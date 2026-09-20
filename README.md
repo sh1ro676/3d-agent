@@ -1,37 +1,9 @@
 # 3D Spatial Agent
 
 基于 **VADAR**（CVPR 2025, `damianomarsili/VADAR`）技术路线重写的三维空间智能体项目。
-课程：3D 视觉 / 三维视觉算法。用途：课程大作业 + 答辩 + 简历。
-
-> **项目根目录：`D:\3D_Spatial_Agent`**
-> 2026-09-15 从 C 盘 WorkBuddy 工作区迁出，此后一律在 D 盘工作。
+课程：3D 视觉 / 三维视觉算法。用途：课程大作业 + 答辩。
 
 **一句话定位**：让 Agent 不再「看图猜空间关系」，而是「调工具算空间关系」。
-
----
-
-## 版本控制（2026-09-20 起）
-
-本项目**此前没有任何版本控制**，改动前的状态只能靠 `logs/before_*.zip` 手工快照 ——
-一次误改即无法回滚。2026-09-20 已建立 git 仓库（首个提交 `5e572db`），
-并推送到 <https://github.com/sh1ro676/3d-agent>（分支 `main`）。
-
-```bash
-git log --oneline          # 历史
-git diff HEAD --stat       # 当前改了什么
-git diff HEAD -- <path>    # 某文件改了什么
-```
-
-**不进仓库的东西**（规则见 `.gitignore`，每条都注明了「为什么忽略」）：
-`venvs/`（可重建的环境）｜`.cache/`（模型权重）｜`dataset/raw/`（101 MB parquet，可重新下载）｜
-`vendor/UniDepth` + `vendor/VADAR`（本身是 git clone，固定版本记在 `vendor/VENDOR.md`）｜
-`.bt_*` / `.pytest_bt*` / `logs/pt*`（pytest `--basetemp` 遗留的临时目录）｜
-`.workbuddy/`（协作者的内部工作记忆：逐日日志与 `MEMORY*.md`，**不对外发布**）。
-
-⚠ **`configs/llm_backend.env` 含真实 API key**，已列入忽略且**从未提交**（库里只有同名 `.template`）。
-改动 `.gitignore` 或批量加文件时，请守住这一条。本地另有一道 `.git/hooks/pre-commit` 密钥守卫
-（三条规则：拦 `.env`、扫长密钥串、**从该 env 文件推导密钥前缀**后扫碎片），
-但它**不在版本控制内**（`.git/` 不随仓库走），克隆者拿不到 —— 换机器需重新放置。
 
 ---
 
@@ -105,9 +77,11 @@ git diff HEAD -- <path>    # 某文件改了什么
 
 ## 环境事实（2026-09-16 实测）
 
-**硬件**：RTX 4060 Laptop **8188 MiB**｜驱动 560.76｜CUDA 12.6｜Ryzen 9 7945HX 16C/32T
-**磁盘**：C 剩 21.8 GB｜**D 剩 381 GB（工作盘）**
+**参考硬件**：单卡 RTX 4060 Laptop，显存上限 **8188 MiB**（下文显存数字均在这一档实测）｜CUDA 12.6
 **环境**：`venvs\vision`（Python 3.12.5）｜torch 2.6.0+cu124｜torchvision 0.21.0+cu124
+**国内网络**：`huggingface.co` 不可达 ⟹ 需设 `HF_ENDPOINT=https://hf-mirror.com`；
+`raw.githubusercontent.com` 超时时，可用 `cdn.jsdelivr.net/gh/<owner>/<repo>@<ref>/<path>`
+逐字节取文件（**不重编码 ⟹ 真实相机 EXIF 保真**）。
 
 **关键实测数字**：
 
@@ -300,18 +274,12 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
 > 完整表格、预处理轨迹、素材来源与可复现命令见方案文档 **§23**。
 > 探针：`phase0/fetch_cross_source.py` + `phase0/probe_cross_source.py --part a|b|c`。
 
-**网络**：❌ `huggingface.co` 超时（**必须** `HF_ENDPOINT=https://hf-mirror.com`）｜❌ `api.openai.com` 超时
-｜✅ `download.pytorch.org` 实测 4.19 MB/s（最快）｜✅ `pypi.tuna.tsinghua.edu.cn`、`hf-mirror.com`
-｜✅ `cdn.jsdelivr.net`（**可逐字节代理 GitHub 仓库文件 ⟹ 能拿到真实相机 EXIF 素材**）、
-`gitee` / `gitcode` / Unsplash / Pexels / Pixabay CDN
-｜❌ `upload.wikimedia.org`、`raw.githubusercontent.com` 超时｜⚠️ `github.com` git 端点间歇超时
-
 ---
 
 ## 目录结构
 
 ```
-D:\3D_Spatial_Agent\
+3d-agent\
 ├── README.md                  ← 你在这里
 ├── docs\
 │   ├── VADAR可借鉴性评估与路径选择.md        ★ 先读
@@ -319,8 +287,8 @@ D:\3D_Spatial_Agent\
 ├── vendor\
 │   ├── VADAR\                 原始源码（HEAD 56018ebc），**一行不改**，只作参考
 │   └── UniDepth\              git clone，editable 安装
-├── venvs\vision\              Python 3.12.5
-├── .cache\                    pip / wheels / huggingface / models（全部引到 D 盘）
+├── venvs\vision\              本地虚拟环境（不入库，按文档自建）
+├── .cache\                    模型权重与 pip 缓存（不入库）
 ├── phase0\                    Phase 0 可执行脚本与探针
 │   ├── 01_setup_windows.ps1      建 venv + 装依赖 + 自检 + 出锁文件
 │   ├── 01b_fetch_torch.ps1       curl 预下 torch 轮子（断点续传）
@@ -375,88 +343,72 @@ D:\3D_Spatial_Agent\
 
 ---
 
-## 常用命令（Windows 原生）
+## 环境准备与常用命令（Windows 原生）
+
+**首次使用三步**：
+
+1. 按 **`vendor/VENDOR.md`** 拉回两个第三方检出（`vendor/VADAR`、`vendor/UniDepth` 本身是 git clone，
+   不入库，该文件记录了固定 HEAD 与重新获取命令）；
+2. 跑 **`phase0/01_setup_windows.ps1`** —— 建 venv + 装依赖 + 自检 + 出锁文件；
+3. 依赖版本固定在 `phase0/requirements-vision.lock.txt`，环境须为 Python 3.12。
+
+以下命令请先 `cd` 到仓库根目录再执行。
 
 ```powershell
-# 全部单元测试（193 用例，约 2.8 s，不需要 GPU 与联网）
-cd D:\3D_Spatial_Agent
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe -m pytest -q
+# 解释器简写（下文一律用 $PY）
+$PY = "venvs\vision\Scripts\python.exe"
+
+# 全部单元测试（不需要 GPU 与联网）
+# ⚠ 必须从仓库根目录运行 —— 用例分布在 tests\、scene_graph\tests\、evaluation\tests\ 三处
+& $PY -m pytest -q
 
 # 端到端冒烟：场景图 → 工具 → 答案 + 证据链 + trace（不需要 GPU 与联网）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\scripts\smoke_tools.py
+& $PY scripts\smoke_tools.py
 
 # 先看看手上的照片有没有可用的 EXIF（不加载任何模型、不需要 GPU）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\scripts\inspect_exif.py `
-    D:\photos\*.jpg --raw
+& $PY scripts\inspect_exif.py `
+    <你的照片目录>\*.jpg --raw
 
 # ★ 真实照片建场景图（加载三模型，约 2 s/图 + 13 s 冷启动）
 #   --intrinsics auto：sidecar npy → EXIF → 模型预测，逐级降级；强烈建议提供
 #   ⚠ 图片短边 ≥600 px（推荐 ≥768 px）—— 见下文「内参杠杆（三）」的分辨率表
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\scripts\build_scene.py `
-    --image D:\3D_Spatial_Agent\vendor\UniDepth\assets\demo\rgb.png `
+& $PY scripts\build_scene.py `
+    --image vendor\UniDepth\assets\demo\rgb.png `
     --scene-id living_room_gt --intrinsics auto `
     --prompt "sofa. chair. table. picture. mirror."
 
 # 场景图体检（不加载任何模型、不需要 GPU）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\scripts\inspect_scene.py `
-    --scene D:\3D_Spatial_Agent\dataset\scenes\living_room_gt --scene-id living_room_gt
+& $PY scripts\inspect_scene.py `
+    --scene dataset\scenes\living_room_gt --scene-id living_room_gt
 
 # 内参杠杆的量化证据（需要 GPU，约 30 s）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_depth_gt.py
+& $PY phase0\probe_depth_gt.py
 
 # 内参的剂量-反应曲线 + 数字变焦三视场复现（需要 GPU，约 5 min）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_k_sweep.py
+& $PY phase0\probe_k_sweep.py
 
 # 造一张带真值的 EXIF fixture（写 .cache\exif_fixture\rgb_exif.jpg）并核对读数
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\make_exif_fixture.py
+& $PY phase0\make_exif_fixture.py
 
 # 主点假设的代价（需要 GPU，约 4 min）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_principal_point.py
+& $PY phase0\probe_principal_point.py
 
 # ★ 跨来源复跑（方案文档 §23）。先抓素材，再跑三段
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\fetch_cross_source.py
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_cross_source.py --part a   # 纯 CPU，秒级
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_cross_source.py --part b   # GPU，约 20 s
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe_cross_source.py --part c   # GPU，约 20 s（决定性证据）
+& $PY phase0\fetch_cross_source.py
+& $PY phase0\probe_cross_source.py --part a   # 纯 CPU，秒级
+& $PY phase0\probe_cross_source.py --part b   # GPU，约 20 s
+& $PY phase0\probe_cross_source.py --part c   # GPU，约 20 s（决定性证据）
 
 # 环境自检
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\verify_env.py
+& $PY phase0\verify_env.py
 
 # 核心探针（A–D 四段：UniDepth → points 自洽 → GroundingDINO → 三维距离）
-& D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe D:\3D_Spatial_Agent\phase0\probe3d.py
+& $PY phase0\probe3d.py
 
 # 改完方案文档后重建 HTML
-D:\Users\ROG\anaconda3\python.exe D:\3D_Spatial_Agent\tools\build_doc_html.py `
-    "D:\3D_Spatial_Agent\docs\3D_Spatial_Agent_技术调研与实施方案.md"
+python tools\build_doc_html.py `
+    "docs\3D_Spatial_Agent_技术调研与实施方案.md"
 ```
-
----
-
-## 本机环境金律（每次都踩，先看这里）
-
-| 现象 | 对策 |
-|---|---|
-| **单条命令约 121 秒被杀**（前台后台一视同仁，日志无 ERROR） | 每条命令 ≤110 s；安装/下载一律拆片 |
-| pip 下大文件静默卡死（2.5 GB 轮子 18 min 0 字节） | 大文件用 **`curl -C -`**，别交给 pip |
-| 大文件下载中途被杀 | `curl -C - --max-time 100` 分轮续传 |
-| **`.ps1` 报「命令未找到」** | PowerShell **没有 `B` 数值后缀**（只有 KB/MB/GB/TB）—— `MinBytes = 100B` 会被当成命令名。小文件阈值写**纯字节数** |
-| `.ps1` 并非"无法执行"（**旧结论已推翻**） | `powershell -NoProfile -ExecutionPolicy Bypass -File x.ps1` 可正常执行，exit code 与 stderr 都读得到。此前「6 秒静默退出」的真因就是上一条的语法错 |
-| `curl -C -` 对已完整文件返回 **http=416** | 加分支识别，否则白跑满重试次数 |
-| PowerShell stdout 不回传；bash 不可用 | 一律「命令写文件 → Read 读文件」；日志中文乱码时先设 `[Console]::OutputEncoding = [Text.Encoding]::UTF8`，并给子进程加 `PYTHONIOENCODING=utf-8`。**更好的办法是让 Python 脚本自己写报告文件**（UTF-8 由 Python 控制，绕开整条控制台编码链）—— `probe_depth_gt.py` / `build_log.txt` 就是这么做的 |
-| **`*>` 会让成功的命令返回 exit=1** | PowerShell 把子进程 stderr（timm/xformers 的 warning）当成 NativeCommandError。判断成败要看脚本自己写的产物，不要只看 exit code |
-| **CUDA 计时不用 `synchronize` 会差一个量级** | 实测同一模型：同步 47 ms、不同步 28 ms，而不同步时「第二条路径」总显得更快 —— 那是 kernel 排队顺序造出来的假结论。测 GPU 一律 `torch.cuda.synchronize()` 夹住，并先跑一次丢弃的预热 |
-| HF 下载慢/下两份等价权重 | `HF_HUB_DISABLE_XET=1` + `allow_patterns=["config.json","*.safetensors"]` |
-| **跑 GPU 探针时忘了设 HF 变量 ⟹ `httpx.ProxyError: 502`** | `HF_HOME` / `HF_ENDPOINT` / `HF_HUB_DISABLE_XET` 必须在 **`import torch` 之前**设好（`huggingface_hub` 在 import 期就读它们）。权重已缓存也一样会去连 |
-| **结论被一个没注意到的输入维度混杂** | 本轮实例：`640×480` 是 UniDepth 相机头的反常工作点，而全部旧结论都取自它。**换来源前先扫一遍「输入尺度」这个自变量**，别只换内容 |
-| **想证明「跳变不是 pipeline 造成的」** | 不能只靠推理：**把 pipeline 的预处理轨迹打出来**（`probe_cross_source.preprocess_trace()` 打印 padding / resize_factor / 网络实际输入尺寸）。否则读者有理由怀疑是分支 |
-| **按字节原样取 GitHub 上的测试素材** | `raw.githubusercontent.com` 超时，但 **`cdn.jsdelivr.net/gh/<owner>/<repo>@<ref>/<path>` 可用**（逐字节代理，不重编码 ⟹ EXIF 保真）。`data.jsdelivr.com/v1/packages/gh/<owner>/<repo>@<ref>?structure=flat` 可列文件 |
-| **想造「真实相机 EXIF」素材** | 别自己合成（合成的证明不了真实标签分布）：`hMatoba/Piexif` 的 `tests/images/r_*.jpg` 是 5 台真实相机的原始 EXIF。注意**文件名不可信**（`r_pen.jpg` 里装的是 **Olympus E-P3**，`r_pana.jpg` 是 DMC-L10），一律以 EXIF 里的 `Make`/`Model` 为准 |
-| **方案文档改了但 HTML 像是只渲染了一半** | Markdown 里的字面量尖括号（如写「i 小于 j」时用了 `<j`）会被当成**未闭合标签**，**吞掉文档剩余部分** —— 症状是正文在中途断掉、后面的章节和附录整块消失。改完务必重建 HTML **并 grep 一次末尾章节标题**；正文里不要用尖括号写小于号 |
-| **造验证素材时「有 EXIF」不等于「有真值」** | 若只造一张「带 EXIF 的图」，验证就退化成「流水线跑通了」——什么都没证明。必须从 GT 内参**反推出该写进 EXIF 的值**，于是素材自带正确答案与已知偏差；否则换算写错宽高（偏差会从 0.64% 变成 33%）在单测之外看不出来 |
-| **裁剪/变焦类操作必须同步裁剪真值** | 数字变焦时忘了把 GT 深度一起裁到同一窗口，A/B 对比被一个假常数污染，结论全错 |
-| **单调性检查写反方向** | `diff(lo) >= 0` 会让严格递减的曲线报「不单调」→ 断言直接失效。正确是 `<= 0`（先降后升）；并**把原始数组打出来核对**，别只信布尔量 |
-| **相对阈值不要建立在近零基准上** | 基准 2.6 px 已接近模型自身误差下限，在近零分母上算「涨 X%」会得出虚高的 ±0.5%，读起来像苛刻工程要求，其实只是小分母假象。**改用绝对门槛**（5/10/25/50 px） |
-| **一维与二维指标不能混引** | 同一情形：一维（只含 x/z）306.3 px vs 二维 432.0 px。两个都对，但**引用必须带口径**，否则「同一个量」在两处数字不同，看起来像自相矛盾。（纵向误差几乎全落在 y 分量 —— 用标量概括二维量必有盲区） |
 
 ---
 
