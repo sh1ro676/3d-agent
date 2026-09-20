@@ -10,6 +10,27 @@
 
 ---
 
+## 版本控制（2026-09-20 起）
+
+本项目**此前没有任何版本控制**，改动前的状态只能靠 `logs/before_*.zip` 手工快照 ——
+一次误改即无法回滚。2026-09-20 已建立 git 仓库，首个提交 `1f2d8db`（825 文件）。
+
+```bash
+git log --oneline          # 历史
+git diff HEAD --stat       # 当前改了什么
+git diff HEAD -- <path>    # 某文件改了什么
+```
+
+**不进仓库的东西**（规则见 `.gitignore`，每条都注明了「为什么忽略」）：
+`venvs/`（可重建的环境）｜`.cache/`（模型权重）｜`dataset/raw/`（101 MB parquet，可重新下载）｜
+`vendor/UniDepth` + `vendor/VADAR`（本身是 git clone，固定版本记在 `vendor/VENDOR.md`）｜
+`.bt_*` / `.pytest_bt*` / `logs/pt*`（pytest `--basetemp` 遗留的临时目录）。
+
+⚠ **`configs/llm_backend.env` 含真实 API key**，已列入忽略且**从未提交**（库里只有同名 `.template`）。
+改动 `.gitignore` 或批量加文件时，请守住这一条。
+
+---
+
 ## 两类输出（项目的核心契约）
 
 | # | 输出类 | 内容 | 面向 |
