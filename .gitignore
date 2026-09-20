@@ -63,3 +63,11 @@ __pycache__/
 .idea/
 Thumbs.db
 Desktop.ini
+
+# ---------- 10. Agent 工作区记忆（不发布）----------
+# .workbuddy/memory/ 是协作者的内部工作记忆：逐日日志、长期索引 MEMORY.md、
+# 细节层 MEMORY-DETAIL.md。里面是坦率的失败清单、教训与口径讨论，
+# **属内部记录，不进公开仓库**（2026-09-20 决定）。
+# 注意：该目录此前曾被误纳入提交，已通过 filter-branch 从全部历史中移除；
+# 这条规则是防止它再次被 `git add` 加回来的唯一闸门。
+.workbuddy/
