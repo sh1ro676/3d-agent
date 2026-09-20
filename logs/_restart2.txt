@@ -1,0 +1,6 @@
+﻿## py_compile
+
+exit=0
+## 停旧进程
+kill PID 95028
+done

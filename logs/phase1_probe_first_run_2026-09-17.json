@@ -1,0 +1,269 @@
+{
+  "generated_at": "2026-09-17 14:46:55",
+  "config": {
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-v4-flash-vision-exp",
+    "api_key": "***",
+    "vision_base_url": "https://api.deepseek.com",
+    "vision_model": "deepseek-v4-flash-vision-exp",
+    "vision_api_key": "***",
+    "vision_enabled": false,
+    "temperature": 0.2,
+    "max_tokens": 8192
+  },
+  "vadar_tag_contract": {
+    "docstring": "<docstring>(.*?)</docstring>",
+    "signature": "<signature>(.*?)</signature>",
+    "implementation": "<implementation>(.*?)</implementation>",
+    "program": "<program>(.*?)</program>",
+    "answer": "<answer>(.*?)</answer>",
+    "def_name": "def (\\w+)\\s*\\(.*\\):"
+  },
+  "t1_connectivity": {
+    "ok": true,
+    "status": 200,
+    "elapsed": 1.7095959186553955,
+    "text": "pong",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 38,
+      "completion_tokens": 31,
+      "total_tokens": 69,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 28
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 38
+    },
+    "has_reasoning": true,
+    "model_returned": "deepseek-flash",
+    "error": ""
+  },
+  "t2_program": [
+    {
+      "run": 1,
+      "ok": true,
+      "elapsed": 5.37,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 459,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "elapsed": 9.89,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 683,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "elapsed": 7.95,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 688,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    }
+  ],
+  "t3_signature": [
+    {
+      "run": 1,
+      "ok": true,
+      "elapsed": 6.4,
+      "finish_reason": "stop",
+      "error": "",
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "elapsed": 11.5,
+      "finish_reason": "stop",
+      "error": "",
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "elapsed": 13.26,
+      "finish_reason": "stop",
+      "error": "",
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    }
+  ],
+  "t4_vision": [
+    {
+      "run": 1,
+      "truth": "blue",
+      "distractor": "orange",
+      "ok": true,
+      "elapsed": 2.23,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "blue",
+      "correct": true,
+      "has_reasoning": true,
+      "usage": {
+        "prompt_tokens": 285,
+        "completion_tokens": 69,
+        "total_tokens": 354,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 61
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 157
+      }
+    },
+    {
+      "run": 2,
+      "truth": "green",
+      "distractor": "purple",
+      "ok": true,
+      "elapsed": 1.91,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "green",
+      "correct": true,
+      "has_reasoning": true,
+      "usage": {
+        "prompt_tokens": 285,
+        "completion_tokens": 95,
+        "total_tokens": 380,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 87
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 157
+      }
+    },
+    {
+      "run": 3,
+      "truth": "yellow",
+      "distractor": "blue",
+      "ok": true,
+      "elapsed": 1.82,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "yellow",
+      "correct": true,
+      "has_reasoning": true,
+      "usage": {
+        "prompt_tokens": 285,
+        "completion_tokens": 75,
+        "total_tokens": 360,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 67
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 157
+      }
+    },
+    {
+      "run": 4,
+      "truth": "purple",
+      "distractor": "green",
+      "ok": true,
+      "elapsed": 2.53,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "purple",
+      "correct": true,
+      "has_reasoning": true,
+      "usage": {
+        "prompt_tokens": 285,
+        "completion_tokens": 73,
+        "total_tokens": 358,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 157
+      }
+    }
+  ],
+  "t5_error_path": {
+    "skipped": true,
+    "reason": "文本与视觉用同一模型，无需测错误路径"
+  },
+  "verdicts": [
+    {
+      "check": "<program> 标签 + 语法可编译",
+      "pass_rate": "3/3",
+      "impact": "ProgramAgent / Engine 的程序合成主链路（agents.py:757, engine.py:344）",
+      "blocking": false
+    },
+    {
+      "check": "签名可被 VADAR 正则提取出方法名",
+      "pass_rate": "3/3",
+      "impact": "SignatureAgent / APIAgent（agents.py:89/352/483/668）",
+      "blocking": false
+    },
+    {
+      "check": "<answer> 标签出现率",
+      "pass_rate": "4/4",
+      "impact": "VQAModule.predict（predefined_modules.py:354，列表取 [0]）",
+      "blocking": false
+    },
+    {
+      "check": "视觉问答答对率（红框内目标颜色）",
+      "pass_rate": "4/4",
+      "impact": "vqa() 的结果质量，直接影响最终答案准确率",
+      "blocking": false
+    }
+  ]
+}

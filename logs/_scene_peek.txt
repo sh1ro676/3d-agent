@@ -1,0 +1,8 @@
+﻿exif_fixture_exif
+exif_fixture_pred
+living_room
+living_room_gt
+living_room_pred
+---- nodes ----
+ |  | bbox= | c3d= | attrs=
+---- build_meta ----

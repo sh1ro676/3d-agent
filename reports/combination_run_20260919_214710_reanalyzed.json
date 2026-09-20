@@ -1,0 +1,3793 @@
+{
+  "scene": "points_probe",
+  "scene_path": "D:\\3D_Spatial_Agent\\dataset\\scenes\\points_probe",
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "switches": {
+    "action_space": "program",
+    "planner": "off",
+    "render": "template",
+    "toolset": [
+      "list_objects",
+      "get_object",
+      "find_object",
+      "single_object",
+      "find_nearest",
+      "find_farthest",
+      "query_relation",
+      "get_3d_position",
+      "get_3d_extent",
+      "calculate_distance",
+      "calculate_angle",
+      "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+  },
+  "backend": {
+    "label": "text",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "api_key": "***7dc8",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "max_retries": 2,
+    "timeout_s": 180.0,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "price_cny_per_mtok": [
+      3.0,
+      9.0
+    ],
+    "ready": true
+  },
+  "gt_source": "scripts.probe_combination.SPECS（与前半段同一份实现）",
+  "summary": {
+    "n": 10,
+    "class": {
+      "B": 1,
+      "OK": 4,
+      "OK*": 5
+    },
+    "status": {
+      "ok": 10
+    },
+    "answer_matches_gt": 9,
+    "correct_but_rejected_by_contract": 0,
+    "used_combination": 9,
+    "keyed_ops_used": 3,
+    "has_key_arg": 1,
+    "has_comprehension": 9,
+    "tool_calls_total": 32,
+    "tool_calls_perfect_total": 70,
+    "tool_calls_min_total": 26,
+    "n_one_call_sufficient": 8,
+    "call_ratio_median": 1.11,
+    "cost_cny": 0.087861
+  },
+  "runs": [
+    {
+      "qid": "C1",
+      "category": "类内 argmax（按尺寸）",
+      "question": "四幅画里哪一幅面积最大？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": "picture_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 1 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'picture_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          4.0
+        ],
+        "n_numbers": 29
+      },
+      "attempts": 1,
+      "tool_calls": 1,
+      "call_ratio": 1.0,
+      "elapsed_s": 1.729,
+      "cost_cny": 0.008775,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [
+          "sorted("
+        ],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 34
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\n# 1) 找出所有 picture\nres = find_object(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\n# 2) 用 extent_m 计算每幅画的面积（取最大的两个维度乘积作为画面面积）\nbest_id = None\nbest_area = -1.0\ndetail = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    ext = p[\"extent_m\"]\n    dims = sorted([ext[\"w\"], ext[\"h\"], ext[\"l\"]], reverse=True)\n    area = dims[0] * dims[1]  # 画面面积 = 最大的两个边长之积\n    detail.append(\"%s: dims=%s area=%.4f\" % (oid, dims, area))\n    if area > best_area:\n        best_area = area\n        best_id = oid\n\nsubmit(\n    best_id,\n    target_ids=[best_id],\n    evidence=[\n        \"find_object(label='picture') returned %d pictures\" % len(pics),\n        \"area computed as product of two largest extent_m dims: \" + \"; \".join(detail),\n        \"max area = %.4f m^2 -> %s\" % (best_area, best_id),\n    ],\n)",
+      "trace_tools": [
+        "find_object"
+      ],
+      "evidence": [
+        "find_object(label='picture') returned 4 pictures",
+        "area computed as product of two largest extent_m dims: picture_1: dims=[1.118, 0.985, 0.243] area=1.1012; picture_2: dims=[0.261, 0.23, 0.043] area=0.0600; picture_3: dims=[0.252, 0.214, 0.057] area=0.0539; picture_4: dims=[0.287, 0.149, 0.147] area=0.0428",
+        "max area = 1.1012 m^2 -> picture_1"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "find_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "picture"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "picture",
+              "count": 4
+            },
+            "error": null,
+            "meta": {
+              "tool": "find_object",
+              "version": "1.3.0",
+              "tool_call_id": "c5ffaf95119ca",
+              "latency_ms": 0.246,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825569.6079104
+            }
+          }
+        }
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C2",
+      "category": "类内 argmin（按距离）",
+      "question": "哪幅画离镜子最近？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_2",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_nearest"
+      ],
+      "one_call_answer": "picture_2",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_2",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 1 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 3 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'picture_2' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816
+        ],
+        "n_numbers": 78
+      },
+      "attempts": 1,
+      "tool_calls": 3,
+      "call_ratio": 3.0,
+      "elapsed_s": 1.668,
+      "cost_cny": 0.008877,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": false,
+        "n_lines": 34
+      },
+      "used_combination": false,
+      "program": "from itertools import count\n\nscene_id = \"points_probe\"\n\n# 1) 找到镜子\nmirror_res = single_object(scene_id=scene_id, label=\"mirror\")\nif not mirror_res.ok:\n    submit(\"unknown\", evidence=[\"single_object(mirror) failed: \" + str(mirror_res.error.code)])\nelse:\n    mirror_id = mirror_res.value[\"object_id\"]\n\n    # 2) 找到所有画\n    pics_res = find_object(scene_id=scene_id, label=\"picture\")\n    if not pics_res.ok:\n        submit(\"unknown\", evidence=[\"find_object(picture) failed: \" + str(pics_res.error.code)])\n    else:\n        pics = pics_res.value\n        if not pics:\n            submit(\"unknown\", evidence=[\"no picture objects in scene\"])\n        else:\n            # 3) 用 find_nearest 直接按距离排序（anchor=镜子，label=picture）\n            near_res = find_nearest(scene_id=scene_id, anchor=mirror_id, label=\"picture\", k=len(pics))\n            if not near_res.ok:\n                submit(\"unknown\", evidence=[\"find_nearest failed: \" + str(near_res.error.code)])\n            else:\n                nearest = near_res.value[0]\n                submit(\n                    nearest[\"object_id\"],\n                    target_ids=[nearest[\"object_id\"]],\n                    evidence=[\n                        \"find_nearest(anchor=%s, label=picture) -> %s at distance_m=%s\"\n                        % (mirror_id, nearest[\"object_id\"], nearest.get(\"distance_m\"))\n                    ],\n                )",
+      "trace_tools": [
+        "single_object",
+        "find_object",
+        "find_nearest"
+      ],
+      "evidence": [
+        "find_nearest(anchor=mirror_1, label=picture) -> picture_2 at distance_m=0.8691"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "single_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "mirror"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "mirror_1",
+              "label": "mirror",
+              "score": 0.676,
+              "centroid_m": [
+                -0.2998,
+                -1.037,
+                3.9484
+              ],
+              "extent_m": {
+                "w": 0.877,
+                "h": 1.276,
+                "l": 0.272
+              },
+              "attributes": {}
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "mirror",
+              "count": 1
+            },
+            "error": null,
+            "meta": {
+              "tool": "single_object",
+              "version": "1.3.0",
+              "tool_call_id": "cc52622f561ac",
+              "latency_ms": 0.165,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825571.278878
+            }
+          }
+        },
+        {
+          "tool": "find_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "picture"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "picture",
+              "count": 4
+            },
+            "error": null,
+            "meta": {
+              "tool": "find_object",
+              "version": "1.3.0",
+              "tool_call_id": "c6d96d640e84b",
+              "latency_ms": 0.045,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825571.278878
+            }
+          }
+        },
+        {
+          "tool": "find_nearest",
+          "args": {
+            "scene_id": "points_probe",
+            "anchor": "mirror_1",
+            "label": "picture",
+            "k": 4
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                },
+                "distance_m": 0.8691
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                },
+                "distance_m": 0.8846
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                },
+                "distance_m": 1.6389
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                },
+                "distance_m": 1.6421
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "anchor": "mirror_1",
+              "anchor_centroid_m": [
+                -0.2998,
+                -1.037,
+                3.9484
+              ],
+              "candidate_label": "picture",
+              "n_candidates": 4,
+              "order": "ascending",
+              "ranked": [
+                {
+                  "object_id": "picture_2",
+                  "distance_m": 0.8691
+                },
+                {
+                  "object_id": "picture_3",
+                  "distance_m": 0.8846
+                },
+                {
+                  "object_id": "picture_4",
+                  "distance_m": 1.6389
+                },
+                {
+                  "object_id": "picture_1",
+                  "distance_m": 1.6421
+                }
+              ]
+            },
+            "error": null,
+            "meta": {
+              "tool": "find_nearest",
+              "version": "1.3.0",
+              "tool_call_id": "c7171f526df61",
+              "latency_ms": 0.102,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825571.278878
+            }
+          }
+        }
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C3",
+      "category": "全场景 argmax",
+      "question": "场景里最高的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "mirror_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "list_objects"
+      ],
+      "one_call_answer": "mirror_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "mirror_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 1 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'mirror_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 66
+      },
+      "attempts": 1,
+      "tool_calls": 1,
+      "call_ratio": 1.0,
+      "elapsed_s": 1.372,
+      "cost_cny": 0.007887,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 30
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res.error.code])\n\nobjs = res.value\nbest = None\nbest_h = None\nfor o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if best_h is None or h > best_h:\n        best_h = h\n        best = o\n\nif best is None:\n    submit(\"unknown\", evidence=[\"no object with extent_m.h available\"])\n\nsubmit(\n    best[\"object_id\"],\n    target_ids=[best[\"object_id\"]],\n    evidence=[\n        \"list_objects(points_probe) returned %d objects with extent_m\" % len(objs),\n        \"max extent_m.h = %.4f m on object_id=%s (label=%s)\"\n        % (best_h, best[\"object_id\"], best.get(\"label\")),\n    ],\n)",
+      "trace_tools": [
+        "list_objects"
+      ],
+      "evidence": [
+        "list_objects(points_probe) returned 9 objects with extent_m",
+        "max extent_m.h = 1.2760 m on object_id=mirror_1 (label=mirror)"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "cdcdaa34d3314",
+              "latency_ms": 0.237,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825572.6513557
+            }
+          }
+        }
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C4",
+      "category": "筛选 + 计数",
+      "question": "有几个物体的高度超过 0.8 米？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 4,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "list_objects"
+      ],
+      "one_call_answer": 4,
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": 4,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "derived:within",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 1 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 4.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": true,
+            "detail": "答案 4.0 落在 trace 量值区间 [-1.9192, 4.0816] 内（63 个不同量值）—— 聚合类派生量按此判据通过",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed_exact",
+            "ok": false,
+            "detail": "答案只靠 derived:within 这一弱档通过：对得上，但没有逐字出现在任何工具返回值里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 66
+      },
+      "attempts": 1,
+      "tool_calls": 1,
+      "call_ratio": 1.0,
+      "elapsed_s": 1.493,
+      "cost_cny": 0.00792,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 26
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\n\nobjs = res.value\ncount = 0\ntall = []\nfor o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if h > 0.8:\n        count += 1\n        tall.append((o.get(\"object_id\"), o.get(\"label\"), h))\n\nsubmit(\n    count,\n    target_ids=[t[0] for t in tall],\n    evidence=[\n        \"list_objects(points_probe) 返回 %d 个物体，逐个读取 extent_m['h']\" % len(objs),\n        \"高度 > 0.8 m 的物体: \" + \", \".join(\"%s(%s)=%.3f\" % t for t in tall) if tall else \"无物体高度超过 0.8 m\",\n    ],\n)",
+      "trace_tools": [
+        "list_objects"
+      ],
+      "evidence": [
+        "list_objects(points_probe) 返回 9 个物体，逐个读取 extent_m['h']",
+        "高度 > 0.8 m 的物体: sofa_1(sofa)=0.817, picture_1(picture)=0.985, mirror_1(mirror)=1.276, sofa_chair_1(sofa chair)=0.810"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "c0b7af22c67e1",
+              "latency_ms": 0.058,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825574.1444056
+            }
+          }
+        }
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    },
+    {
+      "qid": "C5",
+      "category": "聚合（均值）",
+      "question": "四幅画的平均宽度是多少米？",
+      "answer_type": "float",
+      "needs": "current_values",
+      "gt": 0.4445,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": 0.4445,
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": 0.4445499926805496,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "derived:within",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 5 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 0.4445499926805496",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": true,
+            "detail": "答案 0.4445499926805496 落在 trace 量值区间 [-1.9953880310058594, 4.154461860656738] 内（65 个不同量值）—— 聚合类派生量按此判据通过",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed_exact",
+            "ok": false,
+            "detail": "答案只靠 derived:within 这一弱档通过：对得上，但没有逐字出现在任何工具返回值里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          1.118233,
+          0.984506,
+          0.243413,
+          0.260738
+        ],
+        "n_numbers": 87
+      },
+      "attempts": 1,
+      "tool_calls": 5,
+      "call_ratio": 5.0,
+      "elapsed_s": 1.512,
+      "cost_cny": 0.007803,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [
+          "mean("
+        ],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 22
+      },
+      "used_combination": true,
+      "program": "from statistics import mean\n\nres = list_objects(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[f\"list_objects failed: {res.error.code}\"])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\nwidths = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    ext = get_3d_extent(scene_id=\"points_probe\", object_id=oid)\n    if not ext.ok:\n        submit(\"unknown\", evidence=[f\"get_3d_extent failed for {oid}: {ext.error.code}\"])\n    widths.append(ext.value[\"w\"])\n\navg = mean(widths)\nsubmit(avg, target_ids=[p[\"object_id\"] for p in pics],\n       evidence=[f\"widths from get_3d_extent (w) for {len(widths)} pictures: {widths}\",\n                 f\"mean = {avg}\"])",
+      "trace_tools": [
+        "list_objects",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent"
+      ],
+      "evidence": [
+        "widths from get_3d_extent (w) for 4 pictures: [1.118232548236847, 0.2607384920120239, 0.2522379159927368, 0.14699101448059082]",
+        "mean = 0.4445499926805496"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "picture"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": "picture",
+              "returned": 4,
+              "total_in_scene": 4,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "c93ad49809e2d",
+              "latency_ms": 0.053,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825575.6565666
+            }
+          }
+        },
+        {
+          "tool": "get_3d_extent",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_1"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "w": 1.118232548236847,
+              "h": 0.9845064878463745,
+              "l": 0.24341273307800293
+            },
+            "evidence": {
+              "method": "geometry_v1",
+              "extent_m": [
+                1.118232548236847,
+                0.9845064878463745,
+                0.24341273307800293
+              ],
+              "bbox_3d_min": [
+                0.8082974553108215,
+                -1.6001802682876587,
+                3.902456521987915
+              ],
+              "bbox_3d_max": [
+                1.9265300035476685,
+                -0.6156737804412842,
+                4.145869255065918
+              ],
+              "n_points": 16137
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_3d_extent",
+              "version": "1.3.0",
+              "tool_call_id": "c1bcfdc66e307",
+              "latency_ms": 0.015,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825575.6565666
+            }
+          }
+        },
+        {
+          "tool": "get_3d_extent",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_2"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "w": 0.2607384920120239,
+              "h": 0.23024147748947144,
+              "l": 0.04252767562866211
+            },
+            "evidence": {
+              "method": "geometry_v1",
+              "extent_m": [
+                0.2607384920120239,
+                0.23024147748947144,
+                0.04252767562866211
+              ],
+              "bbox_3d_min": [
+                -1.2979636192321777,
+                -1.1743061542510986,
+                4.000626087188721
+              ],
+              "bbox_3d_max": [
+                -1.0372251272201538,
+                -0.9440646767616272,
+                4.043153762817383
+              ],
+              "n_points": 965
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_3d_extent",
+              "version": "1.3.0",
+              "tool_call_id": "c29e8b20d57e6",
+              "latency_ms": 0.009,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825575.6565666
+            }
+          }
+        },
+        {
+          "tool": "get_3d_extent",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_3"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "w": 0.2522379159927368,
+              "h": 0.214128315448761,
+              "l": 0.05726480484008789
+            },
+            "evidence": {
+              "method": "geometry_v1",
+              "extent_m": [
+                0.2522379159927368,
+                0.214128315448761,
+                0.05726480484008789
+              ],
+              "bbox_3d_min": [
+                -1.2850322723388672,
+                -0.9434587955474854,
+                4.026882171630859
+              ],
+              "bbox_3d_max": [
+                -1.0327943563461304,
+                -0.7293304800987244,
+                4.084146976470947
+              ],
+              "n_points": 893
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_3d_extent",
+              "version": "1.3.0",
+              "tool_call_id": "c686afbab4562",
+              "latency_ms": 0.006,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825575.6565666
+            }
+          }
+        },
+        {
+          "tool": "get_3d_extent",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_4"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "w": 0.14699101448059082,
+              "h": 0.2872832417488098,
+              "l": 0.14869070053100586
+            },
+            "evidence": {
+              "method": "geometry_v1",
+              "extent_m": [
+                0.14699101448059082,
+                0.2872832417488098,
+                0.14869070053100586
+              ],
+              "bbox_3d_min": [
+                -1.9953880310058594,
+                -0.9591855406761169,
+                4.005771160125732
+              ],
+              "bbox_3d_max": [
+                -1.8483970165252686,
+                -0.6719022989273071,
+                4.154461860656738
+              ],
+              "n_points": 809
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_3d_extent",
+              "version": "1.3.0",
+              "tool_call_id": "ca23bf3f01e81",
+              "latency_ms": 0.005,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825575.6565666
+            }
+          }
+        }
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    },
+    {
+      "qid": "C6",
+      "category": "排序",
+      "question": "把四幅画按从左到右排序，给出 object_id 列表（逗号分隔）。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_4,picture_2,picture_3,picture_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": "picture_4,picture_2,picture_3,picture_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_4,picture_2,picture_3,picture_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 5 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": false,
+            "detail": "答案 'picture_4,picture_2,picture_3,picture_1' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "text_backed"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816
+        ],
+        "n_numbers": 97
+      },
+      "attempts": 1,
+      "tool_calls": 5,
+      "call_ratio": 5.0,
+      "elapsed_s": 2.342,
+      "cost_cny": 0.009963,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [
+          "sorted("
+        ],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": true,
+        "has_comprehension": true,
+        "n_lines": 43
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\n# 1) 取出所有 picture 物体\nres = find_object(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\n# 2) 用相机系 x 坐标排序（相机系：x 向右为正 → 图像上从左到右）\n#    同时用 bbox_2d 的 x 中心做交叉验证\nitems = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    cx = p[\"centroid_m\"][0]\n    items.append((cx, oid))\n\nitems.sort(key=lambda t: t[0])\nordered = [oid for _, oid in items]\n\n# 3) 交叉验证：读 bbox_2d 的图像像素 x 中心\nbbox_centers = {}\nfor oid in ordered:\n    r = get_object(scene_id=\"points_probe\", object_id=oid)\n    if r.ok:\n        bb = r.value.get(\"bbox_2d\")\n        if bb:\n            bbox_centers[oid] = (bb[0] + bb[2]) / 2.0\n\nbbox_order = sorted(bbox_centers.keys(), key=lambda o: bbox_centers[o]) if bbox_centers else []\n\nevidence = [\n    \"find_object(label='picture') returned %d pictures\" % len(pics),\n    \"sorted by centroid_m[0] (camera x, right-positive): \" + \", \".join(\n        \"%s=%.3f\" % (oid, cx) for cx, oid in items),\n]\nif bbox_order:\n    evidence.append(\"bbox_2d x-center order: \" + \", \".join(\n        \"%s=%.1f\" % (o, bbox_centers[o]) for o in bbox_order))\n\nsubmit(\",\".join(ordered), target_ids=ordered, evidence=evidence)",
+      "trace_tools": [
+        "find_object",
+        "get_object",
+        "get_object",
+        "get_object",
+        "get_object"
+      ],
+      "evidence": [
+        "find_object(label='picture') returned 4 pictures",
+        "sorted by centroid_m[0] (camera x, right-positive): picture_4=-1.919, picture_2=-1.166, picture_3=-1.155, picture_1=1.337",
+        "bbox_2d x-center order: picture_4=82.2, picture_2=173.7, picture_3=176.5, picture_1=495.9"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "find_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "picture"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "picture",
+              "count": 4
+            },
+            "error": null,
+            "meta": {
+              "tool": "find_object",
+              "version": "1.3.0",
+              "tool_call_id": "c4ac01b823228",
+              "latency_ms": 0.048,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825577.9973037
+            }
+          }
+        },
+        {
+          "tool": "get_object",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_4"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "picture_4",
+              "label": "picture",
+              "score": 0.332,
+              "centroid_m": [
+                -1.9192,
+                -0.8224,
+                4.0816
+              ],
+              "extent_m": {
+                "w": 0.147,
+                "h": 0.287,
+                "l": 0.149
+              },
+              "attributes": {},
+              "mask_ref": "points_probe/masks/picture_4.png",
+              "frame": "camera",
+              "bbox_2d": [
+                71.13,
+                127.36,
+                93.21,
+                165.03
+              ]
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "bbox_3d_min": [
+                -1.9953880310058594,
+                -0.9591855406761169,
+                4.005771160125732
+              ],
+              "bbox_3d_max": [
+                -1.8483970165252686,
+                -0.6719022989273071,
+                4.154461860656738
+              ]
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_object",
+              "version": "1.3.0",
+              "tool_call_id": "cdc60763812d2",
+              "latency_ms": 0.02,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825577.9984577
+            }
+          }
+        },
+        {
+          "tool": "get_object",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_2"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "picture_2",
+              "label": "picture",
+              "score": 0.501,
+              "centroid_m": [
+                -1.1661,
+                -1.0598,
+                4.0146
+              ],
+              "extent_m": {
+                "w": 0.261,
+                "h": 0.23,
+                "l": 0.043
+              },
+              "attributes": {},
+              "mask_ref": "points_probe/masks/picture_2.png",
+              "frame": "camera",
+              "bbox_2d": [
+                157.02,
+                98.69,
+                190.39,
+                127.79
+              ]
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "bbox_3d_min": [
+                -1.2979636192321777,
+                -1.1743061542510986,
+                4.000626087188721
+              ],
+              "bbox_3d_max": [
+                -1.0372251272201538,
+                -0.9440646767616272,
+                4.043153762817383
+              ]
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_object",
+              "version": "1.3.0",
+              "tool_call_id": "c91e06306ff42",
+              "latency_ms": 0.013,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825577.9984577
+            }
+          }
+        },
+        {
+          "tool": "get_object",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_3"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "picture_3",
+              "label": "picture",
+              "score": 0.489,
+              "centroid_m": [
+                -1.155,
+                -0.8366,
+                4.054
+              ],
+              "extent_m": {
+                "w": 0.252,
+                "h": 0.214,
+                "l": 0.057
+              },
+              "attributes": {},
+              "mask_ref": "points_probe/masks/picture_3.png",
+              "frame": "camera",
+              "bbox_2d": [
+                160.41,
+                129.49,
+                192.64,
+                157.26
+              ]
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "bbox_3d_min": [
+                -1.2850322723388672,
+                -0.9434587955474854,
+                4.026882171630859
+              ],
+              "bbox_3d_max": [
+                -1.0327943563461304,
+                -0.7293304800987244,
+                4.084146976470947
+              ]
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_object",
+              "version": "1.3.0",
+              "tool_call_id": "c0bb5f7361b3c",
+              "latency_ms": 0.012,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825577.9984577
+            }
+          }
+        },
+        {
+          "tool": "get_object",
+          "args": {
+            "scene_id": "points_probe",
+            "object_id": "picture_1"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "picture_1",
+              "label": "picture",
+              "score": 0.795,
+              "centroid_m": [
+                1.3369,
+                -1.1095,
+                4.0582
+              ],
+              "extent_m": {
+                "w": 1.118,
+                "h": 0.985,
+                "l": 0.243
+              },
+              "attributes": {},
+              "mask_ref": "points_probe/masks/picture_1.png",
+              "frame": "camera",
+              "bbox_2d": [
+                425.04,
+                46.58,
+                566.66,
+                172.96
+              ]
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "bbox_3d_min": [
+                0.8082974553108215,
+                -1.6001802682876587,
+                3.902456521987915
+              ],
+              "bbox_3d_max": [
+                1.9265300035476685,
+                -0.6156737804412842,
+                4.145869255065918
+              ]
+            },
+            "error": null,
+            "meta": {
+              "tool": "get_object",
+              "version": "1.3.0",
+              "tool_call_id": "c072f7a5726a5",
+              "latency_ms": 0.009,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825577.9984577
+            }
+          }
+        }
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    },
+    {
+      "qid": "C7",
+      "category": "两跳组合（跨类别最近）",
+      "question": "离沙发最近的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "table_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "one_call_answer": "table_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "table_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 3 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'table_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 87
+      },
+      "attempts": 1,
+      "tool_calls": 3,
+      "call_ratio": 3.0,
+      "elapsed_s": 2.138,
+      "cost_cny": 0.009948,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 46
+      },
+      "used_combination": true,
+      "program": "from itertools import chain\n\nscene_id = \"points_probe\"\n\n# 1) 找到沙发（唯一）\nres = single_object(scene_id=scene_id, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: \" + str(res.error.code)])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n\n    # 2) 列出全部物体，用质心算距离（list_objects 一次给全 centroid_m）\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res_all.error.code)])\n    else:\n        objs = res_all.value\n        sx, sy, sz = sofa[\"centroid_m\"]\n\n        best = None\n        best_d = None\n        for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            ox, oy, oz = o[\"centroid_m\"]\n            d = ((ox - sx) ** 2 + (oy - sy) ** 2 + (oz - sz) ** 2) ** 0.5\n            if best_d is None or d < best_d:\n                best_d = d\n                best = o\n\n        if best is None:\n            submit(\"unknown\", evidence=[\"no other objects in scene\"])\n        else:\n            # 用工具复核距离\n            res_d = calculate_distance(scene_id=scene_id, a=sofa_id, b=best[\"object_id\"])\n            dist = res_d.value if res_d.ok else best_d\n            submit(\n                best[\"object_id\"],\n                target_ids=[best[\"object_id\"]],\n                evidence=[\n                    \"sofa_id=%s centroid=%s\" % (sofa_id, sofa[\"centroid_m\"]),\n                    \"nearest=%s label=%s centroid=%s\" % (best[\"object_id\"], best[\"label\"], best[\"centroid_m\"]),\n                    \"distance_m=%.4f (calculate_distance / euclidean on centroid_m)\" % dist,\n                ],\n            )",
+      "trace_tools": [
+        "single_object",
+        "list_objects",
+        "calculate_distance"
+      ],
+      "evidence": [
+        "sofa_id=sofa_1 centroid=[0.7967, 0.3191, 3.1746]",
+        "nearest=table_1 label=table centroid=[0.5889, 0.6055, 1.8714]",
+        "distance_m=1.3504 (calculate_distance / euclidean on centroid_m)"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "single_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "sofa"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "sofa_1",
+              "label": "sofa",
+              "score": 0.836,
+              "centroid_m": [
+                0.7967,
+                0.3191,
+                3.1746
+              ],
+              "extent_m": {
+                "w": 2.342,
+                "h": 0.817,
+                "l": 1.263
+              },
+              "attributes": {}
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "sofa",
+              "count": 1
+            },
+            "error": null,
+            "meta": {
+              "tool": "single_object",
+              "version": "1.3.0",
+              "tool_call_id": "c5da45349be87",
+              "latency_ms": 0.04,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825580.1357079
+            }
+          }
+        },
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "c0d5cbf6f5dfc",
+              "latency_ms": 0.037,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825580.1357079
+            }
+          }
+        },
+        {
+          "tool": "calculate_distance",
+          "args": {
+            "scene_id": "points_probe",
+            "a": "sofa_1",
+            "b": "table_1"
+          },
+          "result": {
+            "ok": true,
+            "value": 1.3503527386656395,
+            "evidence": {
+              "method": "geometry_v1",
+              "formula": "||centroid_a - centroid_b||_2",
+              "anchor": "mask_median",
+              "distance_m": 1.3503527386656395,
+              "delta_x": 0.20782169699668884,
+              "delta_y": -0.2864100933074951,
+              "delta_z": 1.3031622767448425,
+              "a_x": 0.7966746687889099,
+              "a_y": 0.3191015422344208,
+              "a_z": 3.1745684146881104,
+              "b_x": 0.5888529717922211,
+              "b_y": 0.6055116355419159,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "calculate_distance",
+              "version": "1.3.0",
+              "tool_call_id": "c4cc8707ec212",
+              "latency_ms": 0.018,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825580.1357079
+            }
+          }
+        }
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C8",
+      "category": "关系计数（命中容差死区）",
+      "question": "有多少个物体在桌子的前面？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 0,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "list_objects",
+        "query_relation"
+      ],
+      "one_call_answer": 1,
+      "one_call_matches_gt": false,
+      "min_tool_calls": 9,
+      "answer": 1,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "evidence",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 10 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 1.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": true,
+            "detail": "答案 1.0 命中证据/参数里的数 1.0（弱一档：非工具返回值）",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed_exact",
+            "ok": true,
+            "detail": "答案逐字落在 trace 的数上（evidence）",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.399,
+          0.5889,
+          0.6055,
+          1.8714,
+          1.059,
+          0.537,
+          1.039,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 122
+      },
+      "attempts": 1,
+      "tool_calls": 10,
+      "call_ratio": 1.11,
+      "elapsed_s": 1.979,
+      "cost_cny": 0.009324,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 42
+      },
+      "used_combination": true,
+      "program": "from collections import Counter\n\nscene_id = \"points_probe\"\n\n# 1) 找到桌子\nres = single_object(scene_id=scene_id, label=\"table\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(table) failed: %s\" % res.error.code])\nelse:\n    table = res.value\n    table_id = table[\"object_id\"]\n    table_centroid = table[\"centroid_m\"]\n\n    # 2) 列出所有物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res_all.error.code])\n    else:\n        objs = res_all.value\n\n        # 相机系：x 右, y 下, z 前(深度)。\"桌子前面\" = 比桌子更靠近相机 = z 更小。\n        # 用 query_relation 的 front_of 关系来判定更稳妥。\n        count = 0\n        counted = []\n        for o in objs:\n            oid = o[\"object_id\"]\n            if oid == table_id:\n                continue\n            r = query_relation(scene_id=scene_id, relation=\"front_of\", a=oid, b=table_id, tol=0)\n            if r.ok and r.value is True:\n                count += 1\n                counted.append(oid)\n\n        submit(\n            count,\n            target_ids=counted,\n            evidence=[\n                \"table_id=%s centroid_m=%s\" % (table_id, table_centroid),\n                \"counted objects with query_relation(relation='front_of', a=obj, b=table, tol=0) == True\",\n                \"count=%d, ids=%s\" % (count, counted),\n            ],\n        )",
+      "trace_tools": [
+        "single_object",
+        "list_objects",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation"
+      ],
+      "evidence": [
+        "table_id=table_1 centroid_m=[0.5889, 0.6055, 1.8714]",
+        "counted objects with query_relation(relation='front_of', a=obj, b=table, tol=0) == True",
+        "count=1, ids=['chair_1']"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "single_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "table"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "table_1",
+              "label": "table",
+              "score": 0.399,
+              "centroid_m": [
+                0.5889,
+                0.6055,
+                1.8714
+              ],
+              "extent_m": {
+                "w": 1.059,
+                "h": 0.537,
+                "l": 1.039
+              },
+              "attributes": {}
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "table",
+              "count": 1
+            },
+            "error": null,
+            "meta": {
+              "tool": "single_object",
+              "version": "1.3.0",
+              "tool_call_id": "cee081aa78274",
+              "latency_ms": 0.041,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "c2009b92122ba",
+              "latency_ms": 0.036,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "sofa_1",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "sofa_1",
+              "b": "table_1",
+              "delta_z": 1.3031622767448425,
+              "tol": 0,
+              "a_z": 3.1745684146881104,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "cd83db58be984",
+              "latency_ms": 0.05,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "picture_1",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "picture_1",
+              "b": "table_1",
+              "delta_z": 2.1867746710777283,
+              "tol": 0,
+              "a_z": 4.058180809020996,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "c78e317968a9b",
+              "latency_ms": 0.02,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "mirror_1",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "mirror_1",
+              "b": "table_1",
+              "delta_z": 2.077040374279022,
+              "tol": 0,
+              "a_z": 3.94844651222229,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "c1c4d85a0ea85",
+              "latency_ms": 0.016,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "chair_1",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": true,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "chair_1",
+              "b": "table_1",
+              "delta_z": -0.03784304857254028,
+              "tol": 0,
+              "a_z": 1.8335630893707275,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "cc4e5987ab055",
+              "latency_ms": 0.014,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "picture_2",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "picture_2",
+              "b": "table_1",
+              "delta_z": 2.1432260870933533,
+              "tol": 0,
+              "a_z": 4.014632225036621,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "c192a5456c2d7",
+              "latency_ms": 0.016,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "picture_3",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "picture_3",
+              "b": "table_1",
+              "delta_z": 2.182611405849457,
+              "tol": 0,
+              "a_z": 4.054017543792725,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "c8513b707cd68",
+              "latency_ms": 0.012,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "sofa_chair_1",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "sofa_chair_1",
+              "b": "table_1",
+              "delta_z": 0.8678937554359436,
+              "tol": 0,
+              "a_z": 2.7392998933792114,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "cf36b513d27dd",
+              "latency_ms": 0.013,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        },
+        {
+          "tool": "query_relation",
+          "args": {
+            "scene_id": "points_probe",
+            "relation": "front_of",
+            "a": "picture_4",
+            "b": "table_1",
+            "tol": 0
+          },
+          "result": {
+            "ok": true,
+            "value": false,
+            "evidence": {
+              "method": "geometry_v1",
+              "scene_id": "points_probe",
+              "relation": "front_of",
+              "a": "picture_4",
+              "b": "table_1",
+              "delta_z": 2.2101802229881287,
+              "tol": 0,
+              "a_z": 4.0815863609313965,
+              "b_z": 1.8714061379432678
+            },
+            "error": null,
+            "meta": {
+              "tool": "query_relation",
+              "version": "1.3.0",
+              "tool_call_id": "c20f740bc92a0",
+              "latency_ms": 0.013,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825582.1146414
+            }
+          }
+        }
+      ],
+      "class": "B",
+      "why": "有组合算子但答案 ≠ GT —— 组合落了地但算错了"
+    },
+    {
+      "qid": "C8b",
+      "category": "关系计数（远离死区）",
+      "question": "有多少个物体在沙发的前面？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 3,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "list_objects",
+        "query_relation"
+      ],
+      "one_call_answer": null,
+      "one_call_matches_gt": false,
+      "min_tool_calls": 9,
+      "answer": 3,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "derived:within",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 2 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 3.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": true,
+            "detail": "答案 3.0 落在 trace 量值区间 [-1.9192, 4.0816] 内（63 个不同量值）—— 聚合类派生量按此判据通过",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed_exact",
+            "ok": false,
+            "detail": "答案只靠 derived:within 这一弱档通过：对得上，但没有逐字出现在任何工具返回值里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 74
+      },
+      "attempts": 1,
+      "tool_calls": 2,
+      "call_ratio": 0.22,
+      "elapsed_s": 1.986,
+      "cost_cny": 0.009,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 41
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\nscene_id = \"points_probe\"\n\n# 1) 找到沙发\nres = single_object(scene_id=scene_id, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: \" + str(res.error.code)])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n    sofa_c = sofa[\"centroid_m\"]\n\n    # 2) 列出全部物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res_all.error.code)])\n    else:\n        objs = res_all.value\n\n        # 相机系：x 向右，y 向下，z 向前（深度）。\n        # \"在沙发前面\" = 比沙发更靠近相机 = z 更小。\n        count = 0\n        counted = []\n        for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            z = o[\"centroid_m\"][2]\n            if z < sofa_c[2]:\n                count += 1\n                counted.append(o[\"object_id\"])\n\n        submit(\n            count,\n            target_ids=[sofa_id] + counted,\n            evidence=[\n                \"sofa centroid_m=%s (z=%.4f)\" % (sofa_c, sofa_c[2]),\n                \"counted objects with centroid z < sofa z: %s\" % counted,\n                \"rule: camera-frame z is depth; smaller z = closer to camera = in front of sofa\",\n            ],\n        )",
+      "trace_tools": [
+        "single_object",
+        "list_objects"
+      ],
+      "evidence": [
+        "sofa centroid_m=[0.7967, 0.3191, 3.1746] (z=3.1746)",
+        "counted objects with centroid z < sofa z: ['chair_1', 'sofa_chair_1', 'table_1']",
+        "rule: camera-frame z is depth; smaller z = closer to camera = in front of sofa"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "single_object",
+          "args": {
+            "scene_id": "points_probe",
+            "label": "sofa"
+          },
+          "result": {
+            "ok": true,
+            "value": {
+              "object_id": "sofa_1",
+              "label": "sofa",
+              "score": 0.836,
+              "centroid_m": [
+                0.7967,
+                0.3191,
+                3.1746
+              ],
+              "extent_m": {
+                "w": 2.342,
+                "h": 0.817,
+                "l": 1.263
+              },
+              "attributes": {}
+            },
+            "evidence": {
+              "scene_id": "points_probe",
+              "label": "sofa",
+              "count": 1
+            },
+            "error": null,
+            "meta": {
+              "tool": "single_object",
+              "version": "1.3.0",
+              "tool_call_id": "cd177b1f32d3f",
+              "latency_ms": 0.305,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825584.1008494
+            }
+          }
+        },
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "cfdeed9bd08fe",
+              "latency_ms": 0.081,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825584.1008494
+            }
+          }
+        }
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    },
+    {
+      "qid": "C12",
+      "category": "全局极值对（O(n²)）",
+      "question": "场景里质心相距最远的是哪两个物体？给出两个 object_id（逗号分隔）。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_4,table_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 37,
+      "perfect_tools": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "one_call_answer": "picture_4,table_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "table_1,picture_4",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 1 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": false,
+            "detail": "答案 'table_1,picture_4' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "2 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "text_backed"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 66
+      },
+      "attempts": 1,
+      "tool_calls": 1,
+      "call_ratio": 1.0,
+      "elapsed_s": 1.507,
+      "cost_cny": 0.008364,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "sum(",
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 28
+      },
+      "used_combination": true,
+      "program": "from itertools import combinations\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\nelse:\n    objs = res.value\n    best_pair = None\n    best_dist = -1.0\n    for a, b in combinations(objs, 2):\n        ca = a[\"centroid_m\"]\n        cb = b[\"centroid_m\"]\n        d = sum((ca[i] - cb[i]) ** 2 for i in range(3)) ** 0.5\n        if d > best_dist:\n            best_dist = d\n            best_pair = (a[\"object_id\"], b[\"object_id\"])\n    if best_pair is None:\n        submit(\"unknown\", evidence=[\"fewer than 2 objects in scene\"])\n    else:\n        submit(\n            best_pair[0] + \",\" + best_pair[1],\n            target_ids=[best_pair[0], best_pair[1]],\n            evidence=[\n                \"list_objects returned centroids for %d objects\" % len(objs),\n                \"max pairwise euclidean distance = %.4f m between %s and %s\"\n                % (best_dist, best_pair[0], best_pair[1]),\n            ],\n        )",
+      "trace_tools": [
+        "list_objects"
+      ],
+      "evidence": [
+        "list_objects returned centroids for 9 objects",
+        "max pairwise euclidean distance = 3.6352 m between table_1 and picture_4"
+      ],
+      "targets": [],
+      "trace": [
+        {
+          "tool": "list_objects",
+          "args": {
+            "scene_id": "points_probe"
+          },
+          "result": {
+            "ok": true,
+            "value": [
+              {
+                "object_id": "sofa_1",
+                "label": "sofa",
+                "score": 0.836,
+                "centroid_m": [
+                  0.7967,
+                  0.3191,
+                  3.1746
+                ],
+                "extent_m": {
+                  "w": 2.342,
+                  "h": 0.817,
+                  "l": 1.263
+                }
+              },
+              {
+                "object_id": "picture_1",
+                "label": "picture",
+                "score": 0.795,
+                "centroid_m": [
+                  1.3369,
+                  -1.1095,
+                  4.0582
+                ],
+                "extent_m": {
+                  "w": 1.118,
+                  "h": 0.985,
+                  "l": 0.243
+                }
+              },
+              {
+                "object_id": "mirror_1",
+                "label": "mirror",
+                "score": 0.676,
+                "centroid_m": [
+                  -0.2998,
+                  -1.037,
+                  3.9484
+                ],
+                "extent_m": {
+                  "w": 0.877,
+                  "h": 1.276,
+                  "l": 0.272
+                }
+              },
+              {
+                "object_id": "chair_1",
+                "label": "chair",
+                "score": 0.528,
+                "centroid_m": [
+                  -0.7395,
+                  0.6535,
+                  1.8336
+                ],
+                "extent_m": {
+                  "w": 0.977,
+                  "h": 0.303,
+                  "l": 0.829
+                }
+              },
+              {
+                "object_id": "picture_2",
+                "label": "picture",
+                "score": 0.501,
+                "centroid_m": [
+                  -1.1661,
+                  -1.0598,
+                  4.0146
+                ],
+                "extent_m": {
+                  "w": 0.261,
+                  "h": 0.23,
+                  "l": 0.043
+                }
+              },
+              {
+                "object_id": "picture_3",
+                "label": "picture",
+                "score": 0.489,
+                "centroid_m": [
+                  -1.155,
+                  -0.8366,
+                  4.054
+                ],
+                "extent_m": {
+                  "w": 0.252,
+                  "h": 0.214,
+                  "l": 0.057
+                }
+              },
+              {
+                "object_id": "sofa_chair_1",
+                "label": "sofa chair",
+                "score": 0.44,
+                "centroid_m": [
+                  -1.0662,
+                  0.3275,
+                  2.7393
+                ],
+                "extent_m": {
+                  "w": 1.332,
+                  "h": 0.81,
+                  "l": 1.482
+                }
+              },
+              {
+                "object_id": "table_1",
+                "label": "table",
+                "score": 0.399,
+                "centroid_m": [
+                  0.5889,
+                  0.6055,
+                  1.8714
+                ],
+                "extent_m": {
+                  "w": 1.059,
+                  "h": 0.537,
+                  "l": 1.039
+                }
+              },
+              {
+                "object_id": "picture_4",
+                "label": "picture",
+                "score": 0.332,
+                "centroid_m": [
+                  -1.9192,
+                  -0.8224,
+                  4.0816
+                ],
+                "extent_m": {
+                  "w": 0.147,
+                  "h": 0.287,
+                  "l": 0.149
+                }
+              }
+            ],
+            "evidence": {
+              "scene_id": "points_probe",
+              "filter_label": null,
+              "returned": 9,
+              "total_in_scene": 9,
+              "total_objects": 9,
+              "label_counts": {
+                "sofa": 1,
+                "picture": 4,
+                "mirror": 1,
+                "chair": 1,
+                "sofa chair": 1,
+                "table": 1
+              }
+            },
+            "error": null,
+            "meta": {
+              "tool": "list_objects",
+              "version": "1.3.0",
+              "tool_call_id": "cf28aba46e9f7",
+              "latency_ms": 0.062,
+              "cached": false,
+              "gpu_peak_mb": null,
+              "timestamp": 1789825585.6086142
+            }
+          }
+        }
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    }
+  ],
+  "reanalyzed_from": "D:\\3D_Spatial_Agent\\reports\\combination_run_20260919_214625.json",
+  "reverified": false
+}

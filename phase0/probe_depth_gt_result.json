@@ -1,0 +1,97 @@
+{
+  "gt": {
+    "fx": 518.85791015625,
+    "fy": 519.4696044921875,
+    "cx": 325.58245849609375,
+    "cy": 253.7361602783203,
+    "hfov_deg": 63.327521774950746
+  },
+  "depth_gt_valid_px": 209294,
+  "depth_gt_range_m": [
+    1.653,
+    10.0
+  ],
+  "returned_K": {
+    "path_a_fx": 163.73776245117188,
+    "path_a_hfov_deg": 125.80411529541016,
+    "path_b_fx": 163.73776245117188,
+    "path_b_hfov_deg": 125.80411529541016
+  },
+  "metrics": {
+    "path_a_no_camera": {
+      "all": {
+        "n_px": 209294,
+        "depth_absrel_mean": 0.1984,
+        "depth_absrel_median": 0.1757,
+        "depth_delta1_25": 0.5709,
+        "depth_rmse_m": 0.8309,
+        "err3d_median_m": 1.943,
+        "err3d_p90_m": 3.3709,
+        "err3d_rel_median": 0.5898
+      },
+      "inner_r50": {
+        "n_px": 109565,
+        "depth_absrel_mean": 0.1978,
+        "depth_absrel_median": 0.1839,
+        "depth_delta1_25": 0.52,
+        "depth_rmse_m": 0.905,
+        "err3d_median_m": 1.7065,
+        "err3d_p90_m": 2.6677,
+        "err3d_rel_median": 0.4629
+      },
+      "outer_r50": {
+        "n_px": 99729,
+        "depth_absrel_mean": 0.1991,
+        "depth_absrel_median": 0.1744,
+        "depth_delta1_25": 0.6268,
+        "depth_rmse_m": 0.7495,
+        "err3d_median_m": 2.1367,
+        "err3d_p90_m": 3.8269,
+        "err3d_rel_median": 0.7159
+      }
+    },
+    "path_b_gt_camera": {
+      "all": {
+        "n_px": 209294,
+        "depth_absrel_mean": 0.117,
+        "depth_absrel_median": 0.0939,
+        "depth_delta1_25": 0.932,
+        "depth_rmse_m": 0.5498,
+        "err3d_median_m": 0.2673,
+        "err3d_p90_m": 0.9832,
+        "err3d_rel_median": 0.0912
+      },
+      "inner_r50": {
+        "n_px": 109565,
+        "depth_absrel_mean": 0.131,
+        "depth_absrel_median": 0.106,
+        "depth_delta1_25": 0.892,
+        "depth_rmse_m": 0.651,
+        "err3d_median_m": 0.3479,
+        "err3d_p90_m": 1.0229,
+        "err3d_rel_median": 0.1041
+      },
+      "outer_r50": {
+        "n_px": 99729,
+        "depth_absrel_mean": 0.1016,
+        "depth_absrel_median": 0.0863,
+        "depth_delta1_25": 0.976,
+        "depth_rmse_m": 0.4386,
+        "err3d_median_m": 0.2034,
+        "err3d_p90_m": 0.9151,
+        "err3d_rel_median": 0.082
+      }
+    }
+  },
+  "lateral_inflation": 3.1688347415336047,
+  "plausible_hfov": [
+    30.0,
+    110.0
+  ],
+  "path_a_hfov_plausible": false,
+  "timings_ms": {
+    "path_a": 47.2,
+    "path_b": 120.1
+  },
+  "load_s": 2.87
+}

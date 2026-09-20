@@ -1,0 +1,353 @@
+{
+  "mode": "llm",
+  "arm": "agent-program-synthesis",
+  "scene": "living_room: 9 objects / 133 edges (up_axis=-y, scale=1.000)",
+  "scene_id": "living_room",
+  "scene_hint": {
+    "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+    },
+    "n_objects": 9,
+    "image_id": "rgb.png",
+    "scene_id": "living_room",
+    "image_size": [
+      640,
+      480
+    ]
+  },
+  "tools_version": "1.2.0",
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "switches": {
+    "action_space": "program",
+    "planner": "on",
+    "render": "template",
+    "toolset": [
+      "list_objects",
+      "get_object",
+      "find_object",
+      "single_object",
+      "find_nearest",
+      "find_farthest",
+      "query_relation",
+      "get_3d_position",
+      "get_3d_extent",
+      "calculate_distance",
+      "calculate_angle",
+      "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+  },
+  "vlm": {
+    "enabled": true,
+    "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png",
+    "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）",
+    "label": "text",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "api_key": "***7dc8",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "max_retries": 2,
+    "timeout_s": 180.0,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "price_cny_per_mtok": [
+      3.0,
+      9.0
+    ],
+    "ready": true,
+    "confidence_threshold": 0.6,
+    "attrs": [
+      "color",
+      "material",
+      "texture",
+      "state",
+      "shape"
+    ]
+  },
+  "backend": {
+    "label": "text",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "api_key": "***7dc8",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "max_retries": 2,
+    "timeout_s": 180.0,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "price_cny_per_mtok": [
+      3.0,
+      9.0
+    ],
+    "ready": true
+  },
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "84ca92b0406554998f9c67de527a60513ba6b1efa042475d7117faeee5217f12",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "usage": {
+    "calls": 0,
+    "failed_calls": 2,
+    "retried_calls": 0,
+    "truncated": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "cost_cny": 0.0,
+    "unpriced_calls": 0,
+    "latency_s": 0.0,
+    "by_purpose": {}
+  },
+  "summary": {
+    "n": 1,
+    "status": {
+      "llm_error": 1
+    },
+    "verdict": {
+      "unsupported": 1
+    },
+    "n_attempts_gt1": 0,
+    "n_failure": 1,
+    "tool_calls_total": 0,
+    "cost_cny": 0.0
+  },
+  "runs": [
+    {
+      "question": "沙发是什么颜色？",
+      "scene_id": "living_room",
+      "status": "llm_error",
+      "answer": null,
+      "answer_type": "str",
+      "target_ids": [],
+      "evidence": [],
+      "abstained": false,
+      "program": "",
+      "program_fenced": true,
+      "render": "",
+      "render_report": {
+        "mode": "template",
+        "used_fallback": false
+      },
+      "stages": [
+        {
+          "stage": "plan",
+          "attempt": 1,
+          "ok": false,
+          "detail": "重试 2 次仍失败（status=None）：URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+        },
+        {
+          "stage": "synthesize",
+          "attempt": 1,
+          "ok": false,
+          "detail": "重试 2 次仍失败（status=None）：URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+        },
+        {
+          "stage": "render",
+          "attempt": 2,
+          "ok": false,
+          "detail": {
+            "mode": "template",
+            "used_fallback": false
+          }
+        },
+        {
+          "stage": "verify",
+          "attempt": 3,
+          "ok": false,
+          "detail": {
+            "level": "unsupported",
+            "ok": false,
+            "matched_from": "",
+            "checks": [
+              {
+                "name": "has_submission",
+                "ok": false,
+                "detail": "没有 submit() 结果 —— 本题没有答案可校验",
+                "hard": true
+              }
+            ],
+            "failed": [
+              "has_submission"
+            ],
+            "failed_hard": [
+              "has_submission"
+            ],
+            "numbers": [],
+            "n_numbers": 0
+          }
+        }
+      ],
+      "attempts": 1,
+      "usage": {
+        "calls": 0.0,
+        "failed_calls": 2.0,
+        "retried_calls": 0.0,
+        "truncated": 0.0,
+        "prompt_tokens": 0.0,
+        "completion_tokens": 0.0,
+        "unpriced_calls": 0.0,
+        "cost_cny": 0.0,
+        "latency_s": 0.0,
+        "by_purpose": {}
+      },
+      "failure": {
+        "stage": "llm_error",
+        "message": "重试 2 次仍失败（status=None）：URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>",
+        "status": null
+      },
+      "tool_calls": 0,
+      "trace": [],
+      "elapsed_s": 24.267,
+      "tools_version": "1.2.0",
+      "memory": {
+        "question": "沙发是什么颜色？",
+        "scene_hint": {
+          "objects": {
+            "sofa": 1,
+            "picture": 4,
+            "mirror": 1,
+            "chair": 1,
+            "sofa chair": 1,
+            "table": 1
+          },
+          "n_objects": 9,
+          "image_id": "rgb.png",
+          "scene_id": "living_room",
+          "image_size": [
+            640,
+            480
+          ]
+        },
+        "n_attempts": 0,
+        "attempts": [],
+        "confirmed_ids": [],
+        "facts": {}
+      },
+      "verdict": {
+        "level": "unsupported",
+        "ok": false,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_submission",
+            "ok": false,
+            "detail": "没有 submit() 结果 —— 本题没有答案可校验",
+            "hard": true
+          }
+        ],
+        "failed": [
+          "has_submission"
+        ],
+        "failed_hard": [
+          "has_submission"
+        ],
+        "numbers": [],
+        "n_numbers": 0
+      },
+      "plan": {
+        "ok": false,
+        "steps": [],
+        "n_steps": 0,
+        "tool_categories": [],
+        "unknown_categories": [],
+        "numbers_in_plan": [],
+        "text": "",
+        "reply": null,
+        "error": "重试 2 次仍失败（status=None）：URLError: <urlopen error [WinError 10061] 由于目标计算机积极拒绝，无法连接。>"
+      },
+      "switches": {
+        "action_space": "program",
+        "planner": "on",
+        "render": "template",
+        "toolset": [
+          "list_objects",
+          "get_object",
+          "find_object",
+          "single_object",
+          "find_nearest",
+          "find_farthest",
+          "query_relation",
+          "get_3d_position",
+          "get_3d_extent",
+          "calculate_distance",
+          "calculate_angle",
+          "get_attributes"
+        ],
+        "n_tools": 12,
+        "max_synthesis_retries": 2,
+        "exec_timeout_s": 60.0,
+        "vlm": true,
+        "vlm_model": "deepseek-flash"
+      }
+    }
+  ]
+}

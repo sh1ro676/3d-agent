@@ -1,0 +1,5 @@
+OK   https://unpkg.com/three@0.169.0/build/three.module.js                  200  len=None
+FAIL https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js       <urlopen error [WinError 10054] 远程主机强迫关闭了一个现有的连接。>
+OK   https://registry.npmjs.org/three                                       200  len=None
+node C:\Users\ROG\.workbuddy\binaries\node\versions\22.22.2-3\node.exe -> v22.22.2
+node C:\Program Files\nodejs\node.exe -> v24.17.0

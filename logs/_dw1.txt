@@ -1,0 +1,11 @@
+== scene top keys: ['build_meta', 'camera_intrinsics', 'edges', 'image_hw', 'image_id', 'image_url', 'nodes', 'scale_factor', 'scene_id', 'up_axis']
+image_id=rgb.png image_hw=[640, 480]
+camera_intrinsics=[[163.73776245117188, 0.0, 322.0], [0.0, 163.41827392578125, 248.1103515625], [0.0, 0.0, 1.0]]
+build_meta keys=['config', 'depth_range_m', 'image_hw', 'label_counts', 'mask_box_coverage_mean', 'mask_box_coverage_min', 'n_detections_kept', 'n_detections_raw', 'n_dropped', 'n_edges', 'n_fallbacks', 'n_nodes', 'perception', 'scale_calibrated', 'timings_ms', 'up_axis', 'up_axis_reason', 'up_axis_reliable', 'up_axis_tilt_deg']
+scale_calibrated=None up_axis=-y
+n_nodes=9
+node keys=['attributes', 'bbox_2d', 'bbox_3d', 'centroid_3d', 'centroid_source', 'extent_3d', 'frame', 'id', 'label', 'mask_url', 'n_points', 'score']
+node[0]={"id": "sofa_1", "label": "sofa", "score": 0.8359, "bbox_2d": [286.29, 215.18, 632.16, 363.71], "centroid_3d": [2.4003, 1.0316, 2.864], "extent_3d": [6.705, 2.3488, 1.1285], "bbox_3d": {"min": [-0.6875, -0.6323, 2.7192], "max": [6.0175, 1.7165, 3.8477]}, "mask_url": "assets/living_room/masks/sofa_1.png", "n_points": 23841, "centroid_source": "mask", "attributes": {}, "frame": "camera"}
+n_edges=133
+edge keys=['metric', 'relation', 'source', 'target', 'value']
+edge[0]={"source": "sofa_1", "target": "picture_1", "relation": "distance", "value": 4.394358065492718, "metric": {"distance_m": 4.3944, "delta_x": -1.4829, "delta_y": 4.0649, "delta_z": -0.7667, "a_x": 2.4003, "a_y": 1.0316, "a_z": 2.864, "b_x": 3.8832, "b_y": -3.0333, "b_z": 3.6307}}

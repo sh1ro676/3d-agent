@@ -1,0 +1,33 @@
+run_dir : D:\3D_Spatial_Agent\results\A\2026-09-18_16-43-16
+mode    : run
+stages  : {"signatures": {"ok": true, "s": 3.59, "n_api_questions": 3, "n_methods": 6, "methods": ["_closest_object_bbox", "_farthest_object_bbox", "_count_objects", "_get_color", "_get_real_height", "_get_real_width"]}, "api": {"ok": true, "s": 10.3, "n_api": 6}, "programs": {"ok": true, "s": 72.16, "n_programs": 20, "n_nonempty": 19}, "execute": {"ok": true, "s": 394.15}}
+sanitize: {"files": 28, "replacements": 28, "namespace_coercions": 28, "samples": [{"file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-43-16\\api_generator\\_closest_object_bbox\\exec_env/executable_program.py", "n": 1}, {"file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-43-16\\api_generator\\_farthest_object_bbox\\exec_env/executable_program.py", "n": 1}, {"file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-43-16\\api_generator\\_count_objects\\exec_env/executable_program.py", "n": 1}, {"file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-43-16\\api_generator\\_get_color\\exec_env/executable_program.py", "n": 1}, {"file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-43-16\\api_generator\\_get_real_height\\exec_env/executable_program.py", "n": 1}]}
+deletion: {"host_safe_delete_enabled": false, "why": "VADAR 会 rmtree 自己的 exec 目录；实测正常方法 4 个文件，出错重试的那个累积到 51（> 宿主阈值 50）"}
+started : 2026-09-18T16:42:54   finished: 2026-09-18T16:51:17
+
+unparseable: {"numeric_count": 0, "numeric_other": 0}
+submetrics : {"numeric_count": 0.0, "numeric_other_mra": 20.0, "yes_no": 66.7, "multi_choice": 100.0}
+Total      : 36.01
+
+q387   OK      901B keys=23 final_result='0.002436093520373106'
+q95    OK     1046B keys=27 final_result='2.318692207336426'
+q34    OK      798B keys=22 final_result='0.8386726975440979'
+q137   OK      459B keys=13 final_result='0'
+q107   OK      593B keys=15 final_result='closest'
+q235   OK     1168B keys=35 final_result='0.7983189225196838'
+q31    OK      855B keys=25 final_result='4.717571258544922'
+q92    OK     1046B keys=28 final_result='1.7328004837036133'
+q150   OK      486B keys=12 final_result='5'
+q26    OK      542B keys=14 final_result='998.6455078125'
+q464   OK      512B keys=12 final_result='no'
+q466   OK      521B keys=13 final_result='yellow'
+q18    OK      484B keys=12 final_result='washing machine'
+q175   OK      997B keys=27 final_result='False'
+q132   OK      659B keys=14 final_result='2'
+q153   OK      853B keys=18 final_result='477.9263000488281'
+q248   OK      744B keys=20 final_result='0.001407406060025096'
+q113   OK      418B keys=11 final_result='1048.19921875'
+q480   OK      814B keys=20 final_result='1448.0853271484375'
+q482   OK      441B keys=12 final_result='no'
+
+parsed 20 / truncated 0 / total 20

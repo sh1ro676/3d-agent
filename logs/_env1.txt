@@ -1,0 +1,382 @@
+D:\3D_Spatial_Agent\venvs\vision\Lib\site-packages\timm\models\layers\__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+D:\3D_Spatial_Agent\vendor\UniDepth\unidepth\utils\chamfer_distance.py:9: UserWarning: !! To run evaluation you need KNN. Please compile KNN: `cd unidepth/ops/knn with && bash compile.sh`.
+  warnings.warn(
+Cannot import NystromAttention, you can not run original UniDepth. UniDepthV2 is available.
+{
+  "arm": "A",
+  "started": "2026-09-18T15:01:18",
+  "argv": [
+    "--plan",
+    "--arm",
+    "A",
+    "--num-questions",
+    "20",
+    "--num-api-questions",
+    "3"
+  ],
+  "env_applied_by_runner": {
+    "HF_HOME": "D:\\3D_Spatial_Agent\\.cache\\huggingface",
+    "HF_ENDPOINT": "https://hf-mirror.com",
+    "HF_HUB_DISABLE_XET": "1",
+    "HF_HUB_OFFLINE": "1",
+    "VADAR_GDINO_DIR": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "VADAR_CALL_LOG": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl"
+  },
+  "dataset": "omni3d",
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_API_KEY",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "a2c55d251d9db1740ae20aac5413239477b193d1d8dbcfbc2a011b25f63cd483",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      },
+      "VADAR_MAX_TOKENS": {
+        "present": true,
+        "fingerprint": "864a936a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "api_key_source": "missing",
+  "precheck": {
+    "annotations": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\annotations.json",
+    "images": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\images",
+    "problems": [],
+    "n_questions": 501,
+    "question_fields": [
+      "answer",
+      "answer_type",
+      "image_filename",
+      "image_index",
+      "question",
+      "question_index"
+    ],
+    "n_unique_image_filenames": 201,
+    "n_missing_image_files": 0,
+    "ok": true
+  },
+  "subset": {
+    "mode": "vadarspec",
+    "seed": 42,
+    "n_requested": 20,
+    "n_selected": 20,
+    "metric_class_counts": {
+      "numeric_other": 10,
+      "yes_no": 5,
+      "multi_choice": 4,
+      "numeric_count": 1
+    },
+    "answer_type_counts": {
+      "float": 10,
+      "str": 9,
+      "int": 1
+    },
+    "n_unique_images": 7,
+    "annotation_pool_size": 501,
+    "num_api_questions": 3,
+    "selected": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "2",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "If the rightmost sofa were placed in front of the fireplace, would the fireplace still be visible?"
+      },
+      {
+        "image_index": "40579.354_00002498.jpg",
+        "question_index": "3",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the armchair is 1.5m wide, how tall is the combined cabinet right next to it in meters?"
+      },
+      {
+        "image_index": "123687.328_00001658.jpg",
+        "question_index": "4",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the height of the leftmost cabinet to the width of the center cabinet?"
+      },
+      {
+        "image_index": "144249.998_00004791.jpg",
+        "question_index": "5",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "How many of the rightmost stool would you have to stack to reach the same height as the left-most chair?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "6",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "Is the white coffee table on the carpet large enough to stack the black table on top of it?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "7",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "How many objects of the same height as the TV would you have to stack on top of each other to achieve an object the same height as the sofa?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "8",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "How many objects of double the height of the white coffee table would you have to stack on top of each other to achieve an object the same height as the fireplace?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "9",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the black table is 1.5m wide, how tall is the TV in meters?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "10",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Which object is closer to the fireplace: the sofa or the white coffee table? Options: {sofa, coffee table}"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "11",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "If the TV were to fall directly forward over the glass table, would it hit the black table?"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "12",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "If the black table were pushed directly against the sofa, would the sofa still be visible?"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "13",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the width of the combined top-most cabinets to the width of the washing machine?"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "14",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "How many objects of the same width as the rightmost chair would you have to stack to produce an object of the same width as the one of the topmost cabinets?"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "15",
+        "metric_class": "numeric_count",
+        "answer_type": "int",
+        "question": "Including all objects, how many handles are shown?"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "16",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Which object is closer to the camera: the washing machine or the rightmost chair? Options: {washing machine, rightmost chair}"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "17",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Which object is closer to the camera: the washing machine or the kettle? Options: {washing machine, kettle}"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "18",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Which object is closer to the camera: the washing machine or the kettle? Options: {washing machine, kettle}"
+      },
+      {
+        "image_index": "23026.800_00002444.jpg",
+        "question_index": "19",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "If the cabinet is 2m wide and the TV is moved 0.4m forward, will it fall over?"
+      }
+    ],
+    "api_subset": [
+      {
+        "image_index": "40579.354_00002498.jpg",
+        "question_index": "3"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0"
+      },
+      {
+        "image_index": "18917.457_00002815.jpg",
+        "question_index": "8"
+      }
+    ],
+    "deviation_from_original": "原版用无种子的 random.sample 抽 api_questions（bug ③，不可复现）；本运行器改用 random.Random(seed).sample，并把选中清单落盘。"
+  },
+  "adapter": {
+    "steps": {
+      "paths": {
+        "added": [
+          "D:\\3D_Spatial_Agent\\vendor",
+          "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+        ],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+      },
+      "stubs": {
+        "count": 21
+      },
+      "bridge_install": {
+        "patched": [
+          "engine.engine_utils",
+          "engine.predefined_modules (+VQAModule.predict)",
+          "engine.engine",
+          "agents.agents"
+        ],
+        "failed": [],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR",
+        "warnings": []
+      },
+      "alarm": {
+        "patched": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "failed": [],
+        "targets": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "shim": {
+          "armed": 0,
+          "cancelled": 0,
+          "fired": 0,
+          "fired_by": {
+            "trace": 0,
+            "timer": 0
+          },
+          "trace_errors": 0,
+          "timeout_s": null,
+          "exception_type": "builtins.TimeoutError"
+        }
+      },
+      "alarm_note": "计数请在实验结束时调用 report['steps']['alarm']['shim'].describe()"
+    },
+    "model_fingerprint": {
+      "text": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "(missing)",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      },
+      "vision": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "(missing)",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      }
+    },
+    "gdino_dir": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "gdino_caption_mode": "vadar"
+  },
+  "adapter_ok": true,
+  "mode": "plan",
+  "plan_summary": {
+    "n_questions": 20,
+    "n_api_questions": 3,
+    "metric_class_counts": {
+      "numeric_other": 10,
+      "yes_no": 5,
+      "multi_choice": 4,
+      "numeric_count": 1
+    },
+    "n_unique_images": 7,
+    "api_key_present": false,
+    "api_key_source": "missing",
+    "env_file": {
+      "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+      "exists": true,
+      "n_keys": 10,
+      "config_sha256": "a2c55d251d9db1740ae20aac5413239477b193d1d8dbcfbc2a011b25f63cd483"
+    },
+    "next_command": "evaluation/runner.py --arm A --subset-file <本次落盘的 subset.json>"
+  }
+}

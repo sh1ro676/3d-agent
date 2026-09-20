@@ -1,0 +1,1385 @@
+{
+  "scene": "points_probe",
+  "scene_path": "D:\\3D_Spatial_Agent\\dataset\\scenes\\points_probe",
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "switches": {
+    "action_space": "program",
+    "planner": "off",
+    "render": "template",
+    "toolset": [
+      "list_objects",
+      "get_object",
+      "find_object",
+      "single_object",
+      "find_nearest",
+      "find_farthest",
+      "query_relation",
+      "get_3d_position",
+      "get_3d_extent",
+      "calculate_distance",
+      "calculate_angle",
+      "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+  },
+  "backend": {
+    "label": "text",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "api_key": "***7dc8",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "max_retries": 2,
+    "timeout_s": 180.0,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "price_cny_per_mtok": [
+      3.0,
+      9.0
+    ],
+    "ready": true
+  },
+  "gt_source": "scripts.probe_combination.SPECS（与前半段同一份实现）",
+  "summary": {
+    "n": 10,
+    "class": {
+      "C": 3,
+      "OK": 5,
+      "OK*": 2
+    },
+    "status": {
+      "ok": 10
+    },
+    "answer_matches_gt": 10,
+    "correct_but_rejected_by_contract": 3,
+    "used_combination": 9,
+    "keyed_ops_used": 2,
+    "has_key_arg": 1,
+    "has_comprehension": 9,
+    "tool_calls_total": 106,
+    "tool_calls_perfect_total": 70,
+    "tool_calls_min_total": 26,
+    "n_one_call_sufficient": 8,
+    "call_ratio_median": 5.0,
+    "cost_cny": 0.090714
+  },
+  "runs": [
+    {
+      "qid": "C1",
+      "category": "类内 argmax（按尺寸）",
+      "question": "四幅画里哪一幅面积最大？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": "picture_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 4 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 5 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'picture_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          1.118233,
+          0.984506,
+          0.243413,
+          0.260738
+        ],
+        "n_numbers": 85
+      },
+      "attempts": 1,
+      "tool_calls": 5,
+      "call_ratio": 5.0,
+      "elapsed_s": 2.62,
+      "cost_cny": 0.008088,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [
+          "sorted("
+        ],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 40
+      },
+      "used_combination": true,
+      "program": "from itertools import product\n\nscene_id = \"points_probe\"\n\n# 1) 找出所有 picture\nres = find_object(scene_id=scene_id, label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n    raise SystemExit\n\npics = res.value or []\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n    raise SystemExit\n\n# 2) 逐个取三维尺寸，算面积（取最大的两个维度之积作为画面面积）\nbest_id = None\nbest_area = -1.0\nevidence = []\n\nfor p in pics:\n    oid = p.get(\"object_id\")\n    if not oid:\n        continue\n    er = get_3d_extent(scene_id=scene_id, object_id=oid)\n    if not er.ok:\n        evidence.append(\"get_3d_extent(%s) failed: %s\" % (oid, er.error.code))\n        continue\n    ext = er.value\n    dims = sorted([ext[\"w\"], ext[\"h\"], ext[\"l\"]], reverse=True)\n    area = dims[0] * dims[1]\n    evidence.append(\"%s extent=(w=%.4f,h=%.4f,l=%.4f) area=%.6f m^2\" % (oid, ext[\"w\"], ext[\"h\"], ext[\"l\"], area))\n    if area > best_area:\n        best_area = area\n        best_id = oid\n\nif best_id is None:\n    submit(\"unknown\", evidence=[\"could not compute extent for any picture\"] + evidence)\nelse:\n    submit(best_id, target_ids=[best_id], evidence=evidence)",
+      "trace_tools": [
+        "find_object",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent"
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C2",
+      "category": "类内 argmin（按距离）",
+      "question": "哪幅画离镜子最近？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_2",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_nearest"
+      ],
+      "one_call_answer": "picture_2",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_2",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 1 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 3 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'picture_2' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816
+        ],
+        "n_numbers": 54
+      },
+      "attempts": 1,
+      "tool_calls": 3,
+      "call_ratio": 3.0,
+      "elapsed_s": 1.683,
+      "cost_cny": 0.007929,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": false,
+        "n_lines": 39
+      },
+      "used_combination": false,
+      "program": "from itertools import count\n\nscene_id = \"points_probe\"\n\n# 1) 找到镜子\nres = single_object(scene_id=scene_id, label=\"mirror\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(mirror) failed: %s\" % res.error.code])\nelse:\n    mirror = res.value\n    mirror_id = mirror[\"object_id\"]\n\n    # 2) 找到所有画\n    res2 = find_object(scene_id=scene_id, label=\"picture\")\n    if not res2.ok:\n        submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res2.error.code])\n    else:\n        pictures = res2.value\n        if not pictures:\n            submit(\"unknown\", evidence=[\"no picture objects in scene\"])\n        else:\n            # 3) 用 find_nearest 直接取离镜子最近的画\n            res3 = find_nearest(scene_id=scene_id, anchor=mirror_id, label=\"picture\", k=1)\n            if not res3.ok:\n                submit(\"unknown\", evidence=[\"find_nearest failed: %s\" % res3.error.code])\n            else:\n                nearest = res3.value\n                if not nearest:\n                    submit(\"unknown\", evidence=[\"find_nearest returned empty\"])\n                else:\n                    best = nearest[0]\n                    submit(\n                        best[\"object_id\"],\n                        target_ids=[best[\"object_id\"]],\n                        evidence=[\n                            \"find_nearest(anchor=%s, label=picture, k=1) -> object_id=%s, distance_m=%s\"\n                            % (mirror_id, best[\"object_id\"], best.get(\"distance_m\"))\n                        ],\n                    )",
+      "trace_tools": [
+        "single_object",
+        "find_object",
+        "find_nearest"
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C3",
+      "category": "全场景 argmax",
+      "question": "场景里最高的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "mirror_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "list_objects"
+      ],
+      "one_call_answer": "mirror_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "mirror_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 10 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'mirror_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 198
+      },
+      "attempts": 1,
+      "tool_calls": 10,
+      "call_ratio": 10.0,
+      "elapsed_s": 1.729,
+      "cost_cny": 0.007938,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 44
+      },
+      "used_combination": true,
+      "program": "from itertools import groupby\n\nscene_id = \"points_probe\"\n\n# 1) 列出场景中所有物体\nres = list_objects(scene_id=scene_id)\nif not res.ok:\n    submit(\"unknown\", evidence=[f\"list_objects failed: {res.error.code}\"])\n\nobjs = res.value\n\n# 2) 逐个取三维尺寸，找最高的（h 最大）\nbest_id = None\nbest_h = None\nbest_label = None\ndetails = []\n\nfor obj in objs:\n    oid = obj.get(\"object_id\")\n    if not oid:\n        continue\n    ext_res = get_3d_extent(scene_id=scene_id, object_id=oid)\n    if not ext_res.ok:\n        continue\n    ext = ext_res.value\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    details.append((oid, obj.get(\"label\"), h))\n    if best_h is None or h > best_h:\n        best_h = h\n        best_id = oid\n        best_label = obj.get(\"label\")\n\nif best_id is None:\n    submit(\"unknown\", evidence=[\"no object with a valid 3D extent height was found\"])\n\nevidence = [\n    f\"list_objects returned {len(objs)} objects\",\n    f\"get_3d_extent heights (m): \" + \", \".join(f\"{lbl}:{h:.3f}\" for _, lbl, h in details),\n    f\"tallest = {best_label} ({best_id}) with h={best_h:.3f} m\",\n]\n\nsubmit(best_id, target_ids=[best_id], evidence=evidence)",
+      "trace_tools": [
+        "list_objects",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent"
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C4",
+      "category": "筛选 + 计数",
+      "question": "有几个物体的高度超过 0.8 米？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 4,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "list_objects"
+      ],
+      "one_call_answer": 4,
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": 4,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "evidence",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 10 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 4.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": true,
+            "detail": "答案 4.0 命中证据/参数里的数 4.0（弱一档：非工具返回值）",
+            "hard": true
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 198
+      },
+      "attempts": 1,
+      "tool_calls": 10,
+      "call_ratio": 10.0,
+      "elapsed_s": 1.795,
+      "cost_cny": 0.007305,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 37
+      },
+      "used_combination": true,
+      "program": "from itertools import chain\n\nscene_id = \"points_probe\"\n\n# 1) 列出场景中所有物体\nres = list_objects(scene_id=scene_id)\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res.error.code])\n    raise SystemExit\n\nobjs = res.value\ncount = 0\ntall_ids = []\ndetails = []\n\nfor obj in objs:\n    oid = obj[\"object_id\"]\n    ext = get_3d_extent(scene_id=scene_id, object_id=oid)\n    if not ext.ok:\n        continue\n    e = ext.value\n    # 高度取 h 分量\n    h = e[\"h\"] if isinstance(e, dict) else e[1]\n    details.append(\"%s(%s)=%.3f\" % (oid, obj.get(\"label\"), h))\n    if h > 0.8:\n        count += 1\n        tall_ids.append(oid)\n\nsubmit(\n    count,\n    target_ids=tall_ids,\n    evidence=[\n        \"list_objects 返回 %d 个物体\" % len(objs),\n        \"对每个物体调用 get_3d_extent 取 h 分量，统计 h > 0.8 的个数\",\n        \"各物体高度: \" + \"; \".join(details),\n    ],\n)",
+      "trace_tools": [
+        "list_objects",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent"
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C5",
+      "category": "聚合（均值）",
+      "question": "四幅画的平均宽度是多少米？",
+      "answer_type": "float",
+      "needs": "current_values",
+      "gt": 0.4445,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": 0.4445,
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": 0.4445499926805496,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "unsupported",
+        "ok": false,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 5 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 0.4445499926805496",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": false,
+            "detail": "答案 0.4445499926805496 在 trace 的 85 个数里找不到出处 —— 这个数是凭空出现的",
+            "hard": true
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed"
+        ],
+        "failed_hard": [
+          "numeric_backed"
+        ],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          1.118233,
+          0.984506,
+          0.243413,
+          0.260738
+        ],
+        "n_numbers": 85
+      },
+      "attempts": 1,
+      "tool_calls": 5,
+      "call_ratio": 5.0,
+      "elapsed_s": 1.544,
+      "cost_cny": 0.006774,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [
+          "mean("
+        ],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 30
+      },
+      "used_combination": true,
+      "program": "from statistics import mean\n\nscene_id = \"points_probe\"\n\nres = find_object(scene_id=scene_id, label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\nwidths = []\nids = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    ext = get_3d_extent(scene_id=scene_id, object_id=oid)\n    if not ext.ok:\n        continue\n    e = ext.value\n    widths.append(e[\"w\"])\n    ids.append(oid)\n\nif not widths:\n    submit(\"unknown\", evidence=[\"could not read extent for any picture\"])\n\navg = mean(widths)\nsubmit(avg, target_ids=ids,\n       evidence=[\"get_3d_extent(w) for %d pictures: %s\" % (len(widths), widths),\n                 \"average width = mean(widths) = %.6f m\" % avg])",
+      "trace_tools": [
+        "find_object",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent",
+        "get_3d_extent"
+      ],
+      "class": "C",
+      "why": "答案与 GT 一致，但被契约判 unsupported —— 契约问题，与模型无关"
+    },
+    {
+      "qid": "C6",
+      "category": "排序",
+      "question": "把四幅画按从左到右排序，给出 object_id 列表（逗号分隔）。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_4,picture_2,picture_3,picture_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 1,
+      "perfect_tools": [
+        "find_object"
+      ],
+      "one_call_answer": "picture_4,picture_2,picture_3,picture_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "picture_4,picture_2,picture_3,picture_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 5 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": false,
+            "detail": "答案 'picture_4,picture_2,picture_3,picture_1' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "4 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "text_backed"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146,
+          0.261,
+          0.23,
+          0.043,
+          0.489,
+          -1.155,
+          -0.8366,
+          4.054,
+          0.252,
+          0.214,
+          0.057,
+          0.332,
+          -1.9192,
+          -0.8224,
+          4.0816,
+          0.147,
+          0.287,
+          0.149,
+          1.336948,
+          -1.109501,
+          4.058181,
+          -1.166067
+        ],
+        "n_numbers": 81
+      },
+      "attempts": 1,
+      "tool_calls": 5,
+      "call_ratio": 5.0,
+      "elapsed_s": 1.823,
+      "cost_cny": 0.007872,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": true,
+        "has_comprehension": true,
+        "n_lines": 41
+      },
+      "used_combination": true,
+      "program": "from collections import defaultdict\n\nscene_id = \"points_probe\"\n\n# 1) 找出所有 picture\nres = find_object(scene_id=scene_id, label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: \" + str(res.error.code)])\n    raise SystemExit\n\npics = res.value\nif not pics or len(pics) < 2:\n    submit(\"unknown\", evidence=[\"fewer than 2 pictures found\"])\n    raise SystemExit\n\n# 2) 取每幅画的相机系质心 x 坐标（左 = x 更小，相机系约定）\nitems = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    pos = get_3d_position(scene_id=scene_id, object_id=oid)\n    if not pos.ok:\n        submit(\"unknown\", evidence=[\"get_3d_position failed for \" + oid])\n        raise SystemExit\n    x = pos.value[0]\n    items.append((x, oid))\n\n# 3) 从左到右 = x 升序\nitems.sort(key=lambda t: t[0])\nordered = [oid for _, oid in items]\n\nsubmit(\n    \",\".join(ordered),\n    target_ids=ordered,\n    evidence=[\n        \"find_object(label='picture') returned {} pictures\".format(len(pics)),\n        \"get_3d_position x-coords: \" + \", \".join(\n            \"{}={:.3f}\".format(oid, x) for x, oid in items\n        ),\n        \"sorted ascending by camera-frame x (left = smaller x)\",\n    ],\n)",
+      "trace_tools": [
+        "find_object",
+        "get_3d_position",
+        "get_3d_position",
+        "get_3d_position",
+        "get_3d_position"
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    },
+    {
+      "qid": "C7",
+      "category": "两跳组合（跨类别最近）",
+      "question": "离沙发最近的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "table_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "supported",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "one_call_answer": "table_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "table_1",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "supported",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 2 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 10 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": true,
+            "detail": "答案 'table_1' 出现在 trace 里",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 184
+      },
+      "attempts": 1,
+      "tool_calls": 10,
+      "call_ratio": 10.0,
+      "elapsed_s": 2.102,
+      "cost_cny": 0.008226,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 46
+      },
+      "used_combination": true,
+      "program": "from itertools import chain\n\nSCENE = \"points_probe\"\n\n# 1) 找到沙发（唯一）\nres = single_object(scene_id=SCENE, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: %s\" % res.error.code])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n\n    # 2) 列出场景中所有物体，排除沙发自身\n    res_all = list_objects(scene_id=SCENE)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res_all.error.code])\n    else:\n        objs = res_all.value\n        others = [o for o in objs if o[\"object_id\"] != sofa_id]\n\n        if not others:\n            submit(\"unknown\", evidence=[\"no other objects besides sofa\"])\n        else:\n            # 3) 用 calculate_distance 逐个算距离（几何量，不猜坐标）\n            best_id = None\n            best_d = None\n            for o in others:\n                r = calculate_distance(scene_id=SCENE, a=sofa_id, b=o[\"object_id\"])\n                if not r.ok:\n                    continue\n                d = r.value\n                if best_d is None or d < best_d:\n                    best_d = d\n                    best_id = o[\"object_id\"]\n\n            if best_id is None:\n                submit(\"unknown\", evidence=[\"calculate_distance failed for all candidates\"])\n            else:\n                submit(\n                    best_id,\n                    target_ids=[best_id],\n                    evidence=[\n                        \"single_object(label='sofa') -> %s\" % sofa_id,\n                        \"calculate_distance(sofa, each other object) minimized; min distance = %.4f m\" % best_d,\n                    ],\n                )",
+      "trace_tools": [
+        "single_object",
+        "list_objects",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance"
+      ],
+      "class": "OK",
+      "why": "答案与 GT 一致，证据被支持"
+    },
+    {
+      "qid": "C8",
+      "category": "关系计数（命中容差死区）",
+      "question": "有多少个物体在桌子的前面？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 0,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "list_objects",
+        "query_relation"
+      ],
+      "one_call_answer": 1,
+      "one_call_matches_gt": false,
+      "min_tool_calls": 9,
+      "answer": 0,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "unsupported",
+        "ok": false,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 1 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 11 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 0.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": false,
+            "detail": "答案 0.0 在 trace 的 133 个数里找不到出处 —— 这个数是凭空出现的",
+            "hard": true
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed"
+        ],
+        "failed_hard": [
+          "numeric_backed"
+        ],
+        "numbers": [
+          0.399,
+          0.5889,
+          0.6055,
+          1.8714,
+          1.059,
+          0.537,
+          1.039,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 133
+      },
+      "attempts": 2,
+      "tool_calls": 11,
+      "call_ratio": 1.22,
+      "elapsed_s": 4.456,
+      "cost_cny": 0.02142,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 51
+      },
+      "used_combination": true,
+      "program": "scene_id = \"points_probe\"\n\n# 1) 找到桌子\nres = single_object(scene_id=scene_id, label=\"table\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(table) failed: %s\" % res.error.code])\nelse:\n    table = res.value\n    table_id = table[\"object_id\"]\n\n    # 2) 列出所有物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res_all.error.code])\n    else:\n        objs = res_all.value\n        table_pos = get_3d_position(scene_id=scene_id, object_id=table_id)\n        if not table_pos.ok:\n            submit(\"unknown\", evidence=[\"get_3d_position(table) failed\"])\n        else:\n            tx, ty, tz = table_pos.value\n\n            count = 0\n            details = []\n            for o in objs:\n                oid = o[\"object_id\"]\n                if oid == table_id:\n                    continue\n                # 用 query_relation 判断是否在桌子前面\n                rel = query_relation(scene_id=scene_id, relation=\"front_of\",\n                                     a=oid, b=table_id)\n                if rel.ok:\n                    val = rel.value\n                    is_front = bool(val) if not isinstance(val, (int, float)) else (val > 0)\n                    if is_front:\n                        count += 1\n                        details.append(oid)\n                else:\n                    # 回退：用相机系坐标判断（相机系中 z 越小越靠前）\n                    p = get_3d_position(scene_id=scene_id, object_id=oid)\n                    if p.ok:\n                        oz = p.value[2]\n                        if oz < tz:\n                            count += 1\n                            details.append(oid)\n\n            submit(count,\n                   target_ids=[table_id],\n                   evidence=[\"query_relation(front_of) 对每个非桌子物体判定，\"\n                             \"回退用相机系 z 坐标比较 (z 越小越靠前)；\"\n                             \"桌子 z=%.3f，命中物体: %s\" % (tz, details)])",
+      "trace_tools": [
+        "single_object",
+        "list_objects",
+        "get_3d_position",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation"
+      ],
+      "class": "C",
+      "why": "答案与 GT 一致，但被契约判 unsupported —— 契约问题，与模型无关"
+    },
+    {
+      "qid": "C8b",
+      "category": "关系计数（远离死区）",
+      "question": "有多少个物体在沙发的前面？",
+      "answer_type": "int",
+      "needs": "current_values",
+      "gt": 3,
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 9,
+      "perfect_tools": [
+        "list_objects",
+        "query_relation"
+      ],
+      "one_call_answer": null,
+      "one_call_matches_gt": false,
+      "min_tool_calls": 9,
+      "answer": 3,
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "unsupported",
+        "ok": false,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 3 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 10 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "answer_finite",
+            "ok": true,
+            "detail": "答案是有限数 3.0",
+            "hard": true
+          },
+          {
+            "name": "numeric_backed",
+            "ok": false,
+            "detail": "答案 3.0 在 trace 的 120 个数里找不到出处 —— 这个数是凭空出现的",
+            "hard": true
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "1 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "numeric_backed"
+        ],
+        "failed_hard": [
+          "numeric_backed"
+        ],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336
+        ],
+        "n_numbers": 120
+      },
+      "attempts": 1,
+      "tool_calls": 10,
+      "call_ratio": 1.11,
+      "elapsed_s": 1.523,
+      "cost_cny": 0.007926,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 44
+      },
+      "used_combination": true,
+      "program": "import math\n\nscene_id = \"points_probe\"\n\n# 1. 找到沙发\nres = single_object(scene_id=scene_id, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: %s\" % res.error.code])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n\n    # 2. 列出所有物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res_all.error.code])\n    else:\n        objs = res_all.value\n        count = 0\n        details = []\n        for o in objs:\n            oid = o[\"object_id\"]\n            if oid == sofa_id:\n                continue\n            # 用关系查询判断是否在沙发前面\n            r = query_relation(scene_id=scene_id, relation=\"front_of\", a=oid, b=sofa_id)\n            if not r.ok:\n                # 关系不可用则跳过\n                continue\n            val = r.value\n            is_front = bool(val) if isinstance(val, bool) else (val > 0)\n            if is_front:\n                count += 1\n                details.append(oid)\n\n        submit(\n            count,\n            target_ids=[sofa_id],\n            evidence=[\n                \"single_object(sofa) -> %s\" % sofa_id,\n                \"query_relation(front_of, a=obj, b=sofa) over %d objects\" % len(objs),\n                \"front objects: %s\" % details,\n            ],\n        )",
+      "trace_tools": [
+        "single_object",
+        "list_objects",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation",
+        "query_relation"
+      ],
+      "class": "C",
+      "why": "答案与 GT 一致，但被契约判 unsupported —— 契约问题，与模型无关"
+    },
+    {
+      "qid": "C12",
+      "category": "全局极值对（O(n²)）",
+      "question": "场景里质心相距最远的是哪两个物体？给出两个 object_id（逗号分隔）。",
+      "answer_type": "str",
+      "needs": "current_values",
+      "gt": "picture_4,table_1",
+      "gt_error": "",
+      "gt_verdict_on_perfect": "weak",
+      "perfect_tool_calls": 37,
+      "perfect_tools": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "one_call_answer": "picture_4,table_1",
+      "one_call_matches_gt": true,
+      "min_tool_calls": 1,
+      "answer": "table_1,picture_4",
+      "abstained": false,
+      "status": "ok",
+      "verdict": {
+        "level": "weak",
+        "ok": true,
+        "matched_from": "",
+        "checks": [
+          {
+            "name": "has_evidence",
+            "ok": true,
+            "detail": "evidence 有 1 条",
+            "hard": true
+          },
+          {
+            "name": "tool_was_used",
+            "ok": true,
+            "detail": "成功调用 37 次工具（另有 0 次失败）",
+            "hard": true
+          },
+          {
+            "name": "text_backed",
+            "ok": false,
+            "detail": "答案 'table_1,picture_4' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）",
+            "hard": false
+          },
+          {
+            "name": "targets_in_scene",
+            "ok": true,
+            "detail": "2 个 target_id 全部落在场景内",
+            "hard": false
+          },
+          {
+            "name": "targets_exist",
+            "ok": true,
+            "detail": "全部存在于场景图",
+            "hard": false
+          }
+        ],
+        "failed": [
+          "text_backed"
+        ],
+        "failed_hard": [],
+        "numbers": [
+          0.836,
+          0.7967,
+          0.3191,
+          3.1746,
+          2.342,
+          0.817,
+          1.263,
+          0.795,
+          1.3369,
+          -1.1095,
+          4.0582,
+          1.118,
+          0.985,
+          0.243,
+          0.676,
+          -0.2998,
+          -1.037,
+          3.9484,
+          0.877,
+          1.276,
+          0.272,
+          0.528,
+          -0.7395,
+          0.6535,
+          1.8336,
+          0.977,
+          0.303,
+          0.829,
+          0.501,
+          -1.1661,
+          -1.0598,
+          4.0146
+        ],
+        "n_numbers": 540
+      },
+      "attempts": 1,
+      "tool_calls": 37,
+      "call_ratio": 37.0,
+      "elapsed_s": 1.306,
+      "cost_cny": 0.007236,
+      "failure": null,
+      "ops": {
+        "keyed_ops": [],
+        "bare_ops": [
+          "len("
+        ],
+        "has_key_arg": false,
+        "has_comprehension": true,
+        "n_lines": 33
+      },
+      "used_combination": true,
+      "program": "import itertools\n\nscene_id = \"points_probe\"\n\nres = list_objects(scene_id=scene_id)\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\nelse:\n    objs = res.value\n    ids = [o[\"object_id\"] for o in objs]\n\n    best_pair = None\n    best_dist = -1.0\n    evidence = []\n\n    for a, b in itertools.combinations(ids, 2):\n        r = calculate_distance(scene_id=scene_id, a=a, b=b)\n        if not r.ok:\n            continue\n        d = r.value\n        if d > best_dist:\n            best_dist = d\n            best_pair = (a, b)\n\n    if best_pair is None:\n        submit(\"unknown\", evidence=[\"no valid pairwise distances could be computed\"])\n    else:\n        a, b = best_pair\n        evidence.append(\n            \"calculate_distance over all %d pairs; max = %.6f m between %s and %s\"\n            % (len(ids) * (len(ids) - 1) // 2, best_dist, a, b)\n        )\n        submit(\"%s,%s\" % (a, b), target_ids=[a, b], evidence=evidence)",
+      "trace_tools": [
+        "list_objects",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance",
+        "calculate_distance"
+      ],
+      "class": "OK*",
+      "why": "答案与 GT 一致，但只判 weak（软检查没过：多值答案不逐字出现）"
+    }
+  ],
+  "reanalyzed_from": "D:\\3D_Spatial_Agent\\reports\\combination_run_20260919_212328.json"
+}

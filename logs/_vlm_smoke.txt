@@ -1,0 +1,9 @@
+﻿attrs: ('color', 'material', 'texture', 'state', 'shape')
+signature_violations: ()
+params: ['self', 'image', 'region', 'attrs', 'candidates']
+n_tools: 16
+has get_attributes: True
+params: ('scene_id', 'object_id', 'attrs', 'candidates')
+  get_attributes(scene_id: str | None=None, object_id: str='', attrs: list[str] | None=None, candidates: dict | None=None)
+      璇诲彇鏌愪釜鐗╀綋鍦?*瑙嗚璇箟**涓婄殑灞炴€э紙棰滆壊 / 鏉愯川 / 绾圭悊 / 鐘舵€?/ 褰㈢姸锛夈€?
+exit=0

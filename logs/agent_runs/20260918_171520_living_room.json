@@ -1,0 +1,114 @@
+{
+  "mode": "program_file",
+  "scene": "living_room: 9 objects / 133 edges (up_axis=-y, scale=1.000)",
+  "scene_hint": {
+    "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+    },
+    "n_objects": 9,
+    "image_id": "rgb.png",
+    "scene_id": "living_room"
+  },
+  "tools_version": "1.1.0",
+  "static_check": {
+    "ok": true,
+    "parse_ok": true,
+    "has_submit": true,
+    "tool_calls": [
+      "list_objects",
+      "calculate_distance",
+      "get_3d_extent",
+      "get_3d_position"
+    ],
+    "n_tool_calls": 4,
+    "unknown_calls": [],
+    "bad_kwargs": [],
+    "positional_tool_calls": [],
+    "bad_imports": [],
+    "errors": [],
+    "syntax_error": null
+  },
+  "execution": {
+    "ok": true,
+    "stage": "ok",
+    "message": "",
+    "lineno": null,
+    "tool_calls": 4,
+    "duration_ms": 2.165,
+    "submission": {
+      "answer": 4.394358065492718,
+      "answer_type": "float",
+      "target_ids": [
+        "sofa_1",
+        "picture_1"
+      ],
+      "evidence": [
+        "labels = chair,mirror,picture,sofa,sofa chair,table",
+        "calculate_distance(a=sofa_1, b=picture_1) = 4.3944 m",
+        "formula = ||centroid_a - centroid_b||_2",
+        "get_3d_extent(sofa_1) = {'w': 6.7049707770347595, 'h': 2.348816752433777, 'l': 1.1285264492034912}",
+        "get_3d_position(picture_1) = [3.883178949356079, -3.033325672149658, 3.630674123764038]"
+      ],
+      "unknown_targets": [],
+      "abstained": false,
+      "n_evidence": 5
+    },
+    "stdout": "",
+    "n_trace": 4,
+    "trace_errors": {}
+  },
+  "usage": {
+    "calls": 0,
+    "cost_cny": 0.0
+  },
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "84ca92b0406554998f9c67de527a60513ba6b1efa042475d7117faeee5217f12",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  }
+}

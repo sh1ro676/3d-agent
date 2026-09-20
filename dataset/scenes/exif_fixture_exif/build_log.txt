@@ -1,0 +1,275 @@
+# 场景图构建记录  scene_id=exif_fixture_exif
+image=D:\3D_Spatial_Agent\.cache\exif_fixture\rgb_exif.jpg
+built_at='sofa. chair. table. picture. mirror.'
+
+## 耗时 (ms)
+{"depth_ms": 930.9, "detect_ms": 977.3, "segment_ms": 274.0, "nodes_ms": 33.0, "up_axis_ms": 8.8, "relations_ms": 2.6}
+build_wall_s=2.23
+model_load_wall_s=21.37
+
+## 内参与视场
+intrinsics_arg=EXIF → fx=515.6 fy=515.6 cx=320.0 cy=240.0  等效焦距 29 mm  HFoV 63.7°  量化误差 ±1.7%
+{
+  "intrinsics_source": "provided",
+  "intrinsics": [
+    [
+      515.555556,
+      0.0,
+      320.0
+    ],
+    [
+      0.0,
+      515.555556,
+      240.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "fov": {
+    "hfov_deg": 63.65,
+    "vfov_deg": 49.93,
+    "plausible": true,
+    "reason": "ok"
+  },
+  "scale_calibrated": false
+}
+{
+  "exif": {
+    "source": "exif:35mm",
+    "fx": 515.56,
+    "fy": 515.56,
+    "cx": 320.0,
+    "cy": 240.0,
+    "image_hw": [
+      480,
+      640
+    ],
+    "focal_mm": 29.0,
+    "focal_35mm_mm": 29.0,
+    "sensor_width_mm": 36.0,
+    "assumed_sensor": false,
+    "quantisation_rel": 0.01724,
+    "size_mismatch": false,
+    "fov": {
+      "hfov_deg": 63.65,
+      "vfov_deg": 49.93,
+      "plausible": true,
+      "reason": "ok"
+    },
+    "notes": [
+      "由 FocalLengthIn35mmFilm=29 mm 换算：f_px = 29/36 × max(W,H)=640 = 515.6",
+      "主点无 EXIF 来源，取图像中心；真实主点常偏 1–3%。",
+      "EXIF 不含畸变系数；广角镜头的桶形畸变会让边缘横向几何系统性偏。",
+      "FocalLengthIn35mmFilm 为整数毫米 ⟹ 四舍五入半步 ±1.7%（整步 ±3.4%）。Step 7 容差预算：方位误差 ≤10 px 要求焦距偏差 ≤±6.6% —— EXIF 在预算内，但用掉了约三分之一。"
+    ]
+  }
+}
+
+## 感知栈
+{
+  "device": "cuda",
+  "device_total_mib": 8188.0,
+  "resident_mb": 1146.7,
+  "resident_pct": 14.0,
+  "peak_mb": 2177.2,
+  "models": {
+    "grounding": {
+      "role": "grounding",
+      "hub_id": "IDEA-Research/grounding-dino-tiny",
+      "loaded": true,
+      "source": "local",
+      "load_s": 9.76,
+      "resident_mb": 660.0,
+      "n_params_m": 172.3,
+      "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+      "role": "segmentation",
+      "hub_id": "facebook/sam2.1-hiera-base-plus",
+      "loaded": true,
+      "source": "local",
+      "load_s": 0.58,
+      "resident_mb": 282.2,
+      "n_params_m": 73.3,
+      "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+      "role": "depth",
+      "hub_id": "lpiccinelli/unidepth-v2-vits14",
+      "loaded": true,
+      "source": "hub",
+      "load_s": 11.02,
+      "resident_mb": 132.3,
+      "n_params_m": 34.2,
+      "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+  }
+}
+
+## 警告
+
+## 物体
+[
+  {
+    "id": "sofa_1",
+    "label": "sofa",
+    "score": 0.8217724561691284,
+    "centroid_m": [
+      0.858584463596344,
+      0.41231678426265717,
+      3.2036805152893066
+    ],
+    "extent_m": [
+      2.4634475857019424,
+      0.7990307360887527,
+      1.2168869972229004
+    ],
+    "n_points": 23898,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_1",
+    "label": "picture",
+    "score": 0.794864296913147,
+    "centroid_m": [
+      1.3924013376235962,
+      -1.0113002061843872,
+      4.072440147399902
+    ],
+    "extent_m": [
+      1.1130556464195251,
+      0.9869014024734497,
+      0.2050938606262207
+    ],
+    "n_points": 16133,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "mirror_1",
+    "label": "mirror",
+    "score": 0.6759629845619202,
+    "centroid_m": [
+      -0.26229697465896606,
+      -0.9507904648780823,
+      3.9995219707489014
+    ],
+    "extent_m": [
+      0.8923138529062271,
+      1.3018127083778381,
+      0.30455970764160156
+    ],
+    "n_points": 18017,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "chair_1",
+    "label": "chair",
+    "score": 0.5307794213294983,
+    "centroid_m": [
+      -0.7272829413414001,
+      0.7084710001945496,
+      1.8393718004226685
+    ],
+    "extent_m": [
+      0.9819139838218689,
+      0.30822980403900146,
+      0.8350784778594971
+    ],
+    "n_points": 18797,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_2",
+    "label": "picture",
+    "score": 0.5047276616096497,
+    "centroid_m": [
+      -1.1409554481506348,
+      -0.9696955680847168,
+      4.053671836853027
+    ],
+    "extent_m": [
+      0.26234984397888184,
+      0.236189067363739,
+      0.033774375915527344
+    ],
+    "n_points": 964,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_3",
+    "label": "picture",
+    "score": 0.4912274181842804,
+    "centroid_m": [
+      -1.1288646459579468,
+      -0.7413851618766785,
+      4.0889997482299805
+    ],
+    "extent_m": [
+      0.2510462999343872,
+      0.22038614749908447,
+      0.05735349655151367
+    ],
+    "n_points": 895,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "sofa_chair_1",
+    "label": "sofa chair",
+    "score": 0.44359102845191956,
+    "centroid_m": [
+      -1.048448920249939,
+      0.3994912803173065,
+      2.730267286300659
+    ],
+    "extent_m": [
+      1.3322252035140991,
+      0.7907477519474924,
+      1.4447870254516602
+    ],
+    "n_points": 29097,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "table_1",
+    "label": "table",
+    "score": 0.40697336196899414,
+    "centroid_m": [
+      0.6217451691627502,
+      0.6641445457935333,
+      1.8876521587371826
+    ],
+    "extent_m": [
+      1.0550521165132523,
+      0.5346048474311829,
+      1.038364052772522
+    ],
+    "n_points": 30578,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_4",
+    "label": "picture",
+    "score": 0.34187331795692444,
+    "centroid_m": [
+      -1.888807773590088,
+      -0.719585120677948,
+      4.084932804107666
+    ],
+    "extent_m": [
+      0.14925599098205566,
+      0.2864251732826233,
+      0.1820509433746338
+    ],
+    "n_points": 817,
+    "centroid_source": "mask"
+  }
+]
+
+## 被丢弃的检测
+[]
+
+## 降级记录
+[]

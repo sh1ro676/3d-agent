@@ -1,0 +1,116 @@
+== scene.json  top keys=['_format', '_written_at', 'scene']
+   scene keys=['build_meta', 'camera_intrinsics', 'edges', 'image_id', 'nodes', 'scale_factor', 'scene_id', 'up_axis']
+   n_nodes=9
+   node[0] keys=['attributes', 'bbox_2d', 'bbox_3d', 'centroid_3d', 'centroid_source', 'extent_3d', 'frame', 'id', 'label', 'mask_ref', 'n_points', 'score']
+   node[0]={"id": "sofa_1", "label": "sofa", "score": 0.8359013199806213, "bbox_2d": [286.2919921875, 215.18048095703125, 632.1593627929688, 363.7095031738281], "mask_ref": "living_room/masks/sofa_1.png", "centroid_3d": [2.4002654552459717, 1.0315964221954346, 2.8640198707580566], "extent_3d": [6.7049707770347595, 2.348816752433777, 1.1285264492034912], "bbox_3d": {"min": [-0.6875008940696716, -0.6322897672653198, 2.719151496887207], "max": [6.017469882965088, 1.716526985168457, 3.8476779460906982]}, "attributes": {}, "frame": "camera", "n_points": 23841, "centroid_source": "mask"}
+== scene_report.json  top keys=['counterfactual', 'diagnosis', 'provenance', 'report', 'summary']
+   scene keys=['counterfactual', 'diagnosis', 'provenance', 'report', 'summary']
+   n_nodes=0
+   report: dict keys=['scene_id', 'image_id', 'objects', 'quality', 'relations', 'truncated', 'relation_summary', 'caveats']
+   diagnosis: dict keys=['scene_id', 'question_id', 'question', 'stage', 'findings']
+   counterfactual: dict keys=['scene_id', 'image_id', 'objects', 'quality', 'relation_summary', 'relations', 'truncated', 'caveats', 'diff']
+   provenance: dict keys=['scene_json', 'tools_version', 'method', 'detail', 'n_objects', 'n_pairs_total', 'gpu_used_mb', 'latency_ms']
+== build_meta ==
+{
+ "config": {
+  "prompt": "sofa. chair. table. picture. mirror.",
+  "box_threshold": 0.3,
+  "text_threshold": 0.25,
+  "min_points": 30,
+  "min_box_area_px": 64.0,
+  "dedupe_iou": 0.85,
+  "max_objects": 40,
+  "tol_m": 0.05,
+  "near_m": 1.0,
+  "relation_policy": "distance_plus_true",
+  "estimate_up": true,
+  "up_band": 0.2,
+  "max_tilt_deg": 25.0
+ },
+ "timings_ms": {
+  "depth_ms": 2085.0,
+  "detect_ms": 1215.4,
+  "segment_ms": 285.8,
+  "nodes_ms": 32.5,
+  "up_axis_ms": 9.4,
+  "relations_ms": 2.5
+ },
+ "image_hw": [
+  480,
+  640
+ ],
+ "grid_hw": [
+  480,
+  640
+ ],
+ "grid_scale_vs_image": [
+  1.0,
+  1.0
+ ],
+ "depth_range_m": [
+  1.3763,
+  3.9738
+ ],
+ "n_detections_raw": 9,
+ "n_detections_kept": 9,
+ "n_nodes": 9,
+ "n_edges": 133,
+ "n_dropped": 0,
+ "n_fallbacks": 0,
+ "dropped": [],
+ "fallbacks": [],
+ "mask_box_coverage_mean": 0.8041,
+ "mask_box_coverage_min": 0.4624,
+ "label_counts": {
+  "sofa": 1,
+  "picture": 4,
+  "mirror": 1,
+  "chair": 1,
+  "sofa chair": 1,
+  "table": 1
+ },
+ "up_axis": "-y",
+ "up_axis_tilt_deg": 63.04,
+ "up_axis_reliable": false,
+ "up_axis_reason": "band_not_horizontal",
+ "scale_calibrated": false,
+ "perception": {
+  "device": "cuda",
+  "device_total_mib": 8188.0,
+  "resident_mb": 1146.7,
+  "resident_pct": 14.0,
+  "peak_mb": 2177.2,
+  "models": {
+   "grounding": {
+    "role": "grounding",
+    "hub_id": "IDEA-Research/grounding-dino-tiny",
+    "loaded": true,
+    "source": "local",
+    "load_s": 7.65,
+    "resident_mb": 660.0,
+    "n_params_m": 172.3,
+    "note": "开放词汇检测；prompt 须小写句点结尾"
+   },
+   "segmentation": {
+    "role": "segmentation",
+    "hub_id": "facebook/sam2.1-hiera-base-plus",
+    "loaded": true,
+    "source": "local",
+    "load_s": 0.51,
+    "resident_mb": 282.2,
+    "n_params_m": 73.3,
+    "note": "提示式分割；必须批量一次调用（快 7.57×）"
+   },
+   "depth": {
+    "role": "depth",
+    "hub_id": "lpiccinelli/unidepth-v2-vits14",
+    "loaded": true,
+    "source": "hub",
+    "load_s": 4.42,
+    "resident_mb": 132.3,
+    "n_params_m": 34.2,
+    "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+   }
+  }
+ }
+}

@@ -1,0 +1,75 @@
+
+Results:
+Image: 91339.246_00000463.jpg
+Question 0: What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?
+Program: 
+# Locate the fireplace
+fireplaces = loc(image, "fireplace")
+fireplace_bbox = fireplaces[0]
+fireplace_height = _get_object_height(image, fireplace_bbox)
+
+# Locate the coffee table
+coffee_tables = loc(image, "coffee table")
+coffee_table_bbox = coffee_tables[0]
+coffee_table_height = _get_object_height(image, coffee_table_bbox)
+
+# Locate all sofas
+sofas = loc(image, "sofa")
+
+# Find the sofa to the right of the coffee table
+# Get coffee table center x-coordinate
+coffee_table_center_x = (coffee_table_bbox[0] + coffee_table_bbox[2]) / 2
+
+sofa_to_right_bbox = None
+for sofa_bbox in sofas:
+    sofa_center_x = (sofa_bbox[0] + sofa_bbox[2]) / 2
+    if sofa_center_x > coffee_table_center_x:
+        sofa_to_right_bbox = sofa_bbox
+        break
+
+sofa_height = _get_object_height(image, sofa_to_right_bbox)
+
+# Calculate the ratio
+combined_height = coffee_table_height + sofa_height
+final_result = fireplace_height / combined_height
+
+Predicted Answer: 0.5548961424332344
+Correct Answer: 0.948
+Image: 91339.246_00000463.jpg
+Question 1: If the coffee table is 2m long, how long is the sofa to the right of it in meters?
+Program: 
+# Locate the coffee table
+coffee_tables = loc(image, "coffee table")
+coffee_table_bbox = coffee_tables[0]
+
+# Get the 2D width (length along x-axis) of the coffee table in pixels
+coffee_table_width_pixels = _get_object_width(image, coffee_table_bbox)
+
+# The coffee table is 2m long, so calculate pixels per meter
+pixels_per_meter = coffee_table_width_pixels / 2.0
+
+# Locate all sofas
+sofas = loc(image, "sofa")
+
+# Find the sofa to the right of the coffee table
+# The sofa to the right should have its xmin greater than the coffee table's xmax
+sofa_to_right_bbox = None
+for sofa_bbox in sofas:
+    if sofa_bbox[0] > coffee_table_bbox[2]:  # sofa's xmin > coffee table's xmax
+        sofa_to_right_bbox = sofa_bbox
+        break
+
+# Get the 2D width (length along x-axis) of the sofa in pixels
+sofa_width_pixels = _get_object_width(image, sofa_to_right_bbox)
+
+# Convert sofa width from pixels to meters using the scale
+sofa_length_meters = sofa_width_pixels / pixels_per_meter
+
+final_result = sofa_length_meters
+
+Predicted Answer: 2.934984520123839
+Correct Answer: 3.026
+
+Only Execution Correct: 0.0
+Both Correct: 0.0
+Accuracy: 0.0

@@ -1,0 +1,21 @@
+﻿python.exe : Traceback (most recent call last):
+所在位置 行:448 字符: 1
++ & $py "$root\scripts\run_agent.py" --scene living_room --question "场景 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last) 
+   ::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "D:\3D_Spatial_Agent\scripts\run_agent.py", line 293, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\3D_Spatial_Agent\scripts\run_agent.py", line 191, in main
+    _emit(args, payload)
+  File "D:\3D_Spatial_Agent\scripts\run_agent.py", line 228, in _emit
+    text.write_text(_human(payload), encoding="utf-8")
+                    ^^^^^^^^^^^^^^^
+  File "D:\3D_Spatial_Agent\scripts\run_agent.py", line 282, in _human
+    st.get("detail", st.get("message", ""))[:160]))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+KeyError: slice(None, 160, None)
+exit=1

@@ -1,0 +1,22 @@
+﻿## 体积
+C:\Users\ROG\WorkBuddy\2026-09-14-19-53-31\.workbuddy\memory
+  2026-09-14.md	3610
+  2026-09-15.md	36568
+  2026-09-16.md	57323
+  2026-09-17.md	26929
+  2026-09-18.md	22867
+  2026-09-19.md	5902
+  MEMORY.md	14735
+  MEMORY-DETAIL.md	43560
+D:\3D_Spatial_Agent\.workbuddy\memory
+  2026-09-14.md	3610
+  2026-09-15.md	36568
+  2026-09-16.md	57323
+  2026-09-17.md	26929
+  2026-09-18.md	22867
+  2026-09-19.md	5902
+  MEMORY.md	14735
+  MEMORY-DETAIL.md	43560
+hash match = True
+## 服务状态
+health OK 200

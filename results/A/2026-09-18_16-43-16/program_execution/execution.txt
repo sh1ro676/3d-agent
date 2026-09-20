@@ -1,0 +1,697 @@
+
+Results:
+Image: 32292.427_00002318.jpg
+Question 18: Which object is closer to the camera: the washing machine or the kettle? Options: {washing machine, kettle}
+Program: 
+washing_machine_bbox = _closest_object_bbox(image, "washing machine")
+kettle_bbox = _closest_object_bbox(image, "kettle")
+
+washing_machine_depth = depth(image, washing_machine_bbox)
+kettle_depth = depth(image, kettle_bbox)
+
+if washing_machine_depth < kettle_depth:
+    final_result = "washing machine"
+else:
+    final_result = "kettle"
+
+Predicted Answer: washing machine
+Correct Answer: washing machine
+Image: 28821.006_00000337.jpg
+Question 26: If the leftmost cabinet is 2m wide, how tall is the black chair in meters?
+Program: 
+# Find all cabinets
+cabinets = loc(image, "cabinet")
+
+# Find the leftmost cabinet (smallest xmin)
+leftmost_cabinet = min(cabinets, key=lambda bbox: bbox[0])
+
+# Find the black chair
+chairs = loc(image, "chair")
+
+# Find the black chair by checking color
+black_chair = None
+for chair in chairs:
+    color = _get_color(image, chair)
+    if color.lower() == "black":
+        black_chair = chair
+        break
+
+# Get the real-world height of the black chair using the cabinet's width as reference
+# The cabinet is 2m wide
+final_result = _get_real_height(image, black_chair, leftmost_cabinet, 2.0)
+
+Predicted Answer: 998.6455078125
+Correct Answer: 2.103
+Image: 183724.018_00000638.jpg
+Question 31: What is the ratio of the volume of the rightmost sofa to the circular table under the TV?
+Program: 
+# Find all sofas
+sofas = loc(image, "sofa")
+
+# Find the rightmost sofa (highest xmax value)
+rightmost_sofa = None
+max_xmax = -1
+for sofa in sofas:
+    if sofa[2] > max_xmax:  # sofa[2] is xmax
+        max_xmax = sofa[2]
+        rightmost_sofa = sofa
+
+# Find the circular table under the TV
+# First find the TV
+tv = loc(image, "TV")
+if tv:
+    tv_bbox = tv[0]  # Take the first TV found
+else:
+    tv_bbox = None
+
+# Find circular tables
+circular_tables = loc(image, "circular table")
+
+# Find the table under the TV
+table_under_tv = None
+if tv_bbox and circular_tables:
+    for table in circular_tables:
+        # Check if table is under the TV (table's ymin should be greater than TV's ymax, and x ranges should overlap)
+        if table[1] > tv_bbox[3]:  # table ymin > TV ymax (table is below TV)
+            # Check horizontal overlap
+            if not (table[2] < tv_bbox[0] or table[0] > tv_bbox[2]):
+                table_under_tv = table
+                break
+
+# Calculate volume of rightmost sofa
+if rightmost_sofa:
+    sofa_width, sofa_height = get_2D_object_size(image, rightmost_sofa)
+    sofa_depth = depth(image, rightmost_sofa)
+    sofa_volume = sofa_width * sofa_height * sofa_depth
+else:
+    sofa_volume = 0
+
+# Calculate volume of circular table under TV
+if table_under_tv:
+    table_width, table_height = get_2D_object_size(image, table_under_tv)
+    table_depth = depth(image, table_under_tv)
+    table_volume = table_width * table_height * table_depth
+else:
+    table_volume = 0
+
+# Calculate ratio
+if table_volume != 0:
+    final_result = sofa_volume / table_volume
+else:
+    final_result = 0
+
+Predicted Answer: 4.717571258544922
+Correct Answer: 5.814
+Image: 12214.439_00001777.jpg
+Question 34: If the sofa is 0.4m tall, how wide is the stool in front of the piano in meters?
+Program: 
+sofa_bboxes = loc(image, "sofa")
+if len(sofa_bboxes) == 0:
+    final_result = None
+else:
+    sofa_bbox = sofa_bboxes[0]
+    sofa_2d_width, sofa_2d_height = get_2D_object_size(image, sofa_bbox)
+    sofa_depth = depth(image, sofa_bbox)
+    
+    stool_bboxes = loc(image, "stool")
+    stool_bbox = None
+    for s_bbox in stool_bboxes:
+        answer = vqa(image, "Is this stool in front of the piano?", s_bbox)
+        if answer.lower() == "yes":
+            stool_bbox = s_bbox
+            break
+    
+    if stool_bbox is None:
+        final_result = None
+    else:
+        stool_2d_width, stool_2d_height = get_2D_object_size(image, stool_bbox)
+        stool_depth = depth(image, stool_bbox)
+        
+        k = 0.4 / (sofa_2d_height * sofa_depth)
+        real_width_stool = stool_2d_width * stool_depth * k
+        final_result = real_width_stool
+
+Predicted Answer: 0.8386726975440979
+Correct Answer: 0.224
+Image: 186909.798_00006580.jpg
+Question 92: If the combined height of the TV and TV stand is 2m, how wide is the brown and silver coffee table?
+Program: 
+# Find the TV and TV stand to establish reference height
+tv_bboxes = loc(image, "TV")
+tv_stand_bboxes = loc(image, "TV stand")
+
+# Get the first TV and TV stand (assuming there's one of each)
+tv_bbox = tv_bboxes[0]
+tv_stand_bbox = tv_stand_bboxes[0]
+
+# Get 2D heights of TV and TV stand
+tv_width_2d, tv_height_2d = get_2D_object_size(image, tv_bbox)
+tv_stand_width_2d, tv_stand_height_2d = get_2D_object_size(image, tv_stand_bbox)
+
+# Get depths to convert to 3D heights
+tv_depth = depth(image, tv_bbox)
+tv_stand_depth = depth(image, tv_stand_bbox)
+
+# Calculate 3D heights (2D height * depth)
+tv_height_3d = tv_height_2d * tv_depth
+tv_stand_height_3d = tv_stand_height_2d * tv_stand_depth
+
+# Combined height is 2m, so we can find the scale factor
+combined_height_3d = tv_height_3d + tv_stand_height_3d
+scale_factor = 2.0 / combined_height_3d
+
+# Now find the brown and silver coffee table
+coffee_table_bboxes = loc(image, "brown and silver coffee table")
+
+# Get the first coffee table
+coffee_table_bbox = coffee_table_bboxes[0]
+
+# Get 2D width of coffee table
+coffee_table_width_2d, coffee_table_height_2d = get_2D_object_size(image, coffee_table_bbox)
+
+# Get depth of coffee table
+coffee_table_depth = depth(image, coffee_table_bbox)
+
+# Calculate 3D width (2D width * depth)
+coffee_table_width_3d = coffee_table_width_2d * coffee_table_depth
+
+# Apply scale factor to get real-world width
+final_result = coffee_table_width_3d * scale_factor
+
+Predicted Answer: 1.7328004837036133
+Correct Answer: 2.546
+Image: 114979.918_00002498.jpg
+Question 95: If the combined height of the bedside table and left-most cabinet is 3m, how wide is the bed?
+Program: 
+# Find the bedside table
+bedside_table_bboxes = loc(image, "bedside table")
+bedside_table_bbox = bedside_table_bboxes[0] if bedside_table_bboxes else None
+
+# Find all cabinets and get the left-most one
+cabinet_bboxes = loc(image, "cabinet")
+if cabinet_bboxes:
+    # Left-most means smallest xmin
+    left_most_cabinet_bbox = min(cabinet_bboxes, key=lambda bbox: bbox[0])
+else:
+    left_most_cabinet_bbox = None
+
+# Find the bed
+bed_bboxes = loc(image, "bed")
+bed_bbox = bed_bboxes[0] if bed_bboxes else None
+
+# Get 2D heights of bedside table and left-most cabinet
+_, bedside_table_2d_height = get_2D_object_size(image, bedside_table_bbox)
+_, cabinet_2d_height = get_2D_object_size(image, left_most_cabinet_bbox)
+
+# Get depths
+bedside_table_depth = depth(image, bedside_table_bbox)
+cabinet_depth = depth(image, left_most_cabinet_bbox)
+
+# Calculate 3D heights (2D height * depth)
+bedside_table_3d_height = bedside_table_2d_height * bedside_table_depth
+cabinet_3d_height = cabinet_2d_height * cabinet_depth
+
+# Combined height is 3m
+combined_3d_height = bedside_table_3d_height + cabinet_3d_height
+
+# Scale factor: real_world / pixel_world
+# We need to find the scale such that combined height = 3m
+scale_factor = 3.0 / combined_3d_height
+
+# Get bed's 2D width and depth
+bed_2d_width, _ = get_2D_object_size(image, bed_bbox)
+bed_depth = depth(image, bed_bbox)
+
+# Calculate bed's 3D width
+bed_3d_width = bed_2d_width * bed_depth
+
+# Apply scale factor to get real-world width
+bed_real_width = bed_3d_width * scale_factor
+
+final_result = bed_real_width
+
+Predicted Answer: 2.318692207336426
+Correct Answer: 3.454
+Image: 14443.893_00002504.jpg
+Question 107: Is the ceiling the same color as the closest or furthest remote control to the camera? Options: {furthest, closest}
+Program: 
+# Find the ceiling and get its color
+ceiling_bboxes = loc(image, "ceiling")
+if ceiling_bboxes:
+    ceiling_bbox = ceiling_bboxes[0]
+    ceiling_color = _get_color(image, ceiling_bbox)
+else:
+    ceiling_color = None
+
+# Find the closest remote control
+closest_remote_bbox = _closest_object_bbox(image, "remote control")
+closest_remote_color = _get_color(image, closest_remote_bbox)
+
+# Find the furthest remote control
+furthest_remote_bbox = _farthest_object_bbox(image, "remote control")
+furthest_remote_color = _get_color(image, furthest_remote_bbox)
+
+# Compare colors
+if ceiling_color == closest_remote_color:
+    final_result = "closest"
+elif ceiling_color == furthest_remote_color:
+    final_result = "furthest"
+else:
+    # If neither matches, we need to determine which is more likely
+    # Since the question asks "same color as the closest or furthest", 
+    # we should check which one matches
+    final_result = "closest"  # Default fallback
+
+Predicted Answer: closest
+Correct Answer: closest
+Image: 74514.833_00005019.jpg
+Question 113: If the table is 1.8m tall, how tall is the brown dresser?
+Program: 
+table_bbox = _closest_object_bbox(image, "table")
+dresser_bbox = _closest_object_bbox(image, "brown dresser")
+dresser_height = _get_real_height(image, dresser_bbox, table_bbox, 1.8)
+final_result = dresser_height
+
+Predicted Answer: 1048.19921875
+Correct Answer: 2.279
+Image: 47702.364_00003218.jpg
+Question 132: How many fruits are in the fruit basket?
+Program: 
+# Locate the fruit basket
+basket_bboxes = loc(image, "fruit basket")
+
+# We assume there is one fruit basket; take the first one
+basket_bbox = basket_bboxes[0]
+
+# Locate all fruits
+fruit_bboxes = loc(image, "fruit")
+
+# Initialize counter
+count = 0
+
+# Check each fruit to see if it is in the fruit basket
+for fruit_bbox in fruit_bboxes:
+    answer = vqa(image, "Is this fruit in the fruit basket?", fruit_bbox)
+    if answer.lower() == "yes":
+        count += 1
+
+final_result = count
+
+Predicted Answer: 2
+Correct Answer: 4
+Image: 144261.993_00005511.jpg
+Question 137: Including the sofa pillows, how many pillows are on the central gray couch?
+Program: 
+# Locate all couches
+couches = loc(image, "couch")
+
+# Find the central gray couch
+central_gray_couch = None
+for couch in couches:
+    # Check if this couch is gray
+    color = _get_color(image, couch)
+    if color.lower() == "gray" or color.lower() == "grey":
+        # Check if it's central by asking VQA
+        is_central = vqa(image, "Is this couch in the center of the image?", couch)
+        if is_central.lower() == "yes":
+            central_gray_couch = couch
+            break
+
+# If we found the central gray couch, count pillows on it
+if central_gray_couch is not None:
+    # Find all pillows
+    all_pillows = loc(image, "pillow")
+    
+    # Count pillows that are on the central gray couch
+    pillow_count = 0
+    for pillow in all_pillows:
+        # Check if this pillow is on the central gray couch
+        is_on_couch = vqa(image, "Is this pillow on the couch?", pillow)
+        if is_on_couch.lower() == "yes":
+            # Verify it's on the central gray couch specifically
+            # Check if the pillow overlaps with the couch area
+            pillow_center_x = (pillow[0] + pillow[2]) / 2
+            pillow_center_y = (pillow[1] + pillow[3]) / 2
+            couch_xmin, couch_ymin, couch_xmax, couch_ymax = central_gray_couch
+            
+            if (couch_xmin <= pillow_center_x <= couch_xmax and 
+                couch_ymin <= pillow_center_y <= couch_ymax):
+                pillow_count += 1
+    
+    final_result = pillow_count
+else:
+    final_result = 0
+
+Predicted Answer: 0
+Correct Answer: 6
+Image: 22064.414_00001501.jpg
+Question 150: How many placemats are on the table?
+Program: 
+placemats = loc(image, "placemat")
+count = 0
+for pm in placemats:
+    answer = vqa(image, "Is this placemat on the table?", pm)
+    if answer.lower() == "yes":
+        count += 1
+final_result = count
+
+Predicted Answer: 5
+Correct Answer: 6
+Image: 65662.203_00000817.jpg
+Question 153: If the leftmost cabinet is 1.9m wide, how tall is the glass cabinet directly adjacent to it?
+Program: 
+# Find all cabinets
+cabinets = loc(image, "cabinet")
+
+# Find the leftmost cabinet (smallest xmin)
+leftmost_cabinet = min(cabinets, key=lambda bbox: bbox[0])
+
+# Get the 2D width of the leftmost cabinet
+leftmost_width_2d, leftmost_height_2d = get_2D_object_size(image, leftmost_cabinet)
+
+# Find all glass cabinets
+glass_cabinets = loc(image, "glass cabinet")
+
+# Find the glass cabinet directly adjacent to the leftmost cabinet
+# Adjacent means closest in x-coordinate (either to the right or left)
+adjacent_glass_cabinet = None
+min_distance = float('inf')
+
+for glass_cabinet in glass_cabinets:
+    # Calculate horizontal distance between the two cabinets
+    # If glass cabinet is to the right of leftmost cabinet
+    if glass_cabinet[0] >= leftmost_cabinet[2]:
+        distance = glass_cabinet[0] - leftmost_cabinet[2]
+    # If glass cabinet is to the left of leftmost cabinet
+    elif glass_cabinet[2] <= leftmost_cabinet[0]:
+        distance = leftmost_cabinet[0] - glass_cabinet[2]
+    else:
+        # Overlapping in x-axis, consider them adjacent
+        distance = 0
+    
+    if distance < min_distance:
+        min_distance = distance
+        adjacent_glass_cabinet = glass_cabinet
+
+# Calculate the real-world height of the glass cabinet using the leftmost cabinet's width as reference
+# The leftmost cabinet is 1.9m wide
+glass_cabinet_height = _get_real_height(image, adjacent_glass_cabinet, leftmost_cabinet, 1.9)
+
+final_result = glass_cabinet_height
+
+Predicted Answer: 477.9263000488281
+Correct Answer: 2.213
+Image: 45899.622_00000877.jpg
+Question 175: Is the combined height of the TV and the TV stand greater than the width of the brick-fireplace?
+Program: 
+# Find the TV
+tv_bboxes = loc(image, "TV")
+tv_bbox = tv_bboxes[0] if tv_bboxes else None
+
+# Find the TV stand
+tv_stand_bboxes = loc(image, "TV stand")
+tv_stand_bbox = tv_stand_bboxes[0] if tv_stand_bboxes else None
+
+# Find the brick fireplace
+fireplace_bboxes = loc(image, "brick fireplace")
+fireplace_bbox = fireplace_bboxes[0] if fireplace_bboxes else None
+
+# Get 2D sizes
+tv_width_2d, tv_height_2d = get_2D_object_size(image, tv_bbox)
+tv_stand_width_2d, tv_stand_height_2d = get_2D_object_size(image, tv_stand_bbox)
+fireplace_width_2d, fireplace_height_2d = get_2D_object_size(image, fireplace_bbox)
+
+# Get depths
+tv_depth = depth(image, tv_bbox)
+tv_stand_depth = depth(image, tv_stand_bbox)
+fireplace_depth = depth(image, fireplace_bbox)
+
+# Calculate real-world heights (2D height * depth)
+tv_height_3d = tv_height_2d * tv_depth
+tv_stand_height_3d = tv_stand_height_2d * tv_stand_depth
+
+# Calculate real-world width of fireplace
+fireplace_width_3d = fireplace_width_2d * fireplace_depth
+
+# Combined height of TV and TV stand
+combined_height = tv_height_3d + tv_stand_height_3d
+
+# Compare
+final_result = combined_height > fireplace_width_3d
+
+Predicted Answer: no
+Correct Answer: no
+Image: 164039.451_00000637.jpg
+Question 235: If the washing machine fell to the right, and its new 3D height was 1 foot, what would be the 3D height of the cabinet above it?
+Program: 
+# Locate the washing machine
+washing_machine_bboxes = loc(image, "washing machine")
+
+# We need to find the washing machine that has a cabinet above it
+# Let's get all cabinets
+cabinet_bboxes = loc(image, "cabinet")
+
+# Find the washing machine and the cabinet above it
+# We'll check each washing machine and each cabinet to find the pair where cabinet is above washing machine
+washing_machine_bbox = None
+cabinet_above_bbox = None
+
+for wm_bbox in washing_machine_bboxes:
+    wm_xmin, wm_ymin, wm_xmax, wm_ymax = wm_bbox
+    wm_center_x = (wm_xmin + wm_xmax) / 2
+    
+    for cab_bbox in cabinet_bboxes:
+        cab_xmin, cab_ymin, cab_xmax, cab_ymax = cab_bbox
+        cab_center_x = (cab_xmin + cab_xmax) / 2
+        
+        # Check if cabinet is above washing machine (cabinet ymin < washing machine ymin)
+        # and they are roughly aligned horizontally
+        if cab_ymax < wm_ymin and abs(cab_center_x - wm_center_x) < (wm_xmax - wm_xmin):
+            washing_machine_bbox = wm_bbox
+            cabinet_above_bbox = cab_bbox
+            break
+    
+    if washing_machine_bbox is not None:
+        break
+
+# Get the 2D heights and depths of both objects
+wm_width_2d, wm_height_2d = get_2D_object_size(image, washing_machine_bbox)
+cab_width_2d, cab_height_2d = get_2D_object_size(image, cabinet_above_bbox)
+
+wm_depth = depth(image, washing_machine_bbox)
+cab_depth = depth(image, cabinet_above_bbox)
+
+# Calculate 3D heights (2D height * depth)
+wm_height_3d = wm_height_2d * wm_depth
+cab_height_3d = cab_height_2d * cab_depth
+
+# The new washing machine height is 1 foot
+new_wm_height = 1.0
+
+# Calculate the scale factor
+scale_factor = new_wm_height / wm_height_3d
+
+# Calculate the new cabinet height
+new_cab_height = cab_height_3d * scale_factor
+
+final_result = new_cab_height
+
+Predicted Answer: 0.7983189225196838
+Correct Answer: 0.984
+Image: 7375.441_00006700.jpg
+Question 248: What is the ratio of the 3D length of the stovetop to the 3D height of the oven?
+Program: 
+# Find the stovetop
+stovetop_bboxes = loc(image, "stovetop")
+
+# Find the oven
+oven_bboxes = loc(image, "oven")
+
+# Get the first stovetop and oven (assuming there's one of each)
+stovetop_bbox = stovetop_bboxes[0]
+oven_bbox = oven_bboxes[0]
+
+# Get 2D dimensions of stovetop
+stovetop_width_2d, stovetop_height_2d = get_2D_object_size(image, stovetop_bbox)
+
+# Get depth of stovetop
+stovetop_depth = depth(image, stovetop_bbox)
+
+# Calculate 3D length of stovetop (length is along z-axis, but we need to use width for x-axis)
+# Wait - length is z-axis, but we can't directly measure z-axis from 2D image
+# Let me reconsider: the question asks for 3D length of stovetop
+# Length = z-axis, but from 2D image we can only get width (x) and height (y)
+# However, depth gives us the z-axis measurement directly
+# So 3D length of stovetop = depth of stovetop
+
+stovetop_3d_length = stovetop_depth
+
+# Get 2D dimensions of oven
+oven_width_2d, oven_height_2d = get_2D_object_size(image, oven_bbox)
+
+# Get depth of oven
+oven_depth = depth(image, oven_bbox)
+
+# Calculate 3D height of oven (height is y-axis, so 2D height * depth)
+oven_3d_height = oven_height_2d * oven_depth
+
+# Calculate the ratio
+final_result = stovetop_3d_length / oven_3d_height
+
+Predicted Answer: 0.001407406060025096
+Correct Answer: 0.626
+Image: 100592.766_00001489.jpg
+Question 387: How many objects of the same height as the red armchair would I need to stack to make a structure as long as the table below the tv?
+Program: 
+# Find the red armchair
+armchairs = loc(image, "armchair")
+red_armchair_bbox = None
+
+for armchair in armchairs:
+    color = _get_color(image, armchair)
+    if color.lower() == "red":
+        red_armchair_bbox = armchair
+        break
+
+# Get the height of the red armchair (2D height * depth = 3D height)
+armchair_2d_size = get_2D_object_size(image, red_armchair_bbox)
+armchair_2d_height = armchair_2d_size[1]
+armchair_depth = depth(image, red_armchair_bbox)
+armchair_3d_height = armchair_2d_height * armchair_depth
+
+# Find the table below the tv
+tables = loc(image, "table")
+tv_bbox = loc(image, "tv")
+
+# Find the table that is below the tv
+table_below_tv_bbox = None
+if tv_bbox:
+    tv_bbox = tv_bbox[0]  # Get first tv
+    tv_bottom = tv_bbox[3]  # ymax of tv
+    
+    for table in tables:
+        table_top = table[1]  # ymin of table
+        # Check if table is below the tv (table top is below tv bottom)
+        if table_top > tv_bottom:
+            table_below_tv_bbox = table
+            break
+
+# Get the length of the table (length is along z-axis = depth)
+# For the table, length = depth in 3D space
+# But we need the 3D length, which is 2D size * depth
+# Actually, length is along z-axis, so it's the depth itself
+table_length = depth(image, table_below_tv_bbox)
+
+# Calculate how many armchairs needed
+final_result = table_length / armchair_3d_height
+
+Predicted Answer: 0.002436093520373106
+Correct Answer: 2.108
+Image: 32082.626_00008020.jpg
+Question 464: Are there more paintings than plants?
+Program: 
+paintings = loc(image, "painting")
+plants = loc(image, "plant")
+num_paintings = len(paintings)
+num_plants = len(plants)
+final_result = "yes" if num_paintings > num_plants else "no"
+
+Predicted Answer: no
+Correct Answer: no
+Image: 32082.626_00008020.jpg
+Question 466: What is the color of the pillow closer in depth?
+Program: 
+# Find all pillows
+pillows = loc(image, "pillow")
+
+# Initialize variables to track the closest pillow
+closest_pillow_bbox = None
+min_depth = float('inf')
+
+# Loop through all pillows to find the one closest in depth
+for pillow_bbox in pillows:
+    d = depth(image, pillow_bbox)
+    if d < min_depth:
+        min_depth = d
+        closest_pillow_bbox = pillow_bbox
+
+# Get the color of the closest pillow
+final_result = _get_color(image, closest_pillow_bbox)
+
+Predicted Answer: yellow
+Correct Answer: yellow
+Image: 91452.019_00011201.jpg
+Question 480: If the 3D height of the camera closest to the camera is 5 feet, what is the 3D height of the chair farthest from the camera?
+Program: 
+# Try to locate cameras and chairs with different prompts
+cameras = loc(image, "camera")
+if not cameras:
+    cameras = loc(image, "cameras")
+
+chairs = loc(image, "chair")
+if not chairs:
+    chairs = loc(image, "chairs")
+
+# If still empty, try to find all objects and filter
+if not cameras or not chairs:
+    all_objects = loc(image, "objects")
+    # We'll need to use vqa to identify cameras and chairs
+    camera_candidates = []
+    chair_candidates = []
+    for obj_bbox in all_objects:
+        is_camera = vqa(image, "Is this a camera?", obj_bbox)
+        is_chair = vqa(image, "Is this a chair?", obj_bbox)
+        if is_camera.lower() == "yes":
+            camera_candidates.append(obj_bbox)
+        if is_chair.lower() == "yes":
+            chair_candidates.append(obj_bbox)
+    if not cameras:
+        cameras = camera_candidates
+    if not chairs:
+        chairs = chair_candidates
+
+# Find the camera closest to the camera (minimum depth)
+closest_camera_bbox = None
+min_camera_depth = float('inf')
+for cam_bbox in cameras:
+    cam_depth = depth(image, cam_bbox)
+    if cam_depth < min_camera_depth:
+        min_camera_depth = cam_depth
+        closest_camera_bbox = cam_bbox
+
+# Find the chair farthest from the camera (maximum depth)
+farthest_chair_bbox = None
+max_chair_depth = float('-inf')
+for chair_bbox in chairs:
+    chair_depth = depth(image, chair_bbox)
+    if chair_depth > max_chair_depth:
+        max_chair_depth = chair_depth
+        farthest_chair_bbox = chair_bbox
+
+# The camera closest to the camera has a known 3D height of 5 feet
+camera_height = 5.0
+
+# Calculate the real-world height of the farthest chair using the camera as reference
+chair_height = _get_real_height(image, farthest_chair_bbox, closest_camera_bbox, camera_height)
+
+final_result = chair_height
+
+Predicted Answer: 1448.0853271484375
+Correct Answer: 6.252
+Image: 91452.019_00011201.jpg
+Question 482: Is the yellow flower vase closer to the camera than the brown door?
+Program: 
+vase_bbox = _closest_object_bbox(image, "yellow flower vase")
+door_bbox = _closest_object_bbox(image, "brown door")
+
+vase_depth = depth(image, vase_bbox)
+door_depth = depth(image, door_bbox)
+
+final_result = "yes" if vase_depth < door_depth else "no"
+
+Predicted Answer: no
+Correct Answer: yes
+
+Only Execution Correct: 0.0
+Both Correct: 0.0
+Accuracy: 0.25

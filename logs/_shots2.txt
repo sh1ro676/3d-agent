@@ -1,0 +1,9 @@
+﻿## syntax
+
+exit=0
+## 截图
+L_grid OK  524674 bytes
+L_wide OK  501278 bytes
+L_focus OK  277476 bytes
+L_upload OK  285749 bytes
+done

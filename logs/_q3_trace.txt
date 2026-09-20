@@ -1,0 +1,9 @@
+top keys=['arm', 'backend', 'llm_env', 'mode', 'runs', 'scene', 'scene_hint', 'scene_id', 'summary', 'switches', 'tools_version', 'toolset', 'usage', 'vlm']
+=== tool=single_object ok=None err=None
+    return_shape=NoneType
+    value=null
+    evidence=null
+=== tool=get_attributes ok=None err=None
+    return_shape=NoneType
+    value=null
+    evidence=null

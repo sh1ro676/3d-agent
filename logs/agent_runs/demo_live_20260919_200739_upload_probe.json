@@ -1,0 +1,565 @@
+{
+ "scene_id": "upload_probe",
+ "scene_hint": {
+  "objects": {
+   "sofa": 1,
+   "picture": 4,
+   "mirror": 1,
+   "chair": 1,
+   "sofa chair": 1,
+   "table": 1
+  },
+  "n_objects": 9,
+  "image_id": "rgb.png",
+  "scene_id": "upload_probe",
+  "image_size": [
+   640,
+   480
+  ],
+  "intrinsics_source": "predicted"
+ },
+ "switches": {
+  "action_space": "program",
+  "planner": "off",
+  "render": "template",
+  "toolset": [
+   "list_objects",
+   "get_object",
+   "find_object",
+   "single_object",
+   "find_nearest",
+   "find_farthest",
+   "query_relation",
+   "get_3d_position",
+   "get_3d_extent",
+   "calculate_distance",
+   "calculate_angle",
+   "get_attributes"
+  ],
+  "n_tools": 12,
+  "max_synthesis_retries": 2,
+  "exec_timeout_s": 60.0,
+  "vlm": true,
+  "vlm_model": "deepseek-flash"
+ },
+ "toolset": [
+  "list_objects",
+  "get_object",
+  "find_object",
+  "single_object",
+  "find_nearest",
+  "find_farthest",
+  "query_relation",
+  "get_3d_position",
+  "get_3d_extent",
+  "calculate_distance",
+  "calculate_angle",
+  "get_attributes"
+ ],
+ "tools_version": "1.2.0",
+ "usage": {
+  "calls": 1,
+  "failed_calls": 0,
+  "retried_calls": 0,
+  "truncated": 0,
+  "prompt_tokens": 1558,
+  "completion_tokens": 304,
+  "cost_cny": 0.00741,
+  "unpriced_calls": 0,
+  "latency_s": 1.71,
+  "by_purpose": {
+   "synthesize": {
+    "calls": 1,
+    "prompt_tokens": 1558,
+    "completion_tokens": 304,
+    "cost_cny": 0.00741,
+    "latency_s": 1.709534800000256
+   }
+  }
+ },
+ "vlm": {
+  "enabled": true,
+  "image": "D:\\3D_Spatial_Agent\\uploads\\upload_probe\\rgb.png",
+  "image_source": "build_meta.image_path",
+  "label": "text",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "api_key": "***7dc8",
+  "temperature": 0.2,
+  "max_tokens": 8192,
+  "max_retries": 2,
+  "timeout_s": 180.0,
+  "extra_body": {
+   "thinking": {
+    "type": "disabled"
+   }
+  },
+  "price_cny_per_mtok": [
+   3.0,
+   9.0
+  ],
+  "ready": true,
+  "confidence_threshold": 0.6,
+  "attrs": [
+   "color",
+   "material",
+   "texture",
+   "state",
+   "shape"
+  ]
+ },
+ "summary": {
+  "source": "demo_live",
+  "n_runs": 1,
+  "status": {
+   "ok": 1
+  }
+ },
+ "runs": [
+  {
+   "question": "沙发和桌子之间的三维距离是多少米？",
+   "scene_id": "upload_probe",
+   "status": "ok",
+   "answer": 1.5221854777889445,
+   "answer_type": "float",
+   "target_ids": [
+    "sofa_1",
+    "table_1"
+   ],
+   "evidence": [
+    "sofa_id=sofa_1, table_id=table_1 (来自 single_object)",
+    "calculate_distance(sofa, table) = 1.522185 米"
+   ],
+   "abstained": false,
+   "program": "import math\n\nscene_id = \"upload_probe\"\n\n# 1) 找到沙发\nsofa_res = single_object(scene_id=scene_id, label=\"sofa\")\nif not sofa_res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) 失败: \" + str(sofa_res.error.code)])\n    raise SystemExit\n\nsofa = sofa_res.value\nsofa_id = sofa[\"object_id\"]\n\n# 2) 找到桌子\ntable_res = single_object(scene_id=scene_id, label=\"table\")\nif not table_res.ok:\n    submit(\"unknown\", evidence=[\"single_object(table) 失败: \" + str(table_res.error.code)])\n    raise SystemExit\n\ntable = table_res.value\ntable_id = table[\"object_id\"]\n\n# 3) 计算三维欧氏距离\ndist_res = calculate_distance(scene_id=scene_id, a=sofa_id, b=table_id)\nif not dist_res.ok:\n    submit(\"unknown\", evidence=[\"calculate_distance 失败: \" + str(dist_res.error.code)])\n    raise SystemExit\n\ndistance = float(dist_res.value)\n\nsubmit(\n    distance,\n    target_ids=[sofa_id, table_id],\n    evidence=[\n        \"sofa_id=%s, table_id=%s (来自 single_object)\" % (sofa_id, table_id),\n        \"calculate_distance(sofa, table) = %f 米\" % distance,\n    ],\n)",
+   "program_fenced": true,
+   "render": "1.52219（指认：sofa_1、table_1）",
+   "render_report": {
+    "mode": "template",
+    "used_fallback": false
+   },
+   "stages": [
+    {
+     "stage": "synthesize",
+     "attempt": 1,
+     "ok": true,
+     "chars": 1014,
+     "fenced": true,
+     "reply": {
+      "purpose": "synthesize",
+      "model_returned": "deepseek-flash",
+      "finish_reason": "stop",
+      "truncated": false,
+      "has_reasoning": false,
+      "elapsed_s": 1.71,
+      "attempts": 1,
+      "usage": {
+       "prompt_tokens": 1558,
+       "completion_tokens": 304,
+       "total_tokens": 1862,
+       "prompt_tokens_details": {
+        "cached_tokens": 1280
+       },
+       "prompt_cache_hit_tokens": 1280,
+       "prompt_cache_miss_tokens": 278
+      },
+      "text_chars": 1028
+     }
+    },
+    {
+     "stage": "static_check",
+     "attempt": 1,
+     "ok": true,
+     "n_tool_calls": 3,
+     "tool_calls": [
+      "single_object",
+      "single_object",
+      "calculate_distance"
+     ]
+    },
+    {
+     "stage": "execute",
+     "attempt": 1,
+     "ok": true,
+     "detail": "ok",
+     "message": "",
+     "lineno": null,
+     "tool_calls": 3,
+     "duration_ms": 0.892,
+     "trace_errors": {}
+    },
+    {
+     "stage": "render",
+     "attempt": 3,
+     "ok": true,
+     "detail": {
+      "mode": "template",
+      "used_fallback": false
+     }
+    },
+    {
+     "stage": "verify",
+     "attempt": 4,
+     "ok": true,
+     "detail": {
+      "level": "supported",
+      "ok": true,
+      "matched_from": "value",
+      "checks": [
+       {
+        "name": "has_evidence",
+        "ok": true,
+        "detail": "evidence 有 2 条",
+        "hard": true
+       },
+       {
+        "name": "tool_was_used",
+        "ok": true,
+        "detail": "成功调用 3 次工具（另有 0 次失败）",
+        "hard": true
+       },
+       {
+        "name": "answer_finite",
+        "ok": true,
+        "detail": "答案是有限数 1.5221854777889445",
+        "hard": true
+       },
+       {
+        "name": "numeric_backed",
+        "ok": true,
+        "detail": "答案 1.5221854777889445 命中工具返回值 1.5221854777889445",
+        "hard": true
+       },
+       {
+        "name": "targets_in_scene",
+        "ok": true,
+        "detail": "2 个 target_id 全部落在场景内",
+        "hard": false
+       },
+       {
+        "name": "targets_exist",
+        "ok": true,
+        "detail": "全部存在于场景图",
+        "hard": false
+       }
+      ],
+      "failed": [],
+      "failed_hard": [],
+      "numbers": [
+       0.836,
+       2.4003,
+       1.0316,
+       2.864,
+       6.705,
+       2.349,
+       1.129,
+       0.399,
+       1.7952,
+       1.8126,
+       1.706,
+       3.005,
+       1.478,
+       1.286,
+       1.522185,
+       1.0,
+       1.0,
+       1.0,
+       2.0,
+       1.522185,
+       0.605108,
+       -0.780998,
+       1.157987,
+       2.400265,
+       1.031596,
+       2.86402,
+       1.795158,
+       1.812595,
+       1.706032
+      ],
+      "n_numbers": 29
+     }
+    }
+   ],
+   "attempts": 1,
+   "usage": {
+    "calls": 1.0,
+    "failed_calls": 0.0,
+    "retried_calls": 0.0,
+    "truncated": 0.0,
+    "prompt_tokens": 1558.0,
+    "completion_tokens": 304.0,
+    "unpriced_calls": 0.0,
+    "cost_cny": 0.00741,
+    "latency_s": 1.71,
+    "by_purpose": {
+     "synthesize": {
+      "calls": 1.0,
+      "prompt_tokens": 1558.0,
+      "completion_tokens": 304.0,
+      "cost_cny": 0.00741,
+      "latency_s": 1.709535
+     }
+    }
+   },
+   "failure": null,
+   "tool_calls": 3,
+   "trace": [
+    {
+     "tool": "single_object",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "sofa"
+     },
+     "result": {
+      "ok": true,
+      "value": {
+       "object_id": "sofa_1",
+       "label": "sofa",
+       "score": 0.836,
+       "centroid_m": [
+        2.4003,
+        1.0316,
+        2.864
+       ],
+       "extent_m": {
+        "w": 6.705,
+        "h": 2.349,
+        "l": 1.129
+       },
+       "attributes": {}
+      },
+      "evidence": {
+       "scene_id": "upload_probe",
+       "label": "sofa",
+       "count": 1
+      },
+      "error": null,
+      "meta": {
+       "tool": "single_object",
+       "version": "1.2.0",
+       "tool_call_id": "c2020361fdcc9",
+       "latency_ms": 0.055,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819659.7814615
+      }
+     }
+    },
+    {
+     "tool": "single_object",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "table"
+     },
+     "result": {
+      "ok": true,
+      "value": {
+       "object_id": "table_1",
+       "label": "table",
+       "score": 0.399,
+       "centroid_m": [
+        1.7952,
+        1.8126,
+        1.706
+       ],
+       "extent_m": {
+        "w": 3.005,
+        "h": 1.478,
+        "l": 1.286
+       },
+       "attributes": {}
+      },
+      "evidence": {
+       "scene_id": "upload_probe",
+       "label": "table",
+       "count": 1
+      },
+      "error": null,
+      "meta": {
+       "tool": "single_object",
+       "version": "1.2.0",
+       "tool_call_id": "c3f75b82dd3f4",
+       "latency_ms": 0.02,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819659.7814615
+      }
+     }
+    },
+    {
+     "tool": "calculate_distance",
+     "args": {
+      "scene_id": "upload_probe",
+      "a": "sofa_1",
+      "b": "table_1"
+     },
+     "result": {
+      "ok": true,
+      "value": 1.5221854777889445,
+      "evidence": {
+       "method": "geometry_v1",
+       "formula": "||centroid_a - centroid_b||_2",
+       "anchor": "mask_median",
+       "distance_m": 1.5221854777889445,
+       "delta_x": 0.6051076054573059,
+       "delta_y": -0.7809983491897583,
+       "delta_z": 1.1579874753952026,
+       "a_x": 2.4002654552459717,
+       "a_y": 1.0315964221954346,
+       "a_z": 2.8640198707580566,
+       "b_x": 1.7951578497886658,
+       "b_y": 1.8125947713851929,
+       "b_z": 1.706032395362854
+      },
+      "error": null,
+      "meta": {
+       "tool": "calculate_distance",
+       "version": "1.2.0",
+       "tool_call_id": "c19cb042296d5",
+       "latency_ms": 0.03,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819659.7814615
+      }
+     }
+    }
+   ],
+   "elapsed_s": 1.714,
+   "tools_version": "1.2.0",
+   "memory": {
+    "question": "沙发和桌子之间的三维距离是多少米？",
+    "scene_hint": {
+     "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+     },
+     "n_objects": 9,
+     "image_id": "rgb.png",
+     "scene_id": "upload_probe",
+     "image_size": [
+      640,
+      480
+     ],
+     "intrinsics_source": "predicted"
+    },
+    "n_attempts": 0,
+    "attempts": [],
+    "confirmed_ids": [
+     "sofa_1",
+     "table_1"
+    ],
+    "facts": {}
+   },
+   "verdict": {
+    "level": "supported",
+    "ok": true,
+    "matched_from": "value",
+    "checks": [
+     {
+      "name": "has_evidence",
+      "ok": true,
+      "detail": "evidence 有 2 条",
+      "hard": true
+     },
+     {
+      "name": "tool_was_used",
+      "ok": true,
+      "detail": "成功调用 3 次工具（另有 0 次失败）",
+      "hard": true
+     },
+     {
+      "name": "answer_finite",
+      "ok": true,
+      "detail": "答案是有限数 1.5221854777889445",
+      "hard": true
+     },
+     {
+      "name": "numeric_backed",
+      "ok": true,
+      "detail": "答案 1.5221854777889445 命中工具返回值 1.5221854777889445",
+      "hard": true
+     },
+     {
+      "name": "targets_in_scene",
+      "ok": true,
+      "detail": "2 个 target_id 全部落在场景内",
+      "hard": false
+     },
+     {
+      "name": "targets_exist",
+      "ok": true,
+      "detail": "全部存在于场景图",
+      "hard": false
+     }
+    ],
+    "failed": [],
+    "failed_hard": [],
+    "numbers": [
+     0.836,
+     2.4003,
+     1.0316,
+     2.864,
+     6.705,
+     2.349,
+     1.129,
+     0.399,
+     1.7952,
+     1.8126,
+     1.706,
+     3.005,
+     1.478,
+     1.286,
+     1.522185,
+     1.0,
+     1.0,
+     1.0,
+     2.0,
+     1.522185,
+     0.605108,
+     -0.780998,
+     1.157987,
+     2.400265,
+     1.031596,
+     2.86402,
+     1.795158,
+     1.812595,
+     1.706032
+    ],
+    "n_numbers": 29
+   },
+   "plan": {
+    "ok": false,
+    "skipped": true,
+    "reason": "planner=off"
+   },
+   "switches": {
+    "action_space": "program",
+    "planner": "off",
+    "render": "template",
+    "toolset": [
+     "list_objects",
+     "get_object",
+     "find_object",
+     "single_object",
+     "find_nearest",
+     "find_farthest",
+     "query_relation",
+     "get_3d_position",
+     "get_3d_extent",
+     "calculate_distance",
+     "calculate_angle",
+     "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+   }
+  }
+ ]
+}

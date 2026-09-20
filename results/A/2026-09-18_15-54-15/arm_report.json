@@ -1,0 +1,436 @@
+{
+  "arm": "A",
+  "started": "2026-09-18T15:53:52",
+  "argv": [
+    "--arm",
+    "A",
+    "--num-questions",
+    "2",
+    "--num-api-questions",
+    "2"
+  ],
+  "env_applied_by_runner": {
+    "HF_HOME": "D:\\3D_Spatial_Agent\\.cache\\huggingface",
+    "HF_ENDPOINT": "https://hf-mirror.com",
+    "HF_HUB_DISABLE_XET": "1",
+    "HF_HUB_OFFLINE": "1",
+    "VADAR_GDINO_DIR": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "VADAR_CALL_LOG": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl"
+  },
+  "dataset": "omni3d",
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "84ca92b0406554998f9c67de527a60513ba6b1efa042475d7117faeee5217f12",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "api_key_source": "env_file",
+  "precheck": {
+    "annotations": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\annotations.json",
+    "images": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\images",
+    "problems": [],
+    "n_questions": 501,
+    "question_fields": [
+      "answer",
+      "answer_type",
+      "image_filename",
+      "image_index",
+      "question",
+      "question_index"
+    ],
+    "n_unique_image_filenames": 201,
+    "n_missing_image_files": 0,
+    "ok": true
+  },
+  "subset": {
+    "mode": "vadarspec",
+    "seed": 42,
+    "n_requested": 2,
+    "n_selected": 2,
+    "metric_class_counts": {
+      "numeric_other": 2
+    },
+    "answer_type_counts": {
+      "float": 2
+    },
+    "n_unique_images": 1,
+    "annotation_pool_size": 501,
+    "num_api_questions": 2,
+    "selected": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?"
+      }
+    ],
+    "api_subset": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1"
+      }
+    ],
+    "deviation_from_original": "原版用无种子的 random.sample 抽 api_questions（bug ③，不可复现）；本运行器改用 random.Random(seed).sample，并把选中清单落盘。"
+  },
+  "adapter": {
+    "steps": {
+      "paths": {
+        "added": [
+          "D:\\3D_Spatial_Agent\\vendor",
+          "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+        ],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+      },
+      "stubs": {
+        "count": 21
+      },
+      "bridge_install": {
+        "patched": [
+          "engine.engine_utils",
+          "engine.predefined_modules (+VQAModule.predict)",
+          "engine.engine",
+          "agents.agents"
+        ],
+        "failed": [],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR",
+        "warnings": []
+      },
+      "alarm": {
+        "patched": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "failed": [],
+        "targets": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "shim": {
+          "armed": 0,
+          "cancelled": 0,
+          "fired": 0,
+          "fired_by": {
+            "trace": 0,
+            "timer": 0
+          },
+          "trace_errors": 0,
+          "timeout_s": null,
+          "exception_type": "builtins.TimeoutError"
+        }
+      },
+      "alarm_note": "计数请在实验结束时调用 report['steps']['alarm']['shim'].describe()"
+    },
+    "model_fingerprint": {
+      "text": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "***",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      },
+      "vision": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "***",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      }
+    },
+    "gdino_dir": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "gdino_caption_mode": "vadar"
+  },
+  "adapter_ok": true,
+  "run_dir": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_15-54-15",
+  "stages": {
+    "signatures": {
+      "ok": true,
+      "s": 2.09,
+      "n_api_questions": 2,
+      "n_methods": 2,
+      "methods": [
+        "_get_object_to_the_right",
+        "_get_real_world_length"
+      ]
+    },
+    "api": {
+      "ok": true,
+      "s": 28.33,
+      "n_api": 0
+    },
+    "programs": {
+      "ok": true,
+      "s": 6.14,
+      "n_programs": 2,
+      "n_nonempty": 2
+    },
+    "execute": {
+      "ok": true,
+      "s": 199.29
+    }
+  },
+  "signature_agent_dataset": "clevr",
+  "execution_json": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_15-54-15\\program_execution\\execution.json",
+  "finished": "2026-09-18T15:58:10",
+  "metrics": {
+    "n_questions": 2,
+    "counts": {
+      "numeric_count": 0,
+      "numeric_other": 2,
+      "yes_no": 0,
+      "multi_choice": 0
+    },
+    "unparseable_predictions": {
+      "numeric_count": 0,
+      "numeric_other": 2
+    },
+    "submetrics": {
+      "numeric_count": null,
+      "numeric_other_mra": 0.0,
+      "yes_no": null,
+      "multi_choice": null
+    },
+    "total_micro": 0.0,
+    "exact_match_accuracy": 0.0,
+    "mra_thresholds": [
+      0.5,
+      0.45,
+      0.4,
+      0.35,
+      0.3,
+      0.25,
+      0.2,
+      0.15,
+      0.1,
+      0.05
+    ],
+    "mra_hits": {
+      "0.5": 0,
+      "0.45": 0,
+      "0.4": 0,
+      "0.35": 0,
+      "0.3": 0,
+      "0.25": 0,
+      "0.2": 0,
+      "0.15": 0,
+      "0.1": 0,
+      "0.05": 0
+    },
+    "records": [
+      {
+        "answer_type": "float",
+        "ground_truth": "0.948",
+        "prediction": "error: [errno 22] invalid argument: 'd:\\x03d_spatial_agent\\results\\\\a\\x826-09-18_15-54-15\\\\program_execution\\\\image_91339.246_00000463.jpg_question_0/exec_env/result.json'",
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "3.026",
+        "prediction": "error: [errno 22] invalid argument: 'd:\\x03d_spatial_agent\\results\\\\a\\x826-09-18_15-54-15\\\\program_execution\\\\image_91339.246_00000463.jpg_question_1/exec_env/result.json'",
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?",
+        "has_program": true
+      }
+    ]
+  },
+  "aggregation_rule": {
+    "rule": "micro = Σ(accuracy_k × n_k) / N",
+    "counts": {
+      "numeric_count": 70,
+      "numeric_other": 270,
+      "yes_no": 75,
+      "multi_choice": 86
+    },
+    "n_total": 501,
+    "weights": {
+      "numeric_count": 0.139721,
+      "numeric_other": 0.538922,
+      "yes_no": 0.149701,
+      "multi_choice": 0.171657
+    },
+    "n_methods_same_run": 8,
+    "residual_max_pp": 0.043,
+    "verdict": "micro_by_question_count",
+    "tolerance_pp": 0.2,
+    "tolerance_rationale": "论文只给一位小数，单行四舍五入贡献 ≤0.05pp；0.2pp 留了 4 倍余量，超过就不是舍入噪声",
+    "per_method": [
+      {
+        "method": "GPT4o",
+        "paper_total": 42.9,
+        "micro_predicted": 42.862,
+        "residual_pp": -0.04,
+        "same_run": true
+      },
+      {
+        "method": "Claude3.5-Sonnet",
+        "paper_total": 32.2,
+        "micro_predicted": 32.229,
+        "residual_pp": 0.03,
+        "same_run": true
+      },
+      {
+        "method": "Llama3.2",
+        "paper_total": 25.6,
+        "micro_predicted": 25.611,
+        "residual_pp": 0.01,
+        "same_run": true
+      },
+      {
+        "method": "Gemini1.5-Pro",
+        "paper_total": 32.0,
+        "micro_predicted": 32.035,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "Gemini1.5-Flash",
+        "paper_total": 35.0,
+        "micro_predicted": 35.0,
+        "residual_pp": -0.0,
+        "same_run": true
+      },
+      {
+        "method": "Molmo",
+        "paper_total": 26.1,
+        "micro_predicted": 26.143,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "SpaceMantis",
+        "paper_total": 30.3,
+        "micro_predicted": 30.338,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "VADAR",
+        "paper_total": 40.4,
+        "micro_predicted": 40.434,
+        "residual_pp": 0.03,
+        "same_run": true
+      }
+    ],
+    "excluded_non_same_run": [
+      {
+        "method": "ViperGPT",
+        "paper_total": 33.5,
+        "micro_predicted": 26.755,
+        "residual_pp": -6.74,
+        "same_run": false
+      },
+      {
+        "method": "VisProg",
+        "paper_total": 21.1,
+        "micro_predicted": 13.525,
+        "residual_pp": -7.58,
+        "same_run": false
+      }
+    ]
+  },
+  "llm_calls": {
+    "path": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl",
+    "total_records": 27,
+    "calls": 23,
+    "ok": 23,
+    "failed": 0,
+    "retried": 0,
+    "truncated": 0,
+    "answer_tag_fallbacks": 4,
+    "latency_s": {
+      "avg": 2.179,
+      "p50": 2.11,
+      "p95": 2.893,
+      "min": 1.583,
+      "max": 3.247
+    },
+    "est_cost_cny_total": 0.2618,
+    "costrable_calls": 23,
+    "by_role": {
+      "text": {
+        "n": 23,
+        "sum_s": 50.122,
+        "ptok": 66153,
+        "ctok": 7037
+      }
+    },
+    "failure_samples": []
+  },
+  "mode": "run"
+}

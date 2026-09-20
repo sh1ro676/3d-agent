@@ -1,0 +1,3 @@
+﻿[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_172244_living_room.json
+[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_172244_living_room.txt
+exit=0

@@ -1,0 +1,10 @@
+﻿python.exe : C:\Users\ROG\.workbuddy\binaries\python\versions\3.13.12\python.ex
+e: No module named pytest
+所在位置 行:449 字符: 1
++ & $py -m pytest tests/test_agent_planner.py tests/test_agent_verifier ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\ROG\.w...le named pytest 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+exit=1

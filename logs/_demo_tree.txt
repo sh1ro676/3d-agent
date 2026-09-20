@@ -1,0 +1,98 @@
+﻿## demo 目录
+[D] demo\assets
+[D] demo\data
+[D] demo\vendor
+[D] demo\assets\exif_fixture_exif
+[D] demo\assets\exif_fixture_pred
+[D] demo\assets\living_room
+[D] demo\assets\living_room_gt
+[D] demo\assets\living_room_pred
+[D] demo\assets\exif_fixture_exif\masks
+    demo\assets\exif_fixture_exif\rgb_exif.jpg  112762
+    demo\assets\exif_fixture_exif\masks\chair_1.png  559
+    demo\assets\exif_fixture_exif\masks\mirror_1.png  417
+    demo\assets\exif_fixture_exif\masks\picture_1.png  274
+    demo\assets\exif_fixture_exif\masks\picture_2.png  182
+    demo\assets\exif_fixture_exif\masks\picture_3.png  180
+    demo\assets\exif_fixture_exif\masks\picture_4.png  222
+    demo\assets\exif_fixture_exif\masks\sofa_1.png  1100
+    demo\assets\exif_fixture_exif\masks\sofa_chair_1.png  758
+    demo\assets\exif_fixture_exif\masks\table_1.png  752
+[D] demo\assets\exif_fixture_pred\masks
+    demo\assets\exif_fixture_pred\rgb_exif.jpg  112762
+    demo\assets\exif_fixture_pred\masks\chair_1.png  559
+    demo\assets\exif_fixture_pred\masks\mirror_1.png  417
+    demo\assets\exif_fixture_pred\masks\picture_1.png  274
+    demo\assets\exif_fixture_pred\masks\picture_2.png  182
+    demo\assets\exif_fixture_pred\masks\picture_3.png  180
+    demo\assets\exif_fixture_pred\masks\picture_4.png  222
+    demo\assets\exif_fixture_pred\masks\sofa_1.png  1100
+    demo\assets\exif_fixture_pred\masks\sofa_chair_1.png  758
+    demo\assets\exif_fixture_pred\masks\table_1.png  752
+[D] demo\assets\living_room\masks
+    demo\assets\living_room\rgb.png  448668
+    demo\assets\living_room\masks\chair_1.png  549
+    demo\assets\living_room\masks\mirror_1.png  418
+    demo\assets\living_room\masks\picture_1.png  273
+    demo\assets\living_room\masks\picture_2.png  183
+    demo\assets\living_room\masks\picture_3.png  180
+    demo\assets\living_room\masks\picture_4.png  223
+    demo\assets\living_room\masks\sofa_1.png  1056
+    demo\assets\living_room\masks\sofa_chair_1.png  757
+    demo\assets\living_room\masks\table_1.png  762
+[D] demo\assets\living_room_gt\masks
+    demo\assets\living_room_gt\rgb.png  448668
+    demo\assets\living_room_gt\masks\chair_1.png  549
+    demo\assets\living_room_gt\masks\mirror_1.png  418
+    demo\assets\living_room_gt\masks\picture_1.png  273
+    demo\assets\living_room_gt\masks\picture_2.png  183
+    demo\assets\living_room_gt\masks\picture_3.png  180
+    demo\assets\living_room_gt\masks\picture_4.png  223
+    demo\assets\living_room_gt\masks\sofa_1.png  1056
+    demo\assets\living_room_gt\masks\sofa_chair_1.png  757
+    demo\assets\living_room_gt\masks\table_1.png  762
+[D] demo\assets\living_room_pred\masks
+    demo\assets\living_room_pred\rgb.png  448668
+    demo\assets\living_room_pred\masks\chair_1.png  549
+    demo\assets\living_room_pred\masks\mirror_1.png  418
+    demo\assets\living_room_pred\masks\picture_1.png  273
+    demo\assets\living_room_pred\masks\picture_2.png  183
+    demo\assets\living_room_pred\masks\picture_3.png  180
+    demo\assets\living_room_pred\masks\picture_4.png  223
+    demo\assets\living_room_pred\masks\sofa_1.png  1056
+    demo\assets\living_room_pred\masks\sofa_chair_1.png  757
+    demo\assets\living_room_pred\masks\table_1.png  762
+    demo\data\exif_fixture_exif.scene.json  43644
+    demo\data\exif_fixture_pred.scene.json  41948
+    demo\data\index.json  2789
+    demo\data\living_room.report.json  29403
+    demo\data\living_room.scene.json  41878
+    demo\data\living_room_gt.report.json  28324
+    demo\data\living_room_gt.scene.json  43441
+    demo\data\living_room_pred.report.json  29889
+    demo\data\living_room_pred.scene.json  41930
+    demo\data\runs.json  82991
+    demo\vendor\OrbitControls.js  32134
+    demo\vendor\three.module.js  1304820
+## scripts
+build_scene.py  19802
+export_demo.py  13840
+inspect_exif.py  7836
+inspect_scene.py  8327
+report_scene.py  9069
+run_agent.py  30585
+selfcheck_agent.py  2772
+serve_demo.py  13310
+smoke_tools.py  8073
+## data 文件
+exif_fixture_exif.scene.json  43644
+exif_fixture_pred.scene.json  41948
+index.json  2789
+living_room.report.json  29403
+living_room.scene.json  41878
+living_room_gt.report.json  28324
+living_room_gt.scene.json  43441
+living_room_pred.report.json  29889
+living_room_pred.scene.json  41930
+runs.json  82991
+ok

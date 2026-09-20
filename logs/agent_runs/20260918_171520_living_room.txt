@@ -1,0 +1,17 @@
+==============================================================================
+自研 3D Spatial Agent —— program_file
+==============================================================================
+场景：living_room: 9 objects / 133 edges (up_axis=-y, scale=1.000)
+场景清单（scene_hint，无坐标）：{"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}
+
+-- 静态检查 --
+  通过：True   工具调用 4 次   有 submit：True
+
+-- 执行 --
+  通过：True   阶段：ok   工具调用：4   耗时：2.2 ms
+  答案：4.394358065492718（float）  弃答：False
+  证据：labels = chair,mirror,picture,sofa,sofa chair,table
+  证据：calculate_distance(a=sofa_1, b=picture_1) = 4.3944 m
+  证据：formula = ||centroid_a - centroid_b||_2
+  证据：get_3d_extent(sofa_1) = {'w': 6.7049707770347595, 'h': 2.348816752433777, 'l': 1.1285264492034912}
+  证据：get_3d_position(picture_1) = [3.883178949356079, -3.033325672149658, 3.630674123764038]

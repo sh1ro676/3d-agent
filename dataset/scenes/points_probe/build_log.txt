@@ -1,0 +1,279 @@
+# 场景图构建记录  scene_id=points_probe
+image=D:\3D_Spatial_Agent\uploads\upload_probe\rgb.png
+built_at='sofa. chair. table. picture. mirror.'
+
+## 耗时 (ms)
+{"depth_ms": 2031.6, "detect_ms": 1220.1, "segment_ms": 272.8, "nodes_ms": 33.3, "up_axis_ms": 13.7, "relations_ms": 4.5}
+build_wall_s=3.58
+model_load_wall_s=23.44
+
+## 内参与视场
+intrinsics_arg=命令行 4 元组
+{
+  "intrinsics_source": "provided",
+  "intrinsics": [
+    [
+      518.86,
+      0.0,
+      325.58
+    ],
+    [
+      0.0,
+      519.47,
+      253.74
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "fov": {
+    "hfov_deg": 63.33,
+    "vfov_deg": 49.59,
+    "plausible": true,
+    "reason": "ok"
+  },
+  "scale_calibrated": false
+}
+{}
+
+## 感知栈
+{
+  "device": "cuda",
+  "device_total_mib": 8188.0,
+  "resident_mb": 1146.7,
+  "resident_pct": 14.0,
+  "peak_mb": 2177.2,
+  "models": {
+    "grounding": {
+      "role": "grounding",
+      "hub_id": "IDEA-Research/grounding-dino-tiny",
+      "loaded": true,
+      "source": "local",
+      "load_s": 11.69,
+      "resident_mb": 660.0,
+      "n_params_m": 172.3,
+      "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+      "role": "segmentation",
+      "hub_id": "facebook/sam2.1-hiera-base-plus",
+      "loaded": true,
+      "source": "local",
+      "load_s": 0.64,
+      "resident_mb": 282.2,
+      "n_params_m": 73.3,
+      "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+      "role": "depth",
+      "hub_id": "lpiccinelli/unidepth-v2-vits14",
+      "loaded": true,
+      "source": "hub",
+      "load_s": 11.1,
+      "resident_mb": 132.3,
+      "n_params_m": 34.2,
+      "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+  }
+}
+
+## 点云
+{
+  "grid_hw": [
+    480,
+    640
+  ],
+  "image_hw": [
+    480,
+    640
+  ],
+  "intrinsics": [
+    [
+      518.86,
+      0.0,
+      325.58
+    ],
+    [
+      0.0,
+      519.47,
+      253.74
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "intrinsics_source": "provided",
+  "scale_calibrated": false,
+  "written": true,
+  "file": "D:\\3D_Spatial_Agent\\dataset\\scenes\\points_probe\\points.npy",
+  "bytes": 3686528
+}
+
+## 警告
+
+## 物体
+[
+  {
+    "id": "sofa_1",
+    "label": "sofa",
+    "score": 0.8359013199806213,
+    "centroid_m": [
+      0.7966746687889099,
+      0.3191015422344208,
+      3.1745684146881104
+    ],
+    "extent_m": [
+      2.341536298394203,
+      0.8170239627361298,
+      1.2634027004241943
+    ],
+    "n_points": 23841,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_1",
+    "label": "picture",
+    "score": 0.7949785590171814,
+    "centroid_m": [
+      1.3369477987289429,
+      -1.1095006465911865,
+      4.058180809020996
+    ],
+    "extent_m": [
+      1.118232548236847,
+      0.9845064878463745,
+      0.24341273307800293
+    ],
+    "n_points": 16137,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "mirror_1",
+    "label": "mirror",
+    "score": 0.6762795448303223,
+    "centroid_m": [
+      -0.29983752965927124,
+      -1.0369728803634644,
+      3.94844651222229
+    ],
+    "extent_m": [
+      0.877042293548584,
+      1.2764545679092407,
+      0.27231764793395996
+    ],
+    "n_points": 18015,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "chair_1",
+    "label": "chair",
+    "score": 0.5280802845954895,
+    "centroid_m": [
+      -0.7395368814468384,
+      0.6535179018974304,
+      1.8335630893707275
+    ],
+    "extent_m": [
+      0.9768438041210175,
+      0.3027966618537903,
+      0.8292100429534912
+    ],
+    "n_points": 18785,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_2",
+    "label": "picture",
+    "score": 0.5012606978416443,
+    "centroid_m": [
+      -1.1660672426223755,
+      -1.0598231554031372,
+      4.014632225036621
+    ],
+    "extent_m": [
+      0.2607384920120239,
+      0.23024147748947144,
+      0.04252767562866211
+    ],
+    "n_points": 965,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_3",
+    "label": "picture",
+    "score": 0.4885120689868927,
+    "centroid_m": [
+      -1.154963493347168,
+      -0.8366074562072754,
+      4.054017543792725
+    ],
+    "extent_m": [
+      0.2522379159927368,
+      0.214128315448761,
+      0.05726480484008789
+    ],
+    "n_points": 893,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "sofa_chair_1",
+    "label": "sofa chair",
+    "score": 0.439514696598053,
+    "centroid_m": [
+      -1.0661630630493164,
+      0.32754266262054443,
+      2.7392998933792114
+    ],
+    "extent_m": [
+      1.331847757101059,
+      0.8102021291851997,
+      1.4819355010986328
+    ],
+    "n_points": 29108,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "table_1",
+    "label": "table",
+    "score": 0.39941057562828064,
+    "centroid_m": [
+      0.5888529717922211,
+      0.6055116355419159,
+      1.8714061379432678
+    ],
+    "extent_m": [
+      1.059262901544571,
+      0.5367464125156403,
+      1.039431095123291
+    ],
+    "n_points": 30660,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_4",
+    "label": "picture",
+    "score": 0.3324681222438812,
+    "centroid_m": [
+      -1.9192111492156982,
+      -0.82236248254776,
+      4.0815863609313965
+    ],
+    "extent_m": [
+      0.14699101448059082,
+      0.2872832417488098,
+      0.14869070053100586
+    ],
+    "n_points": 809,
+    "centroid_source": "mask"
+  }
+]
+
+## 被丢弃的检测
+[]
+
+## 降级记录
+[]

@@ -1,0 +1,8 @@
+﻿## syntax
+
+exit=0
+## shot 1: 默认（living_room）
+shot1 OK
+## shot 2: living_room_gt + select=table_1
+shot2 OK
+done

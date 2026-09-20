@@ -1,0 +1,43 @@
+﻿........F........F.....................................................  [100%]
+================================== FAILURES ===================================
+_____________ TestPlanIsAudited.test_a_clean_plan_has_no_numbers ______________
+
+self = <test_agent_planner.TestPlanIsAudited object at 0x0000013250BD4BC0>
+
+    def test_a_clean_plan_has_no_numbers(self):
+        p = plan(FakeClient(GOOD_PLAN), question="q", scene_hint=HINT)
+>       assert p.numbers == ()
+E       AssertionError: assert ('1', '2') == ()
+E         
+E         Left contains 2 more items, first extra item: '1'
+E         Use -v to get more diff
+
+tests\test_agent_planner.py:139: AssertionError
+__________ TestPromptDelta.test_with_a_plan_only_the_block_is_added ___________
+
+self = <test_agent_planner.TestPromptDelta object at 0x0000013250BD6BA0>
+
+    def test_with_a_plan_only_the_block_is_added(self):
+        """鈽?涓ゆ瀹為獙鐨勫樊寮傚繀椤?*鍙?*鏄繖涓€娈碉紝鍚﹀垯褰掑洜涓嶆垚绔嬨€?""
+        without = build_user_prompt("q", HINT, answer_type="float")
+        with_plan = build_user_prompt("q", HINT, answer_type="float", plan_text="A 鈫?B")
+        assert "浣犱笂涓€杞垪鍑虹殑璁″垝" in with_plan
+        assert "A 鈫?B" in with_plan
+        # 鍘绘帀璁″垝鍧楅偅鍑犺涔嬪悗锛屽墿涓嬬殑閮ㄥ垎涓庝笉甯﹁鍒掓椂閫愬瓧鐩稿悓
+        kept = [ln for ln in with_plan.splitlines()
+                if "璁″垝" not in ln and "A 鈫?B" not in ln and "浠呬緵鍙傝€? not in ln
+                and "浠ュ伐鍏锋枃妗ｄ笌鍦烘櫙娓呭崟涓哄噯" not in ln and "鍙兘" not in ln]
+>       assert [ln for ln in without.splitlines() if ln.strip()] == \
+               [ln for ln in kept if ln.strip()]
+E       AssertionError: assert ['## 闂', 'q'...锛屼笉瑕佸甫鏂囧瓧锛?, ...] == ['## 闂', 'q'...瑕佹眰鐨勭瓟妗堢被鍨?, ...]
+E         
+E         At index 4 diff: '## 瑕佹眰鐨勭瓟妗堢被鍨? != '杩欐槸浣犺嚜宸卞湪鍐欑▼搴忓墠缁欏嚭鐨勬€濊矾锛屼笉鏄害鏉熴€傝嫢瀹冧笌宸ュ叿鏂囨。鎴栧満鏅竻鍗曞啿绐侊紝'
+E         Right contains one more item: '鐜板湪杈撳嚭绋嬪簭銆?
+E         Use -v to get more diff
+
+tests\test_agent_planner.py:210: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_agent_planner.py::TestPlanIsAudited::test_a_clean_plan_has_no_numbers
+FAILED tests/test_agent_planner.py::TestPromptDelta::test_with_a_plan_only_the_block_is_added
+2 failed, 69 passed in 3.68s
+exit=1

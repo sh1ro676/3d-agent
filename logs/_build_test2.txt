@@ -1,0 +1,55 @@
+提交 A ...
+  A job = b1789819304476
+立刻提交 B ...
+  B job = b1789819304509
+[   3.0s] A job=b1789819304476  state=running  stage=build     offline : False
+[   3.0s] B job=b1789819304509  state=queued   stage=queued    排队中…
+[  30.2s] A job=b1789819304476  state=running  stage=report    生成场景报告…
+[  33.2s] A job=b1789819304476  state=running  stage=export    导出到演示台…
+[  35.3s] A job=b1789819304476  state=done     stage=export    导出完成 → D:\3D_Spatial_Agent\demo
+    ↑ A 结束：done
+[   0.9s] B job=b1789819304509  state=running  stage=build     建图：加载 GroundingDINO / SAM2 / UniDepth…
+[  70.4s] B job=b1789819304509  state=running  stage=report    生成场景报告…
+[  76.4s] B job=b1789819304509  state=running  stage=export    场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+[  78.3s] B job=b1789819304509  state=done     stage=export    导出完成 → D:\3D_Spatial_Agent\demo
+    ↑ B 结束：done
+
+=== 排队行为判定 ===
+A 见过 queued = False（它先提交，通常没来得及被观察到）
+B 见过 queued = True  ← 这是排队的证据
+B 观察到过的 (state|stage) 序列：['done|export', 'queued|queued', 'running|build', 'running|export', 'running|report']
+
+=== A 的结果摘要（看内参来源）===
+  scene_id                 "upload_probe2"
+  image_url                "assets/upload_probe2/rgb.png"
+  image_hw                 [640, 480]
+  n_nodes                  9
+  n_edges                  133
+  intrinsics_source        "predicted"
+  intrinsics               [[163.737762, 0.0, 322.0], [0.0, 163.418274, 248.110352], [0.0, 0.0, 1.0]]
+  fov                      {"hfov_deg": 125.8, "vfov_deg": 111.5, "plausible": false, "reason": "hfov_out_of_range"}
+  scale_calibrated         false
+  up_axis_tilt_deg         63.04
+  up_axis_reliable         false
+  up_axis_reason           "band_not_horizontal"
+  mask_box_coverage_min    0.4624
+  prompt                   "sofa. chair. table. picture. mirror."
+
+=== B 的结果摘要 ===
+  scene_id                 "upload_probe3"
+  image_url                "assets/upload_probe3/rgb.png"
+  image_hw                 [640, 480]
+  intrinsics_source        "predicted"
+  scale_calibrated         false
+
+=== 上传目录 ===
+  uploads\20260919_195829_upload_probe.png  448668 bytes
+  uploads\upload_probe2\rgb.png  448668 bytes
+  uploads\upload_probe3\rgb.png  448668 bytes
+
+=== 导出后的资源 ===
+  assets/upload_probe2/ → ['masks', 'rgb.png']
+  assets/upload_probe3/ → ['masks', 'rgb.png']
+
+health.scenes = ['exif_fixture_exif', 'exif_fixture_pred', 'living_room', 'living_room_gt', 'living_room_pred', 'upload_probe', 'upload_probe2', 'upload_probe3']
+DONE

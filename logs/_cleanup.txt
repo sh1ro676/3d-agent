@@ -1,0 +1,15 @@
+﻿deleted=0 remaining=14
+D:\3D_Spatial_Agent\reports\_tmp_ls.txt
+D:\3D_Spatial_Agent\reports\_tmp_probe.txt
+D:\3D_Spatial_Agent\reports\_tmp_venv.txt
+D:\3D_Spatial_Agent\reports\_diag_c8_numbers.txt
+D:\3D_Spatial_Agent\logs\_git_status.txt
+D:\3D_Spatial_Agent\logs\diag_c8.log
+D:\3D_Spatial_Agent\scripts\_diag_c8_numbers.py
+D:\3D_Spatial_Agent\reports\combination_run_20260919_212432_reanalyzed.md
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214241_reanalyzed.json
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214241_reanalyzed.md
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214555_reanalyzed.json
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214555_reanalyzed.md
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214710_reanalyzed.json
+D:\3D_Spatial_Agent\reports\combination_run_20260919_214710_reanalyzed.md

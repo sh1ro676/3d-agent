@@ -1,0 +1,770 @@
+{
+  "arm": "A",
+  "started": "2026-09-18T16:05:14",
+  "argv": [
+    "--arm",
+    "A",
+    "--num-questions",
+    "20",
+    "--select",
+    "stratify",
+    "--num-api-questions",
+    "3"
+  ],
+  "env_applied_by_runner": {
+    "HF_HOME": "D:\\3D_Spatial_Agent\\.cache\\huggingface",
+    "HF_ENDPOINT": "https://hf-mirror.com",
+    "HF_HUB_DISABLE_XET": "1",
+    "HF_HUB_OFFLINE": "1",
+    "VADAR_GDINO_DIR": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "VADAR_CALL_LOG": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl"
+  },
+  "dataset": "omni3d",
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "84ca92b0406554998f9c67de527a60513ba6b1efa042475d7117faeee5217f12",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "api_key_source": "env_file",
+  "precheck": {
+    "annotations": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\annotations.json",
+    "images": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\images",
+    "problems": [],
+    "n_questions": 501,
+    "question_fields": [
+      "answer",
+      "answer_type",
+      "image_filename",
+      "image_index",
+      "question",
+      "question_index"
+    ],
+    "n_unique_image_filenames": 201,
+    "n_missing_image_files": 0,
+    "ok": true
+  },
+  "subset": {
+    "mode": "stratify",
+    "seed": 42,
+    "n_requested": 20,
+    "n_selected": 20,
+    "metric_class_counts": {
+      "multi_choice": 3,
+      "numeric_count": 3,
+      "numeric_other": 11,
+      "yes_no": 3
+    },
+    "answer_type_counts": {
+      "str": 6,
+      "int": 3,
+      "float": 11
+    },
+    "n_unique_images": 18,
+    "annotation_pool_size": 501,
+    "num_api_questions": 3,
+    "selected": [
+      {
+        "image_index": "32082.626_00008020.jpg",
+        "question_index": "466",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "What is the color of the pillow closer in depth?"
+      },
+      {
+        "image_index": "14443.893_00002504.jpg",
+        "question_index": "107",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Is the ceiling the same color as the closest or furthest remote control to the camera? Options: {furthest, closest}"
+      },
+      {
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "18",
+        "metric_class": "multi_choice",
+        "answer_type": "str",
+        "question": "Which object is closer to the camera: the washing machine or the kettle? Options: {washing machine, kettle}"
+      },
+      {
+        "image_index": "22064.414_00001501.jpg",
+        "question_index": "150",
+        "metric_class": "numeric_count",
+        "answer_type": "int",
+        "question": "How many placemats are on the table?"
+      },
+      {
+        "image_index": "144261.993_00005511.jpg",
+        "question_index": "137",
+        "metric_class": "numeric_count",
+        "answer_type": "int",
+        "question": "Including the sofa pillows, how many pillows are on the central gray couch?"
+      },
+      {
+        "image_index": "47702.364_00003218.jpg",
+        "question_index": "132",
+        "metric_class": "numeric_count",
+        "answer_type": "int",
+        "question": "How many fruits are in the fruit basket?"
+      },
+      {
+        "image_index": "65662.203_00000817.jpg",
+        "question_index": "153",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the leftmost cabinet is 1.9m wide, how tall is the glass cabinet directly adjacent to it?"
+      },
+      {
+        "image_index": "74514.833_00005019.jpg",
+        "question_index": "113",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the table is 1.8m tall, how tall is the brown dresser?"
+      },
+      {
+        "image_index": "186909.798_00006580.jpg",
+        "question_index": "92",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the combined height of the TV and TV stand is 2m, how wide is the brown and silver coffee table?"
+      },
+      {
+        "image_index": "100592.766_00001489.jpg",
+        "question_index": "387",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "How many objects of the same height as the red armchair would I need to stack to make a structure as long as the table below the tv?"
+      },
+      {
+        "image_index": "12214.439_00001777.jpg",
+        "question_index": "34",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the sofa is 0.4m tall, how wide is the stool in front of the piano in meters?"
+      },
+      {
+        "image_index": "183724.018_00000638.jpg",
+        "question_index": "31",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the volume of the rightmost sofa to the circular table under the TV?"
+      },
+      {
+        "image_index": "114979.918_00002498.jpg",
+        "question_index": "95",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the combined height of the bedside table and left-most cabinet is 3m, how wide is the bed?"
+      },
+      {
+        "image_index": "164039.451_00000637.jpg",
+        "question_index": "235",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the washing machine fell to the right, and its new 3D height was 1 foot, what would be the 3D height of the cabinet above it?"
+      },
+      {
+        "image_index": "7375.441_00006700.jpg",
+        "question_index": "248",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the 3D length of the stovetop to the 3D height of the oven?"
+      },
+      {
+        "image_index": "91452.019_00011201.jpg",
+        "question_index": "480",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the 3D height of the camera closest to the camera is 5 feet, what is the 3D height of the chair farthest from the camera?"
+      },
+      {
+        "image_index": "28821.006_00000337.jpg",
+        "question_index": "26",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the leftmost cabinet is 2m wide, how tall is the black chair in meters?"
+      },
+      {
+        "image_index": "91452.019_00011201.jpg",
+        "question_index": "482",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "Is the yellow flower vase closer to the camera than the brown door?"
+      },
+      {
+        "image_index": "45899.622_00000877.jpg",
+        "question_index": "175",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "Is the combined height of the TV and the TV stand greater than the width of the brick-fireplace?"
+      },
+      {
+        "image_index": "32082.626_00008020.jpg",
+        "question_index": "464",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "Are there more paintings than plants?"
+      }
+    ],
+    "api_subset": [
+      {
+        "image_index": "22064.414_00001501.jpg",
+        "question_index": "150"
+      },
+      {
+        "image_index": "32082.626_00008020.jpg",
+        "question_index": "466"
+      },
+      {
+        "image_index": "186909.798_00006580.jpg",
+        "question_index": "92"
+      }
+    ],
+    "deviation_from_original": "原版用无种子的 random.sample 抽 api_questions（bug ③，不可复现）；本运行器改用 random.Random(seed).sample，并把选中清单落盘。"
+  },
+  "adapter": {
+    "steps": {
+      "paths": {
+        "added": [
+          "D:\\3D_Spatial_Agent\\vendor",
+          "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+        ],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+      },
+      "stubs": {
+        "count": 21
+      },
+      "bridge_install": {
+        "patched": [
+          "engine.engine_utils",
+          "engine.predefined_modules (+VQAModule.predict)",
+          "engine.engine",
+          "agents.agents"
+        ],
+        "failed": [],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR",
+        "warnings": []
+      },
+      "alarm": {
+        "patched": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "failed": [],
+        "targets": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "shim": {
+          "armed": 0,
+          "cancelled": 0,
+          "fired": 0,
+          "fired_by": {
+            "trace": 0,
+            "timer": 0
+          },
+          "trace_errors": 0,
+          "timeout_s": null,
+          "exception_type": "builtins.TimeoutError"
+        }
+      },
+      "alarm_note": "计数请在实验结束时调用 report['steps']['alarm']['shim'].describe()",
+      "program_sanitizer": {
+        "enabled": true,
+        "patched": [
+          "agents.agents.APIAgent",
+          "engine.engine.Engine"
+        ]
+      }
+    },
+    "model_fingerprint": {
+      "text": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "***",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      },
+      "vision": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "***",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      }
+    },
+    "gdino_dir": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "gdino_caption_mode": "vadar"
+  },
+  "adapter_ok": true,
+  "run_dir": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43",
+  "stages": {
+    "signatures": {
+      "ok": true,
+      "s": 3.46,
+      "n_api_questions": 3,
+      "n_methods": 4,
+      "methods": [
+        "_count_objects",
+        "_get_closest_object",
+        "_get_color",
+        "_get_real_world_width"
+      ]
+    },
+    "api": {
+      "ok": true,
+      "s": 5.68,
+      "n_api": 4
+    },
+    "programs": {
+      "ok": true,
+      "s": 63.78,
+      "n_programs": 20,
+      "n_nonempty": 20
+    },
+    "execute": {
+      "ok": true,
+      "s": 297.19
+    }
+  },
+  "signature_agent_dataset": "clevr",
+  "execution_json": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\program_execution\\execution.json",
+  "finished": "2026-09-18T16:11:53",
+  "program_sanitizer": {
+    "files": 27,
+    "replacements": 27,
+    "samples": [
+      {
+        "file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\api_generator\\_count_objects\\exec_env/executable_program.py",
+        "n": 1
+      },
+      {
+        "file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\api_generator\\_get_closest_object\\exec_env/executable_program.py",
+        "n": 1
+      },
+      {
+        "file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\api_generator\\_get_color\\exec_env/executable_program.py",
+        "n": 1
+      },
+      {
+        "file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\api_generator\\_get_real_world_width\\exec_env/executable_program.py",
+        "n": 1
+      },
+      {
+        "file": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-05-43\\program_execution\\image_32082.626_00008020.jpg_question_466/exec_env/executable_program.py",
+        "n": 1
+      }
+    ]
+  },
+  "metrics": {
+    "n_questions": 20,
+    "counts": {
+      "numeric_count": 3,
+      "numeric_other": 11,
+      "yes_no": 3,
+      "multi_choice": 3
+    },
+    "unparseable_predictions": {
+      "numeric_count": 0,
+      "numeric_other": 11
+    },
+    "submetrics": {
+      "numeric_count": 0.0,
+      "numeric_other_mra": 0.0,
+      "yes_no": 66.7,
+      "multi_choice": 100.0
+    },
+    "total_micro": 25.01,
+    "exact_match_accuracy": 25.0,
+    "mra_thresholds": [
+      0.5,
+      0.45,
+      0.4,
+      0.35,
+      0.3,
+      0.25,
+      0.2,
+      0.15,
+      0.1,
+      0.05
+    ],
+    "mra_hits": {
+      "0.5": 0,
+      "0.45": 0,
+      "0.4": 0,
+      "0.35": 0,
+      "0.3": 0,
+      "0.25": 0,
+      "0.2": 0,
+      "0.15": 0,
+      "0.1": 0,
+      "0.05": 0
+    },
+    "records": [
+      {
+        "answer_type": "str",
+        "ground_truth": "yellow",
+        "prediction": "yellow",
+        "image_index": "32082.626_00008020.jpg",
+        "question_index": "466",
+        "question": "What is the color of the pillow closer in depth?",
+        "has_program": true
+      },
+      {
+        "answer_type": "str",
+        "ground_truth": "closest",
+        "prediction": "closest",
+        "image_index": "14443.893_00002504.jpg",
+        "question_index": "107",
+        "question": "Is the ceiling the same color as the closest or furthest remote control to the camera? Options: {furthest, closest}",
+        "has_program": true
+      },
+      {
+        "answer_type": "str",
+        "ground_truth": "washing machine",
+        "prediction": "washing machine",
+        "image_index": "32292.427_00002318.jpg",
+        "question_index": "18",
+        "question": "Which object is closer to the camera: the washing machine or the kettle? Options: {washing machine, kettle}",
+        "has_program": true
+      },
+      {
+        "answer_type": "int",
+        "ground_truth": "6",
+        "prediction": 5,
+        "image_index": "22064.414_00001501.jpg",
+        "question_index": "150",
+        "question": "How many placemats are on the table?",
+        "has_program": true
+      },
+      {
+        "answer_type": "int",
+        "ground_truth": "6",
+        "prediction": 2,
+        "image_index": "144261.993_00005511.jpg",
+        "question_index": "137",
+        "question": "Including the sofa pillows, how many pillows are on the central gray couch?",
+        "has_program": true
+      },
+      {
+        "answer_type": "int",
+        "ground_truth": "4",
+        "prediction": 0,
+        "image_index": "47702.364_00003218.jpg",
+        "question_index": "132",
+        "question": "How many fruits are in the fruit basket?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "2.213",
+        "prediction": "",
+        "image_index": "65662.203_00000817.jpg",
+        "question_index": "153",
+        "question": "If the leftmost cabinet is 1.9m wide, how tall is the glass cabinet directly adjacent to it?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "2.279",
+        "prediction": "",
+        "image_index": "74514.833_00005019.jpg",
+        "question_index": "113",
+        "question": "If the table is 1.8m tall, how tall is the brown dresser?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "2.546",
+        "prediction": "",
+        "image_index": "186909.798_00006580.jpg",
+        "question_index": "92",
+        "question": "If the combined height of the TV and TV stand is 2m, how wide is the brown and silver coffee table?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "2.108",
+        "prediction": "",
+        "image_index": "100592.766_00001489.jpg",
+        "question_index": "387",
+        "question": "How many objects of the same height as the red armchair would I need to stack to make a structure as long as the table below the tv?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "0.224",
+        "prediction": "",
+        "image_index": "12214.439_00001777.jpg",
+        "question_index": "34",
+        "question": "If the sofa is 0.4m tall, how wide is the stool in front of the piano in meters?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "5.814",
+        "prediction": "",
+        "image_index": "183724.018_00000638.jpg",
+        "question_index": "31",
+        "question": "What is the ratio of the volume of the rightmost sofa to the circular table under the TV?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "3.454",
+        "prediction": "",
+        "image_index": "114979.918_00002498.jpg",
+        "question_index": "95",
+        "question": "If the combined height of the bedside table and left-most cabinet is 3m, how wide is the bed?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "0.984",
+        "prediction": "",
+        "image_index": "164039.451_00000637.jpg",
+        "question_index": "235",
+        "question": "If the washing machine fell to the right, and its new 3D height was 1 foot, what would be the 3D height of the cabinet above it?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "0.626",
+        "prediction": "",
+        "image_index": "7375.441_00006700.jpg",
+        "question_index": "248",
+        "question": "What is the ratio of the 3D length of the stovetop to the 3D height of the oven?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "6.252",
+        "prediction": "",
+        "image_index": "91452.019_00011201.jpg",
+        "question_index": "480",
+        "question": "If the 3D height of the camera closest to the camera is 5 feet, what is the 3D height of the chair farthest from the camera?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "2.103",
+        "prediction": "",
+        "image_index": "28821.006_00000337.jpg",
+        "question_index": "26",
+        "question": "If the leftmost cabinet is 2m wide, how tall is the black chair in meters?",
+        "has_program": true
+      },
+      {
+        "answer_type": "str",
+        "ground_truth": "yes",
+        "prediction": "yes",
+        "image_index": "91452.019_00011201.jpg",
+        "question_index": "482",
+        "question": "Is the yellow flower vase closer to the camera than the brown door?",
+        "has_program": true
+      },
+      {
+        "answer_type": "str",
+        "ground_truth": "no",
+        "prediction": "",
+        "image_index": "45899.622_00000877.jpg",
+        "question_index": "175",
+        "question": "Is the combined height of the TV and the TV stand greater than the width of the brick-fireplace?",
+        "has_program": true
+      },
+      {
+        "answer_type": "str",
+        "ground_truth": "no",
+        "prediction": "no",
+        "image_index": "32082.626_00008020.jpg",
+        "question_index": "464",
+        "question": "Are there more paintings than plants?",
+        "has_program": true
+      }
+    ]
+  },
+  "aggregation_rule": {
+    "rule": "micro = Σ(accuracy_k × n_k) / N",
+    "counts": {
+      "numeric_count": 70,
+      "numeric_other": 270,
+      "yes_no": 75,
+      "multi_choice": 86
+    },
+    "n_total": 501,
+    "weights": {
+      "numeric_count": 0.139721,
+      "numeric_other": 0.538922,
+      "yes_no": 0.149701,
+      "multi_choice": 0.171657
+    },
+    "n_methods_same_run": 8,
+    "residual_max_pp": 0.043,
+    "verdict": "micro_by_question_count",
+    "tolerance_pp": 0.2,
+    "tolerance_rationale": "论文只给一位小数，单行四舍五入贡献 ≤0.05pp；0.2pp 留了 4 倍余量，超过就不是舍入噪声",
+    "per_method": [
+      {
+        "method": "GPT4o",
+        "paper_total": 42.9,
+        "micro_predicted": 42.862,
+        "residual_pp": -0.04,
+        "same_run": true
+      },
+      {
+        "method": "Claude3.5-Sonnet",
+        "paper_total": 32.2,
+        "micro_predicted": 32.229,
+        "residual_pp": 0.03,
+        "same_run": true
+      },
+      {
+        "method": "Llama3.2",
+        "paper_total": 25.6,
+        "micro_predicted": 25.611,
+        "residual_pp": 0.01,
+        "same_run": true
+      },
+      {
+        "method": "Gemini1.5-Pro",
+        "paper_total": 32.0,
+        "micro_predicted": 32.035,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "Gemini1.5-Flash",
+        "paper_total": 35.0,
+        "micro_predicted": 35.0,
+        "residual_pp": -0.0,
+        "same_run": true
+      },
+      {
+        "method": "Molmo",
+        "paper_total": 26.1,
+        "micro_predicted": 26.143,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "SpaceMantis",
+        "paper_total": 30.3,
+        "micro_predicted": 30.338,
+        "residual_pp": 0.04,
+        "same_run": true
+      },
+      {
+        "method": "VADAR",
+        "paper_total": 40.4,
+        "micro_predicted": 40.434,
+        "residual_pp": 0.03,
+        "same_run": true
+      }
+    ],
+    "excluded_non_same_run": [
+      {
+        "method": "ViperGPT",
+        "paper_total": 33.5,
+        "micro_predicted": 26.755,
+        "residual_pp": -6.74,
+        "same_run": false
+      },
+      {
+        "method": "VisProg",
+        "paper_total": 21.1,
+        "micro_predicted": 13.525,
+        "residual_pp": -7.58,
+        "same_run": false
+      }
+    ]
+  },
+  "llm_calls": {
+    "path": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl",
+    "total_records": 95,
+    "calls": 91,
+    "ok": 91,
+    "failed": 0,
+    "retried": 0,
+    "truncated": 0,
+    "answer_tag_fallbacks": 4,
+    "latency_s": {
+      "avg": 2.495,
+      "p50": 2.447,
+      "p95": 3.659,
+      "min": 1.047,
+      "max": 9.472
+    },
+    "est_cost_cny_total": 0.7183,
+    "costrable_calls": 91,
+    "by_role": {
+      "text": {
+        "n": 91,
+        "sum_s": 227.05399999999997,
+        "ptok": 172499,
+        "ctok": 22306
+      }
+    },
+    "failure_samples": []
+  },
+  "mode": "run"
+}

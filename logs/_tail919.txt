@@ -1,0 +1,24 @@
+﻿**不要为此加工具** —— 加工具让动作空间变长、信息量不变，还会让「工具选择准确率」变差。
+
+### 三条环境/工程坑
+
+- ⚠ **我自己写的体检脚本有个「不报错、只改结论」的缺陷**：`field_census` 里建上下文时
+  写了 `ToolContext(record_trace=False)` —— 而 `ctx.record()` 在 `record_trace=False` 时
+  **直接 return**，于是 trace 永远为空、**字段清点结果永远是一张空表**，
+  而空表会被读成「所有字段都缺」。是第一版报告里那张全 `—` 的表暴露了它。
+- 宿主 bash 仍然残缺（`dirname`/`ls`/`wc` 全 not found）⟹ 一律走 PowerShell；
+  PowerShell stdout 不回传 ⟹ 所有结论**必须落盘成 UTF-8 文件**再 Read。
+- 重定向用 `2>&1 | Out-File -Encoding utf8`（不要用 `*>`，会写成 UTF-16）。
+
+### 产物
+
+- `reports/combination_probe.md` / `.json` —— 零成本体检（可达性 + 字段清点 + 死区对照 +
+  一次调用分析 + 「结论与下一步」按修法排序）
+- `reports/combination_run_20260919_212328.json` ＋ `..._212608_reanalyzed.md` —— 真跑与复算
+- 中间那一版（口径尚未修正的）产物已删除，**避免两份指标定义不同的报告并存**
+
+### 下一步（**已给用户，等拍板**）
+
+**① 改 docstring（零风险）→ ③ 定派生量口径 → ④ 才谈加工具**；②（`query_relation` 带
+delta/tol、`get_object` 补 `bbox_2d`）是参数级改动，顺手做。
+**在 ①③ 之前加任何新工具，只会改变动作空间长度，不会改变可回答问题的集合。**

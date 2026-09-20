@@ -1,0 +1,8 @@
+get_attributes(scene_id: str | None=None, object_id: str='', attrs: list[str] | None=None, candidates: dict | None=None)
+    读取某个物体在**视觉语义**上的属性（颜色 / 材质 / 纹理 / 状态 / 形状）。成功时 `res.value` 是 **list**，每项形如 `{"name": "color", "value": "beige", "confidence": 0.9}` —— 按 `name` 取，不要当成 `{"color": ...}` 这种按属性名索引的 dict。置信度低或落在闭集外时整条返回 `LOW_CONFIDENCE`，值仍在 `context["attributes"]` 里。
+
+list_objects(scene_id: str | None=None, label: str | None=None, limit: int | None=None)
+    列出场景中的物体。`label` 为空则返回全部。
+
+single_object(scene_id: str | None=None, label: str='')
+    按类别取**恰好一个**物体；匹配到多个就 `AMBIGUOUS`。

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D 空间智能 Agent · 演示台</title>
+<style>
+:root{
+  --bg:#0d1016; --panel:#141922; --panel2:#1a2029; --panel3:#212936;
+  --line:#28313e; --line2:#333d4c;
+  --fg:#e6edf3; --fg2:#b6c2cf; --dim:#7d8a9a;
+  --accent:#4cc9f0; --accent2:#7b61ff;
+  --ok:#3fb950; --warn:#d29922; --err:#f85149; --info:#79c0ff;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  /* 间距集中在这里：布局的"呼吸感"是三个数字决定的，
+     散落在各处 padding 里就没法一次调匀。 */
+  --gap:12px; --pad:16px; --rin:13px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--bg); color:var(--fg); overflow:hidden; display:flex; flex-direction:column;
+  font:13.5px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+code{font-family:var(--mono);font-size:.94em;background:var(--panel3);padding:1px 5px;border-radius:4px}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  flex:0 0 auto; display:flex; align-items:center; gap:12px;
+  padding:0 16px; height:54px; background:var(--panel);
+  border-bottom:1px solid var(--line); z-index:20;
+}
+.brand{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.brand strong{font-size:14.5px;letter-spacing:.2px}
+.brand .sub{color:var(--dim);font-size:12px}
+.spacer{flex:1}
+.field{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);white-space:nowrap}
+select,input[type=text],textarea{
+  background:var(--panel2); border:1px solid var(--line2); border-radius:6px;
+  padding:6px 9px; color:var(--fg); outline:none;
+}
+select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+select{min-width:158px;cursor:pointer}
+
+/* 布局切换：四个按钮，一个状态 */
+.seg{display:flex;border:1px solid var(--line2);border-radius:7px;overflow:hidden;background:var(--panel2)}
+.seg-b{
+  background:none;border:none;border-right:1px solid var(--line2);
+  padding:5px 11px;cursor:pointer;color:var(--dim);font-size:14px;line-height:1.1;
+}
+.seg-b:last-child{border-right:none}
+.seg-b:hover{color:var(--fg);background:var(--panel3)}
+.seg-b.on{background:rgba(76,201,240,.16);color:var(--accent)}
+
+.pill{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;
+  font-size:11.5px;font-weight:600;letter-spacing:.2px;white-space:nowrap;
+  border:1px solid transparent;
+}
+.pill .d{width:7px;height:7px;border-radius:50%;background:currentColor;flex:0 0 auto}
+.pill-ok{background:rgba(63,185,80,.13);color:var(--ok);border-color:rgba(63,185,80,.35)}
+.pill-warn{background:rgba(210,153,34,.13);color:var(--warn);border-color:rgba(210,153,34,.35)}
+.pill-err{background:rgba(248,81,73,.13);color:var(--err);border-color:rgba(248,81,73,.35)}
+.pill-info{background:rgba(121,192,255,.13);color:var(--info);border-color:rgba(121,192,255,.3)}
+.pill-dim{background:var(--panel2);color:var(--dim);border-color:var(--line2)}
+
+/* ---------- 诚实性横幅（可折叠） ---------- */
+.banners{flex:0 0 auto;display:flex;flex-direction:column;gap:6px;padding:0 16px}
+.banners:not(:empty){padding-top:10px}
+.banner{
+  display:flex;gap:9px;align-items:baseline;padding:7px 12px;border-radius:8px;
+  font-size:12.5px;line-height:1.55;
+  border:1px solid rgba(210,153,34,.32); background:rgba(210,153,34,.08); color:#e8cf9b;
+}
+.banner b{color:var(--warn)}
+.banner .ic{flex:0 0 auto;font-weight:700}
+.banner .sm{color:#c9b184}
+.banner .det{display:none;margin-top:5px;color:#c9b184;font-size:12px}
+.banner.open .det{display:block}
+.banner .more{
+  background:none;border:none;color:var(--warn);cursor:pointer;
+  font-size:11.5px;padding:0 3px;text-decoration:underline;text-underline-offset:2px;
+}
+
+/* ---------- 主网格 ---------- */
+.grid{
+  flex:1 1 auto; min-height:0; display:grid; gap:var(--gap); padding:var(--gap) var(--pad) var(--pad);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1.12fr) minmax(0,.88fr);
+}
+/* 四种布局。之所以做成可切换而不是挑一个"最优"：不同内容怕的拥挤不是同一种 ——
+   看三维时嫌窄的是"横向视野"，读报告时嫌挤的是"纵向行数"，
+   让用的人自己换，比替所有人猜一个折中值有用地多。 */
+body[data-layout="wide"] .grid{grid-template-columns:minmax(0,1.52fr) minmax(0,1fr)}
+body[data-layout="focus"] .grid{
+  grid-template-columns:minmax(0,1.62fr) minmax(0,1fr);
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+  grid-template-areas:"p3d pask" "p3d pimg" "p3d prep";
+}
+body[data-layout="focus"] .pane-3d{grid-area:p3d}
+body[data-layout="focus"] .pane-ask{grid-area:pask}
+body[data-layout="focus"] .pane-img{grid-area:pimg}
+body[data-layout="focus"] .pane-report{grid-area:prep}
+body[data-layout="stack"] .grid{
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:repeat(4,minmax(430px,1fr));
+  overflow:auto;
+}
+
+.pane{
+  display:flex;flex-direction:column;min-height:0;min-width:0;
+  background:var(--panel); border:1px solid var(--line); border-radius:11px; overflow:hidden;
+}
+.pane-head{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-bottom:1px solid var(--line);background:var(--panel2);
+}
+.pane-head h2{margin:0;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--fg)}
+.pane-head .head-tools{margin-left:auto;display:flex;align-items:center;gap:12px}
+.mini{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--dim);cursor:pointer;user-select:none;white-space:nowrap}
+.mini input{accent-color:var(--accent);cursor:pointer;margin:0}
+.pane-body{flex:1 1 auto;min-height:0;position:relative;overflow:auto}
+.pane-foot{
+  flex:0 0 auto;display:flex;align-items:center;gap:9px;
+  padding:8px 11px;border-top:1px solid var(--line);background:var(--panel2);
+}
+
+/* ---------- 按钮 ---------- */
+.btn{
+  background:var(--panel3);border:1px solid var(--line2);border-radius:7px;
+  padding:6px 12px;cursor:pointer;transition:.12s;white-space:nowrap;
+}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.42;cursor:not-allowed}
+.btn-primary{background:rgba(76,201,240,.14);border-color:rgba(76,201,240,.5);color:var(--accent);font-weight:600}
+.btn-primary:hover:not(:disabled){background:rgba(76,201,240,.24)}
+.btn-xs{padding:3px 9px;font-size:11.5px;background:var(--panel3);border:1px solid var(--line2);border-radius:5px;cursor:pointer}
+.btn-xs:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.btn-xs:disabled{opacity:.42;cursor:not-allowed}
+
+/* ---------- 3D ---------- */
+#viewport{position:absolute;inset:0}
+#viewport canvas{display:block}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{
+  position:absolute;transform:translate(-50%,-50%);white-space:nowrap;
+  font:600 10.5px/1 var(--mono);padding:2px 6px;border-radius:4px;
+  background:rgba(13,16,22,.78);border:1px solid var(--line2);color:var(--fg2);
+  transition:opacity .12s;
+}
+.lbl.sel{border-color:var(--accent);color:#fff;background:rgba(76,201,240,.22)}
+/* 坐标系说明：折叠成一行，鼠标悬停/点击才展开 ——
+   它有信息量，但连续看三维时它是遮挡物。 */
+.axis-note{
+  position:absolute;left:10px;bottom:10px;max-width:min(330px,60%);
+  font-size:11px;line-height:1.6;color:var(--dim);
+  background:rgba(11,14,20,.82);border:1px solid var(--line);border-radius:7px;
+  padding:6px 10px;cursor:help;
+}
+.axis-note .ax-det{display:none;margin-top:4px}
+.axis-note.open .ax-det{display:block}
+.axis-note b{color:var(--fg2);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;overflow-y:auto;flex:1;max-height:58px;padding:1px 0;scrollbar-width:thin}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:99px;
+  border:1px solid var(--line2);background:var(--panel3);cursor:pointer;
+  font-size:11.5px;white-space:nowrap;transition:.12s;flex:0 0 auto;
+}
+.chip:hover{border-color:var(--fg2)}
+.chip.sel{border-color:var(--accent);background:rgba(76,201,240,.16);color:#fff}
+.chip .sw{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.chip .n{color:var(--dim);font-family:var(--mono);font-size:10.5px}
+.chip.sel .n{color:var(--fg2)}
+
+/* ---------- 图像 ---------- */
+/* 绝对定位铺满 + flex 居中：原来用 flex-start 让图片顶上去，
+   于是图下方永远空一大块 —— 那是"逼仄"最直接的来源之一。 */
+#imgwrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden}
+#imgstack{position:relative;line-height:0;max-width:100%;max-height:100%}
+#imgstack canvas{
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  border-radius:7px;display:block;cursor:crosshair;
+  box-shadow:0 2px 18px rgba(0,0,0,.4);
+}
+#imgstack .ovl{position:absolute;inset:0}
+.img-note{color:var(--dim);font-size:11.5px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---------- 滚动条 ---------- */
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#2c3542;border-radius:9px;border:2px solid var(--panel)}
+::-webkit-scrollbar-thumb:hover{background:#3b4757}
+
+/* ---------- 通用区块 ---------- */
+.sec{padding:12px 14px;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:none}
+.sec h3{
+  margin:0 0 9px;font-size:11px;font-weight:700;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--dim);
+}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:12.5px}
+.kv dt{color:var(--dim);white-space:nowrap}
+.kv dd{margin:0;font-family:var(--mono);font-size:12px;color:var(--fg);word-break:break-word}
+.muted{color:var(--dim)}
+.note{color:var(--dim);font-size:12px;line-height:1.65}
+.tag{
+  display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:600;
+  font-family:var(--mono);
+}
+.t-ok{background:rgba(63,185,80,.15);color:var(--ok)}
+.t-warn{background:rgba(210,153,34,.15);color:var(--warn)}
+.t-err{background:rgba(248,81,73,.15);color:var(--err)}
+.t-info{background:rgba(121,192,255,.15);color:var(--info)}
+.t-dim{background:var(--panel3);color:var(--dim)}
+
+/* ---------- 问答 ---------- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);background:var(--panel2);flex:0 0 auto}
+.tab{
+  padding:8px 15px;font-size:12px;cursor:pointer;color:var(--dim);
+  border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;
+}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);background:var(--panel)}
+.ask-form{padding:11px 13px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid var(--line)}
+.ask-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+textarea{width:100%;resize:vertical;min-height:46px;font-size:13px}
+.run-list{max-height:172px;overflow:auto;border-bottom:1px solid var(--line)}
+.run-item{
+  display:flex;gap:9px;align-items:center;padding:8px 13px;cursor:pointer;
+  border-bottom:1px solid rgba(40,49,62,.55);font-size:12.5px;
+}
+.run-item:last-child{border-bottom:none}
+.run-item:hover{background:var(--panel2)}
+.run-item.on{background:rgba(76,201,240,.09);box-shadow:inset 3px 0 0 var(--accent)}
+.run-item .q{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.answer{
+  margin:12px 13px;padding:12px 14px;border-radius:9px;
+  background:var(--panel2);border:1px solid var(--line2);
+}
+.answer .big{font:700 21px/1.25 var(--mono);color:var(--accent);word-break:break-all}
+.answer .meta{margin-top:7px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:11.5px;color:var(--dim)}
+.trace{border-top:1px solid var(--line)}
+.tr{
+  border-bottom:1px solid rgba(40,49,62,.55);padding:9px 13px;font-size:12.5px;
+}
+.tr:last-child{border-bottom:none}
+.tr-head{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.tr-name{font-family:var(--mono);font-weight:600;color:var(--fg)}
+.tr-args{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px;word-break:break-all}
+.tr-val{
+  margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--fg2);
+  background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;
+  max-height:180px;overflow:auto;white-space:pre-wrap;word-break:break-word;
+}
+details.pf{margin:0 13px 12px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+details.pf>summary{padding:8px 12px;cursor:pointer;font-size:11.5px;color:var(--dim);background:var(--panel2);user-select:none}
+details.pf>summary:hover{color:var(--accent)}
+details.pf pre{margin:0;padding:11px 13px;overflow:auto;max-height:320px;font:11.5px/1.65 var(--mono);color:var(--fg2)}
+.stages{display:flex;gap:0;flex-wrap:wrap;padding:9px 13px}
+.stg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--dim);padding-right:15px;position:relative}
+.stg:not(:last-child)::after{content:"→";position:absolute;right:5px;color:var(--line2)}
+.stg .sd{width:6px;height:6px;border-radius:50%;background:currentColor}
+.stg.ok{color:var(--ok)} .stg.bad{color:var(--err)}
+
+/* ---------- 空态 / 加载 ---------- */
+.empty{padding:28px 18px;text-align:center;color:var(--dim);font-size:12.5px;line-height:1.75}
+.spin{
+  display:inline-block;width:12px;height:12px;border:2px solid var(--line2);
+  border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;
+}
+@keyframes sp{to{transform:rotate(360deg)}}
+.err-box{
+  margin:11px 13px;padding:11px 13px;border-radius:8px;font-size:12.5px;
+  background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.35);color:#ffb4ae;
+}
+.hidden{display:none !important}
+
+/* ---------- 上传建图弹层 ---------- */
+.modal{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+  background:rgba(6,9,14,.72);backdrop-filter:blur(3px);padding:24px;
+}
+.sheet{
+  width:min(680px,100%);max-height:100%;display:flex;flex-direction:column;
+  background:var(--panel);border:1px solid var(--line2);border-radius:13px;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.6);
+}
+.sheet-head{
+  display:flex;align-items:center;gap:10px;padding:13px 16px;
+  border-bottom:1px solid var(--line);background:var(--panel2);
+}
+.sheet-head h2{margin:0;font-size:14px}
+.sheet-head .x{margin-left:auto}
+.sheet-body{padding:15px 16px;overflow:auto;display:flex;flex-direction:column;gap:13px}
+.sheet-foot{
+  display:flex;align-items:center;gap:11px;padding:12px 16px;
+  border-top:1px solid var(--line);background:var(--panel2);
+}
+.sheet-foot .btn-primary{margin-left:auto}
+.drop{
+  border:1.5px dashed var(--line2);border-radius:11px;padding:26px 18px;text-align:center;
+  cursor:pointer;transition:.14s;background:var(--panel2);
+}
+.drop:hover,.drop.over{border-color:var(--accent);background:rgba(76,201,240,.07)}
+.drop .big{font-size:13.5px;color:var(--fg2)}
+.drop .sm{font-size:11.5px;color:var(--dim);margin-top:5px}
+.drop u{color:var(--accent);text-decoration:none;font-weight:600}
+.drop img{max-height:150px;max-width:100%;border-radius:7px;margin-top:9px}
+.up-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.up-grid label{display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--dim)}
+.up-grid input,.up-grid select{width:100%}
+.up-warn{
+  display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:8px;
+  font-size:12px;line-height:1.6;color:#e8cf9b;
+  background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.3);
+}
+.up-log{
+  margin:0 16px 16px;padding:10px 12px;border-radius:8px;background:var(--bg);
+  border:1px solid var(--line);font:11.5px/1.65 var(--mono);color:var(--fg2);
+  max-height:190px;overflow:auto;white-space:pre-wrap;word-break:break-word;
+}
+.up-bar{height:3px;background:var(--panel3);border-radius:3px;overflow:hidden;flex:1;max-width:220px}
+.up-bar i{display:block;height:100%;width:35%;background:var(--accent);border-radius:3px;animation:mv 1.3s ease-in-out infinite}
+@keyframes mv{0%{margin-left:-35%}100%{margin-left:100%}}
+
+@media (max-width:1180px){
+  body .grid{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,minmax(400px,1fr));overflow:auto}
+  body[data-layout="focus"] .grid{grid-template-areas:none}
+  .up-grid{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+</head>
+<body data-layout="grid">
+
+<header class="topbar">
+  <div class="brand">
+    <strong>3D 空间智能 Agent</strong>
+    <span class="sub">演示台</span>
+  </div>
+  <div class="spacer"></div>
+  <button class="btn" id="btn-upload" title="上传自己的照片，跑一次真实建图">＋ 上传图片建图</button>
+  <div class="seg" id="layout-seg" title="布局">
+    <button class="seg-b on" data-layout="grid" title="四宫格 2×2">▦</button>
+    <button class="seg-b" data-layout="wide" title="左右：左列更宽">◧</button>
+    <button class="seg-b" data-layout="focus" title="三维优先：左半全高，右侧三个竖排">▣</button>
+    <button class="seg-b" data-layout="stack" title="单列：纵向滚动，每格更高">▤</button>
+  </div>
+  <label class="field">场景 <select id="scene-select"></select></label>
+  <div id="conn" class="pill pill-dim"><span class="d"></span>连接中…</div>
+</header>
+
+<div id="banners" class="banners"></div>
+
+<main class="grid">
+
+  <!-- ① 三维场景 -->
+  <section class="pane pane-3d">
+    <div class="pane-head">
+      <h2>三维场景</h2>
+      <div class="head-tools">
+        <label class="mini"><input type="checkbox" id="chk-links"> 关系线</label>
+        <label class="mini"><input type="checkbox" id="chk-labels" checked> 标签</label>
+        <button class="btn-xs" id="btn-fit">取景</button>
+      </div>
+    </div>
+    <div class="pane-body">
+      <div id="viewport"></div>
+      <div class="labels" id="labels"></div>
+      <div class="axis-note" id="axis-note" title="点击展开/收起">
+        <b>相机坐标系</b> x→右 / y→下 / z→前 ｜ 颜色 = 类别
+        <div class="ax-det">
+          原点即光心。盒子是 <b>bbox_3d</b> 线框：位置可信、<b>尺寸未标定</b>。<br>
+          <b>不画地面</b> —— 重力方向不可靠，画了就等于宣称它已知。
+        </div>
+      </div>
+    </div>
+    <div class="pane-foot">
+      <div class="chips" id="obj-chips"></div>
+      <div style="display:flex;gap:6px;flex:0 0 auto">
+        <button class="btn-xs" id="btn-clear" disabled>清空</button>
+        <button class="btn-xs" id="btn-cf" disabled>移走选中</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② 图像 + 掩码 -->
+  <section class="pane pane-img">
+    <div class="pane-head">
+      <h2>原图 · 检测框 · 掩码</h2>
+      <div class="head-tools">
+        <label class="mini"><input type="checkbox" id="chk-mask" checked> 掩码</label>
+        <label class="mini"><input type="checkbox" id="chk-box" checked> 检测框</label>
+      </div>
+    </div>
+    <div class="pane-body">
+      <div id="imgwrap">
+        <div id="imgstack"><canvas id="imgcanvas" width="640" height="480"></canvas></div>
+      </div>
+    </div>
+    <div class="pane-foot">
+      <div class="img-note" id="img-note"></div>
+    </div>
+  </section>
+
+  <!-- ③ 问答 -->
+  <section class="pane pane-ask">
+    <div class="pane-head">
+      <h2>问答 · 轨迹</h2>
+      <div class="head-tools"><span id="ask-hint" class="muted" style="font-size:11.5px"></span></div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" data-mode="replay">回放已存批次</button>
+      <button class="tab" data-mode="live">现场提问</button>
+    </div>
+    <div class="pane-body" id="ask-body"></div>
+  </section>
+
+  <!-- ④ 场景报告 -->
+  <section class="pane pane-report">
+    <div class="pane-head">
+      <h2>场景报告 · 诚实体检</h2>
+      <div class="head-tools"><span id="report-src" class="muted" style="font-size:11.5px"></span></div>
+    </div>
+    <div class="pane-body" id="report-body"></div>
+  </section>
+
+</main>
+
+<!-- ============ 上传建图 ============ -->
+<div class="modal hidden" id="upload-modal">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2>上传图片建图</h2>
+      <span class="muted" style="font-size:11.5px">真跑 GroundingDINO + SAM2 + UniDepth</span>
+      <button class="btn-xs x" id="up-close">关闭</button>
+    </div>
+    <div class="sheet-body">
+      <div class="drop" id="up-drop">
+        <input type="file" id="up-file" accept="image/*" hidden>
+        <div class="big">拖拽图片到此处，或 <u>点击选择</u></div>
+        <div class="sm">PNG / JPG / WebP / BMP ｜ 单张 ≤ 16 MB ｜ 不做前端压缩（内参按实际像素算）</div>
+        <div id="up-preview"></div>
+      </div>
+
+      <div class="up-grid">
+        <label>场景 id
+          <input type="text" id="up-scene-id" placeholder="留空则用文件名">
+        </label>
+        <label>检测词表（GroundingDINO）
+          <input type="text" id="up-prompt" value="sofa. chair. table. picture. mirror.">
+        </label>
+        <label>内参来源
+          <select id="up-intr">
+            <option value="auto">auto —— 同目录 npy → EXIF → 模型预测（推荐）</option>
+            <option value="exif">exif —— 强制从 EXIF 的等效焦距换算</option>
+            <option value="manual">手动 —— 我填 fx,fy,cx,cy</option>
+            <option value="">不提供 —— 直接用模型预测值</option>
+          </select>
+        </label>
+        <label id="up-manual-wrap" class="hidden">fx, fy, cx, cy
+          <input type="text" id="up-manual" placeholder="例如 525.1,525.1,320,240">
+        </label>
+      </div>
+
+      <div class="up-warn">
+        <span>!</span>
+        <span>
+          <b>上传的照片没有标定内参，横向米制尺度就不可信。</b>
+          模型预测的内参在同一张图上有实测 118 倍的横向误差（306.3 px → 2.6 px）。
+          手机直出原图通常带 EXIF 等效焦距，选 <code>auto</code> 会自动用它；
+          截图 / 聊天软件转存的图一般没有 —— 那种情况下本场景会被标成
+          <b>「尺度未标定」</b>，界面上所有米制数字都要按相对值读。
+        </span>
+      </div>
+
+      <div class="up-log hidden" id="up-log"></div>
+    </div>
+    <div class="sheet-foot">
+      <span id="up-status" class="muted" style="font-size:12px">选一张图开始</span>
+      <button class="btn btn-primary" id="up-go" disabled>开始建图</button>
+    </div>  </div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js"
+  }
+}
+</script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

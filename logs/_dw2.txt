@@ -1,0 +1,25 @@
+== runs top keys: ['batches']
+n_batches=4
+batch keys=['file', 'mtime', 'runs', 'scene_hint', 'scene_id', 'summary', 'switches', 'tools_version', 'toolset', 'usage', 'vlm']
+batch[0] meta={"file": "20260918_172113_living_room.json", "mtime": "2026-09-18 17:21", "scene_id": "living_room", "scene_hint": {"objects": {"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}, "n_objects": 9, "image_id": "rgb.png", "scene_id": "living_room"}, "switches": null, "toolset": ["list_objects", "get_object", "find_object", "single_object", "find_nearest", "find_farthest", "query_relation", "get_3d_position", "get_3d_extent", "calculate_distance", "calculate_angle"], "tools_version": "1.1.0", "usage": {"calls": 3, "failed_calls": 0, "retried_calls": 0, "truncated": 0, "
+n_runs=2
+run keys=['abstained', 'answer', 'answer_type', 'attempts', 'elapsed_s', 'evidence', 'failure', 'program', 'program_fenced', 'question', 'render', 'scene_id', 'stages', 'status', 'target_ids', 'tool_calls', 'tools_version', 'trace', 'usage']
+  question="场景里一共有几个物体？"
+  answer_type="float"
+  answer=9.0
+  status="ok"
+  elapsed_s=1.936
+  evidence=["list_objects(scene_id='living_room') returned 9 objects"]
+  n_trace=1
+  trace[0]={"tool": "list_objects", "args": {"scene_id": "living_room"}, "result": {"ok": true, "value": [{"object_id": "sofa_1", "label": "sofa", "score": 0.836, "centroid_m": [2.4003, 1.0316, 2.864], "extent_m": {"w": 6.705, "h": 2.349, "l": 1.129}}, {"object_id": "picture_1", "label": "picture", "score": 0.795, "centroid_m": [3.8832, -3.0333, 3.6307], "extent_m": {"w": 2.92, "h": 2.693, "l": 0.211}}, {"object_id": "mirror_1", "label": "mirror", "score": 0.676, "centroid_m": [-0.8036, -2.9224, 3.6636], "extent_m": {"w": 2.571, "h": 3.69, "l": 0.283}}, {"object_id": "chair_1", "label": "chair", "score": 0.528, "centroid_m": [-1.9961, 1.8474, 1.5844], "extent_m": {"w": 2.716, "h": 0.935, "l": 0.787}}, {"object_id": "picture_2", "label": "picture", "score": 0.501, "centroid_m": [-3.2434, -2.9075, 3.612], "extent_m": {"w": 0.722, "h": 0.655, "l": 0.06}}, {"object_id": "picture_3", "label": "picture", "score": 0.489, "centroid_m": [-3.2396, -2.2867, 3.678], "extent_m": {"w": 0.716, "h": 0.609, "l": 
+  verdict=null
+  plan=null
+  switches=null
+  attempts=2
+  usage={"calls": 2.0, "failed_calls": 0.0, "retried_calls": 0.0, "truncated": 0.0, "prompt_tokens": 2636.0, "completion_tokens": 245.0, "unpriced_calls": 0.0, "cost_cny": 0.010113, "latency_s": 1.918, "by_purpose": {"synthesize": {"calls": 2.0, "prompt_tokens": 2636.0, "completion_tokens": 245.0, "cost_cny": 0.010113, "latency_s": 1.918177}}}
+  program="res = list_objects(scene_id=\"living_room\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\nelse:\n    objs = res.value\n    n = len(objs)\n    ids = []\n    for o in objs:\n        if isinstance(o, dict):\n            oid = o.get(\"object_id\") or o.get(\"id\")\n            if oid:\n                ids.append(oid)\n        else:\n            ids.append(o)\n    submit(float(n), target_ids=ids, evidence=[\"list_objects(scene_id='living_room') returned %d objects\" % n])"
+== 全部批次 ==
+  None | n_runs=2 | None
+  None | n_runs=2 | None
+  None | n_runs=3 | None
+  None | n_runs=1 | None

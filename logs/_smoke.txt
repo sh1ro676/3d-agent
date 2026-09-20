@@ -1,0 +1,3 @@
+﻿[agent] logs\agent_runs\_smoke_planner_on.json
+[agent] logs\agent_runs\_smoke_planner_on.txt
+exit=0

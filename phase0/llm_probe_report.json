@@ -1,0 +1,483 @@
+{
+  "generated_at": "2026-09-17 19:42:57",
+  "config": {
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-v4-flash-vision-exp",
+    "api_key": "***",
+    "vision_base_url": "https://api.deepseek.com",
+    "vision_model": "deepseek-v4-flash-vision-exp",
+    "vision_api_key": "***",
+    "vision_enabled": false,
+    "vision_source": "main_model_fallback",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "extra_body_raw": "{\"thinking\": {\"type\": \"disabled\"}}",
+    "price_in": 0.0,
+    "price_out": 0.0
+  },
+  "vadar_tag_contract": {
+    "docstring": "<docstring>(.*?)</docstring>",
+    "signature": "<signature>(.*?)</signature>",
+    "implementation": "<implementation>(.*?)</implementation>",
+    "program": "<program>(.*?)</program>",
+    "answer": "<answer>(.*?)</answer>",
+    "def_name": "def (\\w+)\\s*\\(.*\\):"
+  },
+  "thinking_observed": {
+    "extra_body_sent": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "temperature_configured": 0.2,
+    "main_path_arm": "disabled",
+    "calls_ok": 13,
+    "calls_with_reasoning": 0,
+    "has_reasoning": false,
+    "excluded_control_arm_calls_ok": 2,
+    "excluded_control_arm_with_reasoning": 2,
+    "excluded_control_arm_note": "T1b 对照组按构造就会带思考，已排除在主路径统计之外，不是反例；两臂对比见 thinking_ab。",
+    "note": "未出现思考痕迹 -> temperature=0.2 真正生效。"
+  },
+  "thinking_ab": {
+    "ran": true,
+    "conclusive": true,
+    "disable_param_works": true,
+    "disabled_arm_has_reasoning": false,
+    "default_arm_has_reasoning": true,
+    "disabled_median_elapsed": 0.985,
+    "default_median_elapsed": 1.22,
+    "note": "关闭参数【有效】：disabled 臂无 reasoning_content，default 臂有。 -> 可以关思考换真低温。"
+  },
+  "t1_connectivity": {
+    "ok": true,
+    "status": 200,
+    "elapsed": 1.262204885482788,
+    "text": "pong",
+    "finish_reason": "stop",
+    "usage": {
+      "prompt_tokens": 12,
+      "completion_tokens": 2,
+      "total_tokens": 14,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 12
+    },
+    "has_reasoning": false,
+    "model_returned": "deepseek-flash",
+    "error": ""
+  },
+  "t1b_thinking_ab": [
+    {
+      "arm": "disabled",
+      "run": 1,
+      "ok": true,
+      "elapsed": 1.0,
+      "has_reasoning": false,
+      "completion_tokens": 2,
+      "reasoning_tokens": null,
+      "finish_reason": "stop",
+      "error": ""
+    },
+    {
+      "arm": "disabled",
+      "run": 2,
+      "ok": true,
+      "elapsed": 0.97,
+      "has_reasoning": false,
+      "completion_tokens": 2,
+      "reasoning_tokens": null,
+      "finish_reason": "stop",
+      "error": ""
+    },
+    {
+      "arm": "default",
+      "run": 1,
+      "ok": true,
+      "elapsed": 1.16,
+      "has_reasoning": true,
+      "completion_tokens": 31,
+      "reasoning_tokens": 28,
+      "finish_reason": "stop",
+      "error": ""
+    },
+    {
+      "arm": "default",
+      "run": 2,
+      "ok": true,
+      "elapsed": 1.28,
+      "has_reasoning": true,
+      "completion_tokens": 20,
+      "reasoning_tokens": 17,
+      "finish_reason": "stop",
+      "error": ""
+    }
+  ],
+  "t2_program": [
+    {
+      "run": 1,
+      "ok": true,
+      "elapsed": 1.39,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 152,
+        "completion_tokens": 201,
+        "total_tokens": 353,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 152
+      },
+      "has_reasoning": false,
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 578,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "elapsed": 1.55,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 152,
+        "completion_tokens": 174,
+        "total_tokens": 326,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 152
+      },
+      "has_reasoning": false,
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 462,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "elapsed": 1.86,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 152,
+        "completion_tokens": 174,
+        "total_tokens": 326,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 152
+      },
+      "has_reasoning": false,
+      "tag_found": true,
+      "n_tags": 1,
+      "code_chars": 462,
+      "parses": true,
+      "has_final_result": true,
+      "truncated": false
+    }
+  ],
+  "t3_signature": [
+    {
+      "run": 1,
+      "ok": true,
+      "elapsed": 1.59,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 131,
+        "completion_tokens": 91,
+        "total_tokens": 222,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 131
+      },
+      "has_reasoning": false,
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    },
+    {
+      "run": 2,
+      "ok": true,
+      "elapsed": 1.77,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 131,
+        "completion_tokens": 44,
+        "total_tokens": 175,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 131
+      },
+      "has_reasoning": false,
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    },
+    {
+      "run": 3,
+      "ok": true,
+      "elapsed": 1.43,
+      "finish_reason": "stop",
+      "error": "",
+      "usage": {
+        "prompt_tokens": 131,
+        "completion_tokens": 106,
+        "total_tokens": 237,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 131
+      },
+      "has_reasoning": false,
+      "docstring_found": true,
+      "signature_found": true,
+      "n_signatures": 1,
+      "signature_preview": "def object_height(image, bbox):",
+      "vadar_can_parse_name": true,
+      "method_name": "object_height",
+      "has_return_annotation": false,
+      "pair_ok": true
+    }
+  ],
+  "t4_vision": [
+    {
+      "run": 1,
+      "truth": "blue",
+      "distractor": "orange",
+      "ok": true,
+      "elapsed": 1.45,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "blue",
+      "correct": true,
+      "has_reasoning": false,
+      "usage": {
+        "prompt_tokens": 259,
+        "completion_tokens": 32,
+        "total_tokens": 291,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 259
+      }
+    },
+    {
+      "run": 2,
+      "truth": "green",
+      "distractor": "purple",
+      "ok": true,
+      "elapsed": 1.26,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "green",
+      "correct": true,
+      "has_reasoning": false,
+      "usage": {
+        "prompt_tokens": 259,
+        "completion_tokens": 33,
+        "total_tokens": 292,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 259
+      }
+    },
+    {
+      "run": 3,
+      "truth": "yellow",
+      "distractor": "blue",
+      "ok": true,
+      "elapsed": 1.15,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "yellow",
+      "correct": true,
+      "has_reasoning": false,
+      "usage": {
+        "prompt_tokens": 259,
+        "completion_tokens": 29,
+        "total_tokens": 288,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 259
+      }
+    },
+    {
+      "run": 4,
+      "truth": "purple",
+      "distractor": "green",
+      "ok": true,
+      "elapsed": 1.38,
+      "finish_reason": "stop",
+      "error": "",
+      "tag_found": true,
+      "answer": "purple",
+      "correct": true,
+      "has_reasoning": false,
+      "usage": {
+        "prompt_tokens": 259,
+        "completion_tokens": 29,
+        "total_tokens": 288,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 259
+      }
+    }
+  ],
+  "t5_error_path": {
+    "skipped": true,
+    "reason": "文本与视觉用同一模型，无需测错误路径"
+  },
+  "token_totals": {
+    "by_test": [
+      {
+        "test": "T1",
+        "calls": 1,
+        "calls_ok": 1,
+        "prompt_tokens": 12,
+        "completion_tokens": 2,
+        "per_call_prompt": 12.0,
+        "per_call_completion": 2.0
+      },
+      {
+        "test": "T1b",
+        "calls": 4,
+        "calls_ok": 4,
+        "prompt_tokens": 48,
+        "completion_tokens": 55,
+        "per_call_prompt": 12.0,
+        "per_call_completion": 13.8
+      },
+      {
+        "test": "T2",
+        "calls": 3,
+        "calls_ok": 3,
+        "prompt_tokens": 456,
+        "completion_tokens": 549,
+        "per_call_prompt": 152.0,
+        "per_call_completion": 183.0
+      },
+      {
+        "test": "T3",
+        "calls": 3,
+        "calls_ok": 3,
+        "prompt_tokens": 393,
+        "completion_tokens": 241,
+        "per_call_prompt": 131.0,
+        "per_call_completion": 80.3
+      },
+      {
+        "test": "T4",
+        "calls": 4,
+        "calls_ok": 4,
+        "prompt_tokens": 1036,
+        "completion_tokens": 123,
+        "per_call_prompt": 259.0,
+        "per_call_completion": 30.8
+      }
+    ],
+    "total_prompt": 1945,
+    "total_completion": 970,
+    "total_tokens": 2915
+  },
+  "verdicts": [
+    {
+      "check": "思考模式关闭参数是否生效（A/B 实测）",
+      "pass_rate": "works",
+      "impact": "决定「低温可复现」能不能写进报告；直接决定实验章节的复现性口径",
+      "blocking": false
+    },
+    {
+      "check": "<program> 标签 + 语法可编译",
+      "pass_rate": "3/3",
+      "impact": "ProgramAgent / Engine 的程序合成主链路（agents.py:757, engine.py:344）",
+      "blocking": false
+    },
+    {
+      "check": "签名可被 VADAR 正则提取出方法名",
+      "pass_rate": "3/3",
+      "impact": "SignatureAgent / APIAgent（agents.py:89/352/483/668）",
+      "blocking": false
+    },
+    {
+      "check": "<answer> 标签出现率",
+      "pass_rate": "4/4",
+      "impact": "VQAModule.predict（predefined_modules.py:354，列表取 [0]）",
+      "blocking": false
+    },
+    {
+      "check": "视觉问答答对率（红框内目标颜色）",
+      "pass_rate": "4/4",
+      "impact": "vqa() 的结果质量，直接影响最终答案准确率",
+      "blocking": false
+    }
+  ],
+  "derived_recomputed": {
+    "when": "2026-09-17 19:46:13",
+    "why": "探针两处「派生」bug：① observed_thinking 把 T1b 的对照组算进主路径，产出与 thinking_ab 相反的结论；② T1b 未保留整份 usage，token 记账恒为 0。已修 02_probe_llm_api.py；本块是用**原始记录离线复算**的结果。",
+    "raw_records_untouched": true,
+    "old_thinking_observed": {
+      "extra_body_sent": {
+        "thinking": {
+          "type": "disabled"
+        }
+      },
+      "temperature_configured": 0.2,
+      "calls_ok": 15,
+      "calls_with_reasoning": 2,
+      "has_reasoning": true,
+      "note": "思考模式生效 -> temperature=0.2 被静默忽略；报告里不得声称「低温可复现」。该覆盖说明必须写进实验章节。"
+    },
+    "t1b_usage_note": "本轮 T1b 未记录 usage，prompt 按 T1 同句提示词的 12 tokens 估算；completion (55) 为记录值，精确。下次重跑即为精确值。",
+    "cost_cny_offpeak_prices": {
+      "price_in": 1.5,
+      "price_out": 4.5,
+      "cost": 0.007282,
+      "cost_peak": 0.014565
+    }
+  }
+}

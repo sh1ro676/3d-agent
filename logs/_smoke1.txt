@@ -1,0 +1,364 @@
+D:\3D_Spatial_Agent\venvs\vision\Lib\site-packages\timm\models\layers\__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+D:\3D_Spatial_Agent\vendor\UniDepth\unidepth\utils\chamfer_distance.py:9: UserWarning: !! To run evaluation you need KNN. Please compile KNN: `cd unidepth/ops/knn with && bash compile.sh`.
+  warnings.warn(
+Cannot import NystromAttention, you can not run original UniDepth. UniDepthV2 is available.
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:02<00:00,  2.09s/it]100%|██████████| 1/1 [00:02<00:00,  2.09s/it]
+  0%|          | 0/2 [00:00<?, ?it/s]Implementing _get_object_to_the_right at error count 0:   0%|          | 0/2 [00:00<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/executable_program.py:67: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/result.json", "w+") as result_file:
+Implementing _get_object_to_the_right at error count 1:   0%|          | 0/2 [00:04<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/executable_program.py:70: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_object_to_the_right at error count 2:   0%|          | 0/2 [00:06<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/executable_program.py:70: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/result.json", "w+") as result_file:
+Implementing _get_object_to_the_right at error count 3:   0%|          | 0/2 [00:09<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/executable_program.py:70: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/result.json", "w+") as result_file:
+Implementing _get_object_to_the_right at error count 4:   0%|          | 0/2 [00:11<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/executable_program.py:70: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_object_to_the_right\exec_env/result.json", "w+") as result_file:
+Implementing _get_real_world_length at error count 0:   0%|          | 0/2 [00:15<?, ?it/s]  D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/executable_program.py:59: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/result.json", "w+") as result_file:
+<unknown>:1: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_real_world_length at error count 1:   0%|          | 0/2 [00:18<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/executable_program.py:62: SyntaxWarning: invalid escape sequence '\A'
+<unknown>:1: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_real_world_length at error count 2:   0%|          | 0/2 [00:20<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/executable_program.py:62: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/result.json", "w+") as result_file:
+<unknown>:1: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_real_world_length at error count 3:   0%|          | 0/2 [00:23<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/executable_program.py:62: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/result.json", "w+") as result_file:
+<unknown>:1: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_real_world_length at error count 4:   0%|          | 0/2 [00:25<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/executable_program.py:62: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\api_generator\_get_real_world_length\exec_env/result.json", "w+") as result_file:
+<unknown>:1: SyntaxWarning: invalid escape sequence '\A'
+Implementing _get_real_world_length at error count 4:   0%|          | 0/2 [00:28<?, ?it/s]
+Error in executing _get_object_to_the_right: min() iterable argument is empty
+Error in executing _get_object_to_the_right: list index out of range
+Error in executing _get_object_to_the_right: list index out of range
+Error in executing _get_object_to_the_right: list index out of range
+Error in executing _get_object_to_the_right: list index out of range
+Error in executing _get_real_world_length: [Errno 22] Invalid argument: 'D:\x03D_Spatial_Agent\results\\A\x826-09-18_15-54-15\x07pi_generator\\_get_real_world_length\\exec_env/result.json'
+Error in executing _get_real_world_length: [Errno 22] Invalid argument: 'D:\x03D_Spatial_Agent\results\\A\x826-09-18_15-54-15\x07pi_generator\\_get_real_world_length\\exec_env/result.json'
+Error in executing _get_real_world_length: [Errno 22] Invalid argument: 'D:\x03D_Spatial_Agent\results\\A\x826-09-18_15-54-15\x07pi_generator\\_get_real_world_length\\exec_env/result.json'
+Error in executing _get_real_world_length: [Errno 22] Invalid argument: 'D:\x03D_Spatial_Agent\results\\A\x826-09-18_15-54-15\x07pi_generator\\_get_real_world_length\\exec_env/result.json'
+Error in executing _get_real_world_length: [Errno 22] Invalid argument: 'D:\x03D_Spatial_Agent\results\\A\x826-09-18_15-54-15\x07pi_generator\\_get_real_world_length\\exec_env/result.json'
+  0%|          | 0/2 [00:00<?, ?it/s] 50%|█████     | 1/2 [00:02<00:02,  2.78s/it]100%|██████████| 2/2 [00:06<00:00,  3.12s/it]100%|██████████| 2/2 [00:06<00:00,  3.07s/it]
+xFormers not available
+xFormers not available
+Initializing modules
+Device: cuda
+GroundingDINO Initialized
+Not loading pretrained weights for backbone
+EdgeGuidedLocalSSI reverts to a non cuda-optimized operation, you will experince large slowdown, please install it:  `cd ./unidepth/ops/extract_patches && bash compile.sh`
+  0%|          | 0/2 [00:00<?, ?it/s]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:59: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/result.json", "w+") as result_file:
+
+Loading weights:   0%|          | 0/978 [00:00<?, ?it/s][A
+Loading weights:   2%|▏         | 24/978 [00:00<00:04, 235.62it/s][A
+Loading weights:   5%|▍         | 48/978 [00:00<00:05, 184.69it/s][A
+Loading weights:   7%|▋         | 68/978 [00:00<00:05, 177.55it/s][A
+Loading weights:   9%|▉         | 92/978 [00:00<00:04, 198.70it/s][A
+Loading weights:  12%|█▏        | 117/978 [00:00<00:04, 213.87it/s][A
+Loading weights:  14%|█▍        | 139/978 [00:00<00:04, 197.42it/s][A
+Loading weights:  16%|█▋        | 160/978 [00:00<00:04, 173.08it/s][A
+Loading weights:  18%|█▊        | 179/978 [00:01<00:04, 160.36it/s][A
+Loading weights:  20%|██        | 196/978 [00:01<00:04, 159.64it/s][A
+Loading weights:  22%|██▏       | 213/978 [00:01<00:04, 160.96it/s][A
+Loading weights:  24%|██▍       | 234/978 [00:01<00:04, 172.91it/s][A
+Loading weights:  26%|██▌       | 252/978 [00:01<00:04, 174.61it/s][A
+Loading weights:  28%|██▊       | 274/978 [00:01<00:03, 186.44it/s][A
+Loading weights:  30%|██▉       | 293/978 [00:01<00:05, 127.22it/s][A
+Loading weights:  32%|███▏      | 309/978 [00:02<00:08, 77.44it/s] [A
+Loading weights:  33%|███▎      | 321/978 [00:02<00:10, 62.64it/s][A
+Loading weights:  34%|███▍      | 331/978 [00:02<00:10, 59.94it/s][A
+Loading weights:  35%|███▍      | 342/978 [00:02<00:09, 67.10it/s][A
+Loading weights:  37%|███▋      | 359/978 [00:02<00:07, 84.83it/s][A
+Loading weights:  39%|███▉      | 386/978 [00:03<00:04, 121.28it/s][A
+Loading weights:  41%|████      | 402/978 [00:03<00:04, 124.89it/s][A
+Loading weights:  43%|████▎     | 418/978 [00:03<00:05, 101.52it/s][A
+Loading weights:  44%|████▍     | 431/978 [00:03<00:05, 100.15it/s][A
+Loading weights:  46%|████▌     | 449/978 [00:03<00:04, 116.76it/s][A
+Loading weights:  48%|████▊     | 466/978 [00:03<00:03, 128.01it/s][A
+Loading weights:  49%|████▉     | 482/978 [00:03<00:03, 132.71it/s][A
+Loading weights:  51%|█████     | 497/978 [00:04<00:05, 83.99it/s] [A
+Loading weights:  52%|█████▏    | 509/978 [00:04<00:06, 67.63it/s][A
+Loading weights:  53%|█████▎    | 519/978 [00:04<00:07, 59.53it/s][A
+Loading weights:  54%|█████▍    | 527/978 [00:04<00:08, 55.35it/s][A
+Loading weights:  55%|█████▍    | 534/978 [00:05<00:08, 51.60it/s][A
+Loading weights:  55%|█████▌    | 540/978 [00:05<00:09, 47.59it/s][A
+Loading weights:  56%|█████▌    | 546/978 [00:05<00:09, 46.88it/s][A
+Loading weights:  56%|█████▋    | 552/978 [00:05<00:09, 44.77it/s][A
+Loading weights:  57%|█████▋    | 557/978 [00:05<00:09, 44.49it/s][A
+Loading weights:  58%|█████▊    | 571/978 [00:05<00:06, 65.12it/s][A
+Loading weights:  60%|██████    | 587/978 [00:05<00:04, 86.93it/s][A
+Loading weights:  62%|██████▏   | 604/978 [00:05<00:03, 105.73it/s][A
+Loading weights:  63%|██████▎   | 618/978 [00:06<00:03, 114.22it/s][A
+Loading weights:  65%|██████▍   | 631/978 [00:06<00:02, 116.42it/s][A
+Loading weights:  66%|██████▌   | 644/978 [00:06<00:02, 112.38it/s][A
+Loading weights:  67%|██████▋   | 658/978 [00:06<00:02, 119.80it/s][A
+Loading weights:  69%|██████▊   | 672/978 [00:06<00:02, 124.12it/s][A
+Loading weights:  70%|███████   | 687/978 [00:06<00:02, 129.46it/s][A
+Loading weights:  72%|███████▏  | 701/978 [00:06<00:02, 113.67it/s][A
+Loading weights:  73%|███████▎  | 713/978 [00:06<00:02, 89.47it/s] [A
+Loading weights:  74%|███████▍  | 724/978 [00:07<00:03, 82.89it/s][A
+Loading weights:  75%|███████▌  | 734/978 [00:07<00:02, 82.76it/s][A
+Loading weights:  77%|███████▋  | 751/978 [00:07<00:02, 101.63it/s][A
+Loading weights:  78%|███████▊  | 766/978 [00:07<00:01, 113.11it/s][A
+Loading weights:  80%|████████  | 785/978 [00:07<00:01, 132.81it/s][A
+Loading weights:  82%|████████▏ | 801/978 [00:07<00:01, 139.65it/s][A
+Loading weights:  83%|████████▎ | 816/978 [00:07<00:01, 116.31it/s][A
+Loading weights:  85%|████████▍ | 829/978 [00:07<00:01, 110.83it/s][A
+Loading weights:  86%|████████▌ | 841/978 [00:08<00:01, 104.61it/s][A
+Loading weights:  87%|████████▋ | 855/978 [00:08<00:01, 113.05it/s][A
+Loading weights:  89%|████████▊ | 867/978 [00:08<00:00, 114.18it/s][A
+Loading weights:  90%|████████▉ | 879/978 [00:08<00:00, 109.75it/s][A
+Loading weights:  91%|█████████ | 891/978 [00:08<00:00, 102.08it/s][A
+Loading weights:  92%|█████████▏| 904/978 [00:08<00:00, 108.44it/s][A
+Loading weights:  94%|█████████▍| 917/978 [00:08<00:00, 111.58it/s][A
+Loading weights:  95%|█████████▍| 929/978 [00:08<00:00, 110.41it/s][A
+Loading weights:  96%|█████████▌| 941/978 [00:09<00:00, 107.78it/s][A
+Loading weights:  97%|█████████▋| 953/978 [00:09<00:00, 110.28it/s][A
+Loading weights:  99%|█████████▊| 965/978 [00:09<00:00, 70.97it/s] [A
+Loading weights: 100%|█████████▉| 974/978 [00:09<00:00, 63.46it/s][ALoading weights: 100%|██████████| 978/978 [00:09<00:00, 100.23it/s]
+D:\3D_Spatial_Agent\venvs\vision\Lib\site-packages\transformers\models\grounding_dino\processing_grounding_dino.py:89: FutureWarning: The key `labels` is will return integer ids in `GroundingDinoProcessor.post_process_grounded_object_detection` output since v4.51.0. Use `text_labels` instead to retrieve string object names.
+  warnings.warn(self.message, FutureWarning)
+D:\3D_Spatial_Agent\vendor\UniDepth\unidepth\models\unidepthv2\unidepthv2.py:262: UserWarning: !! self.resolution_level not set, using default bounds !!
+  warnings.warn("!! self.resolution_level not set, using default bounds !!")
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:58: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:58: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:58: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:58: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_0/exec_env/executable_program.py:50: SyntaxWarning: invalid escape sequence '\A'
+  def is_serializable(obj):
+ 50%|█████     | 1/2 [02:34<02:34, 155.00s/it]D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:56: SyntaxWarning: invalid escape sequence '\A'
+  with open("D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/result.json", "w+") as result_file:
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:55: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:49: SyntaxWarning: invalid escape sequence '\A'
+  json.dumps(obj)
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:34: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:34: SyntaxWarning: invalid escape sequence '\A'
+  
+D:\3D_Spatial_Agent\results\A\2026-09-18_15-54-15\program_execution\image_91339.246_00000463.jpg_question_1/exec_env/executable_program.py:34: SyntaxWarning: invalid escape sequence '\A'
+  
+100%|██████████| 2/2 [03:16<00:00, 88.27s/it] 100%|██████████| 2/2 [03:16<00:00, 98.28s/it]
+{
+  "arm": "A",
+  "started": "2026-09-18T15:53:52",
+  "argv": [
+    "--arm",
+    "A",
+    "--num-questions",
+    "2",
+    "--num-api-questions",
+    "2"
+  ],
+  "env_applied_by_runner": {
+    "HF_HOME": "D:\\3D_Spatial_Agent\\.cache\\huggingface",
+    "HF_ENDPOINT": "https://hf-mirror.com",
+    "HF_HUB_DISABLE_XET": "1",
+    "HF_HUB_OFFLINE": "1",
+    "VADAR_GDINO_DIR": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "VADAR_CALL_LOG": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl"
+  },
+  "dataset": "omni3d",
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "84ca92b0406554998f9c67de527a60513ba6b1efa042475d7117faeee5217f12",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "api_key_source": "env_file",
+  "precheck": {
+    "annotations": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\annotations.json",
+    "images": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\images",
+    "problems": [],
+    "n_questions": 501,
+    "question_fields": [
+      "answer",
+      "answer_type",
+      "image_filename",
+      "image_index",
+      "question",
+      "question_index"
+    ],
+    "n_unique_image_filenames": 201,
+    "n_missing_image_files": 0,
+    "ok": true
+  },
+  "subset": {
+    "mode": "vadarspec",
+    "seed": 42,
+    "n_requested": 2,
+    "n_selected": 2,
+    "metric_class_counts": {
+      "numeric_other": 2
+    },
+    "answer_type_counts": {
+      "float": 2
+    },
+    "n_unique_images": 1,
+    "annotation_pool_size": 501,
+    "num_api_questions": 2,
+    "selected": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?"
+      }
+    ],
+    "api_subset": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1"
+      }
+    ],
+    "deviation_from_original": "原版用无种子的 random.sample 抽 api_questions（bug ③，不可复现）；本运行器改用 random.Random(seed).sample，并把选中清单落盘。"
+  },
+  "adapter_ok": true,
+  "run_dir": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_15-54-15",
+  "stages": {
+    "signatures": {
+      "ok": true,
+      "s": 2.09,
+      "n_api_questions": 2,
+      "n_methods": 2,
+      "methods": [
+        "_get_object_to_the_right",
+        "_get_real_world_length"
+      ]
+    },
+    "api": {
+      "ok": true,
+      "s": 28.33,
+      "n_api": 0
+    },
+    "programs": {
+      "ok": true,
+      "s": 6.14,
+      "n_programs": 2,
+      "n_nonempty": 2
+    },
+    "execute": {
+      "ok": true,
+      "s": 199.29
+    }
+  },
+  "signature_agent_dataset": "clevr",
+  "execution_json": "D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_15-54-15\\program_execution\\execution.json",
+  "finished": "2026-09-18T15:58:10",
+  "metrics": {
+    "n_questions": 2,
+    "counts": {
+      "numeric_count": 0,
+      "numeric_other": 2,
+      "yes_no": 0,
+      "multi_choice": 0
+    },
+    "unparseable_predictions": {
+      "numeric_count": 0,
+      "numeric_other": 2
+    },
+    "submetrics": {
+      "numeric_count": null,
+      "numeric_other_mra": 0.0,
+      "yes_no": null,
+      "multi_choice": null
+    },
+    "total_micro": 0.0,
+    "exact_match_accuracy": 0.0,
+    "mra_thresholds": [
+      0.5,
+      0.45,
+      0.4,
+      0.35,
+      0.3,
+      0.25,
+      0.2,
+      0.15,
+      0.1,
+      0.05
+    ],
+    "mra_hits": {
+      "0.5": 0,
+      "0.45": 0,
+      "0.4": 0,
+      "0.35": 0,
+      "0.3": 0,
+      "0.25": 0,
+      "0.2": 0,
+      "0.15": 0,
+      "0.1": 0,
+      "0.05": 0
+    },
+    "records": [
+      {
+        "answer_type": "float",
+        "ground_truth": "0.948",
+        "prediction": "error: [errno 22] invalid argument: 'd:\\x03d_spatial_agent\\results\\\\a\\x826-09-18_15-54-15\\\\program_execution\\\\image_91339.246_00000463.jpg_question_0/exec_env/result.json'",
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?",
+        "has_program": true
+      },
+      {
+        "answer_type": "float",
+        "ground_truth": "3.026",
+        "prediction": "error: [errno 22] invalid argument: 'd:\\x03d_spatial_agent\\results\\\\a\\x826-09-18_15-54-15\\\\program_execution\\\\image_91339.246_00000463.jpg_question_1/exec_env/result.json'",
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?",
+        "has_program": t

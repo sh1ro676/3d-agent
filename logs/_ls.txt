@@ -1,0 +1,85 @@
+﻿## root
+.bt_1605
+.bt_160636
+.bt_161401
+.bt_161415
+.bt_161423
+.bt_164234
+.bt_164247
+.bt_164254
+.bt_agent
+.bt_attr
+.bt_full
+.bt_full_0918a
+.bt_full_0918b
+.bt_full_0918c
+.bt_ver
+.cache
+.pytest_bt
+.pytest_bt2
+.pytest_bt3
+.pytest_cache
+.workbuddy
+agents
+configs
+dataset
+docs
+evaluation
+llm
+logs
+phase0
+reports
+results
+scene_graph
+scripts
+tests
+tools
+vendor
+venvs
+vision
+README.md
+vadar_env.py
+## scenes
+exif_fixture_exif  (2 files)
+exif_fixture_pred  (2 files)
+living_room  (4 files)
+living_room_gt  (4 files)
+living_room_pred  (4 files)
+## living_room
+\dataset\scenes\living_room\masks  1
+\dataset\scenes\living_room\build_log.txt  4935
+\dataset\scenes\living_room\scene.json  71276
+\dataset\scenes\living_room\scene_report.json  149631
+\dataset\scenes\living_room\scene_report.md  5726
+\dataset\scenes\living_room\masks\chair_1.png  549
+\dataset\scenes\living_room\masks\mirror_1.png  418
+\dataset\scenes\living_room\masks\picture_1.png  273
+\dataset\scenes\living_room\masks\picture_2.png  183
+\dataset\scenes\living_room\masks\picture_3.png  180
+\dataset\scenes\living_room\masks\picture_4.png  223
+\dataset\scenes\living_room\masks\sofa_1.png  1056
+\dataset\scenes\living_room\masks\sofa_chair_1.png  757
+\dataset\scenes\living_room\masks\table_1.png  762
+## top-level py/dirs of interest
+tests
+metrics.py
+README.md
+runner.py
+vadar_compat.py
+win_alarm.py
+__init__.py
+tests
+builder.py
+relations.py
+schema.py
+store.py
+__init__.py
+depth.py
+exif.py
+geometry.py
+grounding.py
+registry.py
+segmentation.py
+semantics.py
+types.py
+__init__.py

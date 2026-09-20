@@ -1,0 +1,11 @@
+﻿chrome.exe : 589834 bytes written to file D:\3D_Spatial_Agent\logs\demo_shot.pn
+g
+所在位置 行:455 字符: 1
++ & $chrome --headless=new --disable-gpu --enable-unsafe-swiftshader -- ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (589834 bytes wr...s\demo_shot.png 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+exit=0
+SHOT OK  589834 bytes

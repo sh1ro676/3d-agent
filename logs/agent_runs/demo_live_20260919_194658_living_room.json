@@ -1,0 +1,633 @@
+{
+ "scene_id": "living_room",
+ "scene_hint": {
+  "objects": {
+   "sofa": 1,
+   "picture": 4,
+   "mirror": 1,
+   "chair": 1,
+   "sofa chair": 1,
+   "table": 1
+  },
+  "n_objects": 9,
+  "image_id": "rgb.png",
+  "scene_id": "living_room",
+  "image_size": [
+   640,
+   480
+  ]
+ },
+ "switches": {
+  "action_space": "program",
+  "planner": "off",
+  "render": "template",
+  "toolset": [
+   "list_objects",
+   "get_object",
+   "find_object",
+   "single_object",
+   "find_nearest",
+   "find_farthest",
+   "query_relation",
+   "get_3d_position",
+   "get_3d_extent",
+   "calculate_distance",
+   "calculate_angle",
+   "get_attributes"
+  ],
+  "n_tools": 12,
+  "max_synthesis_retries": 2,
+  "exec_timeout_s": 60.0,
+  "vlm": true,
+  "vlm_model": "deepseek-flash"
+ },
+ "toolset": [
+  "list_objects",
+  "get_object",
+  "find_object",
+  "single_object",
+  "find_nearest",
+  "find_farthest",
+  "query_relation",
+  "get_3d_position",
+  "get_3d_extent",
+  "calculate_distance",
+  "calculate_angle",
+  "get_attributes"
+ ],
+ "tools_version": "1.2.0",
+ "usage": {
+  "calls": 1,
+  "failed_calls": 0,
+  "retried_calls": 0,
+  "truncated": 0,
+  "prompt_tokens": 1545,
+  "completion_tokens": 149,
+  "cost_cny": 0.005976,
+  "unpriced_calls": 0,
+  "latency_s": 1.259,
+  "by_purpose": {
+   "synthesize": {
+    "calls": 1,
+    "prompt_tokens": 1545,
+    "completion_tokens": 149,
+    "cost_cny": 0.005976,
+    "latency_s": 1.2593768999940949
+   }
+  }
+ },
+ "vlm": {
+  "enabled": true,
+  "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png",
+  "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）",
+  "label": "text",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "api_key": "***7dc8",
+  "temperature": 0.2,
+  "max_tokens": 8192,
+  "max_retries": 2,
+  "timeout_s": 180.0,
+  "extra_body": {
+   "thinking": {
+    "type": "disabled"
+   }
+  },
+  "price_cny_per_mtok": [
+   3.0,
+   9.0
+  ],
+  "ready": true,
+  "confidence_threshold": 0.6,
+  "attrs": [
+   "color",
+   "material",
+   "texture",
+   "state",
+   "shape"
+  ]
+ },
+ "summary": {
+  "source": "demo_live",
+  "n_runs": 1,
+  "status": {
+   "ok": 1
+  }
+ },
+ "runs": [
+  {
+   "question": "场景里一共有几个物体？",
+   "scene_id": "living_room",
+   "status": "ok",
+   "answer": 9,
+   "answer_type": "int",
+   "target_ids": [
+    "sofa_1",
+    "picture_1",
+    "mirror_1",
+    "chair_1",
+    "picture_2",
+    "picture_3",
+    "sofa_chair_1",
+    "table_1",
+    "picture_4"
+   ],
+   "evidence": [
+    "list_objects(scene_id='living_room') returned 9 objects",
+    "label breakdown: chair=1, mirror=1, picture=4, sofa=1, sofa chair=1, table=1"
+   ],
+   "abstained": false,
+   "program": "from collections import Counter\n\nres = list_objects(scene_id=\"living_room\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\n\nobjs = res.value\ncount = len(objs)\nlabels = Counter(o[\"label\"] for o in objs)\n\nsubmit(\n    count,\n    target_ids=[o[\"object_id\"] for o in objs],\n    evidence=[\n        \"list_objects(scene_id='living_room') returned {} objects\".format(count),\n        \"label breakdown: \" + \", \".join(\"{}={}\".format(k, v) for k, v in sorted(labels.items())),\n    ],\n)",
+   "program_fenced": true,
+   "render": "9（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）",
+   "render_report": {
+    "mode": "template",
+    "used_fallback": false
+   },
+   "stages": [
+    {
+     "stage": "synthesize",
+     "attempt": 1,
+     "ok": true,
+     "chars": 520,
+     "fenced": true,
+     "reply": {
+      "purpose": "synthesize",
+      "model_returned": "deepseek-flash",
+      "finish_reason": "stop",
+      "truncated": false,
+      "has_reasoning": false,
+      "elapsed_s": 1.259,
+      "attempts": 1,
+      "usage": {
+       "prompt_tokens": 1545,
+       "completion_tokens": 149,
+       "total_tokens": 1694,
+       "prompt_tokens_details": {
+        "cached_tokens": 1280
+       },
+       "prompt_cache_hit_tokens": 1280,
+       "prompt_cache_miss_tokens": 265
+      },
+      "text_chars": 534
+     }
+    },
+    {
+     "stage": "static_check",
+     "attempt": 1,
+     "ok": true,
+     "n_tool_calls": 1,
+     "tool_calls": [
+      "list_objects"
+     ]
+    },
+    {
+     "stage": "execute",
+     "attempt": 1,
+     "ok": true,
+     "detail": "ok",
+     "message": "",
+     "lineno": null,
+     "tool_calls": 1,
+     "duration_ms": 2.864,
+     "trace_errors": {}
+    },
+    {
+     "stage": "render",
+     "attempt": 3,
+     "ok": true,
+     "detail": {
+      "mode": "template",
+      "used_fallback": false
+     }
+    },
+    {
+     "stage": "verify",
+     "attempt": 4,
+     "ok": true,
+     "detail": {
+      "level": "supported",
+      "ok": true,
+      "matched_from": "evidence",
+      "checks": [
+       {
+        "name": "has_evidence",
+        "ok": true,
+        "detail": "evidence 有 2 条",
+        "hard": true
+       },
+       {
+        "name": "tool_was_used",
+        "ok": true,
+        "detail": "成功调用 1 次工具（另有 0 次失败）",
+        "hard": true
+       },
+       {
+        "name": "answer_finite",
+        "ok": true,
+        "detail": "答案是有限数 9.0",
+        "hard": true
+       },
+       {
+        "name": "numeric_backed",
+        "ok": true,
+        "detail": "答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）",
+        "hard": true
+       },
+       {
+        "name": "targets_in_scene",
+        "ok": true,
+        "detail": "9 个 target_id 全部落在场景内",
+        "hard": false
+       },
+       {
+        "name": "targets_exist",
+        "ok": true,
+        "detail": "全部存在于场景图",
+        "hard": false
+       }
+      ],
+      "failed": [],
+      "failed_hard": [],
+      "numbers": [
+       0.836,
+       2.4003,
+       1.0316,
+       2.864,
+       6.705,
+       2.349,
+       1.129,
+       0.795,
+       3.8832,
+       -3.0333,
+       3.6307,
+       2.92,
+       2.693,
+       0.211,
+       0.676,
+       -0.8036,
+       -2.9224,
+       3.6636,
+       2.571,
+       3.69,
+       0.283,
+       0.528,
+       -1.9961,
+       1.8474,
+       1.5844,
+       2.716,
+       0.935,
+       0.787,
+       0.501,
+       -3.2434,
+       -2.9075,
+       3.612
+      ],
+      "n_numbers": 72
+     }
+    }
+   ],
+   "attempts": 1,
+   "usage": {
+    "calls": 1.0,
+    "failed_calls": 0.0,
+    "retried_calls": 0.0,
+    "truncated": 0.0,
+    "prompt_tokens": 1545.0,
+    "completion_tokens": 149.0,
+    "unpriced_calls": 0.0,
+    "cost_cny": 0.005976,
+    "latency_s": 1.259,
+    "by_purpose": {
+     "synthesize": {
+      "calls": 1.0,
+      "prompt_tokens": 1545.0,
+      "completion_tokens": 149.0,
+      "cost_cny": 0.005976,
+      "latency_s": 1.259377
+     }
+    }
+   },
+   "failure": null,
+   "tool_calls": 1,
+   "trace": [
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "living_room"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "sofa_1",
+        "label": "sofa",
+        "score": 0.836,
+        "centroid_m": [
+         2.4003,
+         1.0316,
+         2.864
+        ],
+        "extent_m": {
+         "w": 6.705,
+         "h": 2.349,
+         "l": 1.129
+        }
+       },
+       {
+        "object_id": "picture_1",
+        "label": "picture",
+        "score": 0.795,
+        "centroid_m": [
+         3.8832,
+         -3.0333,
+         3.6307
+        ],
+        "extent_m": {
+         "w": 2.92,
+         "h": 2.693,
+         "l": 0.211
+        }
+       },
+       {
+        "object_id": "mirror_1",
+        "label": "mirror",
+        "score": 0.676,
+        "centroid_m": [
+         -0.8036,
+         -2.9224,
+         3.6636
+        ],
+        "extent_m": {
+         "w": 2.571,
+         "h": 3.69,
+         "l": 0.283
+        }
+       },
+       {
+        "object_id": "chair_1",
+        "label": "chair",
+        "score": 0.528,
+        "centroid_m": [
+         -1.9961,
+         1.8474,
+         1.5844
+        ],
+        "extent_m": {
+         "w": 2.716,
+         "h": 0.935,
+         "l": 0.787
+        }
+       },
+       {
+        "object_id": "picture_2",
+        "label": "picture",
+        "score": 0.501,
+        "centroid_m": [
+         -3.2434,
+         -2.9075,
+         3.612
+        ],
+        "extent_m": {
+         "w": 0.722,
+         "h": 0.655,
+         "l": 0.06
+        }
+       },
+       {
+        "object_id": "picture_3",
+        "label": "picture",
+        "score": 0.489,
+        "centroid_m": [
+         -3.2396,
+         -2.2867,
+         3.678
+        ],
+        "extent_m": {
+         "w": 0.716,
+         "h": 0.609,
+         "l": 0.078
+        }
+       },
+       {
+        "object_id": "sofa_chair_1",
+        "label": "sofa chair",
+        "score": 0.44,
+        "centroid_m": [
+         -2.8881,
+         0.9837,
+         2.3736
+        ],
+        "extent_m": {
+         "w": 3.41,
+         "h": 2.242,
+         "l": 1.907
+        }
+       },
+       {
+        "object_id": "table_1",
+        "label": "table",
+        "score": 0.399,
+        "centroid_m": [
+         1.7952,
+         1.8126,
+         1.706
+        ],
+        "extent_m": {
+         "w": 3.005,
+         "h": 1.478,
+         "l": 1.286
+        }
+       },
+       {
+        "object_id": "picture_4",
+        "label": "picture",
+        "score": 0.332,
+        "centroid_m": [
+         -5.3458,
+         -2.2068,
+         3.6395
+        ],
+        "extent_m": {
+         "w": 0.38,
+         "h": 0.81,
+         "l": 0.184
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "living_room",
+       "filter_label": null,
+       "returned": 9,
+       "total_in_scene": 9,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "c2f171a059c77",
+       "latency_ms": 0.077,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789818418.4349616
+      }
+     }
+    }
+   ],
+   "elapsed_s": 1.273,
+   "tools_version": "1.2.0",
+   "memory": {
+    "question": "场景里一共有几个物体？",
+    "scene_hint": {
+     "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+     },
+     "n_objects": 9,
+     "image_id": "rgb.png",
+     "scene_id": "living_room",
+     "image_size": [
+      640,
+      480
+     ]
+    },
+    "n_attempts": 0,
+    "attempts": [],
+    "confirmed_ids": [
+     "chair_1",
+     "mirror_1",
+     "picture_1",
+     "picture_2",
+     "picture_3",
+     "picture_4",
+     "sofa_1",
+     "sofa_chair_1",
+     "table_1"
+    ],
+    "facts": {}
+   },
+   "verdict": {
+    "level": "supported",
+    "ok": true,
+    "matched_from": "evidence",
+    "checks": [
+     {
+      "name": "has_evidence",
+      "ok": true,
+      "detail": "evidence 有 2 条",
+      "hard": true
+     },
+     {
+      "name": "tool_was_used",
+      "ok": true,
+      "detail": "成功调用 1 次工具（另有 0 次失败）",
+      "hard": true
+     },
+     {
+      "name": "answer_finite",
+      "ok": true,
+      "detail": "答案是有限数 9.0",
+      "hard": true
+     },
+     {
+      "name": "numeric_backed",
+      "ok": true,
+      "detail": "答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）",
+      "hard": true
+     },
+     {
+      "name": "targets_in_scene",
+      "ok": true,
+      "detail": "9 个 target_id 全部落在场景内",
+      "hard": false
+     },
+     {
+      "name": "targets_exist",
+      "ok": true,
+      "detail": "全部存在于场景图",
+      "hard": false
+     }
+    ],
+    "failed": [],
+    "failed_hard": [],
+    "numbers": [
+     0.836,
+     2.4003,
+     1.0316,
+     2.864,
+     6.705,
+     2.349,
+     1.129,
+     0.795,
+     3.8832,
+     -3.0333,
+     3.6307,
+     2.92,
+     2.693,
+     0.211,
+     0.676,
+     -0.8036,
+     -2.9224,
+     3.6636,
+     2.571,
+     3.69,
+     0.283,
+     0.528,
+     -1.9961,
+     1.8474,
+     1.5844,
+     2.716,
+     0.935,
+     0.787,
+     0.501,
+     -3.2434,
+     -2.9075,
+     3.612
+    ],
+    "n_numbers": 72
+   },
+   "plan": {
+    "ok": false,
+    "skipped": true,
+    "reason": "planner=off"
+   },
+   "switches": {
+    "action_space": "program",
+    "planner": "off",
+    "render": "template",
+    "toolset": [
+     "list_objects",
+     "get_object",
+     "find_object",
+     "single_object",
+     "find_nearest",
+     "find_farthest",
+     "query_relation",
+     "get_3d_position",
+     "get_3d_extent",
+     "calculate_distance",
+     "calculate_angle",
+     "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+   }
+  }
+ ]
+}

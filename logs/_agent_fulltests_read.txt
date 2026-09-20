@@ -1,0 +1,12 @@
+﻿........................................................................ [ 53%]
+........................................................................ [ 67%]
+........................................................................ [ 80%]
+........................................................................ [ 94%]
+..............................                                           [100%]
+============================== warnings summary ===============================
+evaluation/tests/test_program_sanitizer.py::TestTheBugItself::test_unsanitized_program_opens_a_different_path
+  <unknown>:3: SyntaxWarning: invalid escape sequence '\A'
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+534 passed, 1 warning in 11.10s
+硥瑩〽਍

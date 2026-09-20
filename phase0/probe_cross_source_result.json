@@ -1,0 +1,940 @@
+{
+  "part_a": {
+    "rows": [
+      {
+        "file": "panasonic",
+        "ok": true,
+        "size_wh": [
+          80,
+          80
+        ],
+        "model": "DMC-L10",
+        "crop": 2.0,
+        "focal_mm": 50.0,
+        "focal_35mm": 100.0,
+        "exif_pixel": [
+          3648.0,
+          2736.0
+        ],
+        "source": "exif:35mm",
+        "assumed_sensor": false,
+        "size_mismatch": true,
+        "fx": 222.222,
+        "fx_expect": 222.222,
+        "fx_diff": 0.0,
+        "cx": 40.0,
+        "cy": 40.0,
+        "hfov_deg": 20.41,
+        "fov_plausible": false,
+        "fov_reason": "hfov_out_of_range",
+        "focal_crop_check_rel": 0.0,
+        "hfov_true_deg": 20.41,
+        "guarded_by_check_fov": true
+      },
+      {
+        "file": "pentax",
+        "ok": true,
+        "size_wh": [
+          80,
+          80
+        ],
+        "model": "E-P3",
+        "crop": 2.0,
+        "focal_mm": 15.0,
+        "focal_35mm": null,
+        "exif_pixel": [
+          4032.0,
+          3024.0
+        ],
+        "source": "exif:focal+sensor_assumed",
+        "assumed_sensor": true,
+        "size_mismatch": true,
+        "fx": 33.333,
+        "fx_expect": 33.333,
+        "fx_diff": 0.0,
+        "cx": 40.0,
+        "cy": 40.0,
+        "hfov_deg": 100.39,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "focal_crop_check_rel": null,
+        "hfov_true_deg": 61.93,
+        "guarded_by_check_fov": false
+      },
+      {
+        "file": "ricoh",
+        "ok": true,
+        "size_wh": [
+          80,
+          80
+        ],
+        "model": "GR\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+        "crop": 1.5,
+        "focal_mm": 18.3,
+        "focal_35mm": 28.0,
+        "exif_pixel": [
+          4928.0,
+          3264.0
+        ],
+        "source": "exif:35mm",
+        "assumed_sensor": false,
+        "size_mismatch": true,
+        "fx": 62.222,
+        "fx_expect": 62.222,
+        "fx_diff": 0.0,
+        "cx": 40.0,
+        "cy": 40.0,
+        "hfov_deg": 65.47,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "focal_crop_check_rel": 0.01964,
+        "hfov_true_deg": 66.51,
+        "guarded_by_check_fov": true
+      },
+      {
+        "file": "sigma",
+        "ok": true,
+        "size_wh": [
+          80,
+          80
+        ],
+        "model": "SIGMA DP3 Merrill",
+        "crop": 1.5,
+        "focal_mm": 50.0,
+        "focal_35mm": 75.0,
+        "exif_pixel": [
+          3136.0,
+          4704.0
+        ],
+        "source": "exif:35mm",
+        "assumed_sensor": false,
+        "size_mismatch": true,
+        "fx": 166.667,
+        "fx_expect": 166.667,
+        "fx_diff": 0.0,
+        "cx": 40.0,
+        "cy": 40.0,
+        "hfov_deg": 26.99,
+        "fov_plausible": false,
+        "fov_reason": "hfov_out_of_range",
+        "focal_crop_check_rel": 0.0,
+        "hfov_true_deg": 26.99,
+        "guarded_by_check_fov": true
+      },
+      {
+        "file": "sony",
+        "ok": true,
+        "size_wh": [
+          80,
+          80
+        ],
+        "model": "DSC-RX1R",
+        "crop": 1.0,
+        "focal_mm": 35.0,
+        "focal_35mm": 35.0,
+        "exif_pixel": [
+          6000.0,
+          4000.0
+        ],
+        "source": "exif:35mm",
+        "assumed_sensor": false,
+        "size_mismatch": true,
+        "fx": 77.778,
+        "fx_expect": 77.778,
+        "fx_diff": 0.0,
+        "cx": 40.0,
+        "cy": 40.0,
+        "hfov_deg": 54.43,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "focal_crop_check_rel": 0.0,
+        "hfov_true_deg": 54.43,
+        "guarded_by_check_fov": true
+      }
+    ]
+  },
+  "metric_note": "hfov_deg 是**水平**视场（由 K[0,0] 与图像宽度算），与 §21/§22 的方位误差口径一致；不要与对角视场混引。fx 单位为像素，分辨率相关。C 段的 err3d_* 沿用 probe_k_sweep.metrics 的逐像素三维误差定义（米，中位数）。",
+  "part_b": {
+    "rows": [
+      {
+        "name": "picsum_land_a",
+        "ok": true,
+        "note": "Lorem Picsum 1600×1200 横幅",
+        "size_wh": [
+          1600,
+          1200
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 1201.35,
+        "fy": 1262.77,
+        "cx": 802.19,
+        "cy": 601.64,
+        "hfov_deg": 67.32,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 1487.9,
+        "warned": false,
+        "point_shape": [
+          3,
+          1200,
+          1600
+        ],
+        "depth_min_m": 45.541,
+        "depth_med_m": 269.245,
+        "depth_max_m": 6146.339
+      },
+      {
+        "name": "picsum_land_b",
+        "ok": true,
+        "note": "Lorem Picsum 1600×1067 横幅",
+        "size_wh": [
+          1600,
+          1067
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 738.53,
+        "fy": 747.6,
+        "cx": 802.92,
+        "cy": 543.15,
+        "hfov_deg": 94.58,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 201.6,
+        "warned": false,
+        "point_shape": [
+          3,
+          1067,
+          1600
+        ],
+        "depth_min_m": 23.354,
+        "depth_med_m": 157.217,
+        "depth_max_m": 6683.249
+      },
+      {
+        "name": "picsum_port_a",
+        "ok": true,
+        "note": "Lorem Picsum 1200×1600 竖幅",
+        "size_wh": [
+          1200,
+          1600
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 4366.54,
+        "fy": 4332.56,
+        "cx": 600.47,
+        "cy": 803.75,
+        "hfov_deg": 15.65,
+        "fov_plausible": false,
+        "fov_reason": "hfov_out_of_range",
+        "infer_ms": 104.5,
+        "warned": true,
+        "point_shape": [
+          3,
+          1600,
+          1200
+        ],
+        "depth_min_m": 76.588,
+        "depth_med_m": 170.584,
+        "depth_max_m": 198.488
+      },
+      {
+        "name": "picsum_port_b",
+        "ok": true,
+        "note": "Lorem Picsum 1200×1600 竖幅",
+        "size_wh": [
+          1200,
+          1600
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 1589.97,
+        "fy": 1654.72,
+        "cx": 600.76,
+        "cy": 807.67,
+        "hfov_deg": 41.35,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 118.0,
+        "warned": false,
+        "point_shape": [
+          3,
+          1600,
+          1200
+        ],
+        "depth_min_m": 0.286,
+        "depth_med_m": 0.449,
+        "depth_max_m": 1.5
+      },
+      {
+        "name": "picsum_square",
+        "ok": true,
+        "note": "Lorem Picsum 1200×1200 方幅",
+        "size_wh": [
+          1200,
+          1200
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 2010.32,
+        "fy": 2067.05,
+        "cx": 606.99,
+        "cy": 606.39,
+        "hfov_deg": 33.24,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 107.8,
+        "warned": false,
+        "point_shape": [
+          3,
+          1200,
+          1200
+        ],
+        "depth_min_m": 0.655,
+        "depth_med_m": 1.076,
+        "depth_max_m": 1.849
+      },
+      {
+        "name": "pexels_photo",
+        "ok": true,
+        "note": "Pexels 1600×1137",
+        "size_wh": [
+          1600,
+          1137
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 778.2,
+        "fy": 787.76,
+        "cx": 803.68,
+        "cy": 572.32,
+        "hfov_deg": 91.58,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 135.7,
+        "warned": false,
+        "point_shape": [
+          3,
+          1137,
+          1600
+        ],
+        "depth_min_m": 2.552,
+        "depth_med_m": 65.415,
+        "depth_max_m": 2901.753
+      },
+      {
+        "name": "unsplash_photo",
+        "ok": true,
+        "note": "Unsplash 1600×1068",
+        "size_wh": [
+          1600,
+          1068
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 1334.43,
+        "fy": 1320.61,
+        "cx": 805.65,
+        "cy": 543.41,
+        "hfov_deg": 61.89,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 139.6,
+        "warned": false,
+        "point_shape": [
+          3,
+          1068,
+          1600
+        ],
+        "depth_min_m": 5.289,
+        "depth_med_m": 113.031,
+        "depth_max_m": 581.422
+      },
+      {
+        "name": "pixabay_tree",
+        "ok": true,
+        "note": "Pixabay 1280×797",
+        "size_wh": [
+          1280,
+          797
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 707.84,
+        "fy": 738.92,
+        "cx": 648.06,
+        "cy": 401.42,
+        "hfov_deg": 84.24,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 84.5,
+        "warned": false,
+        "point_shape": [
+          3,
+          797,
+          1280
+        ],
+        "depth_min_m": 15.7,
+        "depth_med_m": 61.75,
+        "depth_max_m": 228.546
+      },
+      {
+        "name": "vadar_demo",
+        "ok": true,
+        "note": "VADAR demo 1440×1920 竖幅，另一个房间",
+        "size_wh": [
+          1440,
+          1920
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 1150.76,
+        "fy": 1183.82,
+        "cx": 723.38,
+        "cy": 971.08,
+        "hfov_deg": 64.07,
+        "fov_plausible": true,
+        "fov_reason": "ok",
+        "infer_ms": 116.8,
+        "warned": false,
+        "point_shape": [
+          3,
+          1920,
+          1440
+        ],
+        "depth_min_m": 0.628,
+        "depth_med_m": 2.054,
+        "depth_max_m": 6.407
+      },
+      {
+        "name": "unidepth_demo",
+        "ok": true,
+        "note": "UniDepth demo 640×480（基准图，已知 3D 误差 1.943 m）",
+        "size_wh": [
+          640,
+          480
+        ],
+        "intrinsics_source": "predicted",
+        "fx": 163.74,
+        "fy": 163.42,
+        "cx": 322.0,
+        "cy": 248.11,
+        "hfov_deg": 125.8,
+        "fov_plausible": false,
+        "fov_reason": "hfov_out_of_range",
+        "infer_ms": 81.2,
+        "warned": true,
+        "point_shape": [
+          3,
+          480,
+          640
+        ],
+        "depth_min_m": 1.376,
+        "depth_med_m": 3.357,
+        "depth_max_m": 3.974
+      }
+    ],
+    "summary": {
+      "n_images": 10,
+      "hfov_median": 65.69,
+      "hfov_min": 15.65,
+      "hfov_max": 125.8,
+      "hfov_stdev": 30.95,
+      "n_implausible": 2,
+      "n_warned": 2,
+      "load_s": 10.45,
+      "peak_allocated_mb": 755.8
+    }
+  },
+  "part_c": {
+    "rows": [
+      {
+        "wh": [
+          320,
+          240
+        ],
+        "n_px": 76800,
+        "scale_vs_640": 0.5,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            320,
+            240
+          ],
+          "resize_factor": 1.6137,
+          "resized": true,
+          "net_wh": [
+            518,
+            392
+          ],
+          "net_pixels": 203056,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 94.39,
+        "fx_pred_over_w": 0.295,
+        "hfov_pred_deg": 118.92,
+        "fov_plausible": false,
+        "fx_gt": 259.43,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.3638,
+        "err3d_no_camera_m": 1.6365,
+        "err3d_gt_camera_m": 0.2251,
+        "depth_absrel_no": 0.6429,
+        "depth_absrel_gt": 0.6183,
+        "bear_px_no": 123.5,
+        "bear_px_gt": 1.0
+      },
+      {
+        "wh": [
+          480,
+          360
+        ],
+        "n_px": 172800,
+        "scale_vs_640": 0.75,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            480,
+            360
+          ],
+          "resize_factor": 1.0758,
+          "resized": true,
+          "net_wh": [
+            518,
+            392
+          ],
+          "net_pixels": 203056,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 123.13,
+        "fx_pred_over_w": 0.2565,
+        "hfov_pred_deg": 125.68,
+        "fov_plausible": false,
+        "fx_gt": 389.14,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.3164,
+        "err3d_no_camera_m": 1.9604,
+        "err3d_gt_camera_m": 0.2943,
+        "depth_absrel_no": 0.46,
+        "depth_absrel_gt": 0.4162,
+        "bear_px_no": 228.2,
+        "bear_px_gt": 1.3
+      },
+      {
+        "wh": [
+          640,
+          480
+        ],
+        "n_px": 307200,
+        "scale_vs_640": 1.0,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            640,
+            480
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            644,
+            490
+          ],
+          "net_pixels": 315560,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 163.74,
+        "fx_pred_over_w": 0.2558,
+        "hfov_pred_deg": 125.8,
+        "fov_plausible": false,
+        "fx_gt": 518.86,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.3156,
+        "err3d_no_camera_m": 1.943,
+        "err3d_gt_camera_m": 0.2673,
+        "depth_absrel_no": 0.1984,
+        "depth_absrel_gt": 0.117,
+        "bear_px_no": 305.8,
+        "bear_px_gt": 2.6
+      },
+      {
+        "wh": [
+          672,
+          504
+        ],
+        "n_px": 338688,
+        "scale_vs_640": 1.05,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            672,
+            504
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            672,
+            504
+          ],
+          "net_pixels": 338688,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 172.46,
+        "fx_pred_over_w": 0.2566,
+        "hfov_pred_deg": 125.66,
+        "fov_plausible": false,
+        "fx_gt": 544.8,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.3166,
+        "err3d_no_camera_m": 1.9682,
+        "err3d_gt_camera_m": 0.2006,
+        "depth_absrel_no": 0.4012,
+        "depth_absrel_gt": 0.3487,
+        "bear_px_no": 318.3,
+        "bear_px_gt": 0.5
+      },
+      {
+        "wh": [
+          704,
+          528
+        ],
+        "n_px": 371712,
+        "scale_vs_640": 1.1,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            704,
+            528
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            714,
+            532
+          ],
+          "net_pixels": 379848,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 346.86,
+        "fx_pred_over_w": 0.4927,
+        "hfov_pred_deg": 90.84,
+        "fov_plausible": true,
+        "fx_gt": 570.74,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.6077,
+        "err3d_no_camera_m": 0.789,
+        "err3d_gt_camera_m": 0.1657,
+        "depth_absrel_no": 0.3731,
+        "depth_absrel_gt": 0.294,
+        "bear_px_no": 103.0,
+        "bear_px_gt": 5.8
+      },
+      {
+        "wh": [
+          736,
+          552
+        ],
+        "n_px": 406272,
+        "scale_vs_640": 1.15,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            736,
+            552
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            742,
+            560
+          ],
+          "net_pixels": 415520,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 269.58,
+        "fx_pred_over_w": 0.3663,
+        "hfov_pred_deg": 107.55,
+        "fov_plausible": true,
+        "fx_gt": 596.69,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.4518,
+        "err3d_no_camera_m": 1.2518,
+        "err3d_gt_camera_m": 0.2151,
+        "depth_absrel_no": 0.3979,
+        "depth_absrel_gt": 0.3268,
+        "bear_px_no": 198.6,
+        "bear_px_gt": 3.7
+      },
+      {
+        "wh": [
+          768,
+          576
+        ],
+        "n_px": 442368,
+        "scale_vs_640": 1.2,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            768,
+            576
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            770,
+            588
+          ],
+          "net_pixels": 452760,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 702.52,
+        "fx_pred_over_w": 0.9147,
+        "hfov_pred_deg": 57.32,
+        "fov_plausible": true,
+        "fx_gt": 622.63,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 1.1283,
+        "err3d_no_camera_m": 0.1837,
+        "err3d_gt_camera_m": 0.2066,
+        "depth_absrel_no": 0.2423,
+        "depth_absrel_gt": 0.2593,
+        "bear_px_no": 18.9,
+        "bear_px_gt": 1.6
+      },
+      {
+        "wh": [
+          800,
+          600
+        ],
+        "n_px": 480000,
+        "scale_vs_640": 1.25,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            800,
+            600
+          ],
+          "resize_factor": 1.0,
+          "resized": false,
+          "net_wh": [
+            812,
+            602
+          ],
+          "net_pixels": 488824,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 741.66,
+        "fx_pred_over_w": 0.9271,
+        "hfov_pred_deg": 56.68,
+        "fov_plausible": true,
+        "fx_gt": 648.57,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 1.1435,
+        "err3d_no_camera_m": 0.1803,
+        "err3d_gt_camera_m": 0.2107,
+        "depth_absrel_no": 0.2311,
+        "depth_absrel_gt": 0.2497,
+        "bear_px_no": 19.9,
+        "bear_px_gt": 6.8
+      },
+      {
+        "wh": [
+          960,
+          720
+        ],
+        "n_px": 691200,
+        "scale_vs_640": 1.5,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            960,
+            720
+          ],
+          "resize_factor": 0.9317,
+          "resized": true,
+          "net_wh": [
+            896,
+            672
+          ],
+          "net_pixels": 602112,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 887.96,
+        "fx_pred_over_w": 0.925,
+        "hfov_pred_deg": 56.79,
+        "fov_plausible": true,
+        "fx_gt": 778.29,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 1.1409,
+        "err3d_no_camera_m": 0.2491,
+        "err3d_gt_camera_m": 0.1389,
+        "depth_absrel_no": 0.1972,
+        "depth_absrel_gt": 0.1918,
+        "bear_px_no": 25.8,
+        "bear_px_gt": 1.4
+      },
+      {
+        "wh": [
+          1280,
+          960
+        ],
+        "n_px": 1228800,
+        "scale_vs_640": 2.0,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            1280,
+            960
+          ],
+          "resize_factor": 0.6988,
+          "resized": true,
+          "net_wh": [
+            896,
+            672
+          ],
+          "net_pixels": 602112,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 1159.42,
+        "fx_pred_over_w": 0.9058,
+        "hfov_pred_deg": 57.8,
+        "fov_plausible": true,
+        "fx_gt": 1037.72,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 1.1173,
+        "err3d_no_camera_m": 0.1774,
+        "err3d_gt_camera_m": 0.1427,
+        "depth_absrel_no": 0.1628,
+        "depth_absrel_gt": 0.1677,
+        "bear_px_no": 29.3,
+        "bear_px_gt": 1.7
+      },
+      {
+        "wh": [
+          1600,
+          1200
+        ],
+        "n_px": 1920000,
+        "scale_vs_640": 2.5,
+        "pre": {
+          "paddings": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padded_wh": [
+            1600,
+            1200
+          ],
+          "resize_factor": 0.559,
+          "resized": true,
+          "net_wh": [
+            896,
+            672
+          ],
+          "net_pixels": 602112,
+          "pixels_bounds_used": [
+            200000.0,
+            600000.0
+          ]
+        },
+        "fx_pred": 904.17,
+        "fx_pred_over_w": 0.5651,
+        "hfov_pred_deg": 83.0,
+        "fov_plausible": true,
+        "fx_gt": 1297.14,
+        "hfov_gt_deg": 63.33,
+        "pred_over_gt_fx": 0.697,
+        "err3d_no_camera_m": 0.6443,
+        "err3d_gt_camera_m": 0.1415,
+        "depth_absrel_no": 0.3257,
+        "depth_absrel_gt": 0.2294,
+        "bear_px_no": 152.7,
+        "bear_px_gt": 2.0
+      }
+    ],
+    "summary": {
+      "hfov_pred_min": 56.68,
+      "hfov_pred_max": 125.8,
+      "hfov_pred_range_deg": 69.12,
+      "hfov_pred_stdev": 29.1,
+      "n_implausible": 4,
+      "fx_pred_over_w_min": 0.2558,
+      "fx_pred_over_w_max": 0.9271,
+      "peak_allocated_mb": 857.2
+    }
+  }
+}

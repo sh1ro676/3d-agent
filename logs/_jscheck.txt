@@ -1,0 +1,9 @@
+﻿## node --check app.js
+exit=0
+
+语法 OK
+## 文件清单
+app.check.mjs	44314
+app.js	44314
+index.html	13892
+done

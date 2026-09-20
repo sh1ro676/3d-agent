@@ -1,0 +1,4 @@
+files: build_log.txt, masks, scene.json, scene_report.json, scene_report.md
+== scene.json keys: ['_format', '_written_at', 'scene']
+n_nodes=0
+build_meta=null

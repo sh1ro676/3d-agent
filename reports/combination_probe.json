@@ -1,0 +1,751 @@
+{
+  "scene": "points_probe",
+  "scene_path": "D:\\3D_Spatial_Agent\\dataset\\scenes\\points_probe",
+  "n_objects": 9,
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "field_census": {
+    "value": [
+      "attributes",
+      "bbox_2d",
+      "centroid_m",
+      "distance_m",
+      "extent_m",
+      "frame",
+      "h",
+      "l",
+      "label",
+      "mask_ref",
+      "object_id",
+      "score",
+      "w"
+    ],
+    "evidence": [
+      "a",
+      "a_x",
+      "a_y",
+      "a_z",
+      "anchor",
+      "anchor_centroid_m",
+      "angle_deg",
+      "b",
+      "b_x",
+      "b_y",
+      "b_z",
+      "bbox_2d",
+      "bbox_3d_max",
+      "bbox_3d_min",
+      "candidate_label",
+      "centroid_m",
+      "chair",
+      "count",
+      "delta_x",
+      "delta_y",
+      "delta_z",
+      "distance_m",
+      "extent_m",
+      "filter_label",
+      "formula",
+      "label",
+      "label_counts",
+      "leg_a_m",
+      "leg_c_m",
+      "method",
+      "mirror",
+      "n_candidates",
+      "n_points",
+      "object_id",
+      "order",
+      "picture",
+      "ranked",
+      "relation",
+      "returned",
+      "scene_id",
+      "score",
+      "sofa",
+      "sofa chair",
+      "table",
+      "tol",
+      "total_in_scene",
+      "total_objects",
+      "vertex"
+    ]
+  },
+  "dead_zone": {
+    "relation": "front_of",
+    "anchor": "table_1",
+    "count_default_tol": 0,
+    "count_tol_0": 1,
+    "rows": [
+      {
+        "object_id": "sofa_1",
+        "delta_z": 1.303162,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "picture_1",
+        "delta_z": 2.186775,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "mirror_1",
+        "delta_z": 2.07704,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "chair_1",
+        "delta_z": -0.037843,
+        "default_tol": false,
+        "tol_0": true
+      },
+      {
+        "object_id": "picture_2",
+        "delta_z": 2.143226,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "picture_3",
+        "delta_z": 2.182611,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "sofa_chair_1",
+        "delta_z": 0.867894,
+        "default_tol": false,
+        "tol_0": false
+      },
+      {
+        "object_id": "picture_4",
+        "delta_z": 2.21018,
+        "default_tol": false,
+        "tol_0": false
+      }
+    ],
+    "flipped_by_dead_zone": [
+      {
+        "object_id": "chair_1",
+        "delta_z": -0.037843,
+        "default_tol": false,
+        "tol_0": true
+      }
+    ]
+  },
+  "one_call_solutions": {
+    "C1": {
+      "answer": "picture_1",
+      "n_calls": 1
+    },
+    "C2": {
+      "answer": "picture_2",
+      "n_calls": 1
+    },
+    "C3": {
+      "answer": "mirror_1",
+      "n_calls": 1
+    },
+    "C4": {
+      "answer": 4,
+      "n_calls": 1
+    },
+    "C5": {
+      "answer": 0.4445,
+      "n_calls": 1
+    },
+    "C6": {
+      "answer": "picture_4,picture_2,picture_3,picture_1",
+      "n_calls": 1
+    },
+    "C7": {
+      "answer": "table_1",
+      "n_calls": 1
+    },
+    "C8": {
+      "answer": 1,
+      "n_calls": 1
+    },
+    "C12": {
+      "answer": "picture_4,table_1",
+      "n_calls": 1
+    }
+  },
+  "convention_audit": [
+    {
+      "qid": "C1",
+      "category": "类内 argmax（按尺寸）",
+      "gt": "picture_1",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C2",
+      "category": "类内 argmin（按距离）",
+      "gt": "picture_2",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C3",
+      "category": "全场景 argmax",
+      "gt": "mirror_1",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C4",
+      "category": "筛选 + 计数",
+      "gt": 4,
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C5",
+      "category": "聚合（均值）",
+      "gt": 0.4445,
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C6",
+      "category": "排序",
+      "gt": "picture_4,picture_2,picture_3,picture_1",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C7",
+      "category": "两跳组合（跨类别最近）",
+      "gt": "table_1",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C8",
+      "category": "关系计数（口径敏感）",
+      "gt": 1,
+      "alt": 0,
+      "sensitive": true,
+      "convention": "严格比较（`tol=0`）—— 见下方 caveat",
+      "ambiguous": false
+    },
+    {
+      "qid": "C8b",
+      "category": "关系计数（远离死区）",
+      "gt": 3,
+      "alt": 3,
+      "sensitive": false,
+      "convention": "严格比较（`tol=0`）—— 本题无物体落在容差死区内，两个口径答案相同",
+      "ambiguous": false
+    },
+    {
+      "qid": "C12",
+      "category": "全局极值对（O(n²)）",
+      "gt": "picture_4,table_1",
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C10",
+      "category": "体积",
+      "gt": 2.416642,
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C11",
+      "category": "朝向",
+      "gt": null,
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    },
+    {
+      "qid": "C9",
+      "category": "二维区域",
+      "gt": null,
+      "alt": null,
+      "sensitive": false,
+      "convention": "",
+      "ambiguous": false
+    }
+  ],
+  "results": [
+    {
+      "qid": "C1",
+      "category": "类内 argmax（按尺寸）",
+      "question": "四幅画里哪一幅面积最大？给出它的 object_id。",
+      "answer_type": "str",
+      "route": [
+        "find_object"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": "picture_1",
+      "evidence": [
+        "max(find_object(label='picture').value, key=extent_m.w*extent_m.h)"
+      ],
+      "targets": [
+        "picture_1"
+      ],
+      "tools_used": [
+        "find_object"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "supported",
+        "matched_from": "",
+        "n_numbers": 29,
+        "failed": [],
+        "level_pruned": "supported",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C2",
+      "category": "类内 argmin（按距离）",
+      "question": "哪幅画离镜子最近？给出它的 object_id。",
+      "answer_type": "str",
+      "route": [
+        "find_nearest"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": "picture_2",
+      "evidence": [
+        "find_nearest(anchor='mirror_1', label='picture', k=1).value[0].object_id"
+      ],
+      "targets": [
+        "picture_2"
+      ],
+      "tools_used": [
+        "find_nearest"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "supported",
+        "matched_from": "",
+        "n_numbers": 16,
+        "failed": [],
+        "level_pruned": "supported",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C3",
+      "category": "全场景 argmax",
+      "question": "场景里最高的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "route": [
+        "list_objects"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": "mirror_1",
+      "evidence": [
+        "max(list_objects().value, key=extent_m.h)"
+      ],
+      "targets": [
+        "mirror_1"
+      ],
+      "tools_used": [
+        "list_objects"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "supported",
+        "matched_from": "",
+        "n_numbers": 66,
+        "failed": [],
+        "level_pruned": "supported",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C4",
+      "category": "筛选 + 计数",
+      "question": "有几个物体的高度超过 0.8 米？",
+      "answer_type": "int",
+      "route": [
+        "list_objects"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": 4,
+      "evidence": [
+        "len([o for o in list_objects().value if o['extent_m']['h'] > 0.8])"
+      ],
+      "targets": [
+        "sofa_1",
+        "picture_1",
+        "mirror_1",
+        "sofa_chair_1"
+      ],
+      "tools_used": [
+        "list_objects"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "derived:within",
+        "n_numbers": 66,
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C5",
+      "category": "聚合（均值）",
+      "question": "四幅画的平均宽度是多少米？",
+      "answer_type": "float",
+      "route": [
+        "find_object"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": 0.4445,
+      "evidence": [
+        "sum(o['extent_m']['w'] for o in find_object(label='picture').value) / 4"
+      ],
+      "targets": [],
+      "tools_used": [
+        "find_object"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "derived:within",
+        "n_numbers": 29,
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C6",
+      "category": "排序",
+      "question": "把四幅画按从左到右排序，给出 object_id 列表（逗号分隔）。",
+      "answer_type": "str",
+      "route": [
+        "find_object"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "",
+      "answer": "picture_4,picture_2,picture_3,picture_1",
+      "evidence": [
+        "sorted(find_object(label='picture').value, key=centroid_m[0])"
+      ],
+      "targets": [
+        "picture_4",
+        "picture_2",
+        "picture_3",
+        "picture_1"
+      ],
+      "tools_used": [
+        "find_object"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "",
+        "n_numbers": 29,
+        "failed": [
+          "text_backed"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C7",
+      "category": "两跳组合（跨类别最近）",
+      "question": "离沙发最近的物体是哪个？给出它的 object_id。",
+      "answer_type": "str",
+      "route": [
+        "list_objects",
+        "calculate_distance"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "find_nearest 必须指定类别，跨类别的最近者只能自己遍历",
+      "convention": "",
+      "answer": "table_1",
+      "evidence": [
+        "min over calculate_distance(a='sofa_1', b=<every other>) — 8 次调用"
+      ],
+      "targets": [
+        "table_1"
+      ],
+      "tools_used": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "n_tool_calls": 9,
+      "error": "",
+      "verdict": {
+        "level": "supported",
+        "matched_from": "",
+        "n_numbers": 162,
+        "failed": [],
+        "level_pruned": "supported",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C8",
+      "category": "关系计数（口径敏感）",
+      "question": "有多少个物体在桌子的前面？",
+      "answer_type": "int",
+      "route": [
+        "list_objects",
+        "query_relation"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "GT **= 1**，用严格比较：chair_1 与 table_1 的 z 只差 **37.8 mm**，物理上确实在桌子前面。⚠ 但工具默认 `tol=0.05` 会把它判成不在前面 ⟹ **同一个问题存在两个都合法的答案（1 / 0）**。修口径之前这里记的是 0（「工具默认输出的」），于是任何按质心比较的程序都被错判成算错 —— 那是探针把「工具的行为」当成了「问题的真值」，与模型无关。第三节的受控对照给出 tol↔答案 的完整映射",
+      "convention": "严格比较（`tol=0`）—— 见下方 caveat",
+      "answer": 1,
+      "evidence": [
+        "count(query_relation(relation='front_of', a=<each>, b='table_1', tol=0.0) == True)"
+      ],
+      "targets": [
+        "chair_1"
+      ],
+      "tools_used": [
+        "list_objects",
+        "query_relation"
+      ],
+      "n_tool_calls": 9,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "derived:within",
+        "n_numbers": 90,
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C8b",
+      "category": "关系计数（远离死区）",
+      "question": "有多少个物体在沙发的前面？",
+      "answer_type": "int",
+      "route": [
+        "list_objects",
+        "query_relation"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "",
+      "convention": "严格比较（`tol=0`）—— 本题无物体落在容差死区内，两个口径答案相同",
+      "answer": 3,
+      "evidence": [
+        "count(query_relation(relation='front_of', a=<each>, b='sofa_1', tol=0.0) == True)"
+      ],
+      "targets": [
+        "chair_1",
+        "sofa_chair_1",
+        "table_1"
+      ],
+      "tools_used": [
+        "list_objects",
+        "query_relation"
+      ],
+      "n_tool_calls": 9,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "derived:within",
+        "n_numbers": 90,
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C12",
+      "category": "全局极值对（O(n²)）",
+      "question": "场景里质心相距最远的是哪两个物体？给出两个 object_id（逗号分隔）。",
+      "answer_type": "str",
+      "route": [
+        "list_objects",
+        "calculate_distance"
+      ],
+      "needs": "current_values",
+      "blocked_by": "",
+      "caveat": "能力上够用，但 36 次调用；用 list_objects 的质心在纯 Python 里算只要 1 次调用",
+      "convention": "",
+      "answer": "picture_4,table_1",
+      "evidence": [
+        "max over all 36 pairs of calculate_distance"
+      ],
+      "targets": [
+        "table_1",
+        "picture_4"
+      ],
+      "tools_used": [
+        "calculate_distance",
+        "list_objects"
+      ],
+      "n_tool_calls": 37,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "",
+        "n_numbers": 498,
+        "failed": [
+          "text_backed"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C10",
+      "category": "体积",
+      "question": "沙发的体积大约是多少立方米？",
+      "answer_type": "float",
+      "route": [
+        "list_objects"
+      ],
+      "needs": "new_algorithm",
+      "blocked_by": "缺点云体积：extent_3d 是 AABB 三边，对斜放/不规则物体的乘积不是体积",
+      "caveat": "",
+      "convention": "",
+      "answer": 2.416642,
+      "evidence": [
+        "AABB: extent_m.w * extent_m.h * extent_m.l （口径 ≠ 真实体积）"
+      ],
+      "targets": [
+        "sofa_1"
+      ],
+      "tools_used": [
+        "list_objects"
+      ],
+      "n_tool_calls": 1,
+      "error": "",
+      "verdict": {
+        "level": "weak",
+        "matched_from": "derived:within",
+        "n_numbers": 66,
+        "failed": [
+          "numeric_backed_exact"
+        ],
+        "level_pruned": "weak",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C11",
+      "category": "朝向",
+      "question": "沙发的朝向大致是哪个方向（+x / -x / +z / -z）？",
+      "answer_type": "str",
+      "route": [],
+      "needs": "new_algorithm",
+      "blocked_by": "缺点云主方向（PCA）：质心与 AABB 都丢失了朝向信息",
+      "caveat": "",
+      "convention": "",
+      "answer": null,
+      "evidence": [],
+      "targets": [],
+      "tools_used": [],
+      "n_tool_calls": 0,
+      "error": "未实现（本题按 needs=new_algorithm 判定为不可达）",
+      "verdict": {
+        "level": "",
+        "matched_from": "",
+        "n_numbers": 0,
+        "failed": [],
+        "level_pruned": "",
+        "coincidence": false
+      }
+    },
+    {
+      "qid": "C9",
+      "category": "二维区域",
+      "question": "图像左半部分（按像素 x < 宽/2）里有几个物体？",
+      "answer_type": "int",
+      "route": [],
+      "needs": "extra_field",
+      "blocked_by": "缺 bbox_2d / 像素中心：scene.json 里有 bbox_2d，但没有任何工具的 value/evidence 交出来",
+      "caveat": "",
+      "convention": "",
+      "answer": null,
+      "evidence": [],
+      "targets": [],
+      "tools_used": [],
+      "n_tool_calls": 0,
+      "error": "未实现（本题按 needs=extra_field 判定为不可达）",
+      "verdict": {
+        "level": "",
+        "matched_from": "",
+        "n_numbers": 0,
+        "failed": [],
+        "level_pruned": "",
+        "coincidence": false
+      }
+    }
+  ]
+}

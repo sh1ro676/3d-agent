@@ -1,0 +1,16 @@
+﻿## node --check
+
+exit=0
+## 行数
+app.js = 1472 行
+index.html = 495 行
+## 重复定义自检（每个名字只应出现一次）
+  async function boot → 1
+  function setBanners → 1
+  function fit3D → 1
+  function updateLabels → 1
+  function setupUpload → 1
+  function fillSceneSelect → 1
+  function toBase64 → 1
+  function readExifTags → 1
+done

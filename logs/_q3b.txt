@@ -1,0 +1,3 @@
+﻿[agent] logs\agent_runs\_q3_recheck_vlm.json
+[agent] logs\agent_runs\_q3_recheck_vlm.txt
+exit=1

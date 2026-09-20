@@ -1,0 +1,16 @@
+﻿git : fatal: not a git repository (or any of the parent directories): .git
+所在位置 行:445 字符: 35
++ Set-Location D:\3D_Spatial_Agent; git status --porcelain 2>&1 | Out-F ...
++                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ectories): .git 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+git : fatal: not a git repository (or any of the parent directories): .git
+所在位置 行:445 字符: 133
++ ... oding utf8; git check-ignore -v reports/combination_probe.md logs/pro ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ectories): .git 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 

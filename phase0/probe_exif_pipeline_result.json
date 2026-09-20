@@ -1,0 +1,54 @@
+{
+  "source_image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png",
+  "fixture": "D:\\3D_Spatial_Agent\\.cache\\exif_fixture\\rgb_exif.jpg",
+  "image_wh": [
+    640,
+    480
+  ],
+  "gt_K": {
+    "fx": 518.85791015625,
+    "fy": 519.4696044921875,
+    "cx": 325.58245849609375,
+    "cy": 253.7361602783203
+  },
+  "ideal_focal_35mm": 29.1858,
+  "written_focal_35mm": 29,
+  "fx_from_exif": 515.5556,
+  "fx_dev_pct": -0.6365,
+  "read_back": {
+    "source": "exif:35mm",
+    "fx": 515.56,
+    "fy": 515.56,
+    "cx": 320.0,
+    "cy": 240.0,
+    "image_hw": [
+      480,
+      640
+    ],
+    "focal_mm": 29.0,
+    "focal_35mm_mm": 29.0,
+    "sensor_width_mm": 36.0,
+    "assumed_sensor": false,
+    "quantisation_rel": 0.01724,
+    "size_mismatch": false,
+    "fov": {
+      "hfov_deg": 63.65,
+      "vfov_deg": 49.93,
+      "plausible": true,
+      "reason": "ok"
+    },
+    "notes": [
+      "由 FocalLengthIn35mmFilm=29 mm 换算：f_px = 29/36 × max(W,H)=640 = 515.6",
+      "主点无 EXIF 来源，取图像中心；真实主点常偏 1–3%。",
+      "EXIF 不含畸变系数；广角镜头的桶形畸变会让边缘横向几何系统性偏。",
+      "FocalLengthIn35mmFilm 为整数毫米 ⟹ 四舍五入半步 ±1.7%（整步 ±3.4%）。Step 7 容差预算：方位误差 ≤10 px 要求焦距偏差 ≤±6.6% —— EXIF 在预算内，但用掉了约三分之一。"
+    ]
+  },
+  "read_matches_analytic": true,
+  "fov_plausible": true,
+  "principal_point_error_px": [
+    5.58,
+    13.74
+  ],
+  "tolerance_budget_pct": 6.6
+}

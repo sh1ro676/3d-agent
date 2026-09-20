@@ -1,0 +1,13 @@
+D:\3D_Spatial_Agent\venvs\vision\Lib\site-packages\timm\models\layers\__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+D:\3D_Spatial_Agent\vendor\UniDepth\unidepth\utils\chamfer_distance.py:9: UserWarning: !! To run evaluation you need KNN. Please compile KNN: `cd unidepth/ops/knn with && bash compile.sh`.
+  warnings.warn(
+Cannot import NystromAttention, you can not run original UniDepth. UniDepthV2 is available.
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:02<00:00,  2.69s/it]100%|██████████| 1/1 [00:02<00:00,  2.69s/it]
+  0%|          | 0/5 [00:00<?, ?it/s]Implementing _get_depth at error count 0:   0%|          | 0/5 [00:00<?, ?it/s]Implementing _get_depth at error count 1:   0%|          | 0/5 [00:02<?, ?it/s]Implementing _get_depth at error count 2:   0%|          | 0/5 [00:04<?, ?it/s]Implementing _get_depth at error count 3:   0%|          | 0/5 [00:06<?, ?it/s]Implementing _get_depth at error count 4:   0%|          | 0/5 [00:08<?, ?it/s]Implementing _get_2D_object_size at error count 0:   0%|          | 0/5 [00:11<?, ?it/s][safe-delete][SAFE_DELETE_BULK_CONFIRM_REQUIRED] {"count":51,"threshold":50,"scope":"turn","targets":["D:\\3D_Spatial_Agent\\results\\A\\2026-09-18_16-15-03\\api_generator\\_get_2D_object_size"],"targetCount":1}
+Error in executing _get_depth: Circular reference detected
+Error in executing _get_depth: Circular reference detected
+Error in executing _get_depth: Circular reference detected
+Error in executing _get_depth: Circular reference detected
+Error in executing _get_depth: Circular reference detected
+Error in executing _get_2D_object_size: Circular reference detected

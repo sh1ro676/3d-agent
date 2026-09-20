@@ -1,0 +1,7 @@
+﻿[mine-glue] 自检通过（11 项：扫描归类 4 + 谓词/键 5 + 归一化 2）
+SELFTEST_EXIT=0
+[mine-glue] 程序原文 → D:\3D_Spatial_Agent\reports\glue_programs.txt
+[mine-glue] 读 combination_run_20260919_214625.json
+[mine-glue] D:\3D_Spatial_Agent\reports\glue_mining.md
+[mine-glue] 扫描 10 个 / 9 题 ｜ 形态大类 4 ｜ 签名 9 ｜ 解析失败 0
+RUN_EXIT=0

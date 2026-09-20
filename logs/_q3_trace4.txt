@@ -1,0 +1,131 @@
+n=2
+{
+ "tool": "single_object",
+ "args": {
+  "scene_id": "living_room",
+  "label": "sofa"
+ },
+ "result": {
+  "ok": true,
+  "value": {
+   "object_id": "sofa_1",
+   "label": "sofa",
+   "score": 0.836,
+   "centroid_m": [
+    2.4003,
+    1.0316,
+    2.864
+   ],
+   "extent_m": {
+    "w": 6.705,
+    "h": 2.349,
+    "l": 1.129
+   },
+   "attributes": {}
+  },
+  "evidence": {
+   "scene_id": "living_room",
+   "label": "sofa",
+   "count": 1
+  },
+  "error": null,
+  "meta": {
+   "tool": "single_object",
+   "version": "1.2.0",
+   "tool_call_id": "c74165de46754",
+   "latency_ms": 0.05,
+   "cached": false,
+   "gpu_peak_mb": null,
+   "timestamp": 1789728800.2664585
+  }
+ }
+}
+----------------------------------------
+{
+ "tool": "get_attributes",
+ "args": {
+  "scene_id": "living_room",
+  "object_id": "sofa_1",
+  "attrs": [
+   "color"
+  ]
+ },
+ "result": {
+  "ok": true,
+  "value": [
+   {
+    "name": "color",
+    "value": "beige",
+    "confidence": 0.9,
+    "source": "vlm",
+    "in_closed_set": true,
+    "raw": "beige"
+   }
+  ],
+  "evidence": {
+   "scene_id": "living_room",
+   "object_id": "sofa_1",
+   "label": "sofa",
+   "attrs": [
+    "color"
+   ],
+   "region": {
+    "bbox_2d": [
+     286.29,
+     215.18,
+     632.16,
+     363.71
+    ],
+    "mask_ref": "living_room/masks/sofa_1.png",
+    "label": "sofa",
+    "image_size": [
+     640,
+     480
+    ]
+   },
+   "source": "vlm",
+   "threshold": 0.6,
+   "model": "deepseek-flash",
+   "usage": {
+    "calls": 1.0,
+    "failed_calls": 0.0,
+    "retried_calls": 0.0,
+    "truncated": 0.0,
+    "prompt_tokens": 363.0,
+    "completion_tokens": 26.0,
+    "unpriced_calls": 0.0,
+    "cost_cny": 0.001323,
+    "latency_s": 0.918,
+    "by_purpose": {
+     "describe": {
+      "calls": 1.0,
+      "prompt_tokens": 363.0,
+      "completion_tokens": 26.0,
+      "cost_cny": 0.001323,
+      "latency_s": 0.917944
+     }
+    }
+   },
+   "elapsed_s": 1.007,
+   "cropped": true,
+   "values": {
+    "color": "beige"
+   },
+   "confidences": {
+    "color": 0.9
+   },
+   "closed_set": null
+  },
+  "error": null,
+  "meta": {
+   "tool": "get_attributes",
+   "version": "1.2.0",
+   "tool_call_id": "c154027a9e9c6",
+   "latency_ms": 1007.222,
+   "cached": false,
+   "gpu_peak_mb": null,
+   "timestamp": 1789728801.2738214
+  }
+ }
+}
+----------------------------------------

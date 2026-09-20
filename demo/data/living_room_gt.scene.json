@@ -1,0 +1,2355 @@
+{
+ "scene_id": "living_room_gt",
+ "image_id": "rgb.png",
+ "up_axis": "-y",
+ "scale_factor": 1.0,
+ "camera_intrinsics": [
+  [
+   518.85791015625,
+   0.0,
+   325.58245849609375
+  ],
+  [
+   0.0,
+   519.4696044921875,
+   253.7361602783203
+  ],
+  [
+   0.0,
+   0.0,
+   1.0
+  ]
+ ],
+ "image_hw": [
+  640,
+  480
+ ],
+ "image_url": "assets/living_room_gt/rgb.png",
+ "nodes": [
+  {
+   "id": "sofa_1",
+   "label": "sofa",
+   "score": 0.8359,
+   "bbox_2d": [
+    286.29,
+    215.18,
+    632.16,
+    363.71
+   ],
+   "centroid_3d": [
+    0.7967,
+    0.3192,
+    3.1746
+   ],
+   "extent_3d": [
+    2.3415,
+    0.817,
+    1.2649
+   ],
+   "bbox_3d": {
+    "min": [
+     -0.2453,
+     -0.2566,
+     2.8569
+    ],
+    "max": [
+     2.0963,
+     0.5604,
+     4.1217
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/sofa_1.png",
+   "n_points": 23841,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "picture_1",
+   "label": "picture",
+   "score": 0.795,
+   "bbox_2d": [
+    425.04,
+    46.58,
+    566.66,
+    172.96
+   ],
+   "centroid_3d": [
+    1.337,
+    -1.1095,
+    4.0582
+   ],
+   "extent_3d": [
+    1.1182,
+    0.9845,
+    0.2434
+   ],
+   "bbox_3d": {
+    "min": [
+     0.8083,
+     -1.6002,
+     3.9025
+    ],
+    "max": [
+     1.9265,
+     -0.6156,
+     4.1459
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/picture_1.png",
+   "n_points": 16137,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "mirror_1",
+   "label": "mirror",
+   "score": 0.6763,
+   "bbox_2d": [
+    226.51,
+    25.82,
+    341.89,
+    197.2
+   ],
+   "centroid_3d": [
+    -0.2999,
+    -1.0369,
+    3.9486
+   ],
+   "extent_3d": [
+    0.877,
+    1.2759,
+    0.2727
+   ],
+   "bbox_3d": {
+    "min": [
+     -0.7433,
+     -1.6761,
+     3.8237
+    ],
+    "max": [
+     0.1337,
+     -0.4001,
+     4.0964
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/mirror_1.png",
+   "n_points": 18015,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "chair_1",
+   "label": "chair",
+   "score": 0.5281,
+   "bbox_2d": [
+    6.73,
+    346.72,
+    234.96,
+    474.95
+   ],
+   "centroid_3d": [
+    -0.7396,
+    0.6535,
+    1.8336
+   ],
+   "extent_3d": [
+    0.9769,
+    0.3028,
+    0.8274
+   ],
+   "bbox_3d": {
+    "min": [
+     -1.2903,
+     0.5293,
+     1.6149
+    ],
+    "max": [
+     -0.3134,
+     0.8321,
+     2.4423
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/chair_1.png",
+   "n_points": 18785,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "picture_2",
+   "label": "picture",
+   "score": 0.5013,
+   "bbox_2d": [
+    157.02,
+    98.69,
+    190.39,
+    127.79
+   ],
+   "centroid_3d": [
+    -1.1661,
+    -1.0598,
+    4.0147
+   ],
+   "extent_3d": [
+    0.2607,
+    0.2302,
+    0.0425
+   ],
+   "bbox_3d": {
+    "min": [
+     -1.298,
+     -1.1743,
+     4.0006
+    ],
+    "max": [
+     -1.0372,
+     -0.944,
+     4.0432
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/picture_2.png",
+   "n_points": 965,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "picture_3",
+   "label": "picture",
+   "score": 0.4885,
+   "bbox_2d": [
+    160.41,
+    129.49,
+    192.64,
+    157.26
+   ],
+   "centroid_3d": [
+    -1.155,
+    -0.8366,
+    4.054
+   ],
+   "extent_3d": [
+    0.2522,
+    0.2142,
+    0.0573
+   ],
+   "bbox_3d": {
+    "min": [
+     -1.2851,
+     -0.9435,
+     4.0269
+    ],
+    "max": [
+     -1.0328,
+     -0.7293,
+     4.0841
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/picture_3.png",
+   "n_points": 893,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "sofa_chair_1",
+   "label": "sofa chair",
+   "score": 0.4395,
+   "bbox_2d": [
+    6.8,
+    231.76,
+    237.04,
+    403.74
+   ],
+   "centroid_3d": [
+    -1.0662,
+    0.3275,
+    2.7394
+   ],
+   "extent_3d": [
+    1.3318,
+    0.8102,
+    1.4802
+   ],
+   "bbox_3d": {
+    "min": [
+     -1.8224,
+     -0.0955,
+     2.1027
+    ],
+    "max": [
+     -0.4906,
+     0.7147,
+     3.5829
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/sofa_chair_1.png",
+   "n_points": 29108,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "table_1",
+   "label": "table",
+   "score": 0.3994,
+   "bbox_2d": [
+    359.25,
+    334.04,
+    632.94,
+    478.75
+   ],
+   "centroid_3d": [
+    0.5888,
+    0.6055,
+    1.8714
+   ],
+   "extent_3d": [
+    1.0593,
+    0.5367,
+    1.0292
+   ],
+   "bbox_3d": {
+    "min": [
+     0.2,
+     0.4203,
+     1.6674
+    ],
+    "max": [
+     1.2593,
+     0.9571,
+     2.6966
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/table_1.png",
+   "n_points": 30660,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  },
+  {
+   "id": "picture_4",
+   "label": "picture",
+   "score": 0.3325,
+   "bbox_2d": [
+    71.13,
+    127.36,
+    93.21,
+    165.03
+   ],
+   "centroid_3d": [
+    -1.9192,
+    -0.8223,
+    4.0817
+   ],
+   "extent_3d": [
+    0.1464,
+    0.2873,
+    0.1487
+   ],
+   "bbox_3d": {
+    "min": [
+     -1.9954,
+     -0.9592,
+     4.0058
+    ],
+    "max": [
+     -1.849,
+     -0.6719,
+     4.1545
+    ]
+   },
+   "mask_url": "assets/living_room_gt/masks/picture_4.png",
+   "n_points": 809,
+   "centroid_source": "mask",
+   "attributes": {},
+   "frame": "camera"
+  }
+ ],
+ "edges": [
+  {
+   "source": "sofa_1",
+   "target": "picture_1",
+   "relation": "distance",
+   "value": 1.7645907708778947,
+   "metric": {
+    "distance_m": 1.7646,
+    "delta_x": -0.5403,
+    "delta_y": 1.4286,
+    "delta_z": -0.8837,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": 1.337,
+    "b_y": -1.1095,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.5403,
+    "tol": 0.05,
+    "a_x": 0.7967,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_1",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.8837,
+    "tol": 0.05,
+    "a_z": 3.1746,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_1",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.4286,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "mirror_1",
+   "relation": "distance",
+   "value": 1.908066697693814,
+   "metric": {
+    "distance_m": 1.9081,
+    "delta_x": 1.0966,
+    "delta_y": 1.3561,
+    "delta_z": -0.774,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -0.2999,
+    "b_y": -1.0369,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "mirror_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.0966,
+    "tol": 0.05,
+    "a_x": -0.2999,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "mirror_1",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.774,
+    "tol": 0.05,
+    "a_z": 3.1746,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "mirror_1",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.3561,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "chair_1",
+   "relation": "distance",
+   "value": 2.0664581910551485,
+   "metric": {
+    "distance_m": 2.0665,
+    "delta_x": 1.5363,
+    "delta_y": -0.3344,
+    "delta_z": 1.341,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -0.7396,
+    "b_y": 0.6535,
+    "b_z": 1.8336
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.5363,
+    "tol": 0.05,
+    "a_x": -0.7396,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.341,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 3.1746
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.3344,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_2",
+   "relation": "distance",
+   "value": 2.5416652138591944,
+   "metric": {
+    "distance_m": 2.5417,
+    "delta_x": 1.9628,
+    "delta_y": 1.379,
+    "delta_z": -0.8401,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -1.1661,
+    "b_y": -1.0598,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_2",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.9628,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_2",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.8401,
+    "tol": 0.05,
+    "a_z": 3.1746,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_2",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.379,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_3",
+   "relation": "distance",
+   "value": 2.432755838220965,
+   "metric": {
+    "distance_m": 2.4328,
+    "delta_x": 1.9517,
+    "delta_y": 1.1557,
+    "delta_z": -0.8795,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_3",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.9517,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_3",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.8795,
+    "tol": 0.05,
+    "a_z": 3.1746,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_3",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.1557,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 1.913110804087543,
+   "metric": {
+    "distance_m": 1.9131,
+    "delta_x": 1.8629,
+    "delta_y": -0.0084,
+    "delta_z": 0.4352,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "sofa_chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.8629,
+    "tol": 0.05,
+    "a_x": -1.0662,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "sofa_chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -0.4352,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 3.1746
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 1.3503606497079217,
+   "metric": {
+    "distance_m": 1.3504,
+    "delta_x": 0.2079,
+    "delta_y": -0.2863,
+    "delta_z": 1.3032,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "table_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.2079,
+    "tol": 0.05,
+    "a_x": 0.5888,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.3032,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 3.1746
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2863,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 3.0825635495190773,
+   "metric": {
+    "distance_m": 3.0826,
+    "delta_x": 2.7159,
+    "delta_y": 1.1415,
+    "delta_z": -0.9071,
+    "a_x": 0.7967,
+    "a_y": 0.3192,
+    "a_z": 3.1746,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.7159,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": 0.7967
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.9071,
+    "tol": 0.05,
+    "a_z": 3.1746,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "sofa_1",
+   "target": "picture_4",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.1415,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "mirror_1",
+   "relation": "distance",
+   "value": 1.6421829535675108,
+   "metric": {
+    "distance_m": 1.6422,
+    "delta_x": 1.6369,
+    "delta_y": -0.0725,
+    "delta_z": 0.1096,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -0.2999,
+    "b_y": -1.0369,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "mirror_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.6369,
+    "tol": 0.05,
+    "a_x": -0.2999,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "mirror_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -0.1096,
+    "tol": 0.05,
+    "a_z": 3.9486,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "mirror_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.0725,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "chair_1",
+   "relation": "distance",
+   "value": 3.517021262081372,
+   "metric": {
+    "distance_m": 3.517,
+    "delta_x": 2.0766,
+    "delta_y": -1.763,
+    "delta_z": 2.2246,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -0.7396,
+    "b_y": 0.6535,
+    "b_z": 1.8336
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.0766,
+    "tol": 0.05,
+    "a_x": -0.7396,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.2246,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.763,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_2",
+   "relation": "distance",
+   "value": 2.504018524070895,
+   "metric": {
+    "distance_m": 2.504,
+    "delta_x": 2.5031,
+    "delta_y": -0.0497,
+    "delta_z": 0.0436,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -1.1661,
+    "b_y": -1.0598,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_2",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.5031,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_3",
+   "relation": "distance",
+   "value": 2.506895756290651,
+   "metric": {
+    "distance_m": 2.5069,
+    "delta_x": 2.492,
+    "delta_y": -0.2729,
+    "delta_z": 0.0042,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_3",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.492,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_3",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2729,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 3.095144323642286,
+   "metric": {
+    "distance_m": 3.0951,
+    "delta_x": 2.4032,
+    "delta_y": -1.437,
+    "delta_z": 1.3189,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "sofa_chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.4032,
+    "tol": 0.05,
+    "a_x": -1.0662,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "sofa_chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.3189,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "sofa_chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.437,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 2.8780518177534047,
+   "metric": {
+    "distance_m": 2.8781,
+    "delta_x": 0.7482,
+    "delta_y": -1.715,
+    "delta_z": 2.1868,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "table_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.7482,
+    "tol": 0.05,
+    "a_x": 0.5888,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.1868,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 4.0582
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.715,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 3.2689627993461574,
+   "metric": {
+    "distance_m": 3.269,
+    "delta_x": 3.2562,
+    "delta_y": -0.2871,
+    "delta_z": -0.0234,
+    "a_x": 1.337,
+    "a_y": -1.1095,
+    "a_z": 4.0582,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -3.2562,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": 1.337
+   }
+  },
+  {
+   "source": "picture_1",
+   "target": "picture_4",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2871,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "chair_1",
+   "relation": "distance",
+   "value": 2.743035748815896,
+   "metric": {
+    "distance_m": 2.743,
+    "delta_x": 0.4397,
+    "delta_y": -1.6905,
+    "delta_z": 2.115,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -0.7396,
+    "b_y": 0.6535,
+    "b_z": 1.8336
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.4397,
+    "tol": 0.05,
+    "a_x": -0.7396,
+    "b_x": -0.2999
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.115,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.6905,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_2",
+   "relation": "distance",
+   "value": 0.8690494802153061,
+   "metric": {
+    "distance_m": 0.869,
+    "delta_x": 0.8662,
+    "delta_y": 0.0228,
+    "delta_z": -0.0661,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.1661,
+    "b_y": -1.0598,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_2",
+   "relation": "near",
+   "value": true,
+   "metric": {
+    "distance_m": 0.869,
+    "delta_x": 0.8662,
+    "delta_y": 0.0228,
+    "delta_z": -0.0661,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.1661,
+    "b_y": -1.0598,
+    "b_z": 4.0147,
+    "thresh_m": 1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_2",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.8662,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": -0.2999
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_2",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.0661,
+    "tol": 0.05,
+    "a_z": 3.9486,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_3",
+   "relation": "distance",
+   "value": 0.8845484142689184,
+   "metric": {
+    "distance_m": 0.8845,
+    "delta_x": 0.8551,
+    "delta_y": -0.2004,
+    "delta_z": -0.1054,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_3",
+   "relation": "near",
+   "value": true,
+   "metric": {
+    "distance_m": 0.8845,
+    "delta_x": 0.8551,
+    "delta_y": -0.2004,
+    "delta_z": -0.1054,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054,
+    "thresh_m": 1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_3",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.8551,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": -0.2999
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_3",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.1054,
+    "tol": 0.05,
+    "a_z": 3.9486,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_3",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2004,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 1.977702341821417,
+   "metric": {
+    "distance_m": 1.9777,
+    "delta_x": 0.7663,
+    "delta_y": -1.3645,
+    "delta_z": 1.2092,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "sofa_chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.7663,
+    "tol": 0.05,
+    "a_x": -1.0662,
+    "b_x": -0.2999
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "sofa_chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.2092,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "sofa_chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.3645,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 2.7932509752234607,
+   "metric": {
+    "distance_m": 2.7933,
+    "delta_x": -0.8887,
+    "delta_y": -1.6425,
+    "delta_z": 2.0772,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "table_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.8887,
+    "tol": 0.05,
+    "a_x": -0.2999,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.0772,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 3.9486
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.6425,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 1.6389005815003992,
+   "metric": {
+    "distance_m": 1.6389,
+    "delta_x": 1.6193,
+    "delta_y": -0.2146,
+    "delta_z": -0.1331,
+    "a_x": -0.2999,
+    "a_y": -1.0369,
+    "a_z": 3.9486,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.6193,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": -0.2999
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.1331,
+    "tol": 0.05,
+    "a_z": 3.9486,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "mirror_1",
+   "target": "picture_4",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2146,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_2",
+   "relation": "distance",
+   "value": 2.80614644076824,
+   "metric": {
+    "distance_m": 2.8061,
+    "delta_x": 0.4265,
+    "delta_y": 1.7133,
+    "delta_z": -2.1811,
+    "a_x": -0.7396,
+    "a_y": 0.6535,
+    "a_z": 1.8336,
+    "b_x": -1.1661,
+    "b_y": -1.0598,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_2",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.4265,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": -0.7396
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_2",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -2.1811,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_2",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.7133,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_3",
+   "relation": "distance",
+   "value": 2.706151230147955,
+   "metric": {
+    "distance_m": 2.7062,
+    "delta_x": 0.4154,
+    "delta_y": 1.4901,
+    "delta_z": -2.2204,
+    "a_x": -0.7396,
+    "a_y": 0.6535,
+    "a_z": 1.8336,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_3",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.4154,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": -0.7396
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_3",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -2.2204,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_3",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.4901,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 1.0165361449044774,
+   "metric": {
+    "distance_m": 1.0165,
+    "delta_x": 0.3266,
+    "delta_y": 0.326,
+    "delta_z": -0.9058,
+    "a_x": -0.7396,
+    "a_y": 0.6535,
+    "a_z": 1.8336,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "sofa_chair_1",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.3266,
+    "tol": 0.05,
+    "a_x": -1.0662,
+    "b_x": -0.7396
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "sofa_chair_1",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.9058,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "sofa_chair_1",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 0.326,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 1.3298223871186623,
+   "metric": {
+    "distance_m": 1.3298,
+    "delta_x": -1.3284,
+    "delta_y": 0.048,
+    "delta_z": -0.0378,
+    "a_x": -0.7396,
+    "a_y": 0.6535,
+    "a_z": 1.8336,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "table_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.3284,
+    "tol": 0.05,
+    "a_x": -0.7396,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 2.936583379797732,
+   "metric": {
+    "distance_m": 2.9366,
+    "delta_x": 1.1796,
+    "delta_y": 1.4759,
+    "delta_z": -2.2481,
+    "a_x": -0.7396,
+    "a_y": 0.6535,
+    "a_z": 1.8336,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.1796,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": -0.7396
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -2.2481,
+    "tol": 0.05,
+    "a_z": 1.8336,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "chair_1",
+   "target": "picture_4",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.4759,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_3",
+   "relation": "distance",
+   "value": 0.22693386869088203,
+   "metric": {
+    "distance_m": 0.2269,
+    "delta_x": -0.0112,
+    "delta_y": -0.2232,
+    "delta_z": -0.0394,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_3",
+   "relation": "near",
+   "value": true,
+   "metric": {
+    "distance_m": 0.2269,
+    "delta_x": -0.0112,
+    "delta_y": -0.2232,
+    "delta_z": -0.0394,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": -1.155,
+    "b_y": -0.8366,
+    "b_z": 4.054,
+    "thresh_m": 1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_3",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2232,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 1.8870817912562448,
+   "metric": {
+    "distance_m": 1.8871,
+    "delta_x": -0.0999,
+    "delta_y": -1.3873,
+    "delta_z": 1.2753,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "sofa_chair_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.0999,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": -1.0662
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "sofa_chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.2753,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "sofa_chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.3873,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 3.232137620372454,
+   "metric": {
+    "distance_m": 3.2321,
+    "delta_x": -1.755,
+    "delta_y": -1.6653,
+    "delta_z": 2.1433,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "table_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.755,
+    "tol": 0.05,
+    "a_x": -1.1661,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.1433,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 4.0147
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.6653,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 0.792484599673998,
+   "metric": {
+    "distance_m": 0.7925,
+    "delta_x": 0.7531,
+    "delta_y": -0.2375,
+    "delta_z": -0.067,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_4",
+   "relation": "near",
+   "value": true,
+   "metric": {
+    "distance_m": 0.7925,
+    "delta_x": 0.7531,
+    "delta_y": -0.2375,
+    "delta_z": -0.067,
+    "a_x": -1.1661,
+    "a_y": -1.0598,
+    "a_z": 4.0147,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817,
+    "thresh_m": 1.0
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.7531,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": -1.1661
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -0.067,
+    "tol": 0.05,
+    "a_z": 4.0147,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "picture_2",
+   "target": "picture_4",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.2375,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "sofa_chair_1",
+   "relation": "distance",
+   "value": 1.7582359108504315,
+   "metric": {
+    "distance_m": 1.7582,
+    "delta_x": -0.0888,
+    "delta_y": -1.1641,
+    "delta_z": 1.3147,
+    "a_x": -1.155,
+    "a_y": -0.8366,
+    "a_z": 4.054,
+    "b_x": -1.0662,
+    "b_y": 0.3275,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "sofa_chair_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.0888,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": -1.0662
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "sofa_chair_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -1.3147,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "sofa_chair_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.1641,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 3.143937180779072,
+   "metric": {
+    "distance_m": 3.1439,
+    "delta_x": -1.7438,
+    "delta_y": -1.4421,
+    "delta_z": 2.1826,
+    "a_x": -1.155,
+    "a_y": -0.8366,
+    "a_z": 4.054,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "table_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.7438,
+    "tol": 0.05,
+    "a_x": -1.155,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -2.1826,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 4.054
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 1.4421,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 0.7648808603557091,
+   "metric": {
+    "distance_m": 0.7649,
+    "delta_x": 0.7642,
+    "delta_y": -0.0142,
+    "delta_z": -0.0276,
+    "a_x": -1.155,
+    "a_y": -0.8366,
+    "a_z": 4.054,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "picture_4",
+   "relation": "near",
+   "value": true,
+   "metric": {
+    "distance_m": 0.7649,
+    "delta_x": 0.7642,
+    "delta_y": -0.0142,
+    "delta_z": -0.0276,
+    "a_x": -1.155,
+    "a_y": -0.8366,
+    "a_z": 4.054,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817,
+    "thresh_m": 1.0
+   }
+  },
+  {
+   "source": "picture_3",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.7642,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": -1.155
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "table_1",
+   "relation": "distance",
+   "value": 1.8893843259022998,
+   "metric": {
+    "distance_m": 1.8894,
+    "delta_x": -1.655,
+    "delta_y": -0.278,
+    "delta_z": 0.868,
+    "a_x": -1.0662,
+    "a_y": 0.3275,
+    "a_z": 2.7394,
+    "b_x": 0.5888,
+    "b_y": 0.6055,
+    "b_z": 1.8714
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "table_1",
+   "relation": "left_of",
+   "value": true,
+   "metric": {
+    "delta_x": -1.655,
+    "tol": 0.05,
+    "a_x": -1.0662,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "table_1",
+   "relation": "behind",
+   "value": true,
+   "metric": {
+    "delta_z": -0.868,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 2.7394
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "table_1",
+   "relation": "above",
+   "value": true,
+   "metric": {
+    "delta_up": 0.278,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 1.962557587443096,
+   "metric": {
+    "distance_m": 1.9626,
+    "delta_x": 0.853,
+    "delta_y": 1.1499,
+    "delta_z": -1.3423,
+    "a_x": -1.0662,
+    "a_y": 0.3275,
+    "a_z": 2.7394,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -0.853,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": -1.0662
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -1.3423,
+    "tol": 0.05,
+    "a_z": 2.7394,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "sofa_chair_1",
+   "target": "picture_4",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.1499,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  },
+  {
+   "source": "table_1",
+   "target": "picture_4",
+   "relation": "distance",
+   "value": 3.6351573118219305,
+   "metric": {
+    "distance_m": 3.6352,
+    "delta_x": 2.5081,
+    "delta_y": 1.4278,
+    "delta_z": -2.2103,
+    "a_x": 0.5888,
+    "a_y": 0.6055,
+    "a_z": 1.8714,
+    "b_x": -1.9192,
+    "b_y": -0.8223,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "table_1",
+   "target": "picture_4",
+   "relation": "right_of",
+   "value": true,
+   "metric": {
+    "delta_x": -2.5081,
+    "tol": 0.05,
+    "a_x": -1.9192,
+    "b_x": 0.5888
+   }
+  },
+  {
+   "source": "table_1",
+   "target": "picture_4",
+   "relation": "front_of",
+   "value": true,
+   "metric": {
+    "delta_z": -2.2103,
+    "tol": 0.05,
+    "a_z": 1.8714,
+    "b_z": 4.0817
+   }
+  },
+  {
+   "source": "table_1",
+   "target": "picture_4",
+   "relation": "below",
+   "value": true,
+   "metric": {
+    "delta_up": 1.4278,
+    "tol": 0.05,
+    "up_axis": 1.0,
+    "up_sign": -1.0
+   }
+  }
+ ],
+ "build_meta": {
+  "n_detections_raw": 9,
+  "n_detections_kept": 9,
+  "n_nodes": 9,
+  "n_edges": 137,
+  "n_dropped": 0,
+  "n_fallbacks": 0,
+  "mask_box_coverage_mean": 0.8041,
+  "mask_box_coverage_min": 0.4624,
+  "label_counts": {
+   "sofa": 1,
+   "picture": 4,
+   "mirror": 1,
+   "chair": 1,
+   "sofa chair": 1,
+   "table": 1
+  },
+  "up_axis": "-y",
+  "up_axis_tilt_deg": 11.95,
+  "up_axis_reliable": true,
+  "up_axis_reason": "ok",
+  "scale_calibrated": false,
+  "depth_range_m": [
+   1.5948,
+   4.3939
+  ],
+  "image_hw": [
+   480,
+   640
+  ],
+  "timings_ms": {
+   "depth_ms": 1178.3,
+   "detect_ms": 743.6,
+   "segment_ms": 260.8,
+   "nodes_ms": 28.2,
+   "up_axis_ms": 8.3,
+   "relations_ms": 2.4
+  },
+  "perception": {
+   "device": "cuda",
+   "device_total_mib": 8188.0,
+   "resident_mb": 1146.7,
+   "resident_pct": 14.0,
+   "peak_mb": 2177.2,
+   "models": {
+    "grounding": {
+     "role": "grounding",
+     "hub_id": "IDEA-Research/grounding-dino-tiny",
+     "loaded": true,
+     "source": "local",
+     "load_s": 7.42,
+     "resident_mb": 660.0,
+     "n_params_m": 172.3,
+     "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+     "role": "segmentation",
+     "hub_id": "facebook/sam2.1-hiera-base-plus",
+     "loaded": true,
+     "source": "local",
+     "load_s": 0.5,
+     "resident_mb": 282.2,
+     "n_params_m": 73.3,
+     "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+     "role": "depth",
+     "hub_id": "lpiccinelli/unidepth-v2-vits14",
+     "loaded": true,
+     "source": "hub",
+     "load_s": 7.66,
+     "resident_mb": 132.3,
+     "n_params_m": 34.2,
+     "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+   }
+  },
+  "config": {
+   "prompt": "sofa. chair. table. picture. mirror.",
+   "box_threshold": 0.3,
+   "text_threshold": 0.25,
+   "tol_m": 0.05,
+   "near_m": 1.0,
+   "relation_policy": "distance_plus_true"
+  }
+ }
+}

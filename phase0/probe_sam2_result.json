@@ -1,0 +1,257 @@
+{
+  "sam2_single": {
+    "latency_ms": 281.6,
+    "peak_vram_alloc_mb": 647.3,
+    "peak_vram_reserved_mb": 928.0,
+    "mask_image_fraction": 0.1043,
+    "mask_box_coverage": 0.6238
+  },
+  "sam2_model": {
+    "repo": "D:\\3D_Spatial_Agent\\.cache\\models\\sam2.1-hiera-base-plus",
+    "class": "Sam2Model",
+    "params_m": 73.3,
+    "weights_mib": 279.7,
+    "load_s": 0.59,
+    "live_after_load_mb": 372.3
+  },
+  "sam2_batch": {
+    "batched": {
+      "boxes": 9,
+      "model_ms": 179.1,
+      "end_to_end_ms": 199.7,
+      "peak_vram_alloc_mb": 824.1,
+      "peak_vram_reserved_mb": 1042.0
+    },
+    "per_box": {
+      "calls": 9,
+      "end_to_end_ms": 1512.2,
+      "peak_vram_alloc_mb": 753.3,
+      "peak_vram_reserved_mb": 1042.0
+    },
+    "boxes_used": 9
+  },
+  "three_models_resident": {
+    "live_mb": 1199.7,
+    "peak_mb_while_hot": 1199.7,
+    "reserved_mb_while_hot": 1212.0,
+    "device_total_mib": 8188.0,
+    "share_pct": 14.7,
+    "unidepth_loaded": true
+  },
+  "centre_comparison": {
+    "rows": [
+      {
+        "label": "sofa",
+        "box_xyxy": [
+          286.3,
+          215.2,
+          632.2,
+          363.7
+        ],
+        "n_box_px": 51554,
+        "n_mask_px": 23840,
+        "mask_over_box": 0.4624,
+        "centre_box_m": [
+          2.4478,
+          0.8752,
+          2.9917
+        ],
+        "centre_mask_m": [
+          2.3999,
+          1.0317,
+          2.864
+        ],
+        "delta_m": 0.2076
+      },
+      {
+        "label": "picture",
+        "box_xyxy": [
+          425.0,
+          46.6,
+          566.7,
+          173.0
+        ],
+        "n_box_px": 17892,
+        "n_mask_px": 16137,
+        "mask_over_box": 0.9019,
+        "centre_box_m": [
+          3.9222,
+          -3.0242,
+          3.6324
+        ],
+        "centre_mask_m": [
+          3.8832,
+          -3.0333,
+          3.6307
+        ],
+        "delta_m": 0.0401
+      },
+      {
+        "label": "mirror",
+        "box_xyxy": [
+          226.5,
+          25.8,
+          341.9,
+          197.2
+        ],
+        "n_box_px": 19836,
+        "n_mask_px": 18015,
+        "mask_over_box": 0.9082,
+        "centre_box_m": [
+          -0.8139,
+          -3.0029,
+          3.6569
+        ],
+        "centre_mask_m": [
+          -0.8036,
+          -2.9224,
+          3.6636
+        ],
+        "delta_m": 0.0815
+      },
+      {
+        "label": "sofa chair",
+        "box_xyxy": [
+          6.8,
+          231.8,
+          237.0,
+          403.7
+        ],
+        "n_box_px": 39560,
+        "n_mask_px": 29106,
+        "mask_over_box": 0.7357,
+        "centre_box_m": [
+          -2.808,
+          1.0439,
+          2.3495
+        ],
+        "centre_mask_m": [
+          -2.8881,
+          0.9837,
+          2.3736
+        ],
+        "delta_m": 0.103
+      },
+      {
+        "label": "picture",
+        "box_xyxy": [
+          157.0,
+          98.7,
+          190.4,
+          127.8
+        ],
+        "n_box_px": 957,
+        "n_mask_px": 965,
+        "mask_over_box": 1.0084,
+        "centre_box_m": [
+          -3.2462,
+          -2.922,
+          3.6113
+        ],
+        "centre_mask_m": [
+          -3.2434,
+          -2.9075,
+          3.612
+        ],
+        "delta_m": 0.0147
+      },
+      {
+        "label": "picture",
+        "box_xyxy": [
+          160.4,
+          129.5,
+          192.6,
+          157.3
+        ],
+        "n_box_px": 891,
+        "n_mask_px": 893,
+        "mask_over_box": 1.0022,
+        "centre_box_m": [
+          -3.2402,
+          -2.2873,
+          3.6784
+        ],
+        "centre_mask_m": [
+          -3.2396,
+          -2.2867,
+          3.678
+        ],
+        "delta_m": 0.0009
+      },
+      {
+        "label": "chair",
+        "box_xyxy": [
+          6.7,
+          346.7,
+          235.0,
+          475.0
+        ],
+        "n_box_px": 29184,
+        "n_mask_px": 18786,
+        "mask_over_box": 0.6437,
+        "centre_box_m": [
+          -2.0732,
+          1.7888,
+          1.6885
+        ],
+        "centre_mask_m": [
+          -1.9961,
+          1.8474,
+          1.5844
+        ],
+        "delta_m": 0.1421
+      },
+      {
+        "label": "table",
+        "box_xyxy": [
+          359.3,
+          334.0,
+          632.9,
+          478.8
+        ],
+        "n_box_px": 39730,
+        "n_mask_px": 30658,
+        "mask_over_box": 0.7717,
+        "centre_box_m": [
+          1.9067,
+          1.7763,
+          1.7753
+        ],
+        "centre_mask_m": [
+          1.7952,
+          1.8126,
+          1.706
+        ],
+        "delta_m": 0.1362
+      },
+      {
+        "label": "picture",
+        "box_xyxy": [
+          71.1,
+          127.4,
+          93.2,
+          165.0
+        ],
+        "n_box_px": 836,
+        "n_mask_px": 808,
+        "mask_over_box": 0.9665,
+        "centre_box_m": [
+          -5.3272,
+          -2.214,
+          3.6434
+        ],
+        "centre_mask_m": [
+          -5.3459,
+          -2.2068,
+          3.6394
+        ],
+        "delta_m": 0.0204
+      }
+    ],
+    "delta_mean_mm": 82.9,
+    "delta_max_mm": 207.6,
+    "bg_in_box_mean_pct": 17.8,
+    "bg_in_box_max_pct": 53.8,
+    "tol_reference_m": 0.05
+  }
+}

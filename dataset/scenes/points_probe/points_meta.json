@@ -1,0 +1,37 @@
+{
+  "_format": "1.0",
+  "_written_at": "2026-09-19T21:15:49",
+  "shape": [
+    3,
+    480,
+    640
+  ],
+  "dtype": "float32",
+  "grid_hw": [
+    480,
+    640
+  ],
+  "image_hw": [
+    480,
+    640
+  ],
+  "intrinsics": [
+    [
+      518.86,
+      0.0,
+      325.58
+    ],
+    [
+      0.0,
+      519.47,
+      253.74
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "intrinsics_source": "provided",
+  "scale_calibrated": false
+}

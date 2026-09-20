@@ -1,0 +1,14 @@
+﻿## 浏览器候选
+FOUND  C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  --   C:\Program Files\Microsoft\Edge\Application\msedge.exe
+FOUND  C:\Program Files\Google\Chrome\Application\chrome.exe
+  --   C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+  --   C:\Users\ROG\AppData\Local\Google\Chrome\Application\chrome.exe
+## PLAYWRIGHT 缓存
+.links
+chromium-1217
+chromium_headless_shell-1217
+ffmpeg-1011
+winldd-1007
+## puppeteer 缓存
+done

@@ -1,0 +1,35 @@
+﻿_diag_c8_numbers.txt	5389
+_tmp_ls.txt	975
+_tmp_probe.txt	64
+_tmp_venv.txt	6561
+answer_provenance.md	4430
+combination_probe.json	18935
+combination_probe.md	25395
+combination_run_20260919_212328.json	45852
+combination_run_20260919_212432_reanalyzed.md	21442
+combination_run_20260919_212608_reanalyzed.json	48774
+combination_run_20260919_212608_reanalyzed.md	21600
+combination_run_20260919_214241_reanalyzed.json	48748
+combination_run_20260919_214241_reanalyzed.md	21600
+combination_run_20260919_214555_reanalyzed.json	49422
+combination_run_20260919_214555_reanalyzed.md	21600
+combination_run_20260919_214625.json	118440
+combination_run_20260919_214625.md	18633
+combination_run_20260919_214625_reanalyzed.json	117920
+combination_run_20260919_214625_reanalyzed.md	19111
+combination_run_20260919_214710_reanalyzed.json	117993
+combination_run_20260919_214710_reanalyzed.md	18633
+README.md	2855
+----
+S	_diag_c8_numbers.py	1428
+S	probe_combination.py	76386
+S	show_answer_provenance.py	10902
+S	probe_combination_run.py	26995
+S	build_scene.py	23325
+S	verify_points.py	8534
+S	serve_demo.py	38449
+S	run_agent.py	30585
+S	export_demo.py	13840
+S	selfcheck_agent.py	2772
+S	report_scene.py	9069
+S	inspect_exif.py	7836

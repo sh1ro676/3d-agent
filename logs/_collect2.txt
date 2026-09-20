@@ -1,0 +1,5 @@
+﻿tests = 556
+scene_graph/tests = 85
+evaluation/tests = 114
+D:\3D_Spatial_Agent\evaluation\tests\conftest.py
+D:\3D_Spatial_Agent\scene_graph\tests\conftest.py

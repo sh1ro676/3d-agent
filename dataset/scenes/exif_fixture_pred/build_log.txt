@@ -1,0 +1,247 @@
+# 场景图构建记录  scene_id=exif_fixture_pred
+image=D:\3D_Spatial_Agent\.cache\exif_fixture\rgb_exif.jpg
+built_at='sofa. chair. table. picture. mirror.'
+
+## 耗时 (ms)
+{"depth_ms": 919.2, "detect_ms": 488.1, "segment_ms": 211.4, "nodes_ms": 25.3, "up_axis_ms": 2.5, "relations_ms": 2.0}
+build_wall_s=1.65
+model_load_wall_s=17.15
+
+## 内参与视场
+intrinsics_arg=未提供 —— 将用模型预测值，并做视场合理性检查
+{
+  "intrinsics_source": "predicted",
+  "intrinsics": [
+    [
+      159.165695,
+      0.0,
+      322.0
+    ],
+    [
+      0.0,
+      160.414062,
+      248.110352
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "fov": {
+    "hfov_deg": 127.11,
+    "vfov_deg": 112.48,
+    "plausible": false,
+    "reason": "hfov_out_of_range"
+  },
+  "scale_calibrated": false
+}
+{}
+
+## 感知栈
+{
+  "device": "cuda",
+  "device_total_mib": 8188.0,
+  "resident_mb": 1146.7,
+  "resident_pct": 14.0,
+  "peak_mb": 2177.2,
+  "models": {
+    "grounding": {
+      "role": "grounding",
+      "hub_id": "IDEA-Research/grounding-dino-tiny",
+      "loaded": true,
+      "source": "local",
+      "load_s": 8.56,
+      "resident_mb": 660.0,
+      "n_params_m": 172.3,
+      "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+      "role": "segmentation",
+      "hub_id": "facebook/sam2.1-hiera-base-plus",
+      "loaded": true,
+      "source": "local",
+      "load_s": 0.44,
+      "resident_mb": 282.2,
+      "n_params_m": 73.3,
+      "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+      "role": "depth",
+      "hub_id": "lpiccinelli/unidepth-v2-vits14",
+      "loaded": true,
+      "source": "hub",
+      "load_s": 8.14,
+      "resident_mb": 132.3,
+      "n_params_m": 34.2,
+      "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+  }
+}
+
+## 警告
+- 内参是模型预测的，且视场不可信（HFoV 127.1°，reason=hfov_out_of_range，可信区间 30–110°）—— **所有横向米制尺寸可能被整体放大**，本图的坐标只能当相对量用，报告里必须标注。有已知内参请设 BuildConfig.known_intrinsics。量化证据见 phase0/probe_depth_gt.py。
+- 重力方向估计不可靠（reason=band_not_horizontal, tilt=63.7°）—— above/below 类关系在本题上不可采信，报告里必须显式说明
+
+## 物体
+[
+  {
+    "id": "sofa_1",
+    "label": "sofa",
+    "score": 0.8217724561691284,
+    "centroid_m": [
+      2.501635432243347,
+      1.0551794171333313,
+      2.8838818073272705
+    ],
+    "extent_m": [
+      6.931918561458588,
+      2.4069564938545227,
+      1.1423006057739258
+    ],
+    "n_points": 23898,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_1",
+    "label": "picture",
+    "score": 0.794864296913147,
+    "centroid_m": [
+      4.013776779174805,
+      -3.1050820350646973,
+      3.648590326309204
+    ],
+    "extent_m": [
+      3.0149927139282227,
+      2.761108875274658,
+      0.21260714530944824
+    ],
+    "n_points": 16133,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "mirror_1",
+    "label": "mirror",
+    "score": 0.6759629845619202,
+    "centroid_m": [
+      -0.8324053287506104,
+      -2.9923532009124756,
+      3.681950330734253
+    ],
+    "extent_m": [
+      2.65700763463974,
+      3.7893996238708496,
+      0.2766547203063965
+    ],
+    "n_points": 18017,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "chair_1",
+    "label": "chair",
+    "score": 0.5307794213294983,
+    "centroid_m": [
+      -2.0652916431427,
+      1.8928914070129395,
+      1.5955336093902588
+    ],
+    "extent_m": [
+      2.8186011910438538,
+      0.9760438203811646,
+      0.7967063188552856
+    ],
+    "n_points": 18797,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_2",
+    "label": "picture",
+    "score": 0.5047276616096497,
+    "centroid_m": [
+      -3.35459303855896,
+      -2.9774491786956787,
+      3.630020022392273
+    ],
+    "extent_m": [
+      0.7445197105407715,
+      0.6729729175567627,
+      0.05768227577209473
+    ],
+    "n_points": 964,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_3",
+    "label": "picture",
+    "score": 0.4912274181842804,
+    "centroid_m": [
+      -3.347151517868042,
+      -2.339583396911621,
+      3.6935412883758545
+    ],
+    "extent_m": [
+      0.7361156940460205,
+      0.62502121925354,
+      0.07645440101623535
+    ],
+    "n_points": 895,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "sofa_chair_1",
+    "label": "sofa chair",
+    "score": 0.44359102845191956,
+    "centroid_m": [
+      -2.983738660812378,
+      1.007190227508545,
+      2.385490894317627
+    ],
+    "extent_m": [
+      3.485002279281616,
+      2.2914674431085587,
+      1.9151777029037476
+    ],
+    "n_points": 29097,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "table_1",
+    "label": "table",
+    "score": 0.40697336196899414,
+    "centroid_m": [
+      1.857002317905426,
+      1.8594545125961304,
+      1.7156433463096619
+    ],
+    "extent_m": [
+      3.113832116127014,
+      1.5149661302566528,
+      1.3060798645019531
+    ],
+    "n_points": 30578,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_4",
+    "label": "picture",
+    "score": 0.34187331795692444,
+    "centroid_m": [
+      -5.521536827087402,
+      -2.2548131942749023,
+      3.653538703918457
+    ],
+    "extent_m": [
+      0.3860197067260742,
+      0.83011794090271,
+      0.18795132637023926
+    ],
+    "n_points": 817,
+    "centroid_source": "mask"
+  }
+]
+
+## 被丢弃的检测
+[]
+
+## 降级记录
+[]

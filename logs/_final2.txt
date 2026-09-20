@@ -1,0 +1,16 @@
+﻿## node --check app.js
+
+exit=0
+## 关键函数唯一性
+  function setupUpload → 1
+  function fillSceneSelect → 1
+  function reloadIndex → 1
+  function toBase64 → 1
+  function readExifTags → 1
+  function banner → 1
+  async function boot → 1
+## 上传面板截图
+  OK 285749
+## 服务
+  health OK  场景 6 个  tools=1.2.0
+done

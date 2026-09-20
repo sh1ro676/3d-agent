@@ -1,0 +1,23 @@
+# 行尾策略：由 git 自行探测文本/二进制，文本在索引里统一存 LF。
+# 目的是避免 Windows 工作区出现「文件没改却整片显示 modified」的假差异。
+* text=auto
+
+# 显式声明二进制，防止被当成文本做行尾转换（会静默损坏文件）
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.gif        binary
+*.zip        binary
+*.npy        binary
+*.npz        binary
+*.pt         binary
+*.pth        binary
+*.parquet    binary
+*.whl        binary
+*.safetensors binary
+*.so         binary
+*.pyd        binary
+*.dll        binary
+*.ttf        binary
+*.woff       binary
+*.woff2      binary

@@ -1,0 +1,10 @@
+=== tool=single_object ok=None code=None
+    value=null
+    evidence=null
+    meta=null
+    context=null
+=== tool=get_attributes ok=None code=None
+    value=null
+    evidence=null
+    meta=null
+    context=null

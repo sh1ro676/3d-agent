@@ -1,0 +1,16 @@
+﻿## 1) 语法
+
+exit=0
+## 2) 重新导出
+场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+场景 exif_fixture_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room_gt: 9 节点 / 137 边 / 图 1 掩码 9
+场景 living_room_pred: 9 节点 / 133 边 / 图 1 掩码 9
+回放批次：6
+导出完成 → D:\3D_Spatial_Agent\demo
+
+## 3) 截图
+final1 OK 601267
+final2 OK 601600
+done

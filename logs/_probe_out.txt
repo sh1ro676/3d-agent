@@ -1,0 +1,48 @@
+﻿scene_dir: D:\3D_Spatial_Agent\dataset\scenes\living_room
+image_id: rgb.png
+build_meta keys: ['config', 'depth_range_m', 'dropped', 'fallbacks', 'grid_hw', 'grid_scale_vs_image', 'image_hw', 'label_counts', 'mask_box_coverage_mean', 'mask_box_coverage_min', 'n_detections_kept', 'n_detections_raw', 'n_dropped', 'n_edges', 'n_fallbacks', 'n_nodes', 'perception', 'scale_calibrated', 'timings_ms', 'up_axis', 'up_axis_reason', 'up_axis_reliable', 'up_axis_tilt_deg']
+    config = {'prompt': 'sofa. chair. table. picture. mirror.', 'box_threshold': 0.3, 'text_threshold': 0.25, 'min_points': 30, 'min_
+    depth_range_m = [1.3763, 3.9738]
+    dropped = []
+    fallbacks = []
+    grid_hw = [480, 640]
+    grid_scale_vs_image = [1.0, 1.0]
+    image_hw = [480, 640]
+    label_counts = {'sofa': 1, 'picture': 4, 'mirror': 1, 'chair': 1, 'sofa chair': 1, 'table': 1}
+    mask_box_coverage_mean = 0.8041
+    mask_box_coverage_min = 0.4624
+    n_detections_kept = 9
+    n_detections_raw = 9
+    n_dropped = 0
+    n_edges = 133
+    n_fallbacks = 0
+    n_nodes = 9
+    perception = {'device': 'cuda', 'device_total_mib': 8188.0, 'resident_mb': 1146.7, 'resident_pct': 14.0, 'peak_mb': 2177.2, 'models':
+    scale_calibrated = False
+    timings_ms = {'depth_ms': 2085.0, 'detect_ms': 1215.4, 'segment_ms': 285.8, 'nodes_ms': 32.5, 'up_axis_ms': 9.4, 'relations_ms': 2.5}
+    up_axis = -y
+    up_axis_reason = band_not_horizontal
+    up_axis_reliable = False
+    up_axis_tilt_deg = 63.04
+--- dataset tree (2 levels) ---
+   builders (dir)
+   raw (dir)
+   scenes (dir)
+   synthesized (dir)
+--- non-mask images: 201
+    dataset\raw\omni3d-bench\unpacked\images\100592.766_00001489.jpg
+    dataset\raw\omni3d-bench\unpacked\images\10163.212_00001538.jpg
+    dataset\raw\omni3d-bench\unpacked\images\104078.645_00000043.jpg
+    dataset\raw\omni3d-bench\unpacked\images\10498.967_00003764.jpg
+    dataset\raw\omni3d-bench\unpacked\images\10967.124_00004419.jpg
+    dataset\raw\omni3d-bench\unpacked\images\1143.065_00000343.jpg
+    dataset\raw\omni3d-bench\unpacked\images\114325.651_00002557.jpg
+    dataset\raw\omni3d-bench\unpacked\images\114979.918_00002498.jpg
+    dataset\raw\omni3d-bench\unpacked\images\117564.261_00000038.jpg
+    dataset\raw\omni3d-bench\unpacked\images\117572.241_00000517.jpg
+    dataset\raw\omni3d-bench\unpacked\images\12214.439_00001777.jpg
+    dataset\raw\omni3d-bench\unpacked\images\12273.449_00005319.jpg
+    dataset\raw\omni3d-bench\unpacked\images\12309.727_00004004.jpg
+    dataset\raw\omni3d-bench\unpacked\images\123687.328_00001658.jpg
+    dataset\raw\omni3d-bench\unpacked\images\12447.023_00000096.jpg
+exit=0

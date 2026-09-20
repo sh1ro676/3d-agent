@@ -1,0 +1,69 @@
+﻿场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+场景 exif_fixture_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room_gt: 9 节点 / 137 边 / 图 1 掩码 9
+场景 living_room_pred: 9 节点 / 133 边 / 图 1 掩码 9
+回放批次：4
+导出完成 → D:\3D_Spatial_Agent\demo
+exit=0
+exif_fixture_exif.scene.json	43644
+exif_fixture_pred.scene.json	41948
+index.json	2789
+living_room.report.json	29403
+living_room.scene.json	41878
+living_room_gt.report.json	28324
+living_room_gt.scene.json	43441
+living_room_pred.report.json	29889
+living_room_pred.scene.json	41930
+runs.json	82991
+---- assets ----
+assets\exif_fixture_exif\rgb_exif.jpg	112762
+assets\exif_fixture_exif\masks\chair_1.png	559
+assets\exif_fixture_exif\masks\mirror_1.png	417
+assets\exif_fixture_exif\masks\picture_1.png	274
+assets\exif_fixture_exif\masks\picture_2.png	182
+assets\exif_fixture_exif\masks\picture_3.png	180
+assets\exif_fixture_exif\masks\picture_4.png	222
+assets\exif_fixture_exif\masks\sofa_1.png	1100
+assets\exif_fixture_exif\masks\sofa_chair_1.png	758
+assets\exif_fixture_exif\masks\table_1.png	752
+assets\exif_fixture_pred\rgb_exif.jpg	112762
+assets\exif_fixture_pred\masks\chair_1.png	559
+assets\exif_fixture_pred\masks\mirror_1.png	417
+assets\exif_fixture_pred\masks\picture_1.png	274
+assets\exif_fixture_pred\masks\picture_2.png	182
+assets\exif_fixture_pred\masks\picture_3.png	180
+assets\exif_fixture_pred\masks\picture_4.png	222
+assets\exif_fixture_pred\masks\sofa_1.png	1100
+assets\exif_fixture_pred\masks\sofa_chair_1.png	758
+assets\exif_fixture_pred\masks\table_1.png	752
+assets\living_room\rgb.png	448668
+assets\living_room\masks\chair_1.png	549
+assets\living_room\masks\mirror_1.png	418
+assets\living_room\masks\picture_1.png	273
+assets\living_room\masks\picture_2.png	183
+assets\living_room\masks\picture_3.png	180
+assets\living_room\masks\picture_4.png	223
+assets\living_room\masks\sofa_1.png	1056
+assets\living_room\masks\sofa_chair_1.png	757
+assets\living_room\masks\table_1.png	762
+assets\living_room_gt\rgb.png	448668
+assets\living_room_gt\masks\chair_1.png	549
+assets\living_room_gt\masks\mirror_1.png	418
+assets\living_room_gt\masks\picture_1.png	273
+assets\living_room_gt\masks\picture_2.png	183
+assets\living_room_gt\masks\picture_3.png	180
+assets\living_room_gt\masks\picture_4.png	223
+assets\living_room_gt\masks\sofa_1.png	1056
+assets\living_room_gt\masks\sofa_chair_1.png	757
+assets\living_room_gt\masks\table_1.png	762
+assets\living_room_pred\rgb.png	448668
+assets\living_room_pred\masks\chair_1.png	549
+assets\living_room_pred\masks\mirror_1.png	418
+assets\living_room_pred\masks\picture_1.png	273
+assets\living_room_pred\masks\picture_2.png	183
+assets\living_room_pred\masks\picture_3.png	180
+assets\living_room_pred\masks\picture_4.png	223
+assets\living_room_pred\masks\sofa_1.png	1056
+assets\living_room_pred\masks\sofa_chair_1.png	757
+assets\living_room_pred\masks\table_1.png	762

@@ -1,0 +1,29 @@
+﻿## py_compile serve_demo.py
+
+exit=0
+语法 OK
+## 关键符号自检
+  90: UPLOAD_DIR = ROOT / "uploads"
+  105: _BUILD_LOCK = threading.Lock()
+  111: def _now() -> str:
+  115: def _log(line: str) -> None:
+  126: def _backend_state() -> dict[str, Any]:
+  216: def _api_health(self) -> None:
+  230: def _api_runs(self) -> None:
+  238: def _api_ask(self, payload: dict[str, Any]) -> None:
+  295: def _api_counterfactual(self, payload: dict[str, Any]) -> None:
+  316: def _api_build(self, payload: dict[str, Any]) -> None:
+  355: # 排队发生在**工作线程**里（见 `_run_build_job` 里的 `_BUILD_LOCK`），
+  362: def _api_build_status(self) -> None:
+  373: def _safe_scene_id(raw: str, fallback: str) -> str:
+  384: def _existing_scene_ids() -> set[str]:
+  391: def _stream_proc(cmd: list[str], job: dict[str, Any], stage: str,
+  428: def _run_build_job(job_id: str) -> None:
+  442: _BUILD_LOCK.acquire()
+  474: UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+  479: img_path = UPLOAD_DIR / ("%s_%s%s" % (stamp, scene_id, ext))
+  528: _BUILD_LOCK.release()
+  531: def _scene_summary(scene_id: str) -> dict[str, Any]:
+  570: def _job_snapshot(job: dict[str, Any]) -> dict[str, Any]:
+  588: def _persist_live_run(scene_id: str, session: Any, loop: Any, run: Any,
+done

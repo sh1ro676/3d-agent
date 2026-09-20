@@ -1,0 +1,25 @@
+OK   three.module.js  1304820 bytes
+OK   OrbitControls.js  32134 bytes
+run json type=dict
+  top.mode: str
+  top.arm: str
+  top.scene: str
+  top.scene_id: str
+  top.scene_hint: dict len=5
+  top.tools_version: str
+  top.toolset: list len=12
+  top.switches: dict len=9
+  top.vlm: dict len=16
+  top.backend: dict len=11
+  top.llm_env: dict len=11
+  top.usage: dict len=10
+  top.summary: dict len=7
+  top.runs: list len=3
+  run[0] keys=['abstained', 'answer', 'answer_type', 'attempts', 'elapsed_s', 'evidence', 'failure', 'memory', 'plan', 'program', 'program_fenced', 'question', 'render', 'render_report', 'scene_id', 'stages', 'status', 'switches', 'target_ids', 'tool_calls', 'tools_version', 'trace', 'usage', 'verdict']
+  n_trace=1
+  trace[0]={"tool": "list_objects", "args": {"scene_id": "living_room"}, "result": {"ok": true, "value": [{"object_id": "sofa_1", "label": "sofa", "score": 0.836, "centroid_m": [2.4003, 1.0316, 2.864], "extent_m": {"w": 6.705, "h": 2.349, "l": 1.129}}, {"object_id": "picture_1", "label": "picture", "score": 0.795, "centroid_m": [3.8832, -3.0333, 3.6307], "extent_m": {"w": 2.92, "h": 2.693, "l": 0.211}}, {"object_id": "mirror_1", "label": "mirror", "score": 0.676, "centroid_m": [-0.8036, -2.9224, 3.6636], "extent_m": {"w": 2.571, "h": 3.69, "l": 0.283}}, {"object_id": "chair_1", "label": "chair", "score": 0.528, "centroid_m": [-1.9961, 1.8474, 1.5844], "extent_m": {"w": 2.716, "h": 0.935, "l": 0.787}}, {"object_id": "picture_2", "label": "picture", "score": 0.501, "centroid_m": [-3.2434, -2.9075, 3.612], "extent_m": {"w": 0.722, "h": 0.655, "l": 0.06}}, {"object_id": "picture_3", "label": "picture",
+  run[0].plan={"ok": true, "steps": ["调用 list_objects 并传入 scene_id，获取场景中所有物体的完整列表。", "读取返回结果中物体的总条数，即为场景中的物体总数。"], "n_steps": 2, "tool_categories": ["list_objects"], "unknown_categories": [], "numbers_in_plan": [], "text": "需要的工具类别：list_objects\n步骤：\n  1. 调用 list_objects 并传入 scene_id，获取场景中所有物体的完整列表。\n  2. 读取返回结果中物体的总条数，即为场景中的物体总数。", "reply": {"purpose": "plan", "model_returned": "deepseek-flash", "finish_reason": "stop", "truncated": false, "has_reasoning": false, "elapsed_s": 1.051, "attempts": 1, "usage": {
+  run[0].switches={"action_space": "program", "planner": "on", "render": "template", "toolset": ["list_objects", "get_object", "find_object", "single_object", "find_nearest", "find_farthest", "query_relation", "get_3d_position", "get_3d_extent", "calculate_distance", "calculate_angle", "get_attributes"], "n_tools": 12, "max_synthesis_retries": 2, "exec_timeout_s": 60.0, "vlm": true, "vlm_model": "deepseek-flash"}
+  run[0].verdict={"level": "supported", "ok": true, "matched_from": "evidence", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name": "tool_was_used", "ok": true, "detail": "成功调用 1 次工具（另有 0 次失败）", "hard": true}, {"name": "answer_finite", "ok": true, "detail": "答案是有限数 9.0", "hard": true}, {"name": "numeric_backed", "ok": true, "detail": "答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）", "hard": true}, {"name": "targets_in_scene", "ok": true, "detail": "9 个 target_id 全部落在场景内", "hard
+  run[0].usage={"calls": 2.0, "failed_calls": 0.0, "retried_calls": 0.0, "truncated": 0.0, "prompt_tokens": 2519.0, "completion_tokens": 154.0, "unpriced_calls": 0.0, "cost_cny": 0.008943, "latency_s": 2.259, "by_purpose": {"plan": {"calls": 1.0, "prompt_tokens": 949.0, "completion_tokens": 51.0, "cost_cny": 0.003306, "latency_s": 1.050981}, "synthesize": {"calls": 1.0, "prompt_tokens": 1570.0, "completion_tokens": 103.0, "cost_cny": 0.005637, "latency_s": 1.208412}}}
+  run[0].attempts=1

@@ -1,0 +1,138 @@
+上传源: rgb.png  438.2 KB  (PNG，无 EXIF)
+提交返回: {"ok": true, "job_id": "b1789819591290", "stage": "queued"}
+[   3.0s] running  build    | offline : False
+[   6.0s] running  build    | 加载模型 ...
+[   9.0s] running  build    | 加载模型 ...
+[  12.0s] running  build    | 加载模型 ...
+[  15.0s] running  build    | Loading weights: 100%|██████████| 453/453 [00:00<00:00, 1295.90it/s]
+[  18.1s] running  build    | Loading weights: 100%|██████████| 453/453 [00:00<00:00, 1295.90it/s]
+[  21.1s] running  build    | Cannot import NystromAttention, you can not run original UniDepth. UniDepthV2 is available.
+[  24.1s] running  build    | Cannot import NystromAttention, you can not run original UniDepth. UniDepthV2 is available.
+[  27.1s] running  build    | warnings.warn("!! self.resolution_level not set, using default bounds !!")
+[  30.1s] running  build    | 或者用 scripts/smoke_tools.py 的套路直接对它提问。
+[  33.1s] running  export   | 导出到演示台…
+[  34.7s] done     export   | 导出完成 → D:\3D_Spatial_Agent\demo
+
+--- 子进程日志尾部 ---
+    sofa_1           --below     --> picture_2        True
+    sofa_1           --distance  --> picture_3        6.594
+    sofa_1           --right_of  --> picture_3        True
+    sofa_1           --front_of  --> picture_3        True
+    sofa_1           --below     --> picture_3        True
+    ... 其余 113 条见 scene.json
+  警告
+    ! 内参是模型预测的，且视场不可信（HFoV 125.8°，reason=hfov_out_of_range，可信区间 30–110°）—— **所有横向米制尺寸可能被整体放大**，本图的坐标只能当相对量用，报告里必须标注。有已知内参请设 BuildConfig.known_intrinsics。量化证据见 phase0/probe_depth_gt.py。
+    ! 重力方向估计不可靠（reason=band_not_horizontal, tilt=63.0°）—— above/below 类关系在本题上不可采信，报告里必须显式说明
+  已写入 D:\3D_Spatial_Agent\dataset\scenes\upload_probe\scene.json
+  掩码 9 个 → D:\3D_Spatial_Agent\dataset\scenes\upload_probe\masks
+  构建记录 D:\3D_Spatial_Agent\dataset\scenes\upload_probe\build_log.txt
+  下一步：把这个 scene.json 交给工具层（tools/spatial.py），
+          或者用 scripts/smoke_tools.py 的套路直接对它提问。
+[report_scene] wrote D:\3D_Spatial_Agent\dataset\scenes\upload_probe\scene_report.json  (118158 bytes)
+[report_scene] wrote D:\3D_Spatial_Agent\dataset\scenes\upload_probe\scene_report.md    (5599 bytes)
+场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+场景 exif_fixture_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room_gt: 9 节点 / 137 边 / 图 1 掩码 9
+场景 living_room_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 upload_probe: 9 节点 / 133 边 / 图 1 掩码 9
+回放批次：6
+导出完成 → D:\3D_Spatial_Agent\demo
+
+--- 结果摘要 ---
+{
+ "scene_id": "upload_probe",
+ "scene_url": "data/upload_probe.scene.json",
+ "image_url": "assets/upload_probe/rgb.png",
+ "n_nodes": 9,
+ "n_edges": 133,
+ "image_hw": [
+  640,
+  480
+ ],
+ "intrinsics_source": "predicted",
+ "intrinsics": [
+  [
+   163.737762,
+   0.0,
+   322.0
+  ],
+  [
+   0.0,
+   163.418274,
+   248.110352
+  ],
+  [
+   0.0,
+   0.0,
+   1.0
+  ]
+ ],
+ "fov": {
+  "hfov_deg": 125.8,
+  "vfov_deg": 111.5,
+  "plausible": false,
+  "reason": "hfov_out_of_range"
+ },
+ "scale_calibrated": false,
+ "up_axis": "-y",
+ "up_axis_tilt_deg": 63.04,
+ "up_axis_reliable": false,
+ "up_axis_reason": "band_not_horizontal",
+ "n_detections_raw": 9,
+ "n_detections_kept": 9,
+ "mask_box_coverage_min": 0.4624,
+ "prompt": "sofa. chair. table. picture. mirror.",
+ "nodes": [
+  {
+   "id": "sofa_1",
+   "label": "sofa",
+   "n_points": 23841
+  },
+  {
+   "id": "picture_1",
+   "label": "picture",
+   "n_points": 16137
+  },
+  {
+   "id": "mirror_1",
+   "label": "mirror",
+   "n_points": 18015
+  },
+  {
+   "id": "chair_1",
+   "label": "chair",
+   "n_points": 18785
+  },
+  {
+   "id": "picture_2",
+   "label": "picture",
+   "n_points": 965
+  },
+  {
+   "id": "picture_3",
+   "label": "picture",
+   "n_points": 893
+  },
+  {
+   "id": "sofa_chair_1",
+   "label": "sofa chair",
+   "n_points": 29108
+  },
+  {
+   "id": "table_1",
+   "label": "table",
+   "n_points": 30660
+  },
+  {
+   "id": "picture_4",
+   "label": "picture",
+   "n_points": 809
+  }
+ ]
+}
+error = None
+
+health.scenes = ['exif_fixture_exif', 'exif_fixture_pred', 'living_room', 'living_room_gt', 'living_room_pred', 'upload_probe']
+index.json 里 upload_probe = [{"scene_id": "upload_probe", "image_id": "rgb.png", "n_nodes": 9, "n_edges": 133, "image_url": "assets/upload_probe/rgb.png", "image_hw": [640, 480], "has_report": true, "label_counts": {"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}, "up_axis": "-y", "up_axis_reliable": false, "up_axis_tilt_deg": 63.04, "scale_calibrated": false, "assets": {"images": 1, "masks": 9}}]
+DONE

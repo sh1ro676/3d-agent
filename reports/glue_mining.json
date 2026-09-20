@@ -1,0 +1,468 @@
+{
+  "run_path": "D:\\3D_Spatial_Agent\\reports\\combination_run_20260919_214625.json",
+  "scene": "points_probe",
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "n_runs": 10,
+  "failed": [],
+  "rows": [
+    {
+      "qid": "C1",
+      "category": "类内 argmax（按尺寸）",
+      "question": "四幅画里哪一幅面积最大？给出它的 object_id。",
+      "program": "from collections import defaultdict\n\n# 1) 找出所有 picture\nres = find_object(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\n# 2) 用 extent_m 计算每幅画的面积（取最大的两个维度乘积作为画面面积）\nbest_id = None\nbest_area = -1.0\ndetail = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    ext = p[\"extent_m\"]\n    dims = sorted([ext[\"w\"], ext[\"h\"], ext[\"l\"]], reverse=True)\n    area = dims[0] * dims[1]  # 画面面积 = 最大的两个边长之积\n    detail.append(\"%s: dims=%s area=%.4f\" % (oid, dims, area))\n    if area > best_area:\n        best_area = area\n        best_id = oid\n\nsubmit(\n    best_id,\n    target_ids=[best_id],\n    evidence=[\n        \"find_object(label='picture') returned %d pictures\" % len(pics),\n        \"area computed as product of two largest extent_m dims: \" + \"; \".join(detail),\n        \"max area = %.4f m^2 -> %s\" % (best_area, best_id),\n    ],\n)",
+      "tool_calls": 1,
+      "one_call_matches_gt": true,
+      "class": "OK",
+      "answer": "picture_1",
+      "gt": "picture_1",
+      "scans": [
+        {
+          "kind": "scan_extreme_by",
+          "key_kind": "arithmetic",
+          "predicate": "none",
+          "tools_called": [],
+          "n_lines": 9
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C2",
+      "category": "类内 argmin（按距离）",
+      "question": "哪幅画离镜子最近？给出它的 object_id。",
+      "program": "from itertools import count\n\nscene_id = \"points_probe\"\n\n# 1) 找到镜子\nmirror_res = single_object(scene_id=scene_id, label=\"mirror\")\nif not mirror_res.ok:\n    submit(\"unknown\", evidence=[\"single_object(mirror) failed: \" + str(mirror_res.error.code)])\nelse:\n    mirror_id = mirror_res.value[\"object_id\"]\n\n    # 2) 找到所有画\n    pics_res = find_object(scene_id=scene_id, label=\"picture\")\n    if not pics_res.ok:\n        submit(\"unknown\", evidence=[\"find_object(picture) failed: \" + str(pics_res.error.code)])\n    else:\n        pics = pics_res.value\n        if not pics:\n            submit(\"unknown\", evidence=[\"no picture objects in scene\"])\n        else:\n            # 3) 用 find_nearest 直接按距离排序（anchor=镜子，label=picture）\n            near_res = find_nearest(scene_id=scene_id, anchor=mirror_id, label=\"picture\", k=len(pics))\n            if not near_res.ok:\n                submit(\"unknown\", evidence=[\"find_nearest failed: \" + str(near_res.error.code)])\n            else:\n                nearest = near_res.value[0]\n                submit(\n                    nearest[\"object_id\"],\n                    target_ids=[nearest[\"object_id\"]],\n                    evidence=[\n                        \"find_nearest(anchor=%s, label=picture) -> %s at distance_m=%s\"\n                        % (mirror_id, nearest[\"object_id\"], nearest.get(\"distance_m\"))\n                    ],\n                )",
+      "tool_calls": 3,
+      "one_call_matches_gt": true,
+      "class": "OK",
+      "answer": "picture_2",
+      "gt": "picture_2",
+      "scans": [],
+      "exprs": [
+        {
+          "kind": "expr_len_local",
+          "skeleton": "len(v)",
+          "lineno": 22,
+          "fields": []
+        }
+      ],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C3",
+      "category": "全场景 argmax",
+      "question": "场景里最高的物体是哪个？给出它的 object_id。",
+      "program": "from collections import defaultdict\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res.error.code])\n\nobjs = res.value\nbest = None\nbest_h = None\nfor o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if best_h is None or h > best_h:\n        best_h = h\n        best = o\n\nif best is None:\n    submit(\"unknown\", evidence=[\"no object with extent_m.h available\"])\n\nsubmit(\n    best[\"object_id\"],\n    target_ids=[best[\"object_id\"]],\n    evidence=[\n        \"list_objects(points_probe) returned %d objects with extent_m\" % len(objs),\n        \"max extent_m.h = %.4f m on object_id=%s (label=%s)\"\n        % (best_h, best[\"object_id\"], best.get(\"label\")),\n    ],\n)",
+      "tool_calls": 1,
+      "one_call_matches_gt": true,
+      "class": "OK",
+      "answer": "mirror_1",
+      "gt": "mirror_1",
+      "scans": [
+        {
+          "kind": "scan_extreme_by",
+          "key_kind": "field",
+          "predicate": "guard",
+          "tools_called": [],
+          "n_lines": 8
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C4",
+      "category": "筛选 + 计数",
+      "question": "有几个物体的高度超过 0.8 米？",
+      "program": "from collections import defaultdict\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\n\nobjs = res.value\ncount = 0\ntall = []\nfor o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if h > 0.8:\n        count += 1\n        tall.append((o.get(\"object_id\"), o.get(\"label\"), h))\n\nsubmit(\n    count,\n    target_ids=[t[0] for t in tall],\n    evidence=[\n        \"list_objects(points_probe) 返回 %d 个物体，逐个读取 extent_m['h']\" % len(objs),\n        \"高度 > 0.8 m 的物体: \" + \", \".join(\"%s(%s)=%.3f\" % t for t in tall) if tall else \"无物体高度超过 0.8 m\",\n    ],\n)",
+      "tool_calls": 1,
+      "one_call_matches_gt": true,
+      "class": "OK*",
+      "answer": 4,
+      "gt": 4,
+      "scans": [
+        {
+          "kind": "scan_count_where",
+          "key_kind": "n/a",
+          "predicate": "threshold",
+          "tools_called": [],
+          "n_lines": 8
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": true,
+      "parse_error": null
+    },
+    {
+      "qid": "C5",
+      "category": "聚合（均值）",
+      "question": "四幅画的平均宽度是多少米？",
+      "program": "from statistics import mean\n\nres = list_objects(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[f\"list_objects failed: {res.error.code}\"])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\nwidths = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    ext = get_3d_extent(scene_id=\"points_probe\", object_id=oid)\n    if not ext.ok:\n        submit(\"unknown\", evidence=[f\"get_3d_extent failed for {oid}: {ext.error.code}\"])\n    widths.append(ext.value[\"w\"])\n\navg = mean(widths)\nsubmit(avg, target_ids=[p[\"object_id\"] for p in pics],\n       evidence=[f\"widths from get_3d_extent (w) for {len(widths)} pictures: {widths}\",\n                 f\"mean = {avg}\"])",
+      "tool_calls": 5,
+      "one_call_matches_gt": true,
+      "class": "OK*",
+      "answer": 0.4445499926805496,
+      "gt": 0.4445,
+      "scans": [
+        {
+          "kind": "scan_collect",
+          "key_kind": "n/a",
+          "predicate": "tool_call",
+          "tools_called": [
+            "get_3d_extent"
+          ],
+          "n_lines": 6
+        }
+      ],
+      "exprs": [
+        {
+          "kind": "expr_aggregate_mean",
+          "skeleton": "mean(v)",
+          "lineno": 19,
+          "fields": []
+        }
+      ],
+      "has_real_comprehension": true,
+      "parse_error": null
+    },
+    {
+      "qid": "C6",
+      "category": "排序",
+      "question": "把四幅画按从左到右排序，给出 object_id 列表（逗号分隔）。",
+      "program": "from collections import defaultdict\n\n# 1) 取出所有 picture 物体\nres = find_object(scene_id=\"points_probe\", label=\"picture\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"find_object(picture) failed: %s\" % res.error.code])\n\npics = res.value\nif not pics:\n    submit(\"unknown\", evidence=[\"no picture objects found in scene\"])\n\n# 2) 用相机系 x 坐标排序（相机系：x 向右为正 → 图像上从左到右）\n#    同时用 bbox_2d 的 x 中心做交叉验证\nitems = []\nfor p in pics:\n    oid = p[\"object_id\"]\n    cx = p[\"centroid_m\"][0]\n    items.append((cx, oid))\n\nitems.sort(key=lambda t: t[0])\nordered = [oid for _, oid in items]\n\n# 3) 交叉验证：读 bbox_2d 的图像像素 x 中心\nbbox_centers = {}\nfor oid in ordered:\n    r = get_object(scene_id=\"points_probe\", object_id=oid)\n    if r.ok:\n        bb = r.value.get(\"bbox_2d\")\n        if bb:\n            bbox_centers[oid] = (bb[0] + bb[2]) / 2.0\n\nbbox_order = sorted(bbox_centers.keys(), key=lambda o: bbox_centers[o]) if bbox_centers else []\n\nevidence = [\n    \"find_object(label='picture') returned %d pictures\" % len(pics),\n    \"sorted by centroid_m[0] (camera x, right-positive): \" + \", \".join(\n        \"%s=%.3f\" % (oid, cx) for cx, oid in items),\n]\nif bbox_order:\n    evidence.append(\"bbox_2d x-center order: \" + \", \".join(\n        \"%s=%.1f\" % (o, bbox_centers[o]) for o in bbox_order))\n\nsubmit(\",\".join(ordered), target_ids=ordered, evidence=evidence)",
+      "tool_calls": 5,
+      "one_call_matches_gt": true,
+      "class": "OK*",
+      "answer": "picture_4,picture_2,picture_3,picture_1",
+      "gt": "picture_4,picture_2,picture_3,picture_1",
+      "scans": [
+        {
+          "kind": "scan_collect",
+          "key_kind": "n/a",
+          "predicate": "none",
+          "tools_called": [],
+          "n_lines": 4
+        },
+        {
+          "kind": "scan_collect",
+          "key_kind": "n/a",
+          "predicate": "tool_call",
+          "tools_called": [
+            "get_object"
+          ],
+          "n_lines": 6
+        }
+      ],
+      "exprs": [
+        {
+          "kind": "expr_rank",
+          "skeleton": "v.sort(key=lambda v: v[0])",
+          "lineno": 20,
+          "fields": []
+        },
+        {
+          "kind": "expr_project",
+          "skeleton": "[v for v, v in v]",
+          "lineno": 21,
+          "fields": []
+        },
+        {
+          "kind": "expr_rank",
+          "skeleton": "sorted(v.keys(), key=lambda v: v[o])",
+          "lineno": 32,
+          "fields": []
+        }
+      ],
+      "has_real_comprehension": true,
+      "parse_error": null
+    },
+    {
+      "qid": "C7",
+      "category": "两跳组合（跨类别最近）",
+      "question": "离沙发最近的物体是哪个？给出它的 object_id。",
+      "program": "from itertools import chain\n\nscene_id = \"points_probe\"\n\n# 1) 找到沙发（唯一）\nres = single_object(scene_id=scene_id, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: \" + str(res.error.code)])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n\n    # 2) 列出全部物体，用质心算距离（list_objects 一次给全 centroid_m）\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res_all.error.code)])\n    else:\n        objs = res_all.value\n        sx, sy, sz = sofa[\"centroid_m\"]\n\n        best = None\n        best_d = None\n        for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            ox, oy, oz = o[\"centroid_m\"]\n            d = ((ox - sx) ** 2 + (oy - sy) ** 2 + (oz - sz) ** 2) ** 0.5\n            if best_d is None or d < best_d:\n                best_d = d\n                best = o\n\n        if best is None:\n            submit(\"unknown\", evidence=[\"no other objects in scene\"])\n        else:\n            # 用工具复核距离\n            res_d = calculate_distance(scene_id=scene_id, a=sofa_id, b=best[\"object_id\"])\n            dist = res_d.value if res_d.ok else best_d\n            submit(\n                best[\"object_id\"],\n                target_ids=[best[\"object_id\"]],\n                evidence=[\n                    \"sofa_id=%s centroid=%s\" % (sofa_id, sofa[\"centroid_m\"]),\n                    \"nearest=%s label=%s centroid=%s\" % (best[\"object_id\"], best[\"label\"], best[\"centroid_m\"]),\n                    \"distance_m=%.4f (calculate_distance / euclidean on centroid_m)\" % dist,\n                ],\n            )",
+      "tool_calls": 3,
+      "one_call_matches_gt": true,
+      "class": "OK",
+      "answer": "table_1",
+      "gt": "table_1",
+      "scans": [
+        {
+          "kind": "scan_extreme_by",
+          "key_kind": "euclidean",
+          "predicate": "guard",
+          "tools_called": [],
+          "n_lines": 8
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C8",
+      "category": "关系计数（命中容差死区）",
+      "question": "有多少个物体在桌子的前面？",
+      "program": "from collections import Counter\n\nscene_id = \"points_probe\"\n\n# 1) 找到桌子\nres = single_object(scene_id=scene_id, label=\"table\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(table) failed: %s\" % res.error.code])\nelse:\n    table = res.value\n    table_id = table[\"object_id\"]\n    table_centroid = table[\"centroid_m\"]\n\n    # 2) 列出所有物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: %s\" % res_all.error.code])\n    else:\n        objs = res_all.value\n\n        # 相机系：x 右, y 下, z 前(深度)。\"桌子前面\" = 比桌子更靠近相机 = z 更小。\n        # 用 query_relation 的 front_of 关系来判定更稳妥。\n        count = 0\n        counted = []\n        for o in objs:\n            oid = o[\"object_id\"]\n            if oid == table_id:\n                continue\n            r = query_relation(scene_id=scene_id, relation=\"front_of\", a=oid, b=table_id, tol=0)\n            if r.ok and r.value is True:\n                count += 1\n                counted.append(oid)\n\n        submit(\n            count,\n            target_ids=counted,\n            evidence=[\n                \"table_id=%s centroid_m=%s\" % (table_id, table_centroid),\n                \"counted objects with query_relation(relation='front_of', a=obj, b=table, tol=0) == True\",\n                \"count=%d, ids=%s\" % (count, counted),\n            ],\n        )",
+      "tool_calls": 10,
+      "one_call_matches_gt": false,
+      "class": "B",
+      "answer": 1,
+      "gt": 0,
+      "scans": [
+        {
+          "kind": "scan_count_where",
+          "key_kind": "n/a",
+          "predicate": "tool_call",
+          "tools_called": [
+            "query_relation"
+          ],
+          "n_lines": 8
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C8b",
+      "category": "关系计数（远离死区）",
+      "question": "有多少个物体在沙发的前面？",
+      "program": "from collections import defaultdict\n\nscene_id = \"points_probe\"\n\n# 1) 找到沙发\nres = single_object(scene_id=scene_id, label=\"sofa\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"single_object(sofa) failed: \" + str(res.error.code)])\nelse:\n    sofa = res.value\n    sofa_id = sofa[\"object_id\"]\n    sofa_c = sofa[\"centroid_m\"]\n\n    # 2) 列出全部物体\n    res_all = list_objects(scene_id=scene_id)\n    if not res_all.ok:\n        submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res_all.error.code)])\n    else:\n        objs = res_all.value\n\n        # 相机系：x 向右，y 向下，z 向前（深度）。\n        # \"在沙发前面\" = 比沙发更靠近相机 = z 更小。\n        count = 0\n        counted = []\n        for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            z = o[\"centroid_m\"][2]\n            if z < sofa_c[2]:\n                count += 1\n                counted.append(o[\"object_id\"])\n\n        submit(\n            count,\n            target_ids=[sofa_id] + counted,\n            evidence=[\n                \"sofa centroid_m=%s (z=%.4f)\" % (sofa_c, sofa_c[2]),\n                \"counted objects with centroid z < sofa z: %s\" % counted,\n                \"rule: camera-frame z is depth; smaller z = closer to camera = in front of sofa\",\n            ],\n        )",
+      "tool_calls": 2,
+      "one_call_matches_gt": false,
+      "class": "OK*",
+      "answer": 3,
+      "gt": 3,
+      "scans": [
+        {
+          "kind": "scan_count_where",
+          "key_kind": "n/a",
+          "predicate": "field_compare",
+          "tools_called": [],
+          "n_lines": 7
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": false,
+      "parse_error": null
+    },
+    {
+      "qid": "C12",
+      "category": "全局极值对（O(n²)）",
+      "question": "场景里质心相距最远的是哪两个物体？给出两个 object_id（逗号分隔）。",
+      "program": "from itertools import combinations\n\nres = list_objects(scene_id=\"points_probe\")\nif not res.ok:\n    submit(\"unknown\", evidence=[\"list_objects failed: \" + str(res.error.code)])\nelse:\n    objs = res.value\n    best_pair = None\n    best_dist = -1.0\n    for a, b in combinations(objs, 2):\n        ca = a[\"centroid_m\"]\n        cb = b[\"centroid_m\"]\n        d = sum((ca[i] - cb[i]) ** 2 for i in range(3)) ** 0.5\n        if d > best_dist:\n            best_dist = d\n            best_pair = (a[\"object_id\"], b[\"object_id\"])\n    if best_pair is None:\n        submit(\"unknown\", evidence=[\"fewer than 2 objects in scene\"])\n    else:\n        submit(\n            best_pair[0] + \",\" + best_pair[1],\n            target_ids=[best_pair[0], best_pair[1]],\n            evidence=[\n                \"list_objects returned centroids for %d objects\" % len(objs),\n                \"max pairwise euclidean distance = %.4f m between %s and %s\"\n                % (best_dist, best_pair[0], best_pair[1]),\n            ],\n        )",
+      "tool_calls": 1,
+      "one_call_matches_gt": true,
+      "class": "OK*",
+      "answer": "table_1,picture_4",
+      "gt": "picture_4,table_1",
+      "scans": [
+        {
+          "kind": "scan_extreme_pair",
+          "key_kind": "euclidean",
+          "predicate": "none",
+          "tools_called": [],
+          "n_lines": 7
+        }
+      ],
+      "exprs": [],
+      "has_real_comprehension": true,
+      "parse_error": null
+    }
+  ],
+  "sig_qids": {
+    "scan_extreme_by｜key=arithmetic｜pred=none": [
+      "C1"
+    ],
+    "scan_extreme_by｜key=field｜pred=guard": [
+      "C3"
+    ],
+    "scan_count_where｜key=n/a｜pred=threshold": [
+      "C4"
+    ],
+    "scan_collect｜key=n/a｜pred=tool_call": [
+      "C5",
+      "C6"
+    ],
+    "scan_collect｜key=n/a｜pred=none": [
+      "C6"
+    ],
+    "scan_extreme_by｜key=euclidean｜pred=guard": [
+      "C7"
+    ],
+    "scan_count_where｜key=n/a｜pred=tool_call": [
+      "C8"
+    ],
+    "scan_count_where｜key=n/a｜pred=field_compare": [
+      "C8b"
+    ],
+    "scan_extreme_pair｜key=euclidean｜pred=none": [
+      "C12"
+    ]
+  },
+  "sig_info": {
+    "scan_extreme_by｜key=arithmetic｜pred=none": {
+      "signature": "scan_extreme_by｜key=arithmetic｜pred=none",
+      "kind": "scan_extreme_by",
+      "key_kind": "arithmetic",
+      "predicate": "none",
+      "n_lines": 9,
+      "example_qid": "C1",
+      "example_source": "for p in pics:\n    oid = p[\"object_id\"]\n    ext = p[\"extent_m\"]\n    dims = sorted([ext[\"w\"], ext[\"h\"], ext[\"l\"]], reverse=True)\n    area = dims[0] * dims[1]  # 画面面积 = 最大的两个边长之积\n    detail.append(\"%s: dims=%s area=%.4f\" % (oid, dims, area))\n    if area > best_area:\n        best_area = area\n        best_id = oid"
+    },
+    "scan_extreme_by｜key=field｜pred=guard": {
+      "signature": "scan_extreme_by｜key=field｜pred=guard",
+      "kind": "scan_extreme_by",
+      "key_kind": "field",
+      "predicate": "guard",
+      "n_lines": 8,
+      "example_qid": "C3",
+      "example_source": "for o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if best_h is None or h > best_h:\n        best_h = h\n        best = o"
+    },
+    "scan_count_where｜key=n/a｜pred=threshold": {
+      "signature": "scan_count_where｜key=n/a｜pred=threshold",
+      "kind": "scan_count_where",
+      "key_kind": "n/a",
+      "predicate": "threshold",
+      "n_lines": 8,
+      "example_qid": "C4",
+      "example_source": "for o in objs:\n    ext = o.get(\"extent_m\") or {}\n    h = ext.get(\"h\")\n    if h is None:\n        continue\n    if h > 0.8:\n        count += 1\n        tall.append((o.get(\"object_id\"), o.get(\"label\"), h))"
+    },
+    "scan_collect｜key=n/a｜pred=tool_call": {
+      "signature": "scan_collect｜key=n/a｜pred=tool_call",
+      "kind": "scan_collect",
+      "key_kind": "n/a",
+      "predicate": "tool_call",
+      "n_lines": 6,
+      "example_qid": "C5",
+      "example_source": "for p in pics:\n    oid = p[\"object_id\"]\n    ext = get_3d_extent(scene_id=\"points_probe\", object_id=oid)\n    if not ext.ok:\n        submit(\"unknown\", evidence=[f\"get_3d_extent failed for {oid}: {ext.error.code}\"])\n    widths.append(ext.value[\"w\"])"
+    },
+    "scan_collect｜key=n/a｜pred=none": {
+      "signature": "scan_collect｜key=n/a｜pred=none",
+      "kind": "scan_collect",
+      "key_kind": "n/a",
+      "predicate": "none",
+      "n_lines": 4,
+      "example_qid": "C6",
+      "example_source": "for p in pics:\n    oid = p[\"object_id\"]\n    cx = p[\"centroid_m\"][0]\n    items.append((cx, oid))"
+    },
+    "scan_extreme_by｜key=euclidean｜pred=guard": {
+      "signature": "scan_extreme_by｜key=euclidean｜pred=guard",
+      "kind": "scan_extreme_by",
+      "key_kind": "euclidean",
+      "predicate": "guard",
+      "n_lines": 8,
+      "example_qid": "C7",
+      "example_source": "for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            ox, oy, oz = o[\"centroid_m\"]\n            d = ((ox - sx) ** 2 + (oy - sy) ** 2 + (oz - sz) ** 2) ** 0.5\n            if best_d is None or d < best_d:\n                best_d = d\n                best = o"
+    },
+    "scan_count_where｜key=n/a｜pred=tool_call": {
+      "signature": "scan_count_where｜key=n/a｜pred=tool_call",
+      "kind": "scan_count_where",
+      "key_kind": "n/a",
+      "predicate": "tool_call",
+      "n_lines": 8,
+      "example_qid": "C8",
+      "example_source": "for o in objs:\n            oid = o[\"object_id\"]\n            if oid == table_id:\n                continue\n            r = query_relation(scene_id=scene_id, relation=\"front_of\", a=oid, b=table_id, tol=0)\n            if r.ok and r.value is True:\n                count += 1\n                counted.append(oid)"
+    },
+    "scan_count_where｜key=n/a｜pred=field_compare": {
+      "signature": "scan_count_where｜key=n/a｜pred=field_compare",
+      "kind": "scan_count_where",
+      "key_kind": "n/a",
+      "predicate": "field_compare",
+      "n_lines": 7,
+      "example_qid": "C8b",
+      "example_source": "for o in objs:\n            if o[\"object_id\"] == sofa_id:\n                continue\n            z = o[\"centroid_m\"][2]\n            if z < sofa_c[2]:\n                count += 1\n                counted.append(o[\"object_id\"])"
+    },
+    "scan_extreme_pair｜key=euclidean｜pred=none": {
+      "signature": "scan_extreme_pair｜key=euclidean｜pred=none",
+      "kind": "scan_extreme_pair",
+      "key_kind": "euclidean",
+      "predicate": "none",
+      "n_lines": 7,
+      "example_qid": "C12",
+      "example_source": "for a, b in combinations(objs, 2):\n        ca = a[\"centroid_m\"]\n        cb = b[\"centroid_m\"]\n        d = sum((ca[i] - cb[i]) ** 2 for i in range(3)) ** 0.5\n        if d > best_dist:\n            best_dist = d\n            best_pair = (a[\"object_id\"], b[\"object_id\"])"
+    }
+  },
+  "kind_qids": {
+    "scan_extreme_by": [
+      "C1",
+      "C3",
+      "C7"
+    ],
+    "scan_count_where": [
+      "C4",
+      "C8",
+      "C8b"
+    ],
+    "scan_collect": [
+      "C5",
+      "C6"
+    ],
+    "scan_extreme_pair": [
+      "C12"
+    ]
+  },
+  "expr_qids": {
+    "expr_len_local": [
+      "C2"
+    ],
+    "expr_aggregate_mean": [
+      "C5"
+    ],
+    "expr_rank": [
+      "C6"
+    ],
+    "expr_project": [
+      "C6"
+    ]
+  },
+  "expr_examples": {
+    "expr_len_local": "len(v)",
+    "expr_aggregate_mean": "mean(v)",
+    "expr_rank": "v.sort(key=lambda v: v[0])",
+    "expr_project": "[v for v, v in v]"
+  },
+  "n_loop_qids": 9,
+  "n_bookkeeping": 4,
+  "n_per_item_tool_qids": 0,
+  "per_item_tool_qids": [],
+  "collect_per_item_tool_qids": [
+    "C5",
+    "C6"
+  ],
+  "count_where_tool_qids": [
+    "C8"
+  ],
+  "n_real_comprehension_qids": 4,
+  "tool_names": [
+    "calculate_angle",
+    "calculate_distance",
+    "find_farthest",
+    "find_nearest",
+    "find_object",
+    "get_3d_extent",
+    "get_3d_position",
+    "get_attributes",
+    "get_object",
+    "list_objects",
+    "query_relation",
+    "single_object"
+  ]
+}

@@ -1,0 +1,4 @@
+﻿dns=14.116.174.67  tcp443=True
+HEAD 探测：无法连接到远程服务器
+HTTP_PROXY=
+HTTPS_PROXY=

@@ -1,0 +1,43 @@
+﻿== python candidates ==
+EXISTS D:\3D_Spatial_Agent\venvs\vision\Scripts\python.exe  -> 3.12.5
+   pytest: 9.1.1
+   numpy : 2.5.3
+EXISTS D:\Users\ROG\anaconda3\python.exe  -> 3.13.9
+   pytest: 8.4.2
+   numpy : 2.3.5
+EXISTS C:\Users\ROG\.workbuddy\binaries\python\versions\3.13.12\python.exe  -> 3.13.14
+   pytest: Traceback (most recent call last):   File "<string>", line 1, in <module>     import pytest;print(pytest.__version__)     ^^^^^^^^^^^^^ ModuleNotFoundError: No module named 'pytest'
+   numpy : Traceback (most recent call last):   File "<string>", line 1, in <module>     import numpy;print(numpy.__version__)     ^^^^^^^^^^^^ ModuleNotFoundError: No module named 'numpy'
+vision
+--- root entries ---
+.bt_1605
+.bt_160636
+.bt_161401
+.bt_161415
+.bt_161423
+.bt_164234
+.bt_164247
+.bt_164254
+.cache
+.pytest_bt
+.pytest_bt2
+.pytest_bt3
+.pytest_cache
+.workbuddy
+configs
+dataset
+docs
+evaluation
+logs
+phase0
+reports
+results
+scene_graph
+scripts
+tests
+tools
+vendor
+venvs
+vision
+README.md
+vadar_env.py

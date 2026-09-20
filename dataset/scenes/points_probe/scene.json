@@ -1,0 +1,2676 @@
+{
+  "_format": "1.0",
+  "_written_at": "2026-09-19T21:15:48",
+  "scene": {
+    "scene_id": "points_probe",
+    "image_id": "rgb.png",
+    "camera_intrinsics": [
+      [
+        518.86,
+        0.0,
+        325.58
+      ],
+      [
+        0.0,
+        519.47,
+        253.74
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "up_axis": "-y",
+    "scale_factor": 1.0,
+    "nodes": [
+      {
+        "id": "sofa_1",
+        "label": "sofa",
+        "score": 0.8359013199806213,
+        "bbox_2d": [
+          286.2919921875,
+          215.18048095703125,
+          632.1593627929688,
+          363.7095031738281
+        ],
+        "mask_ref": "points_probe/masks/sofa_1.png",
+        "centroid_3d": [
+          0.7966746687889099,
+          0.3191015422344208,
+          3.1745684146881104
+        ],
+        "extent_3d": [
+          2.341536298394203,
+          0.8170239627361298,
+          1.2634027004241943
+        ],
+        "bbox_3d": {
+          "min": [
+            -0.24525786936283112,
+            -0.25660446286201477,
+            2.85685658454895
+          ],
+          "max": [
+            2.096278429031372,
+            0.560419499874115,
+            4.1202592849731445
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 23841,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "picture_1",
+        "label": "picture",
+        "score": 0.7949785590171814,
+        "bbox_2d": [
+          425.03515625,
+          46.58255386352539,
+          566.6607055664062,
+          172.9574432373047
+        ],
+        "mask_ref": "points_probe/masks/picture_1.png",
+        "centroid_3d": [
+          1.3369477987289429,
+          -1.1095006465911865,
+          4.058180809020996
+        ],
+        "extent_3d": [
+          1.118232548236847,
+          0.9845064878463745,
+          0.24341273307800293
+        ],
+        "bbox_3d": {
+          "min": [
+            0.8082974553108215,
+            -1.6001802682876587,
+            3.902456521987915
+          ],
+          "max": [
+            1.9265300035476685,
+            -0.6156737804412842,
+            4.145869255065918
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 16137,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "mirror_1",
+        "label": "mirror",
+        "score": 0.6762795448303223,
+        "bbox_2d": [
+          226.51388549804688,
+          25.824586868286133,
+          341.88604736328125,
+          197.19943237304688
+        ],
+        "mask_ref": "points_probe/masks/mirror_1.png",
+        "centroid_3d": [
+          -0.29983752965927124,
+          -1.0369728803634644,
+          3.94844651222229
+        ],
+        "extent_3d": [
+          0.877042293548584,
+          1.2764545679092407,
+          0.27231764793395996
+        ],
+        "bbox_3d": {
+          "min": [
+            -0.7432851195335388,
+            -1.676591396331787,
+            3.824043035507202
+          ],
+          "max": [
+            0.13375717401504517,
+            -0.4001368284225464,
+            4.096360683441162
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 18015,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "chair_1",
+        "label": "chair",
+        "score": 0.5280802845954895,
+        "bbox_2d": [
+          6.731224060058594,
+          346.7209777832031,
+          234.95909118652344,
+          474.9516296386719
+        ],
+        "mask_ref": "points_probe/masks/chair_1.png",
+        "centroid_3d": [
+          -0.7395368814468384,
+          0.6535179018974304,
+          1.8335630893707275
+        ],
+        "extent_3d": [
+          0.9768438041210175,
+          0.3027966618537903,
+          0.8292100429534912
+        ],
+        "bbox_3d": {
+          "min": [
+            -1.2902841567993164,
+            0.5292453169822693,
+            1.614900827407837
+          ],
+          "max": [
+            -0.31344035267829895,
+            0.8320419788360596,
+            2.444110870361328
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 18785,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "picture_2",
+        "label": "picture",
+        "score": 0.5012606978416443,
+        "bbox_2d": [
+          157.0170440673828,
+          98.69438934326172,
+          190.38758850097656,
+          127.79252624511719
+        ],
+        "mask_ref": "points_probe/masks/picture_2.png",
+        "centroid_3d": [
+          -1.1660672426223755,
+          -1.0598231554031372,
+          4.014632225036621
+        ],
+        "extent_3d": [
+          0.2607384920120239,
+          0.23024147748947144,
+          0.04252767562866211
+        ],
+        "bbox_3d": {
+          "min": [
+            -1.2979636192321777,
+            -1.1743061542510986,
+            4.000626087188721
+          ],
+          "max": [
+            -1.0372251272201538,
+            -0.9440646767616272,
+            4.043153762817383
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 965,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "picture_3",
+        "label": "picture",
+        "score": 0.4885120689868927,
+        "bbox_2d": [
+          160.4090576171875,
+          129.49343872070312,
+          192.64202880859375,
+          157.2560577392578
+        ],
+        "mask_ref": "points_probe/masks/picture_3.png",
+        "centroid_3d": [
+          -1.154963493347168,
+          -0.8366074562072754,
+          4.054017543792725
+        ],
+        "extent_3d": [
+          0.2522379159927368,
+          0.214128315448761,
+          0.05726480484008789
+        ],
+        "bbox_3d": {
+          "min": [
+            -1.2850322723388672,
+            -0.9434587955474854,
+            4.026882171630859
+          ],
+          "max": [
+            -1.0327943563461304,
+            -0.7293304800987244,
+            4.084146976470947
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 893,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "sofa_chair_1",
+        "label": "sofa chair",
+        "score": 0.439514696598053,
+        "bbox_2d": [
+          6.796779632568359,
+          231.75900268554688,
+          237.04214477539062,
+          403.7405700683594
+        ],
+        "mask_ref": "points_probe/masks/sofa_chair_1.png",
+        "centroid_3d": [
+          -1.0661630630493164,
+          0.32754266262054443,
+          2.7392998933792114
+        ],
+        "extent_3d": [
+          1.331847757101059,
+          0.8102021291851997,
+          1.4819355010986328
+        ],
+        "bbox_3d": {
+          "min": [
+            -1.8224313259124756,
+            -0.09551311284303665,
+            2.102814197540283
+          ],
+          "max": [
+            -0.4905835688114166,
+            0.7146890163421631,
+            3.584749698638916
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 29108,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "table_1",
+        "label": "table",
+        "score": 0.39941057562828064,
+        "bbox_2d": [
+          359.2508544921875,
+          334.0380554199219,
+          632.9375,
+          478.7530517578125
+        ],
+        "mask_ref": "points_probe/masks/table_1.png",
+        "centroid_3d": [
+          0.5888529717922211,
+          0.6055116355419159,
+          1.8714061379432678
+        ],
+        "extent_3d": [
+          1.059262901544571,
+          0.5367464125156403,
+          1.039431095123291
+        ],
+        "bbox_3d": {
+          "min": [
+            0.20001348853111267,
+            0.4203053414821625,
+            1.6673974990844727
+          ],
+          "max": [
+            1.2592763900756836,
+            0.9570517539978027,
+            2.7068285942077637
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 30660,
+        "centroid_source": "mask"
+      },
+      {
+        "id": "picture_4",
+        "label": "picture",
+        "score": 0.3324681222438812,
+        "bbox_2d": [
+          71.1279296875,
+          127.36370086669922,
+          93.20524597167969,
+          165.03195190429688
+        ],
+        "mask_ref": "points_probe/masks/picture_4.png",
+        "centroid_3d": [
+          -1.9192111492156982,
+          -0.82236248254776,
+          4.0815863609313965
+        ],
+        "extent_3d": [
+          0.14699101448059082,
+          0.2872832417488098,
+          0.14869070053100586
+        ],
+        "bbox_3d": {
+          "min": [
+            -1.9953880310058594,
+            -0.9591855406761169,
+            4.005771160125732
+          ],
+          "max": [
+            -1.8483970165252686,
+            -0.6719022989273071,
+            4.154461860656738
+          ]
+        },
+        "attributes": {},
+        "frame": "camera",
+        "n_points": 809,
+        "centroid_source": "mask"
+      }
+    ],
+    "edges": [
+      {
+        "source": "sofa_1",
+        "target": "picture_1",
+        "relation": "distance",
+        "value": 1.7645311366680982,
+        "metric": {
+          "distance_m": 1.7645311366680982,
+          "delta_x": -0.540273129940033,
+          "delta_y": 1.4286021888256073,
+          "delta_z": -0.8836123943328857,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": 1.3369477987289429,
+          "b_y": -1.1095006465911865,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.540273129940033,
+          "tol": 0.05,
+          "a_x": 0.7966746687889099,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_1",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.8836123943328857,
+          "tol": 0.05,
+          "a_z": 3.1745684146881104,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_1",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.4286021888256073,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "mirror_1",
+        "relation": "distance",
+        "value": 1.9079214215509432,
+        "metric": {
+          "distance_m": 1.9079214215509432,
+          "delta_x": 1.0965121984481812,
+          "delta_y": 1.3560744225978851,
+          "delta_z": -0.7738780975341797,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -0.29983752965927124,
+          "b_y": -1.0369728803634644,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "mirror_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.0965121984481812,
+          "tol": 0.05,
+          "a_x": -0.29983752965927124,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "mirror_1",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.7738780975341797,
+          "tol": 0.05,
+          "a_z": 3.1745684146881104,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "mirror_1",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.3560744225978851,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "chair_1",
+        "relation": "distance",
+        "value": 2.0664161031161075,
+        "metric": {
+          "distance_m": 2.0664161031161075,
+          "delta_x": 1.5362115502357483,
+          "delta_y": -0.33441635966300964,
+          "delta_z": 1.3410053253173828,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -0.7395368814468384,
+          "b_y": 0.6535179018974304,
+          "b_z": 1.8335630893707275
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.5362115502357483,
+          "tol": 0.05,
+          "a_x": -0.7395368814468384,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.3410053253173828,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 3.1745684146881104
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.33441635966300964,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_2",
+        "relation": "distance",
+        "value": 2.5415539219191308,
+        "metric": {
+          "distance_m": 2.5415539219191308,
+          "delta_x": 1.9627419114112854,
+          "delta_y": 1.378924697637558,
+          "delta_z": -0.8400638103485107,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -1.1660672426223755,
+          "b_y": -1.0598231554031372,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_2",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.9627419114112854,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_2",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.8400638103485107,
+          "tol": 0.05,
+          "a_z": 3.1745684146881104,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_2",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.378924697637558,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_3",
+        "relation": "distance",
+        "value": 2.4326910152479004,
+        "metric": {
+          "distance_m": 2.4326910152479004,
+          "delta_x": 1.9516381621360779,
+          "delta_y": 1.1557089984416962,
+          "delta_z": -0.8794491291046143,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_3",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.9516381621360779,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_3",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.8794491291046143,
+          "tol": 0.05,
+          "a_z": 3.1745684146881104,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_3",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.1557089984416962,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 1.9130327632625626,
+        "metric": {
+          "distance_m": 1.9130327632625626,
+          "delta_x": 1.8628377318382263,
+          "delta_y": -0.008441120386123657,
+          "delta_z": 0.4352685213088989,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "sofa_chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.8628377318382263,
+          "tol": 0.05,
+          "a_x": -1.0661630630493164,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "sofa_chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -0.4352685213088989,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 3.1745684146881104
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 1.3503527386656395,
+        "metric": {
+          "distance_m": 1.3503527386656395,
+          "delta_x": 0.20782169699668884,
+          "delta_y": -0.2864100933074951,
+          "delta_z": 1.3031622767448425,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "table_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.20782169699668884,
+          "tol": 0.05,
+          "a_x": 0.5888529717922211,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.3031622767448425,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 3.1745684146881104
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.2864100933074951,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 3.082475863833792,
+        "metric": {
+          "distance_m": 3.082475863833792,
+          "delta_x": 2.715885818004608,
+          "delta_y": 1.1414640247821808,
+          "delta_z": -0.9070179462432861,
+          "a_x": 0.7966746687889099,
+          "a_y": 0.3191015422344208,
+          "a_z": 3.1745684146881104,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.715885818004608,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": 0.7966746687889099
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.9070179462432861,
+          "tol": 0.05,
+          "a_z": 3.1745684146881104,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_1",
+        "target": "picture_4",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.1414640247821808,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "mirror_1",
+        "relation": "distance",
+        "value": 1.6420621498575514,
+        "metric": {
+          "distance_m": 1.6420621498575514,
+          "delta_x": 1.6367853283882141,
+          "delta_y": -0.07252776622772217,
+          "delta_z": 0.10973429679870605,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -0.29983752965927124,
+          "b_y": -1.0369728803634644,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "mirror_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.6367853283882141,
+          "tol": 0.05,
+          "a_x": -0.29983752965927124,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "mirror_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -0.10973429679870605,
+          "tol": 0.05,
+          "a_z": 3.94844651222229,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "mirror_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.07252776622772217,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "chair_1",
+        "relation": "distance",
+        "value": 3.5169513826468495,
+        "metric": {
+          "distance_m": 3.5169513826468495,
+          "delta_x": 2.0764846801757812,
+          "delta_y": -1.763018548488617,
+          "delta_z": 2.2246177196502686,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -0.7395368814468384,
+          "b_y": 0.6535179018974304,
+          "b_z": 1.8335630893707275
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.0764846801757812,
+          "tol": 0.05,
+          "a_x": -0.7395368814468384,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.2246177196502686,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.763018548488617,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_2",
+        "relation": "distance",
+        "value": 2.503886704611198,
+        "metric": {
+          "distance_m": 2.503886704611198,
+          "delta_x": 2.5030150413513184,
+          "delta_y": -0.049677491188049316,
+          "delta_z": 0.043548583984375,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -1.1660672426223755,
+          "b_y": -1.0598231554031372,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_2",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.5030150413513184,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_3",
+        "relation": "distance",
+        "value": 2.5068127001656313,
+        "metric": {
+          "distance_m": 2.5068127001656313,
+          "delta_x": 2.491911292076111,
+          "delta_y": -0.27289319038391113,
+          "delta_z": 0.004163265228271484,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_3",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.491911292076111,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_3",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.27289319038391113,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 3.095073853107703,
+        "metric": {
+          "distance_m": 3.095073853107703,
+          "delta_x": 2.4031108617782593,
+          "delta_y": -1.437043309211731,
+          "delta_z": 1.3188809156417847,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "sofa_chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.4031108617782593,
+          "tol": 0.05,
+          "a_x": -1.0661630630493164,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "sofa_chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.3188809156417847,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "sofa_chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.437043309211731,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 2.878002164701059,
+        "metric": {
+          "distance_m": 2.878002164701059,
+          "delta_x": 0.7480948269367218,
+          "delta_y": -1.7150122821331024,
+          "delta_z": 2.1867746710777283,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "table_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.7480948269367218,
+          "tol": 0.05,
+          "a_x": 0.5888529717922211,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.1867746710777283,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 4.058180809020996
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.7150122821331024,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 3.2688785904940567,
+        "metric": {
+          "distance_m": 3.2688785904940567,
+          "delta_x": 3.256158947944641,
+          "delta_y": -0.2871381640434265,
+          "delta_z": -0.02340555191040039,
+          "a_x": 1.3369477987289429,
+          "a_y": -1.1095006465911865,
+          "a_z": 4.058180809020996,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -3.256158947944641,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": 1.3369477987289429
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_1",
+        "target": "picture_4",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.2871381640434265,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "chair_1",
+        "relation": "distance",
+        "value": 2.7429594413924168,
+        "metric": {
+          "distance_m": 2.7429594413924168,
+          "delta_x": 0.43969935178756714,
+          "delta_y": -1.6904907822608948,
+          "delta_z": 2.1148834228515625,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -0.7395368814468384,
+          "b_y": 0.6535179018974304,
+          "b_z": 1.8335630893707275
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.43969935178756714,
+          "tol": 0.05,
+          "a_x": -0.7395368814468384,
+          "b_x": -0.29983752965927124
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.1148834228515625,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.6904907822608948,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_2",
+        "relation": "distance",
+        "value": 0.8690550035931396,
+        "metric": {
+          "distance_m": 0.8690550035931396,
+          "delta_x": 0.8662297129631042,
+          "delta_y": 0.02285027503967285,
+          "delta_z": -0.06618571281433105,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.1660672426223755,
+          "b_y": -1.0598231554031372,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_2",
+        "relation": "near",
+        "value": true,
+        "metric": {
+          "distance_m": 0.8690550035931396,
+          "delta_x": 0.8662297129631042,
+          "delta_y": 0.02285027503967285,
+          "delta_z": -0.06618571281433105,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.1660672426223755,
+          "b_y": -1.0598231554031372,
+          "b_z": 4.014632225036621,
+          "thresh_m": 1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_2",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.8662297129631042,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": -0.29983752965927124
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_2",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.06618571281433105,
+          "tol": 0.05,
+          "a_z": 3.94844651222229,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_3",
+        "relation": "distance",
+        "value": 0.8846083651409189,
+        "metric": {
+          "distance_m": 0.8846083651409189,
+          "delta_x": 0.8551259636878967,
+          "delta_y": -0.20036542415618896,
+          "delta_z": -0.10557103157043457,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_3",
+        "relation": "near",
+        "value": true,
+        "metric": {
+          "distance_m": 0.8846083651409189,
+          "delta_x": 0.8551259636878967,
+          "delta_y": -0.20036542415618896,
+          "delta_z": -0.10557103157043457,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725,
+          "thresh_m": 1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_3",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.8551259636878967,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": -0.29983752965927124
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_3",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.10557103157043457,
+          "tol": 0.05,
+          "a_z": 3.94844651222229,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_3",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.20036542415618896,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 1.9776736424471382,
+        "metric": {
+          "distance_m": 1.9776736424471382,
+          "delta_x": 0.7663255333900452,
+          "delta_y": -1.3645155429840088,
+          "delta_z": 1.2091466188430786,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "sofa_chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.7663255333900452,
+          "tol": 0.05,
+          "a_x": -1.0661630630493164,
+          "b_x": -0.29983752965927124
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "sofa_chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.2091466188430786,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "sofa_chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.3645155429840088,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 2.7931385409148928,
+        "metric": {
+          "distance_m": 2.7931385409148928,
+          "delta_x": -0.8886905014514923,
+          "delta_y": -1.6424845159053802,
+          "delta_z": 2.077040374279022,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "table_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.8886905014514923,
+          "tol": 0.05,
+          "a_x": -0.29983752965927124,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.077040374279022,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 3.94844651222229
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.6424845159053802,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 1.6389492859390684,
+        "metric": {
+          "distance_m": 1.6389492859390684,
+          "delta_x": 1.619373619556427,
+          "delta_y": -0.21461039781570435,
+          "delta_z": -0.13313984870910645,
+          "a_x": -0.29983752965927124,
+          "a_y": -1.0369728803634644,
+          "a_z": 3.94844651222229,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.619373619556427,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": -0.29983752965927124
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.13313984870910645,
+          "tol": 0.05,
+          "a_z": 3.94844651222229,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "mirror_1",
+        "target": "picture_4",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.21461039781570435,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_2",
+        "relation": "distance",
+        "value": 2.8061589944603513,
+        "metric": {
+          "distance_m": 2.8061589944603513,
+          "delta_x": 0.4265303611755371,
+          "delta_y": 1.7133410573005676,
+          "delta_z": -2.1810691356658936,
+          "a_x": -0.7395368814468384,
+          "a_y": 0.6535179018974304,
+          "a_z": 1.8335630893707275,
+          "b_x": -1.1660672426223755,
+          "b_y": -1.0598231554031372,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_2",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.4265303611755371,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": -0.7395368814468384
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_2",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -2.1810691356658936,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_2",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.7133410573005676,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_3",
+        "relation": "distance",
+        "value": 2.7061912047939543,
+        "metric": {
+          "distance_m": 2.7061912047939543,
+          "delta_x": 0.4154266119003296,
+          "delta_y": 1.4901253581047058,
+          "delta_z": -2.220454454421997,
+          "a_x": -0.7395368814468384,
+          "a_y": 0.6535179018974304,
+          "a_z": 1.8335630893707275,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_3",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.4154266119003296,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": -0.7395368814468384
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_3",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -2.220454454421997,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_3",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.4901253581047058,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 1.0165154584487837,
+        "metric": {
+          "distance_m": 1.0165154584487837,
+          "delta_x": 0.326626181602478,
+          "delta_y": 0.325975239276886,
+          "delta_z": -0.9057368040084839,
+          "a_x": -0.7395368814468384,
+          "a_y": 0.6535179018974304,
+          "a_z": 1.8335630893707275,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "sofa_chair_1",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.326626181602478,
+          "tol": 0.05,
+          "a_x": -1.0661630630493164,
+          "b_x": -0.7395368814468384
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "sofa_chair_1",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.9057368040084839,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "sofa_chair_1",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 0.325975239276886,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 1.3297955858413542,
+        "metric": {
+          "distance_m": 1.3297955858413542,
+          "delta_x": -1.3283898532390594,
+          "delta_y": 0.048006266355514526,
+          "delta_z": -0.03784304857254028,
+          "a_x": -0.7395368814468384,
+          "a_y": 0.6535179018974304,
+          "a_z": 1.8335630893707275,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "table_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.3283898532390594,
+          "tol": 0.05,
+          "a_x": -0.7395368814468384,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 2.9365733290187754,
+        "metric": {
+          "distance_m": 2.9365733290187754,
+          "delta_x": 1.1796742677688599,
+          "delta_y": 1.4758803844451904,
+          "delta_z": -2.248023271560669,
+          "a_x": -0.7395368814468384,
+          "a_y": 0.6535179018974304,
+          "a_z": 1.8335630893707275,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.1796742677688599,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": -0.7395368814468384
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -2.248023271560669,
+          "tol": 0.05,
+          "a_z": 1.8335630893707275,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "chair_1",
+        "target": "picture_4",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.4758803844451904,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_3",
+        "relation": "distance",
+        "value": 0.22693555241297916,
+        "metric": {
+          "distance_m": 0.22693555241297916,
+          "delta_x": -0.01110374927520752,
+          "delta_y": -0.22321569919586182,
+          "delta_z": -0.039385318756103516,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_3",
+        "relation": "near",
+        "value": true,
+        "metric": {
+          "distance_m": 0.22693555241297916,
+          "delta_x": -0.01110374927520752,
+          "delta_y": -0.22321569919586182,
+          "delta_z": -0.039385318756103516,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": -1.154963493347168,
+          "b_y": -0.8366074562072754,
+          "b_z": 4.054017543792725,
+          "thresh_m": 1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_3",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.22321569919586182,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 1.887124085556488,
+        "metric": {
+          "distance_m": 1.887124085556488,
+          "delta_x": -0.09990417957305908,
+          "delta_y": -1.3873658180236816,
+          "delta_z": 1.2753323316574097,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "sofa_chair_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.09990417957305908,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": -1.0661630630493164
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "sofa_chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.2753323316574097,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "sofa_chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.3873658180236816,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 3.2321050393343445,
+        "metric": {
+          "distance_m": 3.2321050393343445,
+          "delta_x": -1.7549202144145966,
+          "delta_y": -1.665334790945053,
+          "delta_z": 2.1432260870933533,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "table_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.7549202144145966,
+          "tol": 0.05,
+          "a_x": -1.1660672426223755,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.1432260870933533,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 4.014632225036621
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.665334790945053,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 0.7925251866691658,
+        "metric": {
+          "distance_m": 0.7925251866691658,
+          "delta_x": 0.7531439065933228,
+          "delta_y": -0.2374606728553772,
+          "delta_z": -0.06695413589477539,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_4",
+        "relation": "near",
+        "value": true,
+        "metric": {
+          "distance_m": 0.7925251866691658,
+          "delta_x": 0.7531439065933228,
+          "delta_y": -0.2374606728553772,
+          "delta_z": -0.06695413589477539,
+          "a_x": -1.1660672426223755,
+          "a_y": -1.0598231554031372,
+          "a_z": 4.014632225036621,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965,
+          "thresh_m": 1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.7531439065933228,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": -1.1660672426223755
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -0.06695413589477539,
+          "tol": 0.05,
+          "a_z": 4.014632225036621,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_2",
+        "target": "picture_4",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.2374606728553772,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "sofa_chair_1",
+        "relation": "distance",
+        "value": 1.758298471789343,
+        "metric": {
+          "distance_m": 1.758298471789343,
+          "delta_x": -0.08880043029785156,
+          "delta_y": -1.1641501188278198,
+          "delta_z": 1.3147176504135132,
+          "a_x": -1.154963493347168,
+          "a_y": -0.8366074562072754,
+          "a_z": 4.054017543792725,
+          "b_x": -1.0661630630493164,
+          "b_y": 0.32754266262054443,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "sofa_chair_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.08880043029785156,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": -1.0661630630493164
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "sofa_chair_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -1.3147176504135132,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "sofa_chair_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.1641501188278198,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 3.1439459104480294,
+        "metric": {
+          "distance_m": 3.1439459104480294,
+          "delta_x": -1.743816465139389,
+          "delta_y": -1.4421190917491913,
+          "delta_z": 2.182611405849457,
+          "a_x": -1.154963493347168,
+          "a_y": -0.8366074562072754,
+          "a_z": 4.054017543792725,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "table_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.743816465139389,
+          "tol": 0.05,
+          "a_x": -1.154963493347168,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -2.182611405849457,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 4.054017543792725
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 1.4421190917491913,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 0.7648774009300636,
+        "metric": {
+          "distance_m": 0.7648774009300636,
+          "delta_x": 0.7642476558685303,
+          "delta_y": -0.01424497365951538,
+          "delta_z": -0.027568817138671875,
+          "a_x": -1.154963493347168,
+          "a_y": -0.8366074562072754,
+          "a_z": 4.054017543792725,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "picture_4",
+        "relation": "near",
+        "value": true,
+        "metric": {
+          "distance_m": 0.7648774009300636,
+          "delta_x": 0.7642476558685303,
+          "delta_y": -0.01424497365951538,
+          "delta_z": -0.027568817138671875,
+          "a_x": -1.154963493347168,
+          "a_y": -0.8366074562072754,
+          "a_z": 4.054017543792725,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965,
+          "thresh_m": 1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "picture_3",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.7642476558685303,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": -1.154963493347168
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "table_1",
+        "relation": "distance",
+        "value": 1.88933437914369,
+        "metric": {
+          "distance_m": 1.88933437914369,
+          "delta_x": -1.6550160348415375,
+          "delta_y": -0.27796897292137146,
+          "delta_z": 0.8678937554359436,
+          "a_x": -1.0661630630493164,
+          "a_y": 0.32754266262054443,
+          "a_z": 2.7392998933792114,
+          "b_x": 0.5888529717922211,
+          "b_y": 0.6055116355419159,
+          "b_z": 1.8714061379432678
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "table_1",
+        "relation": "left_of",
+        "value": true,
+        "metric": {
+          "delta_x": -1.6550160348415375,
+          "tol": 0.05,
+          "a_x": -1.0661630630493164,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "table_1",
+        "relation": "behind",
+        "value": true,
+        "metric": {
+          "delta_z": -0.8678937554359436,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 2.7392998933792114
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "table_1",
+        "relation": "above",
+        "value": true,
+        "metric": {
+          "delta_up": 0.27796897292137146,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 1.962576327476307,
+        "metric": {
+          "distance_m": 1.962576327476307,
+          "delta_x": 0.8530480861663818,
+          "delta_y": 1.1499051451683044,
+          "delta_z": -1.342286467552185,
+          "a_x": -1.0661630630493164,
+          "a_y": 0.32754266262054443,
+          "a_z": 2.7392998933792114,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -0.8530480861663818,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": -1.0661630630493164
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -1.342286467552185,
+          "tol": 0.05,
+          "a_z": 2.7392998933792114,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "sofa_chair_1",
+        "target": "picture_4",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.1499051451683044,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "table_1",
+        "target": "picture_4",
+        "relation": "distance",
+        "value": 3.635121284123193,
+        "metric": {
+          "distance_m": 3.635121284123193,
+          "delta_x": 2.5080641210079193,
+          "delta_y": 1.427874118089676,
+          "delta_z": -2.2101802229881287,
+          "a_x": 0.5888529717922211,
+          "a_y": 0.6055116355419159,
+          "a_z": 1.8714061379432678,
+          "b_x": -1.9192111492156982,
+          "b_y": -0.82236248254776,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "table_1",
+        "target": "picture_4",
+        "relation": "right_of",
+        "value": true,
+        "metric": {
+          "delta_x": -2.5080641210079193,
+          "tol": 0.05,
+          "a_x": -1.9192111492156982,
+          "b_x": 0.5888529717922211
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "table_1",
+        "target": "picture_4",
+        "relation": "front_of",
+        "value": true,
+        "metric": {
+          "delta_z": -2.2101802229881287,
+          "tol": 0.05,
+          "a_z": 1.8714061379432678,
+          "b_z": 4.0815863609313965
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      },
+      {
+        "source": "table_1",
+        "target": "picture_4",
+        "relation": "below",
+        "value": true,
+        "metric": {
+          "delta_up": 1.427874118089676,
+          "tol": 0.05,
+          "up_axis": 1.0,
+          "up_sign": -1.0
+        },
+        "method": "geometry_v1",
+        "confidence": 1.0
+      }
+    ],
+    "build_meta": {
+      "config": {
+        "prompt": "sofa. chair. table. picture. mirror.",
+        "box_threshold": 0.3,
+        "text_threshold": 0.25,
+        "min_points": 30,
+        "min_box_area_px": 64.0,
+        "dedupe_iou": 0.85,
+        "max_objects": 40,
+        "tol_m": 0.05,
+        "near_m": 1.0,
+        "relation_policy": "distance_plus_true",
+        "estimate_up": true,
+        "up_band": 0.2,
+        "max_tilt_deg": 25.0,
+        "known_intrinsics": [
+          518.86,
+          519.47,
+          325.58,
+          253.74
+        ]
+      },
+      "timings_ms": {
+        "depth_ms": 2031.6,
+        "detect_ms": 1220.1,
+        "segment_ms": 272.8,
+        "nodes_ms": 33.3,
+        "up_axis_ms": 13.7,
+        "relations_ms": 4.5
+      },
+      "image_hw": [
+        480,
+        640
+      ],
+      "grid_hw": [
+        480,
+        640
+      ],
+      "grid_scale_vs_image": [
+        1.0,
+        1.0
+      ],
+      "depth_range_m": [
+        1.5948,
+        4.3939
+      ],
+      "n_detections_raw": 9,
+      "n_detections_kept": 9,
+      "n_nodes": 9,
+      "n_edges": 137,
+      "n_dropped": 0,
+      "n_fallbacks": 0,
+      "dropped": [],
+      "fallbacks": [],
+      "mask_box_coverage_mean": 0.8041,
+      "mask_box_coverage_min": 0.4624,
+      "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+      },
+      "up_axis": "-y",
+      "up_axis_tilt_deg": 11.95,
+      "up_axis_reliable": true,
+      "up_axis_reason": "ok",
+      "scale_calibrated": false,
+      "intrinsics_source": "provided",
+      "intrinsics": [
+        [
+          518.86,
+          0.0,
+          325.58
+        ],
+        [
+          0.0,
+          519.47,
+          253.74
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "fov": {
+        "hfov_deg": 63.33,
+        "vfov_deg": 49.59,
+        "plausible": true,
+        "reason": "ok"
+      },
+      "perception": {
+        "device": "cuda",
+        "device_total_mib": 8188.0,
+        "resident_mb": 1146.7,
+        "resident_pct": 14.0,
+        "peak_mb": 2177.2,
+        "models": {
+          "grounding": {
+            "role": "grounding",
+            "hub_id": "IDEA-Research/grounding-dino-tiny",
+            "loaded": true,
+            "source": "local",
+            "load_s": 11.69,
+            "resident_mb": 660.0,
+            "n_params_m": 172.3,
+            "note": "开放词汇检测；prompt 须小写句点结尾"
+          },
+          "segmentation": {
+            "role": "segmentation",
+            "hub_id": "facebook/sam2.1-hiera-base-plus",
+            "loaded": true,
+            "source": "local",
+            "load_s": 0.64,
+            "resident_mb": 282.2,
+            "n_params_m": 73.3,
+            "note": "提示式分割；必须批量一次调用（快 7.57×）"
+          },
+          "depth": {
+            "role": "depth",
+            "hub_id": "lpiccinelli/unidepth-v2-vits14",
+            "loaded": true,
+            "source": "hub",
+            "load_s": 11.1,
+            "resident_mb": 132.3,
+            "n_params_m": 34.2,
+            "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+          }
+        }
+      },
+      "image_path": "D:\\3D_Spatial_Agent\\uploads\\upload_probe\\rgb.png"
+    }
+  }
+}

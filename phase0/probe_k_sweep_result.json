@@ -1,0 +1,918 @@
+{
+  "self_consistency": {
+    "pred_K": [
+      163.73776245117188,
+      0.0,
+      322.0,
+      0.0,
+      163.41827392578125,
+      248.1103515625,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "pred_hfov_deg": 125.80411529541016,
+    "pred_over_gt_fx": 0.31557341469818495,
+    "replay_vs_nocam_mm": {
+      "median": 1.6417,
+      "p90": 3.7566,
+      "max": 18.1752
+    },
+    "err3d_median_m": {
+      "no_camera": 1.943,
+      "replay_pred_K": 1.9435
+    },
+    "ok": true
+  },
+  "sweep": [
+    {
+      "k": 0.15,
+      "fx": 77.8286865234375,
+      "hfov_deg": 152.66047976492175,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1912,
+      "err3d_median_m": 5.0567,
+      "err3d_p90_m": 8.6771,
+      "err_xy_median_m": 4.9824,
+      "err3d_rel_median": 1.5403,
+      "bear_err_px_median": 797.0,
+      "bear_err_median_tan": 1.536041,
+      "bear_span_ratio": 6.7083,
+      "xspan_m": 22.4514,
+      "xspan_ratio": 3.5766,
+      "zone_outer_over_inner": 1.2565,
+      "ms": 43.8
+    },
+    {
+      "k": 0.2,
+      "fx": 103.77158203125,
+      "hfov_deg": 144.06567413346863,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1218,
+      "err3d_median_m": 4.006,
+      "err3d_p90_m": 6.8197,
+      "err_xy_median_m": 3.9489,
+      "err3d_rel_median": 1.2025,
+      "bear_err_px_median": 562.6,
+      "bear_err_median_tan": 1.084349,
+      "bear_span_ratio": 5.0313,
+      "xspan_m": 18.9505,
+      "xspan_ratio": 3.0189,
+      "zone_outer_over_inner": 1.3354,
+      "ms": 39.6
+    },
+    {
+      "k": 0.25,
+      "fx": 129.7144775390625,
+      "hfov_deg": 135.8688917864004,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1555,
+      "err3d_median_m": 2.8573,
+      "err3d_p90_m": 5.0117,
+      "err_xy_median_m": 2.7719,
+      "err3d_rel_median": 0.8551,
+      "bear_err_px_median": 422.8,
+      "bear_err_median_tan": 0.814896,
+      "bear_span_ratio": 4.025,
+      "xspan_m": 14.8953,
+      "xspan_ratio": 2.3729,
+      "zone_outer_over_inner": 1.3482,
+      "ms": 33.3
+    },
+    {
+      "k": 0.3,
+      "fx": 155.657373046875,
+      "hfov_deg": 128.1207089777068,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1937,
+      "err3d_median_m": 2.0879,
+      "err3d_p90_m": 3.6598,
+      "err_xy_median_m": 1.9598,
+      "err3d_rel_median": 0.6286,
+      "bear_err_px_median": 329.6,
+      "bear_err_median_tan": 0.635157,
+      "bear_span_ratio": 3.3542,
+      "xspan_m": 11.8838,
+      "xspan_ratio": 1.8931,
+      "zone_outer_over_inner": 1.267,
+      "ms": 32.0
+    },
+    {
+      "k": 0.3155,
+      "fx": 163.69967065429688,
+      "hfov_deg": 125.81492881604687,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1996,
+      "err3d_median_m": 1.9273,
+      "err3d_p90_m": 3.3843,
+      "err_xy_median_m": 1.7861,
+      "err3d_rel_median": 0.5858,
+      "bear_err_px_median": 306.3,
+      "bear_err_median_tan": 0.590358,
+      "bear_span_ratio": 3.1894,
+      "xspan_m": 11.2385,
+      "xspan_ratio": 1.7903,
+      "zone_outer_over_inner": 1.2384,
+      "ms": 33.8
+    },
+    {
+      "k": 0.35,
+      "fx": 181.6002685546875,
+      "hfov_deg": 120.85010626378788,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2135,
+      "err3d_median_m": 1.638,
+      "err3d_p90_m": 2.8559,
+      "err_xy_median_m": 1.4526,
+      "err3d_rel_median": 0.4978,
+      "bear_err_px_median": 262.0,
+      "bear_err_median_tan": 0.504888,
+      "bear_span_ratio": 2.875,
+      "xspan_m": 9.9928,
+      "xspan_ratio": 1.5919,
+      "zone_outer_over_inner": 1.1613,
+      "ms": 39.7
+    },
+    {
+      "k": 0.4,
+      "fx": 207.5431640625,
+      "hfov_deg": 114.06734330771972,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2239,
+      "err3d_median_m": 1.3821,
+      "err3d_p90_m": 2.3173,
+      "err_xy_median_m": 1.0925,
+      "err3d_rel_median": 0.4051,
+      "bear_err_px_median": 211.6,
+      "bear_err_median_tan": 0.407794,
+      "bear_span_ratio": 2.5156,
+      "xspan_m": 8.6811,
+      "xspan_ratio": 1.3829,
+      "zone_outer_over_inner": 1.0018,
+      "ms": 40.3
+    },
+    {
+      "k": 0.5,
+      "fx": 259.428955078125,
+      "hfov_deg": 101.93556524446223,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2258,
+      "err3d_median_m": 0.9809,
+      "err3d_p90_m": 1.6934,
+      "err_xy_median_m": 0.6566,
+      "err3d_rel_median": 0.3023,
+      "bear_err_px_median": 141.3,
+      "bear_err_median_tan": 0.272355,
+      "bear_span_ratio": 2.0125,
+      "xspan_m": 7.3329,
+      "xspan_ratio": 1.1682,
+      "zone_outer_over_inner": 0.9269,
+      "ms": 48.3
+    },
+    {
+      "k": 0.6,
+      "fx": 311.31474609375,
+      "hfov_deg": 91.57638326910114,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2424,
+      "err3d_median_m": 0.7768,
+      "err3d_p90_m": 1.5301,
+      "err_xy_median_m": 0.3201,
+      "err3d_rel_median": 0.249,
+      "bear_err_px_median": 94.6,
+      "bear_err_median_tan": 0.182256,
+      "bear_span_ratio": 1.6771,
+      "xspan_m": 6.3291,
+      "xspan_ratio": 1.0083,
+      "zone_outer_over_inner": 0.8463,
+      "ms": 40.5
+    },
+    {
+      "k": 0.7,
+      "fx": 363.200537109375,
+      "hfov_deg": 82.763713487864,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2349,
+      "err3d_median_m": 0.7123,
+      "err3d_p90_m": 1.471,
+      "err_xy_median_m": 0.1414,
+      "err3d_rel_median": 0.2152,
+      "bear_err_px_median": 61.1,
+      "bear_err_median_tan": 0.117799,
+      "bear_span_ratio": 1.4375,
+      "xspan_m": 5.4809,
+      "xspan_ratio": 0.8731,
+      "zone_outer_over_inner": 0.7116,
+      "ms": 33.3
+    },
+    {
+      "k": 0.8,
+      "fx": 415.086328125,
+      "hfov_deg": 75.25898205206697,
+      "degenerate": false,
+      "depth_absrel_mean": 0.2031,
+      "err3d_median_m": 0.5929,
+      "err3d_p90_m": 1.3241,
+      "err_xy_median_m": 0.0831,
+      "err3d_rel_median": 0.1817,
+      "bear_err_px_median": 36.0,
+      "bear_err_median_tan": 0.069426,
+      "bear_span_ratio": 1.2578,
+      "xspan_m": 4.8599,
+      "xspan_ratio": 0.7742,
+      "zone_outer_over_inner": 0.6621,
+      "ms": 41.5
+    },
+    {
+      "k": 0.9,
+      "fx": 466.972119140625,
+      "hfov_deg": 68.84301134598083,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1612,
+      "err3d_median_m": 0.4303,
+      "err3d_p90_m": 1.1449,
+      "err_xy_median_m": 0.0561,
+      "err3d_rel_median": 0.138,
+      "bear_err_px_median": 16.4,
+      "bear_err_median_tan": 0.031696,
+      "bear_span_ratio": 1.1181,
+      "xspan_m": 4.397,
+      "xspan_ratio": 0.7005,
+      "zone_outer_over_inner": 0.633,
+      "ms": 70.7
+    },
+    {
+      "k": 1.0,
+      "fx": 518.85791015625,
+      "hfov_deg": 63.327521774950746,
+      "degenerate": false,
+      "depth_absrel_mean": 0.117,
+      "err3d_median_m": 0.2673,
+      "err3d_p90_m": 0.9832,
+      "err_xy_median_m": 0.0673,
+      "err3d_rel_median": 0.0912,
+      "bear_err_px_median": 2.6,
+      "bear_err_median_tan": 0.005029,
+      "bear_span_ratio": 1.0063,
+      "xspan_m": 4.078,
+      "xspan_ratio": 0.6496,
+      "zone_outer_over_inner": 0.5847,
+      "ms": 50.9
+    },
+    {
+      "k": 1.1,
+      "fx": 570.743701171875,
+      "hfov_deg": 58.55625572869579,
+      "degenerate": false,
+      "depth_absrel_mean": 0.0755,
+      "err3d_median_m": 0.1284,
+      "err3d_p90_m": 0.8088,
+      "err_xy_median_m": 0.1007,
+      "err3d_rel_median": 0.0448,
+      "bear_err_px_median": 12.0,
+      "bear_err_median_tan": 0.023104,
+      "bear_span_ratio": 0.9148,
+      "xspan_m": 3.8166,
+      "xspan_ratio": 0.608,
+      "zone_outer_over_inner": 0.7257,
+      "ms": 45.0
+    },
+    {
+      "k": 1.25,
+      "fx": 648.5723876953125,
+      "hfov_deg": 52.52266504575748,
+      "degenerate": false,
+      "depth_absrel_mean": 0.0858,
+      "err3d_median_m": 0.3046,
+      "err3d_p90_m": 0.6936,
+      "err_xy_median_m": 0.1641,
+      "err3d_rel_median": 0.0951,
+      "bear_err_px_median": 27.3,
+      "bear_err_median_tan": 0.052614,
+      "bear_span_ratio": 0.805,
+      "xspan_m": 3.5256,
+      "xspan_ratio": 0.5616,
+      "zone_outer_over_inner": 0.87,
+      "ms": 33.7
+    },
+    {
+      "k": 1.5,
+      "fx": 778.286865234375,
+      "hfov_deg": 44.700955067640066,
+      "degenerate": false,
+      "depth_absrel_mean": 0.1312,
+      "err3d_median_m": 0.5405,
+      "err3d_p90_m": 0.7938,
+      "err_xy_median_m": 0.2389,
+      "err3d_rel_median": 0.1691,
+      "bear_err_px_median": 46.0,
+      "bear_err_median_tan": 0.088641,
+      "bear_span_ratio": 0.6708,
+      "xspan_m": 3.1875,
+      "xspan_ratio": 0.5078,
+      "zone_outer_over_inner": 1.1024,
+      "ms": 33.5
+    },
+    {
+      "k": 2.0,
+      "fx": 1037.7158203125,
+      "hfov_deg": 34.2763427753055,
+      "degenerate": false,
+      "depth_absrel_mean": 0.3158,
+      "err3d_median_m": 1.0899,
+      "err3d_p90_m": 1.3916,
+      "err_xy_median_m": 0.336,
+      "err3d_rel_median": 0.3637,
+      "bear_err_px_median": 69.5,
+      "bear_err_median_tan": 0.133938,
+      "bear_span_ratio": 0.5031,
+      "xspan_m": 2.7785,
+      "xspan_ratio": 0.4426,
+      "zone_outer_over_inner": 1.0508,
+      "ms": 32.3
+    },
+    {
+      "k": 2.5,
+      "fx": 1297.144775390625,
+      "hfov_deg": 27.715835944516126,
+      "degenerate": false,
+      "depth_absrel_mean": 0.4559,
+      "err3d_median_m": 1.5828,
+      "err3d_p90_m": 1.9117,
+      "err_xy_median_m": 0.4178,
+      "err3d_rel_median": 0.499,
+      "bear_err_px_median": 83.5,
+      "bear_err_median_tan": 0.160895,
+      "bear_span_ratio": 0.4025,
+      "xspan_m": 2.455,
+      "xspan_ratio": 0.3911,
+      "zone_outer_over_inner": 1.0174,
+      "ms": 32.2
+    },
+    {
+      "k": 3.0,
+      "fx": 1556.57373046875,
+      "hfov_deg": 23.233997608738893,
+      "degenerate": false,
+      "depth_absrel_mean": 0.5635,
+      "err3d_median_m": 2.0018,
+      "err3d_p90_m": 2.3322,
+      "err_xy_median_m": 0.4858,
+      "err3d_rel_median": 0.6055,
+      "bear_err_px_median": 92.9,
+      "bear_err_median_tan": 0.179135,
+      "bear_span_ratio": 0.3354,
+      "xspan_m": 2.2006,
+      "xspan_ratio": 0.3506,
+      "zone_outer_over_inner": 0.9688,
+      "ms": 38.0
+    },
+    {
+      "k": 4.0,
+      "fx": 2075.431640625,
+      "hfov_deg": 17.530230666843465,
+      "degenerate": false,
+      "depth_absrel_mean": 0.7374,
+      "err3d_median_m": 2.6479,
+      "err3d_p90_m": 2.9891,
+      "err_xy_median_m": 0.5852,
+      "err3d_rel_median": 0.7775,
+      "bear_err_px_median": 104.5,
+      "bear_err_median_tan": 0.201325,
+      "bear_span_ratio": 0.2516,
+      "xspan_m": 1.8097,
+      "xspan_ratio": 0.2883,
+      "zone_outer_over_inner": 0.9306,
+      "ms": 42.5
+    }
+  ],
+  "sweep_summary": {
+    "argmin": {
+      "bearing_err_px": {
+        "k": 1.0,
+        "fx": 518.85791015625,
+        "value_px": 2.6,
+        "dev_from_truth_pct": 0.0
+      },
+      "depth_absrel": {
+        "k": 1.1,
+        "fx": 570.743701171875,
+        "value": 0.0755,
+        "dev_from_truth_pct": 10.0
+      },
+      "err3d": {
+        "k": 1.1,
+        "fx": 570.743701171875,
+        "value_m": 0.1284,
+        "dev_from_truth_pct": 10.0
+      }
+    },
+    "at_k1": {
+      "err3d_median_m": 0.2673,
+      "bear_err_px": 2.6
+    },
+    "at_predicted_k": {
+      "k": 0.3155,
+      "err3d_median_m": 1.9273,
+      "bear_err_px": 306.3,
+      "bear_penalty": 117.81,
+      "err3d_penalty": 7.21
+    },
+    "bearing_monotone": {
+      "left": true,
+      "right": true
+    },
+    "bearing_err_px_range": [
+      2.6,
+      797.0
+    ],
+    "depth_absrel_range": [
+      0.0755,
+      0.7374
+    ],
+    "degenerate_k": []
+  },
+  "fine_sweep": {
+    "k_grid": [
+      0.94,
+      0.95,
+      0.96,
+      0.97,
+      0.98,
+      0.99,
+      1.0,
+      1.01,
+      1.02,
+      1.03,
+      1.04,
+      1.05,
+      1.06
+    ],
+    "rows": [
+      {
+        "k": 0.94,
+        "fx": 487.726435546875,
+        "bear_err_px": 9.7,
+        "bear_span_ratio": 1.0705,
+        "err3d_median_m": 0.37,
+        "depth_absrel": 0.1441
+      },
+      {
+        "k": 0.95,
+        "fx": 492.9150146484375,
+        "bear_err_px": 8.2,
+        "bear_span_ratio": 1.0592,
+        "err3d_median_m": 0.3546,
+        "depth_absrel": 0.1398
+      },
+      {
+        "k": 0.96,
+        "fx": 498.10359374999996,
+        "bear_err_px": 6.7,
+        "bear_span_ratio": 1.0482,
+        "err3d_median_m": 0.339,
+        "depth_absrel": 0.1354
+      },
+      {
+        "k": 0.97,
+        "fx": 503.2921728515625,
+        "bear_err_px": 5.2,
+        "bear_span_ratio": 1.0374,
+        "err3d_median_m": 0.3223,
+        "depth_absrel": 0.131
+      },
+      {
+        "k": 0.98,
+        "fx": 508.480751953125,
+        "bear_err_px": 3.8,
+        "bear_span_ratio": 1.0268,
+        "err3d_median_m": 0.3047,
+        "depth_absrel": 0.1264
+      },
+      {
+        "k": 0.99,
+        "fx": 513.6693310546875,
+        "bear_err_px": 2.8,
+        "bear_span_ratio": 1.0164,
+        "err3d_median_m": 0.2864,
+        "depth_absrel": 0.1218
+      },
+      {
+        "k": 1.0,
+        "fx": 518.85791015625,
+        "bear_err_px": 2.6,
+        "bear_span_ratio": 1.0063,
+        "err3d_median_m": 0.2673,
+        "depth_absrel": 0.117
+      },
+      {
+        "k": 1.01,
+        "fx": 524.0464892578125,
+        "bear_err_px": 2.5,
+        "bear_span_ratio": 0.9963,
+        "err3d_median_m": 0.2476,
+        "depth_absrel": 0.1121
+      },
+      {
+        "k": 1.02,
+        "fx": 529.235068359375,
+        "bear_err_px": 2.3,
+        "bear_span_ratio": 0.9865,
+        "err3d_median_m": 0.2278,
+        "depth_absrel": 0.1072
+      },
+      {
+        "k": 1.03,
+        "fx": 534.4236474609376,
+        "bear_err_px": 3.2,
+        "bear_span_ratio": 0.9769,
+        "err3d_median_m": 0.2083,
+        "depth_absrel": 0.1022
+      },
+      {
+        "k": 1.04,
+        "fx": 539.6122265625,
+        "bear_err_px": 4.5,
+        "bear_span_ratio": 0.9675,
+        "err3d_median_m": 0.1902,
+        "depth_absrel": 0.0973
+      },
+      {
+        "k": 1.05,
+        "fx": 544.8008056640625,
+        "bear_err_px": 5.9,
+        "bear_span_ratio": 0.9583,
+        "err3d_median_m": 0.1731,
+        "depth_absrel": 0.0925
+      },
+      {
+        "k": 1.06,
+        "fx": 549.989384765625,
+        "bear_err_px": 7.2,
+        "bear_span_ratio": 0.9493,
+        "err3d_median_m": 0.1577,
+        "depth_absrel": 0.088
+      }
+    ],
+    "argmin_grid_k": 1.02,
+    "argmin_grid_bear_err_px": 2.3,
+    "k_hat_parabolic": 1.01682,
+    "fx_hat": 527.584,
+    "gt_fx": 518.85791015625,
+    "rel_dev_pct": 1.682,
+    "residual_explanation": "两条独立读数同号但量级差约 1%（跨度残差蕴含 k≈1.006，误差极小 k̂=1.0168）；±1% 是本方法在当前分辨率下的分辨极限。正确表述是「模型方位场相对 GT 内参有约 0.6–1.7% 的系统性展宽」，不是一个更精确的数。该量级小于 EXIF 的 4% 量化误差，实务实测可忽略。"
+  },
+  "zoom": [
+    {
+      "s": 1.0,
+      "crop_wh": [
+        640,
+        480
+      ],
+      "offset_xy": [
+        0,
+        0
+      ],
+      "resize_factors": [
+        1.0,
+        1.0
+      ],
+      "gt_K_fx": 518.85791015625,
+      "gt_hfov_deg": 63.327521774950746,
+      "pred_K_fx_on_zoomed": 163.73776245117188,
+      "pred_hfov_deg_as_returned": 125.80411529541016,
+      "err3d_median_m_no_camera": 1.943,
+      "err3d_median_m_gt_camera": 0.2673,
+      "bear_err_px_no_camera": 305.8,
+      "bear_err_px_gt_camera": 2.6,
+      "depth_absrel_no_camera": 0.1984,
+      "depth_absrel_gt_camera": 0.117,
+      "ratio_a_over_b": 7.269,
+      "ms_path_b": 31.3
+    },
+    {
+      "s": 1.5,
+      "crop_wh": [
+        427,
+        320
+      ],
+      "offset_xy": [
+        106,
+        80
+      ],
+      "resize_factors": [
+        1.498829,
+        1.5
+      ],
+      "gt_K_fx": 777.6793032786886,
+      "gt_hfov_deg": 44.73243762472932,
+      "pred_K_fx_on_zoomed": 188.27703857421875,
+      "pred_hfov_deg_as_returned": 119.05780029296875,
+      "err3d_median_m_no_camera": 2.6686,
+      "err3d_median_m_gt_camera": 0.2234,
+      "bear_err_px_no_camera": 512.7,
+      "bear_err_px_gt_camera": 2.6,
+      "depth_absrel_no_camera": 0.1747,
+      "depth_absrel_gt_camera": 0.0951,
+      "ratio_a_over_b": 11.945,
+      "ms_path_b": 34.4
+    },
+    {
+      "s": 2.0,
+      "crop_wh": [
+        320,
+        240
+      ],
+      "offset_xy": [
+        160,
+        120
+      ],
+      "resize_factors": [
+        2.0,
+        2.0
+      ],
+      "gt_K_fx": 1037.7158203125,
+      "gt_hfov_deg": 34.2763427753055,
+      "pred_K_fx_on_zoomed": 248.09048461914062,
+      "pred_hfov_deg_as_returned": 104.42839050292969,
+      "err3d_median_m_no_camera": 2.1517,
+      "err3d_median_m_gt_camera": 0.4899,
+      "bear_err_px_no_camera": 527.9,
+      "bear_err_px_gt_camera": 2.6,
+      "depth_absrel_no_camera": 0.2525,
+      "depth_absrel_gt_camera": 0.0997,
+      "ratio_a_over_b": 4.392,
+      "ms_path_b": 32.0
+    }
+  ],
+  "zoom_summary": {
+    "ratios": [
+      7.269,
+      11.945,
+      4.392
+    ],
+    "all_a_worse": true,
+    "pred_fx_growth_s1_to_s2": 1.5152,
+    "gt_fx_growth_s1_to_s2": 2.0
+  },
+  "tolerance_budget": {
+    "metric": "bear_err_px_median（方位误差，与深度解耦）",
+    "anchor": "k=1（内参正确）处的方位误差",
+    "anchor_bear_err_px": 2.6,
+    "anchor_err3d_median_m": 0.2673,
+    "absolute_targets": [
+      {
+        "target_px": 5.0,
+        "lateral_mm_at_3m": 28.91,
+        "dev_pct": 2.15
+      },
+      {
+        "target_px": 10.0,
+        "lateral_mm_at_3m": 57.82,
+        "dev_pct": 6.62
+      },
+      {
+        "target_px": 25.0,
+        "lateral_mm_at_3m": 144.55,
+        "dev_pct": 18.57
+      },
+      {
+        "target_px": 50.0,
+        "lateral_mm_at_3m": 289.1,
+        "dev_pct": 42.04
+      }
+    ],
+    "px_to_mm_at_3m": 5.782,
+    "relative_points": [
+      {
+        "k": 0.7,
+        "dev_pct": 30.0,
+        "fx": 363.200537109375,
+        "bear_err_px": 61.1,
+        "bear_penalty": 23.5,
+        "err3d_median_m": 0.7123,
+        "err3d_penalty": 2.665
+      },
+      {
+        "k": 0.8,
+        "dev_pct": 20.0,
+        "fx": 415.086328125,
+        "bear_err_px": 36.0,
+        "bear_penalty": 13.846,
+        "err3d_median_m": 0.5929,
+        "err3d_penalty": 2.218
+      },
+      {
+        "k": 0.9,
+        "dev_pct": 10.0,
+        "fx": 466.972119140625,
+        "bear_err_px": 16.4,
+        "bear_penalty": 6.308,
+        "err3d_median_m": 0.4303,
+        "err3d_penalty": 1.61
+      },
+      {
+        "k": 1.0,
+        "dev_pct": 0.0,
+        "fx": 518.85791015625,
+        "bear_err_px": 2.6,
+        "bear_penalty": 1.0,
+        "err3d_median_m": 0.2673,
+        "err3d_penalty": 1.0
+      },
+      {
+        "k": 1.1,
+        "dev_pct": 10.0,
+        "fx": 570.743701171875,
+        "bear_err_px": 12.0,
+        "bear_penalty": 4.615,
+        "err3d_median_m": 0.1284,
+        "err3d_penalty": 0.48
+      },
+      {
+        "k": 1.25,
+        "dev_pct": 25.0,
+        "fx": 648.5723876953125,
+        "bear_err_px": 27.3,
+        "bear_penalty": 10.5,
+        "err3d_median_m": 0.3046,
+        "err3d_penalty": 1.14
+      }
+    ],
+    "dev_pct_for_1p2x_relative": 0.47,
+    "dev_pct_for_1p5x_relative": 1.16,
+    "dev_pct_for_2x_relative": 2.33,
+    "exif_quantisation_example": {
+      "focal_mm": 26,
+      "step_mm": 1,
+      "rel_pct": 3.8
+    },
+    "warning": "不要用 3D 合成误差定容差：其极小被模型视场偏好污染（见 C 段）。也不要用近零基准谈相对涨幅（见 absolute_targets 前的说明）。"
+  },
+  "verdict": {
+    "self_consistency_ok": true,
+    "replay_vs_nocam_median_mm": 1.6417,
+    "causal_metric": "bear_err_px_median（方位，与深度解耦）",
+    "k_optimal_bearing": 1.0,
+    "k_hat_parabolic": 1.01682,
+    "fx_hat_from_data": 527.584,
+    "fx_hat_rel_dev_pct": 1.682,
+    "k_optimal_bearing_dev_pct_from_1": 0.0,
+    "k_optimal_bearing_grid_resolution_pm_pct": 10.0,
+    "k_optimal_sentence_strict_meaning": "极小落在 [0.95, 1.05] 内，且真值 k=1.0 是该区间内的最优采样点；不等于「极小精确等于 1.000」",
+    "bear_span_vs_1_over_k_rel_dev_pct": [
+      0.62,
+      0.64
+    ],
+    "bearing_monotone": true,
+    "bear_err_px_at_predicted_k": 306.3,
+    "bear_err_px_at_best": 2.6,
+    "bearing_penalty_at_predicted_k": 117.81,
+    "depth_penalty_at_predicted_k": 1.71,
+    "k_optimal_err3d": 1.1,
+    "k_optimal_depth_absrel": 1.1,
+    "methodological_warning": "3D 合成误差的极小位置被模型对视场的偏好污染，不可用于反推内参；必须分解为横向（方位）与纵深两部分分别看。",
+    "zoom_ratios": [
+      7.269,
+      11.945,
+      4.392
+    ],
+    "zoom_all_a_worse": true,
+    "anisotropic_bearing_range": 306.53846153846155,
+    "anisotropic_depth_penalty": 1.705982905982906,
+    "tolerance_dev_pct_for_10px": 6.62,
+    "tolerance_dev_pct_1p5x_relative": 1.16
+  },
+  "gt": {
+    "fx": 518.85791015625,
+    "fy": 519.4696044921875,
+    "cx": 325.58245849609375,
+    "cy": 253.7361602783203,
+    "hfov_deg": 63.327521774950746,
+    "image_hw": [
+      480,
+      640
+    ],
+    "depth_valid_px": 209294,
+    "depth_range_m": [
+      1.653,
+      10.0
+    ]
+  },
+  "k_sweep": [
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.3155,
+    0.35,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.25,
+    1.5,
+    2.0,
+    2.5,
+    3.0,
+    4.0
+  ],
+  "zoom_levels": [
+    1.0,
+    1.5,
+    2.0
+  ],
+  "load_s": 3.6,
+  "metrics_reference": {
+    "no_camera_full": {
+      "all": {
+        "n_px": 209294,
+        "depth_absrel_mean": 0.1984,
+        "depth_delta1_25": 0.5709,
+        "err3d_median_m": 1.943,
+        "err3d_p90_m": 3.3709,
+        "err_xy_median_m": 1.8078,
+        "err3d_rel_median": 0.5898,
+        "bear_err_px_median": null
+      },
+      "inner_r50": {
+        "n_px": 109565,
+        "depth_absrel_mean": 0.1978,
+        "depth_delta1_25": 0.52,
+        "err3d_median_m": 1.7065,
+        "err3d_p90_m": 2.6677,
+        "err_xy_median_m": 1.4862,
+        "err3d_rel_median": 0.4629,
+        "bear_err_px_median": null
+      },
+      "outer_r50": {
+        "n_px": 99729,
+        "depth_absrel_mean": 0.1991,
+        "depth_delta1_25": 0.6268,
+        "err3d_median_m": 2.1367,
+        "err3d_p90_m": 3.8269,
+        "err_xy_median_m": 2.0509,
+        "err3d_rel_median": 0.7159,
+        "bear_err_px_median": null
+      },
+      "bearing": {
+        "n_px": 209294,
+        "bear_err_median_tan": 0.589459,
+        "bear_err_px_median": null,
+        "bear_span": 3.404079,
+        "bear_span_gt": 1.06773
+      },
+      "bear_span_ratio": 3.1881,
+      "xspan_m": 11.328,
+      "xspan_gt_m": 6.2773,
+      "xspan_ratio": 1.8046
+    },
+    "replay_pred_K_full": {
+      "all": {
+        "n_px": 209294,
+        "depth_absrel_mean": 0.1982,
+        "depth_delta1_25": 0.5709,
+        "err3d_median_m": 1.9435,
+        "err3d_p90_m": 3.3717,
+        "err_xy_median_m": 1.8087,
+        "err3d_rel_median": 0.59,
+        "bear_err_px_median": null
+      },
+      "inner_r50": {
+        "n_px": 109565,
+        "depth_absrel_mean": 0.1976,
+        "depth_delta1_25": 0.52,
+        "err3d_median_m": 1.7069,
+        "err3d_p90_m": 2.6678,
+        "err_xy_median_m": 1.4869,
+        "err3d_rel_median": 0.4629,
+        "bear_err_px_median": null
+      },
+      "outer_r50": {
+        "n_px": 99729,
+        "depth_absrel_mean": 0.1989,
+        "depth_delta1_25": 0.6269,
+        "err3d_median_m": 2.1375,
+        "err3d_p90_m": 3.8282,
+        "err_xy_median_m": 2.0519,
+        "err3d_rel_median": 0.7163,
+        "bear_err_px_median": null
+      },
+      "bearing": {
+        "n_px": 209294,
+        "bear_err_median_tan": 0.589368,
+        "bear_err_px_median": null,
+        "bear_span": 3.404607,
+        "bear_span_gt": 1.06773
+      },
+      "bear_span_ratio": 3.1886,
+      "xspan_m": 11.3307,
+      "xspan_gt_m": 6.2773,
+      "xspan_ratio": 1.805
+    }
+  }
+}

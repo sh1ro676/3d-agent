@@ -1,0 +1,59 @@
+OK   import llm                                 <module 'llm' from 'D:\\3D_Spatial_Agent\\llm\\__init__.py'>
+OK   import llm.adapter                         <module 'llm.adapter' from 'D:\\3D_Spatial_Agent\\llm\\adapter.py'>
+OK   import llm.schema                          <module 'llm.schema' from 'D:\\3D_Spatial_Agent\\llm\\schema.py'>
+OK   import llm.render                          <module 'llm.render' from 'D:\\3D_Spatial_Agent\\llm\\render.py'>
+OK   import agents                              <module 'agents' from 'D:\\3D_Spatial_Agent\\agents\\__init__.py'>
+OK   import agents.executor                     <module 'agents.executor' from 'D:\\3D_Spatial_Agent\\agents\\executor.py'>
+OK   import agents.memory                       <module 'agents.memory' from 'D:\\3D_Spatial_Agent\\agents\\memory.py'>
+OK   import agents.synthesizer                  <module 'agents.synthesizer' from 'D:\\3D_Spatial_Agent\\agents\\synthesizer.py'>
+OK   import agents.loop                         <module 'agents.loop' from 'D:\\3D_Spatial_Agent\\agents\\loop.py'>
+OK   import agents.prompts.system               <module 'agents.prompts.system' from 'D:\\3D_Spatial_Agent\\agents\\prompts\\system.py'>
+OK   tool_names()                               15 个: calculate_angle, calculate_distance, counterfactual, describe_scene, diagnose_failure, find_farthest, find_nearest, find_object, get_3d_extent, get_3d_position, get_object, list_objects, query_relation, single_object, summarize_scene
+OK   docs_text() 字符数                            1696
+OK   docs_text() 预览                             
+----
+  calculate_angle(scene_id: str | None=None, a: str='', b: str='', c: str='')
+      三点夹角（度），顶点是 **b**。即 ∠(a, b, c)。
+  calculate_distance(scene_id: str | None=None, a: str='', b: str='')
+      两个物体之间的三维欧氏距离（米）。
+  counterfactual(scene_id: str | None=None, remove: Iterable[str] | None=None)
+      移走若干物体后重算场景关系 —— **纯图操作，不重跑任何视觉模型**。
+  describe_scene(scene_id: str | None=None, detail: str='full')
+      把当前场景导出成结构化三维场景描述（物体清单 + 米制尺寸 + 两两几何关系）。
+  diagnose_failure(scene_id: str | None=None, question_id: str | None=None)
+      定位失败环节：**尺度 / 检测 / 工具 / 程序**，按归因优先级返回有序发现。
+  find_farthest(scene_id: str | None=None, anchor: str='', label: str='', k: int=1)
+      同 `find_nearest`，按距离降序。
+  find_nearest(scene_id: str | None=None, anchor: str='', label: str='', k: int=1)
+      在 `label` 类物体中找出离 `anchor` 最近的 k 个（按距离升序）。
+  find_object(scene_id: str | None=None, label: str='')
+      按类别查物体，**可能返回多个**。一个都没有 → `NOT_FOUND`。
+  get_3d_extent(scene_id: str | None=None, object_id: str='')
+      物体的真实三维尺寸 (w, h, l)，米。
+  get_3d_position(scene_id: str | None=None, object_id: str='', anchor: str='centroid')
+      物体的相机系三维坐标（米）。
+  get_object(scene_id: str | None=None, object_id: str='')
+      取单个物体的完整信息（含语义属性与掩码引用）。
+  list_objects(scene_id: str | None=None, label: str | None=None, limit: int | None=None)
+      列出场景中的物体。`label` 为空则返回全部。
+  query_relation(scene_id: str | None=None, relation: str='left_of', a: str='', b: str='', tol: float | None=None)
+      查询两个物体之间的某一种关系。11 种关系的统一入口。
+  single_object(scene_id: str | None=None, label: str='')
+      按类别取**恰好一个**物体；匹配到多个就 `AMBIGUOUS`。
+  summarize_scene(scene_id: str | None=None, use_llm: bool=False)
+      把场景报告渲染成一段自然语言。
+
+可 import 的模块（其它一律不可用，且不是必需的）：math
+----
+OK   build_namespace()                          命名空间 26 个名字；泄漏 无；可导入 ('math', 'statistics', 'itertools', 'functools', 'collections', 're')
+OK   build_system_prompt()                      2863 字符
+OK   build_user_prompt()                        ## 问题
+哪把椅子离门最近？
+
+## 场景内容（**只有类别清单与计数，没有坐标**）
+{"objects": {"chair": 2}}
+
+## 要求的答案类型
+float（一个数，不要带单位，不要带文字）
+
+现在输出程序。

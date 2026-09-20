@@ -1,0 +1,6 @@
+﻿## py_compile
+
+exit=0
+## 停旧后端
+  kill PID 102824
+done

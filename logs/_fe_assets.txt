@@ -1,0 +1,33 @@
+﻿## reports
+## agent_runs
+20260918_171519_living_room.json  6474  09-18 17:15
+20260918_171519_living_room.txt  5422  09-18 17:15
+20260918_171520_living_room.json  2858  09-18 17:15
+20260918_171520_living_room.txt  1013  09-18 17:15
+20260918_172113_living_room.json  21965  09-18 17:21
+20260918_172244_living_room.json  20475  09-18 17:22
+20260918_172244_living_room.txt  3939  09-18 17:22
+_smoke_planner_on.json  58983  09-18 18:53
+_smoke_planner_on.txt  9254  09-18 18:53
+_q3_recheck_vlm.txt  2483  09-18 22:44
+_q3_recheck_vlm.json  8874  09-18 22:44
+## masks size (python)
+## 找原图
+\vendor\UniDepth\assets\demo\depth.png  148388
+\vendor\UniDepth\assets\demo\output.png  866400
+\vendor\UniDepth\assets\demo\rgb.png  448668
+\vendor\UniDepth\assets\docs\unidepth-banner.png  620975
+\vendor\UniDepth\assets\docs\unidepthv2-banner.png  1487116
+\vendor\VADAR\demo-notebook\resources\demo.jpg  461528
+\vendor\VADAR\docs\method-figure.png  922152
+\vendor\VADAR\docs\omni3d-bench.png  4929485
+## build_log image= 行
+image=D:\3D_Spatial_Agent\vendor\UniDepth\assets\demo\rgb.png
+## scripts 里有没有 web/server
+build_scene.py
+inspect_exif.py
+inspect_scene.py
+report_scene.py
+run_agent.py
+selfcheck_agent.py
+smoke_tools.py

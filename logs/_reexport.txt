@@ -1,0 +1,14 @@
+﻿场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+场景 exif_fixture_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room_gt: 9 节点 / 137 边 / 图 1 掩码 9
+场景 living_room_pred: 9 节点 / 133 边 / 图 1 掩码 9
+回放批次：6
+导出完成 → D:\3D_Spatial_Agent\demo
+exit=0
+## index 里的场景
+  exif_fixture_exif
+  exif_fixture_pred
+  living_room
+  living_room_gt
+  living_room_pred

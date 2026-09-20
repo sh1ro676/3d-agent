@@ -1,0 +1,35 @@
+======================================================================
+文件 _q3_recheck_vlm.json
+  scene=living_room switches={"action_space": "program", "planner": "on", "render": "template", "toolset": ["list_objects", "get_object", "find_object", "single_object", "find_nearest", "find_farthest", "query_relation", "get_3d_position", "get_3d_extent", "calculate_distance", "calculate_angle", "get_attributes"], "n_tools": 1
+  vlm={"enabled": true, "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png", "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）", "label": "text", "base_url": "https://api.deepseek.com", "model": "deepseek-flash", "api_key": "***7dc8", "temperature": 0.2, "max_tokens": 8192, "max_retries": 2, "timeout_s": 180.0, "extra_body": {"thinking": {"type": "disabled"}}, "pr
+  题: 沙发是什么颜色？
+    status=llm_error answer=None type=str attempts=1 elapsed=24.267
+    evidence=[]
+    verdict.level=unsupported ok=False
+======================================================================
+_q3_recheck_novlm.json  —— 不存在
+======================================================================
+文件 demo_live_20260919_194658_living_room.json
+  scene=living_room switches={"action_space": "program", "planner": "off", "render": "template", "toolset": ["list_objects", "get_object", "find_object", "single_object", "find_nearest", "find_farthest", "query_relation", "get_3d_position", "get_3d_extent", "calculate_distance", "calculate_angle", "get_attributes"], "n_tools": 
+  vlm={"enabled": true, "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png", "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）", "label": "text", "base_url": "https://api.deepseek.com", "model": "deepseek-flash", "api_key": "***7dc8", "temperature": 0.2, "max_tokens": 8192, "max_retries": 2, "timeout_s": 180.0, "extra_body": {"thinking": {"type": "disabled"}}, "pr
+  题: 场景里一共有几个物体？
+    status=ok answer=9 type=int attempts=1 elapsed=1.273
+    evidence=["list_objects(scene_id='living_room') returned 9 objects", "label breakdown: chair=1, mirror=1, picture=4, sofa=1, sofa chair=1, table=1"]
+    verdict.level=supported ok=True
+    · list_objects ok=True value=[{"object_id": "sofa_1", "label": "sofa", "score": 0.836, "centroid_m": [2.4003, 1.0316, 2.864], "extent_m": {"w": 6.705, "h": 2.349, "l": 1.129}}, {"object_id": "picture_1", "label": "picture", "score": 0.795, "centroid
+    program(前 500 字): from collections import Counter
+      
+      res = list_objects(scene_id="living_room")
+      if not res.ok:
+          submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+      
+      objs = res.value
+      count = len(objs)
+      labels = Counter(o["label"] for o in objs)
+      
+      submit(
+          count,
+          target_ids=[o["object_id"] for o in objs],
+          evidence=[
+              "list_objects(scene_id='living_room') returned {} objects".format(count),
+              "label breakdown: " + ", ".join("{}={}".format(k, v) for k, v in sorted(labels

@@ -1,0 +1,10 @@
+﻿[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_171519_living_room.json
+[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_171519_living_room.txt
+dryrun exit=0
+[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_171520_living_room.json
+[agent] D:\3D_Spatial_Agent\logs\agent_runs\20260918_171520_living_room.txt
+progfile exit=0
+20260918_171519_living_room.json
+20260918_171519_living_room.txt
+20260918_171520_living_room.json
+20260918_171520_living_room.txt

@@ -1,0 +1,38 @@
+=== 沙发是什么颜色？ / 含视觉能力 ===
+  status=ok  answer='beige'  elapsed=3.07s  attempts=1
+  verdict=supported  matched_from=
+  evidence=["get_attributes(sofa, color) -> beige"]
+  usage={"calls": 1, "failed_calls": 0, "retried_calls": 0, "truncated": 0, "prompt_tokens": 1549, "completion_tokens": 355, "cost_cny": 0.007842, "unpriced_calls": 0, "latency_s": 2.016, "by_purpose": {"synthesize": {"calls": 1
+  saved_as=demo_live_20260919_194729_living_room.json
+  --- trace ---
+   · single_object    ok=True  value={"object_id": "sofa_1", "label": "sofa", "score": 0.836, "centroid_m": [2.4003, 1.0316, 2.864], "extent_m": {"w": 6.705, "h": 2.349, "l": 1.129}, "attributes": {}}
+   · get_attributes   ok=True  value=[{"name": "color", "value": "beige", "confidence": 0.95, "source": "vlm", "in_closed_set": true, "raw": "beige"}]
+  --- program ---
+from itertools import chain
+
+scene_id = "living_room"
+
+# 1) 找到沙发（恰好一个）
+res = single_object(scene_id=scene_id, label="sofa")
+if not res.ok:
+    submit("unknown", evidence=[f"single_object(sofa) failed: {res.error.code}"])
+else:
+    sofa = res.value
+    sofa_id = sofa["object_id"]
+
+    # 2) 读取颜色属性
+    attrs = get_attributes(scene_id=scene_id, object_id=sofa_id, attrs=["color"])
+    if not attrs.ok:
+        submit("unknown", evidence=[f"get_attributes failed: {attrs.error.code}"])
+    else:
+        val = attrs.value
+        color = None
+        if isinstance(val, list):
+            for item in val:
+                if isinstance(item, dict) and item.get("name") == "color":
+                    color = item.get("value")
+                    break
+        if color is None:
+            # 置信度低时值在 context 里
+            ctx = getattr(attrs, "context", None) or {}
+            cand = ctx.get("attribut

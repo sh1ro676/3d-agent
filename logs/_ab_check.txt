@@ -1,0 +1,7 @@
+﻿## which node / npm
+C:\Users\ROG\.workbuddy\binaries\node\versions\22.22.2-3\node.exe
+C:\Users\ROG\.workbuddy\binaries\node\versions\22.22.2-3\npm.ps1
+## node -e
+ok
+## agent-browser
+exit=0

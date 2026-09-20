@@ -1,0 +1,3 @@
+question,image_index,answer_type,ground_truth,prediction
+What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?,91339.246_00000463.jpg,float,0.948,0.5548961424332344
+"If the coffee table is 2m long, how long is the sofa to the right of it in meters?",91339.246_00000463.jpg,float,3.026,2.934984520123839

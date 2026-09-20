@@ -1,0 +1,8 @@
+OK   /api/health                              200  563 bytes
+     backend.ready=True model=deepseek-flash scenes=5
+HTTP /api/build/status?id=__none__       404  b'{"ok": false, "error": "\xe6\xb2\xa1\xe6\x9c\x89\xe8\xbf\x99\xe4\xb8\xaa\xe4\xbb\xbb\xe5\x8a\xa1\xef\xbc\x9a__none__"}'
+HTTP /api/build/status                   404  b'{"ok": false, "error": "\xe6\xb2\xa1\xe6\x9c\x89\xe8\xbf\x99\xe4\xb8\xaa\xe4\xbb\xbb\xe5\x8a\xa1\xef\xbc\x9a"}'
+HTTP /api/build                          400  b'{"ok": false, "error": "\xe7\xbc\xba\xe5\xb0\x91\xe5\x9b\xbe\xe7\x89\x87\xe6\x95\xb0\xe6\x8d\xae\xef\xbc\x88base64\xef\xbc\x89"}'
+HTTP /api/build                          400  b'{"ok": false, "error": "\xe7\xbc\xba\xe5\xb0\x91\xe5\x9b\xbe\xe7\x89\x87\xe6\x95\xb0\xe6\x8d\xae\xef\xbc\x88base64\xef\xbc\x89"}'
+OK   /                                        200  22976 bytes
+OK   /app.js                                  200  63853 bytes

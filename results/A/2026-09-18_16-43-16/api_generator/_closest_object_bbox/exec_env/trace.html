@@ -1,0 +1,146 @@
+<p>90: if signum != self.SIGALRM:</p>
+<p>92: self._handler = handler</p>
+<p>93: self._exc_type = _probe_exception_type(handler)</p>
+<p>193: try:</p>
+<p>194: handler(TraceAlarmShim.SIGALRM, None)</p>
+<p>236: raise TimeoutException(</p>
+<p>237: "The script took too long to run. There is likely a Recursion Error. Ensure that you are not calling a method with infinite recursion."</p>
+<p>236: raise TimeoutException(</p>
+<p>195: except BaseException as e:          # noqa: BLE001  故意接所有，包括 KeyboardInterrupt</p>
+<p>196: return type(e)</p>
+<p>97: if seconds and float(seconds) > 0:</p>
+<p>98: self._cancel_timer()</p>
+<p>121: t, self._timer = self._timer, None</p>
+<p>122: if t is not None:</p>
+<p>99: self._inner_trace = sys.gettrace()</p>
+<p>100: self._timeout = float(seconds)</p>
+<p>101: self._deadline = time.monotonic() + float(seconds)</p>
+<p>102: self.arm_count += 1</p>
+<p>103: sys.settrace(self._tracer)</p>
+<p>104: t = threading.Timer(float(seconds), self._on_timer)</p>
+<p>1419: Thread.__init__(self)</p>
+<p>907: assert group is None, "group argument must be None for now"</p>
+<p>908: if kwargs is None:</p>
+<p>909: kwargs = {}</p>
+<p>910: if name:</p>
+<p>913: name = _newname("Thread-%d")</p>
+<p>840: return name_template % _counter()</p>
+<p>914: if target is not None:</p>
+<p>921: self._target = target</p>
+<p>922: self._name = name</p>
+<p>923: self._args = args</p>
+<p>924: self._kwargs = kwargs</p>
+<p>925: if daemon is not None:</p>
+<p>930: self._daemonic = current_thread().daemon</p>
+<p>1492: try:</p>
+<p>1493: return _active[get_ident()]</p>
+<p>1248: assert self._initialized, "Thread.__init__() not called"</p>
+<p>1249: return self._daemonic</p>
+<p>931: self._ident = None</p>
+<p>932: if _HAVE_THREAD_NATIVE_ID:</p>
+<p>933: self._native_id = None</p>
+<p>934: self._tstate_lock = None</p>
+<p>935: self._started = Event()</p>
+<p>589: self._cond = Condition(Lock())</p>
+<p>278: if lock is None:</p>
+<p>280: self._lock = lock</p>
+<p>282: self.acquire = lock.acquire</p>
+<p>283: self.release = lock.release</p>
+<p>287: if hasattr(lock, '_release_save'):</p>
+<p>289: if hasattr(lock, '_acquire_restore'):</p>
+<p>291: if hasattr(lock, '_is_owned'):</p>
+<p>293: self._waiters = _deque()</p>
+<p>590: self._flag = False</p>
+<p>936: self._is_stopped = False</p>
+<p>937: self._initialized = True</p>
+<p>939: self._stderr = _sys.stderr</p>
+<p>940: self._invoke_excepthook = _make_invoke_excepthook()</p>
+<p>1361: old_excepthook = excepthook</p>
+<p>1362: old_sys_excepthook = _sys.excepthook</p>
+<p>1363: if old_excepthook is None:</p>
+<p>1365: if old_sys_excepthook is None:</p>
+<p>1368: sys_exc_info = _sys.exc_info</p>
+<p>1369: local_print = print</p>
+<p>1370: local_sys = _sys</p>
+<p>1372: def invoke_excepthook(thread):</p>
+<p>1404: return invoke_excepthook</p>
+<p>942: _dangling.add(self)</p>
+<p>86: if self._pending_removals:</p>
+<p>88: self.data.add(ref(item, self._remove))</p>
+<p>1420: self.interval = interval</p>
+<p>1421: self.function = function</p>
+<p>1422: self.args = args if args is not None else []</p>
+<p>1423: self.kwargs = kwargs if kwargs is not None else {}</p>
+<p>1424: self.finished = Event()</p>
+<p>589: self._cond = Condition(Lock())</p>
+<p>278: if lock is None:</p>
+<p>280: self._lock = lock</p>
+<p>282: self.acquire = lock.acquire</p>
+<p>283: self.release = lock.release</p>
+<p>287: if hasattr(lock, '_release_save'):</p>
+<p>289: if hasattr(lock, '_acquire_restore'):</p>
+<p>291: if hasattr(lock, '_is_owned'):</p>
+<p>293: self._waiters = _deque()</p>
+<p>590: self._flag = False</p>
+<p>105: t.daemon = True</p>
+<p>1253: if not self._initialized:</p>
+<p>1255: if daemonic and not _daemon_threads_allowed():</p>
+<p>1257: if self._started.is_set():</p>
+<p>603: return self._flag</p>
+<p>1259: self._daemonic = daemonic</p>
+<p>106: self._timer = t</p>
+<p>107: t.start()</p>
+<p>985: if not self._initialized:</p>
+<p>988: if self._started.is_set():</p>
+<p>603: return self._flag</p>
+<p>991: with _active_limbo_lock:</p>
+<p>992: _limbo[self] = self</p>
+<p>991: with _active_limbo_lock:</p>
+<p>993: try:</p>
+<p>994: _start_new_thread(self._bootstrap, ())</p>
+<p>999: self._started.wait()</p>
+<p>652: with self._cond:</p>
+<p>300: return self._lock.__enter__()</p>
+<p>653: signaled = self._flag</p>
+<p>654: if not signaled:</p>
+<p>656: return signaled</p>
+<p>652: with self._cond:</p>
+<p>303: return self._lock.__exit__(*args)</p>
+<p>108: return 0</p>
+<p>277: if run_name is None:</p>
+<p>278: run_name = "<run_path>"</p>
+<p>279: pkg_name = run_name.rpartition(".")[0]</p>
+<p>221: path_item = os.fsdecode(path_item)</p>
+<p>222: try:</p>
+<p>65: if not isinstance(path, str):</p>
+<p>67: if not path:</p>
+<p>69: if alt_path_sep:</p>
+<p>70: path = path.replace(alt_path_sep, path_sep)</p>
+<p>72: prefix = []</p>
+<p>73: while True:</p>
+<p>74: try:</p>
+<p>75: st = _bootstrap_external._path_stat(path)</p>
+<p>147: return _os.stat(path)</p>
+<p>86: if (st.st_mode & 0o170000) != 0o100000:  # stat.S_ISREG</p>
+<p>89: break</p>
+<p>91: try:</p>
+<p>92: files = _zip_directory_cache[path]</p>
+<p>93: except KeyError:</p>
+<p>94: files = _read_directory(path)</p>
+<p>166: if not path:</p>
+<p>168: return _path_is_mode_type(path, 0o040000)</p>
+<p>152: try:</p>
+<p>153: stat_info = _path_stat(path)</p>
+<p>147: return _os.stat(path)</p>
+<p>156: return (stat_info.st_mode & 0o170000) == mode</p>
+<p>46: if path == PATH_PLACEHOLDER:</p>
+<p>48: raise ImportError</p>
+<p>29: self.mod_name = mod_name</p>
+<p>2: def loc(image, object_prompt):</p>
+<p>7: def vqa(image, question, bbox):</p>
+<p>12: def depth(image, bbox):</p>
+<p>17: def same_object(image, bbox1, bbox2):</p>
+<p>22: def get_2D_object_size(image, bbox):</p>
+<p>29: bboxes = loc(image, object_prompt)</p>
+<p>4: return [[25, 25, 50, 50]]</p>
+<p>14: return 1.0</p>

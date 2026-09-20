@@ -1,0 +1,21 @@
+=== /api/ask #2 ===
+ok=True status=ok answer=9 saved_as=demo_live_20260919_194658_living_room.json
+usage.cost_cny=0.005976 calls=1
+
+=== export_demo.py ===
+exit=0
+场景 exif_fixture_exif: 9 节点 / 137 边 / 图 1 掩码 9
+场景 exif_fixture_pred: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room: 9 节点 / 133 边 / 图 1 掩码 9
+场景 living_room_gt: 9 节点 / 137 边 / 图 1 掩码 9
+场景 living_room_pred: 9 节点 / 133 边 / 图 1 掩码 9
+回放批次：5
+导出完成 → D:\3D_Spatial_Agent\demo
+
+
+批次总数=5
+  20260918_172113_living_room.json               scene=living_room        n=2
+  20260918_172244_living_room.json               scene=living_room        n=2
+  _smoke_planner_on.json                         scene=living_room        n=3
+  _q3_recheck_vlm.json                           scene=living_room        n=1
+  demo_live_20260919_194658_living_room.json     scene=living_room        n=1

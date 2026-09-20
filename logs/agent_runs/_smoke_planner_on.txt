@@ -1,0 +1,152 @@
+==============================================================================
+自研 3D Spatial Agent —— llm
+==============================================================================
+场景：living_room: 9 objects / 133 edges (up_axis=-y, scale=1.000)
+场景清单（scene_hint，无坐标）：{"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}
+动作空间（12 个）：list_objects, get_object, find_object, single_object, find_nearest, find_farthest, query_relation, get_3d_position, get_3d_extent, calculate_distance, calculate_angle, get_attributes
+开关：action_space=program  planner=on  render=template  vlm=True(deepseek-flash)
+角色②（视觉语义）：启用   deepseek-flash
+
+==============================================================================
+问题：这个场景里一共有多少个物体？
+状态：ok   答案：9   渲染：9（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）
+证据校验：supported（命中出处：evidence）
+   OK  has_evidence — evidence 有 1 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  answer_finite — 答案是有限数 9.0
+   OK  numeric_backed — 答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）
+   OK  targets_in_scene — 9 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：2.3 s   成本：¥0.0089
+-- 前置计划（臂 G，2 步）--
+需要的工具类别：list_objects
+步骤：
+  1. 调用 list_objects 并传入 scene_id，获取场景中所有物体的完整列表。
+  2. 读取返回结果中物体的总条数，即为场景中的物体总数。
+  [plan] attempt=1 ok=True {"ok": true, "steps": ["调用 list_objects 并传入 scene_id，获取场景中所有物体的完整列表。", "读取返回结果中物体的总条数，即为场景中的物体总数。"], "n_steps": 2, "tool_categories": ["list_objects"], "unknown
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=4 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=5 ok=True {"level": "supported", "ok": true, "matched_from": "evidence", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name
+-- 生成的程序 --
+res = list_objects(scene_id="living_room")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+else:
+    objs = res.value
+    n = len(objs)
+    ids = [o["object_id"] for o in objs]
+    submit(n, target_ids=ids, evidence=["list_objects(scene_id='living_room') returned %d objects" % n])
+
+==============================================================================
+问题：沙发和桌子之间的三维距离是多少米？
+状态：ok   答案：1.5221854777889445   渲染：1.52219（指认：sofa_1、table_1）
+证据校验：supported（命中出处：value）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   OK  answer_finite — 答案是有限数 1.5221854777889445
+   OK  numeric_backed — 答案 1.5221854777889445 命中工具返回值 1.5221854777889445
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：2   工具调用：3   耗时：3.9 s   成本：¥0.0210
+-- 前置计划（臂 G，3 步）--
+需要的工具类别：single_object、calculate_distance
+步骤：
+  1. 用 single_object 按 label='sofa' 取到唯一的沙发物体 id。
+  2. 用 single_object 按 label='table' 取到唯一的桌子物体 id。
+  3. 用 calculate_distance 传入这两个物体 id，读取返回的三维欧氏距离（米）。
+  [plan] attempt=1 ok=True {"ok": true, "steps": ["用 single_object 按 label='sofa' 取到唯一的沙发物体 id。", "用 single_object 按 label='table' 取到唯一的桌子物体 id。", "用 calculate_distance 传入这两个物体 id，读取返回的三维
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=True ok
+  [render] attempt=6 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=7 ok=True {"level": "supported", "ok": true, "matched_from": "value", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": 
+-- 生成的程序 --
+# 1. 取唯一的沙发
+res_sofa = single_object(scene_id="living_room", label="sofa")
+if not res_sofa.ok:
+    submit("unknown", evidence=["single_object(sofa) 失败: " + str(res_sofa.error.code)])
+sofa = res_sofa.value
+sofa_id = sofa["object_id"]
+
+# 2. 取唯一的桌子
+res_table = single_object(scene_id="living_room", label="table")
+if not res_table.ok:
+    submit("unknown", evidence=["single_object(table) 失败: " + str(res_table.error.code)])
+table = res_table.value
+table_id = table["object_id"]
+
+# 3. 计算三维欧氏距离
+res_dist = calculate_distance(scene_id="living_room", a=sofa_id, b=table_id)
+if not res_dist.ok:
+    submit("unknown", evidence=["calculate_distance 失败: " + str(res_dist.error.code)])
+dist = res_dist.value
+
+submit(
+    float(dist),
+    target_ids=[sofa_id, table_id],
+    evidence=[
+        "single_object(label='sofa') -> object_id=%s" % sofa_id,
+        "single_object(label='table') -> object_id=%s" % table_id,
+        "calculate_distance(a=%s, b=%s) = %s 米" % (sofa_id, table_id, dist),
+    ],
+)
+
+==============================================================================
+问题：沙发是什么颜色？
+状态：abstained   答案：'unknown'   渲染：unknown
+证据校验：abstained（命中出处：abstain）
+   OK  has_evidence — evidence 有 1 条
+   OK  tool_was_used — 成功调用 2 次工具（另有 0 次失败）
+   OK  answer_finite — 弃答，无数值可校验
+   OK  targets_in_scene — 没有指认任何物体（不是错，但 Viewer 无法高亮，也无法核对指认是否正确）
+生成次数：2   工具调用：2   耗时：4.2 s   成本：¥0.0194
+-- 前置计划（臂 G，3 步）--
+需要的工具类别：single_object、get_attributes
+步骤：
+  1. 调用 single_object(label='sofa') 在场景中定位唯一的沙发物体，拿到它的 object_id。
+  2. 调用 get_attributes(object_id=沙发id, attrs=['color']) 读取该沙发的视觉语义颜色属性。
+  3. 若属性缺失或返回空，则如实说明无法确定颜色。
+  [plan] attempt=1 ok=True {"ok": true, "steps": ["调用 single_object(label='sofa') 在场景中定位唯一的沙发物体，拿到它的 object_id。", "调用 get_attributes(object_id=沙发id, attrs=['color']) 读取该沙发的视觉语义颜色属性。", "若属
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=True ok
+  [render] attempt=6 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=7 ok=True {"level": "abstained", "ok": true, "matched_from": "abstain", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name"
+-- 生成的程序 --
+res = single_object(scene_id="living_room", label="sofa")
+if not res.ok:
+    submit("unknown", evidence=["single_object(sofa) failed: " + str(res.error.code)])
+
+sofa = res.value
+sofa_id = sofa["object_id"]
+
+attr = get_attributes(scene_id="living_room", object_id=sofa_id, attrs=["color"])
+if not attr.ok:
+    submit("unknown", evidence=["get_attributes failed: " + str(attr.error.code)])
+
+val = attr.value
+color = None
+if isinstance(val, dict):
+    color = val.get("color")
+    if color is None and "attributes" in val and isinstance(val["attributes"], dict):
+        color = val["attributes"].get("color")
+elif isinstance(val, str):
+    color = val
+
+if not color:
+    submit("unknown", evidence=["color attribute missing for sofa id=" + sofa_id])
+
+submit(str(color), target_ids=[sofa_id], evidence=["get_attributes(object_id=%s, attrs=['color']) -> %s" % (sofa_id, color)])
+
+==============================================================================
+汇总：题数 3 ｜ 状态 {"abstained": 1, "ok": 2} ｜ 证据校验 {"abstained": 1, "supported": 2}
+      重试过的题 2 ｜ 失败题 0 ｜ 工具调用合计 6 ｜ 成本 ¥0.0493
+
+==============================================================================
+总用量：{"calls": 8, "failed_calls": 0, "retried_calls": 0, "truncated": 0, "prompt_tokens": 12129, "completion_tokens": 1435, "cost_cny": 0.049302, "unpriced_calls": 0, "latency_s": 9.293, "by_purpose": {"plan": {"calls": 3, "prompt_tokens": 2846, "completion_tokens": 213, "cost_cny": 0.010455, "latency_s": 2.60757939999894}, "synthesize": {"calls": 5, "prompt_tokens": 9283, "completion_tokens": 1222, "cost_cny": 0.03884699999999999, "latency_s": 6.685143700000481}}}

@@ -1,0 +1,4 @@
+run keys=['abstained', 'answer', 'answer_type', 'attempts', 'elapsed_s', 'evidence', 'failure', 'memory', 'plan', 'program', 'program_fenced', 'question', 'render', 'render_report', 'scene_id', 'stages', 'status', 'switches', 'target_ids', 'tool_calls', 'tools_version', 'trace', 'usage', 'verdict']
+n_trace=0  entry0=none
+no entry1
+vlm_block={"enabled": true, "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png", "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）", "label": "text", "base_url": "https://api.deepseek.com", "model": "deepseek-flash", "api_key": "***7dc8", "temperature": 0.2, "max_tokens": 8192, "max_retries": 2, "timeout_s": 180.0, "extra_body": {"thinking": {"type": "disabled"}}, "price_cny_per_mtok": [3.0, 9.0], "ready": true, "confidence_threshold": 0.6, "attrs": ["color", "material", "texture", "state", "shape"]}

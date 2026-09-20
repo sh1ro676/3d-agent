@@ -1,0 +1,65 @@
+# ============================================================
+# 3D_Spatial_Agent / .gitignore
+# 日期：2026-09-20（本项目首次纳入版本控制）
+#
+# 原则：
+#   能**重新下载 / 重新生成**的 → 忽略（环境、模型、缓存、大数据集、临时目录）
+#   能**自证结论**的产物 → 保留（results/、logs/、reports/、dataset/scenes/、docs/）
+# 判断依据见 reports/README.md（产物地图）与 logs/README.md。
+# ============================================================
+
+# ---------- 1. 解释器 / 虚拟环境 ----------
+# venvs/vision 是 torch+cu124 的完整环境，数 GB，可由 requirements 重建
+venvs/
+.venv/
+env/
+*.egg-info/
+
+# ---------- 2. 模型权重与下载缓存 ----------
+# .cache/huggingface 是 UniDepth 权重；.cache/models 是 DINO/SAM2；.cache/wheels 是 torch 轮子
+.cache/
+*.safetensors
+
+# ---------- 3. 密钥（本仓库唯一真实凭据所在）----------
+# configs/llm_backend.env 内含真实 VADAR_API_KEY，**绝不提交**。
+# 保留同名 .template（空值占位），需要时 cp 一份再填。
+configs/llm_backend.env
+*.env
+!*.env.template
+
+# ---------- 4. 第三方只读检出 ----------
+# vendor/UniDepth、vendor/VADAR 本身是 git clone（均已确认无本地改动）。
+# 固定版本记在 vendor/VENDOR.md，需要时按该文件重新 clone。
+vendor/UniDepth/
+vendor/VADAR/
+!vendor/VENDOR.md
+
+# ---------- 5. 大数据集（可重新下载）----------
+# dataset/raw = Omni3D-Bench parquet（101 MB）+ 解包图片，需按 README 重新获取
+dataset/raw/
+# dataset/scenes、dataset/builders、dataset/synthesized 是自建产物，**保留**
+
+# ---------- 6. 运行时上传 / 临时 ----------
+uploads/
+_tmp_*
+*.tmp
+
+# ---------- 7. pytest 临时目录 ----------
+# 历史遗留：--basetemp 曾被下沉到仓库根，产生大量 .bt_* 目录
+.bt_*/
+.pytest_bt*/
+.pytest_cache/
+# logs/pt*_NNNNNN 是同样东西的归档版（内含 0.7 MB npy 与假密钥夹具）
+logs/pt[0-9]*/
+
+# ---------- 8. Python 字节码 ----------
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# ---------- 9. 编辑器 / 系统 ----------
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,1053 @@
+{
+ "scene_id": "upload_probe",
+ "scene_hint": {
+  "objects": {
+   "sofa": 1,
+   "picture": 4,
+   "mirror": 1,
+   "chair": 1,
+   "sofa chair": 1,
+   "table": 1
+  },
+  "n_objects": 9,
+  "image_id": "rgb.png",
+  "scene_id": "upload_probe",
+  "image_size": [
+   640,
+   480
+  ],
+  "intrinsics_source": "predicted"
+ },
+ "switches": {
+  "action_space": "program",
+  "planner": "off",
+  "render": "template",
+  "toolset": [
+   "list_objects",
+   "get_object",
+   "find_object",
+   "single_object",
+   "find_nearest",
+   "find_farthest",
+   "query_relation",
+   "get_3d_position",
+   "get_3d_extent",
+   "calculate_distance",
+   "calculate_angle",
+   "get_attributes"
+  ],
+  "n_tools": 12,
+  "max_synthesis_retries": 2,
+  "exec_timeout_s": 60.0,
+  "vlm": true,
+  "vlm_model": "deepseek-flash"
+ },
+ "toolset": [
+  "list_objects",
+  "get_object",
+  "find_object",
+  "single_object",
+  "find_nearest",
+  "find_farthest",
+  "query_relation",
+  "get_3d_position",
+  "get_3d_extent",
+  "calculate_distance",
+  "calculate_angle",
+  "get_attributes"
+ ],
+ "tools_version": "1.2.0",
+ "usage": {
+  "calls": 2,
+  "failed_calls": 0,
+  "retried_calls": 0,
+  "truncated": 0,
+  "prompt_tokens": 4036,
+  "completion_tokens": 799,
+  "cost_cny": 0.019299,
+  "unpriced_calls": 0,
+  "latency_s": 3.69,
+  "by_purpose": {
+   "synthesize": {
+    "calls": 2,
+    "prompt_tokens": 4036,
+    "completion_tokens": 799,
+    "cost_cny": 0.019299,
+    "latency_s": 3.6899124999908963
+   }
+  }
+ },
+ "vlm": {
+  "enabled": true,
+  "image": "D:\\3D_Spatial_Agent\\uploads\\upload_probe\\rgb.png",
+  "image_source": "build_meta.image_path",
+  "label": "text",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "api_key": "***7dc8",
+  "temperature": 0.2,
+  "max_tokens": 8192,
+  "max_retries": 2,
+  "timeout_s": 180.0,
+  "extra_body": {
+   "thinking": {
+    "type": "disabled"
+   }
+  },
+  "price_cny_per_mtok": [
+   3.0,
+   9.0
+  ],
+  "ready": true,
+  "confidence_threshold": 0.6,
+  "attrs": [
+   "color",
+   "material",
+   "texture",
+   "state",
+   "shape"
+  ]
+ },
+ "summary": {
+  "source": "demo_live",
+  "n_runs": 1,
+  "status": {
+   "ok": 1
+  }
+ },
+ "runs": [
+  {
+   "question": "场景里一共有多少个物体？",
+   "scene_id": "upload_probe",
+   "status": "ok",
+   "answer": 9,
+   "answer_type": "int",
+   "target_ids": [
+    "sofa_1",
+    "picture_1",
+    "mirror_1",
+    "chair_1",
+    "picture_2",
+    "picture_3",
+    "sofa_chair_1",
+    "table_1",
+    "picture_4"
+   ],
+   "evidence": [
+    "list_objects(scene_id='upload_probe') 返回 9 个物体，len() = 9",
+    "按类别逐类 list_objects 计数: {'chair': 1, 'mirror': 1, 'picture': 4, 'sofa': 1, 'sofa chair': 1, 'table': 1}，求和 = 9",
+    "两种计数一致，确认总数 = 9"
+   ],
+   "abstained": false,
+   "program": "def _ok(res):\n    return res is not None and res.ok\n\ndef _value(res):\n    return res.value if _ok(res) else None\n\ndef _count_all(scene_id):\n    res = list_objects(scene_id=scene_id)\n    if not _ok(res):\n        return None\n    return _value(res)\n\ndef _count_by_label(scene_id, label):\n    res = list_objects(scene_id=scene_id, label=label)\n    if not _ok(res):\n        return None\n    return _value(res)\n\nscene_id = \"upload_probe\"\n\nobjs = _count_all(scene_id)\nif objs is None:\n    submit(\"unknown\", evidence=[\"list_objects 调用失败，无法枚举场景物体\"])\n\ntotal = len(objs)\n\n# 交叉校验：按类别清单逐类计数求和\nlabels = [\"chair\", \"mirror\", \"picture\", \"sofa\", \"sofa chair\", \"table\"]\nper_label = {}\nfor lb in labels:\n    got = _count_by_label(scene_id, lb)\n    per_label[lb] = len(got) if got is not None else None\n\nsum_counts = sum(v for v in per_label.values() if v is not None)\n\nevidence = [\n    \"list_objects(scene_id='upload_probe') 返回 {} 个物体，len() = {}\".format(total, total),\n    \"按类别逐类 list_objects 计数: {}，求和 = {}\".format(per_label, sum_counts),\n]\n\nif sum_counts == total:\n    evidence.append(\"两种计数一致，确认总数 = {}\".format(total))\nelse:\n    evidence.append(\"两种计数不一致，以全量 list_objects 的 len() = {} 为准\".format(total))\n\nsubmit(total, target_ids=[o[\"object_id\"] for o in objs], evidence=evidence)",
+   "program_fenced": true,
+   "render": "9（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）",
+   "render_report": {
+    "mode": "template",
+    "used_fallback": false
+   },
+   "stages": [
+    {
+     "stage": "synthesize",
+     "attempt": 1,
+     "ok": true,
+     "chars": 1308,
+     "fenced": true,
+     "reply": {
+      "purpose": "synthesize",
+      "model_returned": "deepseek-flash",
+      "finish_reason": "stop",
+      "truncated": false,
+      "has_reasoning": false,
+      "elapsed_s": 2.204,
+      "attempts": 1,
+      "usage": {
+       "prompt_tokens": 1555,
+       "completion_tokens": 405,
+       "total_tokens": 1960,
+       "prompt_tokens_details": {
+        "cached_tokens": 1280
+       },
+       "prompt_cache_hit_tokens": 1280,
+       "prompt_cache_miss_tokens": 275
+      },
+      "text_chars": 1322
+     }
+    },
+    {
+     "stage": "static_check",
+     "attempt": 1,
+     "ok": true,
+     "n_tool_calls": 2,
+     "tool_calls": [
+      "list_objects",
+      "list_objects"
+     ]
+    },
+    {
+     "stage": "execute",
+     "attempt": 1,
+     "ok": false,
+     "detail": "runtime",
+     "message": "NameError: name 'getattr' is not defined",
+     "lineno": 4,
+     "tool_calls": 1,
+     "duration_ms": 4.128,
+     "trace_errors": {}
+    },
+    {
+     "stage": "synthesize",
+     "attempt": 2,
+     "ok": true,
+     "chars": 1260,
+     "fenced": true,
+     "reply": {
+      "purpose": "synthesize",
+      "model_returned": "deepseek-flash",
+      "finish_reason": "stop",
+      "truncated": false,
+      "has_reasoning": false,
+      "elapsed_s": 1.486,
+      "attempts": 1,
+      "usage": {
+       "prompt_tokens": 2481,
+       "completion_tokens": 394,
+       "total_tokens": 2875,
+       "prompt_tokens_details": {
+        "cached_tokens": 1536
+       },
+       "prompt_cache_hit_tokens": 1536,
+       "prompt_cache_miss_tokens": 945
+      },
+      "text_chars": 1274
+     }
+    },
+    {
+     "stage": "static_check",
+     "attempt": 2,
+     "ok": true,
+     "n_tool_calls": 2,
+     "tool_calls": [
+      "list_objects",
+      "list_objects"
+     ]
+    },
+    {
+     "stage": "execute",
+     "attempt": 2,
+     "ok": true,
+     "detail": "ok",
+     "message": "",
+     "lineno": null,
+     "tool_calls": 7,
+     "duration_ms": 1.248,
+     "trace_errors": {}
+    },
+    {
+     "stage": "render",
+     "attempt": 6,
+     "ok": true,
+     "detail": {
+      "mode": "template",
+      "used_fallback": false
+     }
+    },
+    {
+     "stage": "verify",
+     "attempt": 7,
+     "ok": true,
+     "detail": {
+      "level": "supported",
+      "ok": true,
+      "matched_from": "evidence",
+      "checks": [
+       {
+        "name": "has_evidence",
+        "ok": true,
+        "detail": "evidence 有 3 条",
+        "hard": true
+       },
+       {
+        "name": "tool_was_used",
+        "ok": true,
+        "detail": "成功调用 7 次工具（另有 0 次失败）",
+        "hard": true
+       },
+       {
+        "name": "answer_finite",
+        "ok": true,
+        "detail": "答案是有限数 9.0",
+        "hard": true
+       },
+       {
+        "name": "numeric_backed",
+        "ok": true,
+        "detail": "答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）",
+        "hard": true
+       },
+       {
+        "name": "targets_in_scene",
+        "ok": true,
+        "detail": "9 个 target_id 全部落在场景内",
+        "hard": false
+       },
+       {
+        "name": "targets_exist",
+        "ok": true,
+        "detail": "全部存在于场景图",
+        "hard": false
+       }
+      ],
+      "failed": [],
+      "failed_hard": [],
+      "numbers": [
+       0.836,
+       2.4003,
+       1.0316,
+       2.864,
+       6.705,
+       2.349,
+       1.129,
+       0.795,
+       3.8832,
+       -3.0333,
+       3.6307,
+       2.92,
+       2.693,
+       0.211,
+       0.676,
+       -0.8036,
+       -2.9224,
+       3.6636,
+       2.571,
+       3.69,
+       0.283,
+       0.528,
+       -1.9961,
+       1.8474,
+       1.5844,
+       2.716,
+       0.935,
+       0.787,
+       0.501,
+       -3.2434,
+       -2.9075,
+       3.612
+      ],
+      "n_numbers": 189
+     }
+    }
+   ],
+   "attempts": 2,
+   "usage": {
+    "calls": 2.0,
+    "failed_calls": 0.0,
+    "retried_calls": 0.0,
+    "truncated": 0.0,
+    "prompt_tokens": 4036.0,
+    "completion_tokens": 799.0,
+    "unpriced_calls": 0.0,
+    "cost_cny": 0.019299,
+    "latency_s": 3.69,
+    "by_purpose": {
+     "synthesize": {
+      "calls": 2.0,
+      "prompt_tokens": 4036.0,
+      "completion_tokens": 799.0,
+      "cost_cny": 0.019299,
+      "latency_s": 3.689912
+     }
+    }
+   },
+   "failure": null,
+   "tool_calls": 7,
+   "trace": [
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "sofa_1",
+        "label": "sofa",
+        "score": 0.836,
+        "centroid_m": [
+         2.4003,
+         1.0316,
+         2.864
+        ],
+        "extent_m": {
+         "w": 6.705,
+         "h": 2.349,
+         "l": 1.129
+        }
+       },
+       {
+        "object_id": "picture_1",
+        "label": "picture",
+        "score": 0.795,
+        "centroid_m": [
+         3.8832,
+         -3.0333,
+         3.6307
+        ],
+        "extent_m": {
+         "w": 2.92,
+         "h": 2.693,
+         "l": 0.211
+        }
+       },
+       {
+        "object_id": "mirror_1",
+        "label": "mirror",
+        "score": 0.676,
+        "centroid_m": [
+         -0.8036,
+         -2.9224,
+         3.6636
+        ],
+        "extent_m": {
+         "w": 2.571,
+         "h": 3.69,
+         "l": 0.283
+        }
+       },
+       {
+        "object_id": "chair_1",
+        "label": "chair",
+        "score": 0.528,
+        "centroid_m": [
+         -1.9961,
+         1.8474,
+         1.5844
+        ],
+        "extent_m": {
+         "w": 2.716,
+         "h": 0.935,
+         "l": 0.787
+        }
+       },
+       {
+        "object_id": "picture_2",
+        "label": "picture",
+        "score": 0.501,
+        "centroid_m": [
+         -3.2434,
+         -2.9075,
+         3.612
+        ],
+        "extent_m": {
+         "w": 0.722,
+         "h": 0.655,
+         "l": 0.06
+        }
+       },
+       {
+        "object_id": "picture_3",
+        "label": "picture",
+        "score": 0.489,
+        "centroid_m": [
+         -3.2396,
+         -2.2867,
+         3.678
+        ],
+        "extent_m": {
+         "w": 0.716,
+         "h": 0.609,
+         "l": 0.078
+        }
+       },
+       {
+        "object_id": "sofa_chair_1",
+        "label": "sofa chair",
+        "score": 0.44,
+        "centroid_m": [
+         -2.8881,
+         0.9837,
+         2.3736
+        ],
+        "extent_m": {
+         "w": 3.41,
+         "h": 2.242,
+         "l": 1.907
+        }
+       },
+       {
+        "object_id": "table_1",
+        "label": "table",
+        "score": 0.399,
+        "centroid_m": [
+         1.7952,
+         1.8126,
+         1.706
+        ],
+        "extent_m": {
+         "w": 3.005,
+         "h": 1.478,
+         "l": 1.286
+        }
+       },
+       {
+        "object_id": "picture_4",
+        "label": "picture",
+        "score": 0.332,
+        "centroid_m": [
+         -5.3458,
+         -2.2068,
+         3.6395
+        ],
+        "extent_m": {
+         "w": 0.38,
+         "h": 0.81,
+         "l": 0.184
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": null,
+       "returned": 9,
+       "total_in_scene": 9,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "ccc5943fa7448",
+       "latency_ms": 0.077,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "chair"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "chair_1",
+        "label": "chair",
+        "score": 0.528,
+        "centroid_m": [
+         -1.9961,
+         1.8474,
+         1.5844
+        ],
+        "extent_m": {
+         "w": 2.716,
+         "h": 0.935,
+         "l": 0.787
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "chair",
+       "returned": 1,
+       "total_in_scene": 1,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "c3d2b0b59e310",
+       "latency_ms": 0.022,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "mirror"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "mirror_1",
+        "label": "mirror",
+        "score": 0.676,
+        "centroid_m": [
+         -0.8036,
+         -2.9224,
+         3.6636
+        ],
+        "extent_m": {
+         "w": 2.571,
+         "h": 3.69,
+         "l": 0.283
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "mirror",
+       "returned": 1,
+       "total_in_scene": 1,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "c8427de9c7466",
+       "latency_ms": 0.016,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "picture"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "picture_1",
+        "label": "picture",
+        "score": 0.795,
+        "centroid_m": [
+         3.8832,
+         -3.0333,
+         3.6307
+        ],
+        "extent_m": {
+         "w": 2.92,
+         "h": 2.693,
+         "l": 0.211
+        }
+       },
+       {
+        "object_id": "picture_2",
+        "label": "picture",
+        "score": 0.501,
+        "centroid_m": [
+         -3.2434,
+         -2.9075,
+         3.612
+        ],
+        "extent_m": {
+         "w": 0.722,
+         "h": 0.655,
+         "l": 0.06
+        }
+       },
+       {
+        "object_id": "picture_3",
+        "label": "picture",
+        "score": 0.489,
+        "centroid_m": [
+         -3.2396,
+         -2.2867,
+         3.678
+        ],
+        "extent_m": {
+         "w": 0.716,
+         "h": 0.609,
+         "l": 0.078
+        }
+       },
+       {
+        "object_id": "picture_4",
+        "label": "picture",
+        "score": 0.332,
+        "centroid_m": [
+         -5.3458,
+         -2.2068,
+         3.6395
+        ],
+        "extent_m": {
+         "w": 0.38,
+         "h": 0.81,
+         "l": 0.184
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "picture",
+       "returned": 4,
+       "total_in_scene": 4,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "c6d70fd4d399b",
+       "latency_ms": 0.022,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "sofa"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "sofa_1",
+        "label": "sofa",
+        "score": 0.836,
+        "centroid_m": [
+         2.4003,
+         1.0316,
+         2.864
+        ],
+        "extent_m": {
+         "w": 6.705,
+         "h": 2.349,
+         "l": 1.129
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "sofa",
+       "returned": 1,
+       "total_in_scene": 1,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "cad0c5650e463",
+       "latency_ms": 0.012,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "sofa chair"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "sofa_chair_1",
+        "label": "sofa chair",
+        "score": 0.44,
+        "centroid_m": [
+         -2.8881,
+         0.9837,
+         2.3736
+        ],
+        "extent_m": {
+         "w": 3.41,
+         "h": 2.242,
+         "l": 1.907
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "sofa chair",
+       "returned": 1,
+       "total_in_scene": 1,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "ccc71b5f9263a",
+       "latency_ms": 0.014,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    },
+    {
+     "tool": "list_objects",
+     "args": {
+      "scene_id": "upload_probe",
+      "label": "table"
+     },
+     "result": {
+      "ok": true,
+      "value": [
+       {
+        "object_id": "table_1",
+        "label": "table",
+        "score": 0.399,
+        "centroid_m": [
+         1.7952,
+         1.8126,
+         1.706
+        ],
+        "extent_m": {
+         "w": 3.005,
+         "h": 1.478,
+         "l": 1.286
+        }
+       }
+      ],
+      "evidence": {
+       "scene_id": "upload_probe",
+       "filter_label": "table",
+       "returned": 1,
+       "total_in_scene": 1,
+       "total_objects": 9,
+       "label_counts": {
+        "sofa": 1,
+        "picture": 4,
+        "mirror": 1,
+        "chair": 1,
+        "sofa chair": 1,
+        "table": 1
+       }
+      },
+      "error": null,
+      "meta": {
+       "tool": "list_objects",
+       "version": "1.2.0",
+       "tool_call_id": "c17fef7fb1469",
+       "latency_ms": 0.012,
+       "cached": false,
+       "gpu_peak_mb": null,
+       "timestamp": 1789819658.032351
+      }
+     }
+    }
+   ],
+   "elapsed_s": 3.73,
+   "tools_version": "1.2.0",
+   "memory": {
+    "question": "场景里一共有多少个物体？",
+    "scene_hint": {
+     "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+     },
+     "n_objects": 9,
+     "image_id": "rgb.png",
+     "scene_id": "upload_probe",
+     "image_size": [
+      640,
+      480
+     ],
+     "intrinsics_source": "predicted"
+    },
+    "n_attempts": 1,
+    "attempts": [
+     {
+      "index": 1,
+      "stage": "execute:runtime",
+      "code": null,
+      "lineno": 4,
+      "message": "NameError: name 'getattr' is not defined",
+      "hint": null,
+      "recovery": [],
+      "source_excerpt": "from itertools import chain\ndef _ok(res):\n    return res is not None and getattr(res, \"ok\", False)\ndef _value(res):\n    return res.value if _ok(res) else None\ndef _count_all(scene_id):"
+     }
+    ],
+    "confirmed_ids": [
+     "chair_1",
+     "mirror_1",
+     "picture_1",
+     "picture_2",
+     "picture_3",
+     "picture_4",
+     "sofa_1",
+     "sofa_chair_1",
+     "table_1"
+    ],
+    "facts": {}
+   },
+   "verdict": {
+    "level": "supported",
+    "ok": true,
+    "matched_from": "evidence",
+    "checks": [
+     {
+      "name": "has_evidence",
+      "ok": true,
+      "detail": "evidence 有 3 条",
+      "hard": true
+     },
+     {
+      "name": "tool_was_used",
+      "ok": true,
+      "detail": "成功调用 7 次工具（另有 0 次失败）",
+      "hard": true
+     },
+     {
+      "name": "answer_finite",
+      "ok": true,
+      "detail": "答案是有限数 9.0",
+      "hard": true
+     },
+     {
+      "name": "numeric_backed",
+      "ok": true,
+      "detail": "答案 9.0 命中证据/参数里的数 9.0（弱一档：非工具返回值）",
+      "hard": true
+     },
+     {
+      "name": "targets_in_scene",
+      "ok": true,
+      "detail": "9 个 target_id 全部落在场景内",
+      "hard": false
+     },
+     {
+      "name": "targets_exist",
+      "ok": true,
+      "detail": "全部存在于场景图",
+      "hard": false
+     }
+    ],
+    "failed": [],
+    "failed_hard": [],
+    "numbers": [
+     0.836,
+     2.4003,
+     1.0316,
+     2.864,
+     6.705,
+     2.349,
+     1.129,
+     0.795,
+     3.8832,
+     -3.0333,
+     3.6307,
+     2.92,
+     2.693,
+     0.211,
+     0.676,
+     -0.8036,
+     -2.9224,
+     3.6636,
+     2.571,
+     3.69,
+     0.283,
+     0.528,
+     -1.9961,
+     1.8474,
+     1.5844,
+     2.716,
+     0.935,
+     0.787,
+     0.501,
+     -3.2434,
+     -2.9075,
+     3.612
+    ],
+    "n_numbers": 189
+   },
+   "plan": {
+    "ok": false,
+    "skipped": true,
+    "reason": "planner=off"
+   },
+   "switches": {
+    "action_space": "program",
+    "planner": "off",
+    "render": "template",
+    "toolset": [
+     "list_objects",
+     "get_object",
+     "find_object",
+     "single_object",
+     "find_nearest",
+     "find_farthest",
+     "query_relation",
+     "get_3d_position",
+     "get_3d_extent",
+     "calculate_distance",
+     "calculate_angle",
+     "get_attributes"
+    ],
+    "n_tools": 12,
+    "max_synthesis_retries": 2,
+    "exec_timeout_s": 60.0,
+    "vlm": true,
+    "vlm_model": "deepseek-flash"
+   }
+  }
+ ]
+}

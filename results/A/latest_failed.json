@@ -1,0 +1,241 @@
+{
+  "arm": "A",
+  "started": "2026-09-18T15:01:55",
+  "argv": [
+    "--arm",
+    "A",
+    "--num-questions",
+    "4"
+  ],
+  "env_applied_by_runner": {
+    "HF_HOME": "D:\\3D_Spatial_Agent\\.cache\\huggingface",
+    "HF_ENDPOINT": "https://hf-mirror.com",
+    "HF_HUB_DISABLE_XET": "1",
+    "HF_HUB_OFFLINE": "1",
+    "VADAR_GDINO_DIR": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "VADAR_CALL_LOG": "D:\\3D_Spatial_Agent\\logs\\vadar_llm_calls.jsonl"
+  },
+  "dataset": "omni3d",
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "VADAR_API_KEY",
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "applied": [
+      "VADAR_BASE_URL",
+      "VADAR_EXTRA_BODY",
+      "VADAR_MAX_RETRIES",
+      "VADAR_MAX_TOKENS",
+      "VADAR_MODEL",
+      "VADAR_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "VADAR_API_KEY",
+      "VADAR_VISION_API_KEY",
+      "VADAR_VISION_BASE_URL",
+      "VADAR_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "a2c55d251d9db1740ae20aac5413239477b193d1d8dbcfbc2a011b25f63cd483",
+    "secrets": {
+      "VADAR_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      },
+      "VADAR_MAX_TOKENS": {
+        "present": true,
+        "fingerprint": "864a936a"
+      },
+      "VADAR_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "api_key_source": "missing",
+  "precheck": {
+    "annotations": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\annotations.json",
+    "images": "D:\\3D_Spatial_Agent\\dataset\\raw\\omni3d-bench\\unpacked\\images",
+    "problems": [],
+    "n_questions": 501,
+    "question_fields": [
+      "answer",
+      "answer_type",
+      "image_filename",
+      "image_index",
+      "question",
+      "question_index"
+    ],
+    "n_unique_image_filenames": 201,
+    "n_missing_image_files": 0,
+    "ok": true
+  },
+  "subset": {
+    "mode": "vadarspec",
+    "seed": 42,
+    "n_requested": 4,
+    "n_selected": 4,
+    "metric_class_counts": {
+      "numeric_other": 3,
+      "yes_no": 1
+    },
+    "answer_type_counts": {
+      "float": 3,
+      "str": 1
+    },
+    "n_unique_images": 2,
+    "annotation_pool_size": 501,
+    "num_api_questions": 3,
+    "selected": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "What is the ratio of the height of the fireplace to the combined height of the coffee table and the sofa to the right of the coffee table?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the coffee table is 2m long, how long is the sofa to the right of it in meters?"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "2",
+        "metric_class": "yes_no",
+        "answer_type": "str",
+        "question": "If the rightmost sofa were placed in front of the fireplace, would the fireplace still be visible?"
+      },
+      {
+        "image_index": "40579.354_00002498.jpg",
+        "question_index": "3",
+        "metric_class": "numeric_other",
+        "answer_type": "float",
+        "question": "If the armchair is 1.5m wide, how tall is the combined cabinet right next to it in meters?"
+      }
+    ],
+    "api_subset": [
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "0"
+      },
+      {
+        "image_index": "40579.354_00002498.jpg",
+        "question_index": "3"
+      },
+      {
+        "image_index": "91339.246_00000463.jpg",
+        "question_index": "1"
+      }
+    ],
+    "deviation_from_original": "原版用无种子的 random.sample 抽 api_questions（bug ③，不可复现）；本运行器改用 random.Random(seed).sample，并把选中清单落盘。"
+  },
+  "adapter": {
+    "steps": {
+      "paths": {
+        "added": [
+          "D:\\3D_Spatial_Agent\\vendor",
+          "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+        ],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR"
+      },
+      "stubs": {
+        "count": 21
+      },
+      "bridge_install": {
+        "patched": [
+          "engine.engine_utils",
+          "engine.predefined_modules (+VQAModule.predict)",
+          "engine.engine",
+          "agents.agents"
+        ],
+        "failed": [],
+        "repo_root": "D:\\3D_Spatial_Agent\\vendor\\VADAR",
+        "warnings": []
+      },
+      "alarm": {
+        "patched": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "failed": [],
+        "targets": [
+          "agents.agents",
+          "engine.engine"
+        ],
+        "shim": {
+          "armed": 0,
+          "cancelled": 0,
+          "fired": 0,
+          "fired_by": {
+            "trace": 0,
+            "timer": 0
+          },
+          "trace_errors": 0,
+          "timeout_s": null,
+          "exception_type": "builtins.TimeoutError"
+        }
+      },
+      "alarm_note": "计数请在实验结束时调用 report['steps']['alarm']['shim'].describe()"
+    },
+    "model_fingerprint": {
+      "text": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "(missing)",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      },
+      "vision": {
+        "label": "text",
+        "base_url": "https://api.deepseek.com",
+        "model": "deepseek-flash",
+        "api_key": "(missing)",
+        "temperature": 0.2,
+        "max_tokens": 8192,
+        "max_retries": 2,
+        "extra_body": {
+          "thinking": {
+            "type": "disabled"
+          }
+        },
+        "price_cny_per_mtok": [
+          3.0,
+          9.0
+        ]
+      }
+    },
+    "gdino_dir": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "gdino_caption_mode": "vadar"
+  },
+  "adapter_ok": true,
+  "fatal": "缺少 VADAR_API_KEY：既不在配置文件里，也不在进程环境里。把 key 填进 D:\\3D_Spatial_Agent\\configs\\llm_backend.env 的第 30 行（打开：notepad \"D:\\3D_Spatial_Agent\\configs\\llm_backend.env\"）。配置文件状态：D:\\3D_Spatial_Agent\\configs\\llm_backend.env（10 个键，新写入 6，留空 VADAR_API_KEY, VADAR_VISION_API_KEY, VADAR_VISION_BASE_URL, VADAR_VISION_MODEL）",
+  "note": "本次失败**没有**覆盖 latest_run.json；它写到了 latest_failed.json。上一次成功的实验记录仍是完整的。",
+  "mode": "fatal"
+}

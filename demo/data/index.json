@@ -1,0 +1,174 @@
+{
+ "generated_at": "2026-09-19 20:07:05",
+ "scenes": [
+  {
+   "scene_id": "exif_fixture_exif",
+   "image_id": "rgb_exif.jpg",
+   "n_nodes": 9,
+   "n_edges": 137,
+   "image_url": "assets/exif_fixture_exif/rgb_exif.jpg",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": false,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 14.26,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "exif_fixture_pred",
+   "image_id": "rgb_exif.jpg",
+   "n_nodes": 9,
+   "n_edges": 133,
+   "image_url": "assets/exif_fixture_pred/rgb_exif.jpg",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": false,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": false,
+   "up_axis_tilt_deg": 63.71,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "living_room",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 133,
+   "image_url": "assets/living_room/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": false,
+   "up_axis_tilt_deg": 63.04,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "living_room_gt",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 137,
+   "image_url": "assets/living_room_gt/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 11.95,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "living_room_pred",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 133,
+   "image_url": "assets/living_room_pred/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": false,
+   "up_axis_tilt_deg": 63.04,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "upload_probe",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 133,
+   "image_url": "assets/upload_probe/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": false,
+   "up_axis_tilt_deg": 63.04,
+   "scale_calibrated": false,
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  }
+ ],
+ "n_run_batches": 6
+}

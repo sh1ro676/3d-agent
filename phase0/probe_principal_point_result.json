@@ -1,0 +1,390 @@
+{
+  "gt_K": {
+    "fx": 518.85791015625,
+    "fy": 519.4696044921875,
+    "cx": 325.58245849609375,
+    "cy": 253.7361602783203
+  },
+  "exif_K": {
+    "fx": 515.5555555555555,
+    "fy": 515.5555555555555,
+    "cx": 320.0,
+    "cy": 240.0,
+    "focal_35mm": 29
+  },
+  "principal_point_offset_px": [
+    -5.58245849609375,
+    -13.736160278320312
+  ],
+  "focal_dev_pct": -0.6365,
+  "decomposition": [
+    {
+      "label": "K0 GT（理想下限）",
+      "ms": 83.7,
+      "bear2d_px_median": 6.8155,
+      "bear2d_px_p90": 9.9038,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.2673
+    },
+    {
+      "label": "K1 EXIF 全套",
+      "ms": 34.3,
+      "bear2d_px_median": 21.9559,
+      "bear2d_px_p90": 26.1583,
+      "bear1d_x_px_median": 8.3175,
+      "bear1d_y_px_median": 20.2645,
+      "err3d_median_m": 0.2376
+    },
+    {
+      "label": "K2 只错主点",
+      "ms": 34.9,
+      "bear2d_px_median": 21.5636,
+      "bear2d_px_p90": 24.6309,
+      "bear1d_x_px_median": 8.1918,
+      "bear1d_y_px_median": 19.9518,
+      "err3d_median_m": 0.2269
+    },
+    {
+      "label": "K3 只错焦距",
+      "ms": 33.1,
+      "bear2d_px_median": 7.2889,
+      "bear2d_px_p90": 11.4381,
+      "bear1d_x_px_median": 2.6992,
+      "bear1d_y_px_median": 6.4404,
+      "err3d_median_m": 0.2805
+    }
+  ],
+  "no_camera_2d": {
+    "bear2d_px_median": 432.0055,
+    "bear2d_px_p90": 630.1817,
+    "bear1d_x_px_median": 305.8455,
+    "bear1d_y_px_median": 238.4672,
+    "err3d_median_m": 1.943
+  },
+  "metric_note": "本探针用二维方位误差 hypot(Δx/z, Δy/z)；Step 7 的 bear_err_px 是一维（只含 x/z）。两者数值不同，引用须标口径。",
+  "decomposition_extra_px": {
+    "total": 15.14,
+    "principal_point": 14.748,
+    "focal_quantisation": 0.473,
+    "ratio_pp_over_focal": 31.15
+  },
+  "grid": [
+    {
+      "dcx": -14.0,
+      "dcy": -14.0,
+      "bear2d_px_median": 26.1433,
+      "bear2d_px_p90": 28.7785,
+      "bear1d_x_px_median": 16.6094,
+      "bear1d_y_px_median": 20.2154,
+      "err3d_median_m": 0.2334
+    },
+    {
+      "dcx": -14.0,
+      "dcy": -7.0,
+      "bear2d_px_median": 21.23,
+      "bear2d_px_p90": 23.4987,
+      "bear1d_x_px_median": 16.6094,
+      "bear1d_y_px_median": 13.2236,
+      "err3d_median_m": 0.2463
+    },
+    {
+      "dcx": -14.0,
+      "dcy": 0.0,
+      "bear2d_px_median": 17.8526,
+      "bear2d_px_p90": 19.4648,
+      "bear1d_x_px_median": 16.6094,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.2689
+    },
+    {
+      "dcx": -14.0,
+      "dcy": 7.0,
+      "bear2d_px_median": 16.779,
+      "bear2d_px_p90": 18.1506,
+      "bear1d_x_px_median": 16.6094,
+      "bear1d_y_px_median": 2.0912,
+      "err3d_median_m": 0.3036
+    },
+    {
+      "dcx": -14.0,
+      "dcy": 14.0,
+      "bear2d_px_median": 18.5213,
+      "bear2d_px_p90": 20.4934,
+      "bear1d_x_px_median": 16.6094,
+      "bear1d_y_px_median": 7.7516,
+      "err3d_median_m": 0.3304
+    },
+    {
+      "dcx": -7.0,
+      "dcy": -14.0,
+      "bear2d_px_median": 22.375,
+      "bear2d_px_p90": 25.376,
+      "bear1d_x_px_median": 9.6094,
+      "bear1d_y_px_median": 20.2154,
+      "err3d_median_m": 0.2279
+    },
+    {
+      "dcx": -7.0,
+      "dcy": -7.0,
+      "bear2d_px_median": 16.3456,
+      "bear2d_px_p90": 19.0938,
+      "bear1d_x_px_median": 9.6094,
+      "bear1d_y_px_median": 13.2236,
+      "err3d_median_m": 0.2388
+    },
+    {
+      "dcx": -7.0,
+      "dcy": 0.0,
+      "bear2d_px_median": 11.5488,
+      "bear2d_px_p90": 13.6272,
+      "bear1d_x_px_median": 9.6094,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.271
+    },
+    {
+      "dcx": -7.0,
+      "dcy": 7.0,
+      "bear2d_px_median": 9.9558,
+      "bear2d_px_p90": 11.2886,
+      "bear1d_x_px_median": 9.6094,
+      "bear1d_y_px_median": 2.0912,
+      "err3d_median_m": 0.2992
+    },
+    {
+      "dcx": -7.0,
+      "dcy": 14.0,
+      "bear2d_px_median": 12.4764,
+      "bear2d_px_p90": 15.1009,
+      "bear1d_x_px_median": 9.6094,
+      "bear1d_y_px_median": 7.7516,
+      "err3d_median_m": 0.3321
+    },
+    {
+      "dcx": 0.0,
+      "dcy": -14.0,
+      "bear2d_px_median": 20.395,
+      "bear2d_px_p90": 23.664,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 20.2154,
+      "err3d_median_m": 0.2251
+    },
+    {
+      "dcx": 0.0,
+      "dcy": -7.0,
+      "bear2d_px_median": 13.5011,
+      "bear2d_px_p90": 16.7372,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 13.2236,
+      "err3d_median_m": 0.2427
+    },
+    {
+      "dcx": 0.0,
+      "dcy": 0.0,
+      "bear2d_px_median": 6.8155,
+      "bear2d_px_p90": 9.9038,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.2673
+    },
+    {
+      "dcx": 0.0,
+      "dcy": 7.0,
+      "bear2d_px_median": 3.6198,
+      "bear2d_px_p90": 5.3952,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 2.0912,
+      "err3d_median_m": 0.3037
+    },
+    {
+      "dcx": 0.0,
+      "dcy": 14.0,
+      "bear2d_px_median": 8.2443,
+      "bear2d_px_p90": 11.8814,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 7.7516,
+      "err3d_median_m": 0.3312
+    },
+    {
+      "dcx": 7.0,
+      "dcy": -14.0,
+      "bear2d_px_median": 20.7155,
+      "bear2d_px_p90": 23.9618,
+      "bear1d_x_px_median": 4.3906,
+      "bear1d_y_px_median": 20.2154,
+      "err3d_median_m": 0.2355
+    },
+    {
+      "dcx": 7.0,
+      "dcy": -7.0,
+      "bear2d_px_median": 13.9833,
+      "bear2d_px_p90": 17.1555,
+      "bear1d_x_px_median": 4.3906,
+      "bear1d_y_px_median": 13.2236,
+      "err3d_median_m": 0.2479
+    },
+    {
+      "dcx": 7.0,
+      "dcy": 0.0,
+      "bear2d_px_median": 7.6773,
+      "bear2d_px_p90": 10.5981,
+      "bear1d_x_px_median": 4.3906,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.2804
+    },
+    {
+      "dcx": 7.0,
+      "dcy": 7.0,
+      "bear2d_px_median": 5.1973,
+      "bear2d_px_p90": 6.5763,
+      "bear1d_x_px_median": 4.3906,
+      "bear1d_y_px_median": 2.0912,
+      "err3d_median_m": 0.3091
+    },
+    {
+      "dcx": 7.0,
+      "dcy": 14.0,
+      "bear2d_px_median": 9.0332,
+      "bear2d_px_p90": 12.3772,
+      "bear1d_x_px_median": 4.3906,
+      "bear1d_y_px_median": 7.7516,
+      "err3d_median_m": 0.3413
+    },
+    {
+      "dcx": 14.0,
+      "dcy": -14.0,
+      "bear2d_px_median": 23.2273,
+      "bear2d_px_p90": 26.1977,
+      "bear1d_x_px_median": 11.3906,
+      "bear1d_y_px_median": 20.2154,
+      "err3d_median_m": 0.2473
+    },
+    {
+      "dcx": 14.0,
+      "dcy": -7.0,
+      "bear2d_px_median": 17.4516,
+      "bear2d_px_p90": 20.1988,
+      "bear1d_x_px_median": 11.3906,
+      "bear1d_y_px_median": 13.2236,
+      "err3d_median_m": 0.2653
+    },
+    {
+      "dcx": 14.0,
+      "dcy": 0.0,
+      "bear2d_px_median": 13.097,
+      "bear2d_px_p90": 15.2113,
+      "bear1d_x_px_median": 11.3906,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.288
+    },
+    {
+      "dcx": 14.0,
+      "dcy": 7.0,
+      "bear2d_px_median": 11.7267,
+      "bear2d_px_p90": 13.1214,
+      "bear1d_x_px_median": 11.3906,
+      "bear1d_y_px_median": 2.0912,
+      "err3d_median_m": 0.3236
+    },
+    {
+      "dcx": 14.0,
+      "dcy": 14.0,
+      "bear2d_px_median": 13.9786,
+      "bear2d_px_p90": 16.2792,
+      "bear1d_x_px_median": 11.3906,
+      "bear1d_y_px_median": 7.7516,
+      "err3d_median_m": 0.3495
+    }
+  ],
+  "radial": [
+    {
+      "radius_px": 0.0,
+      "dcx": -0.0,
+      "dcy": -0.0,
+      "lateral_mm_at_3m": 39.4,
+      "bear2d_px_median": 6.8155,
+      "bear2d_px_p90": 9.9038,
+      "bear1d_x_px_median": 2.6094,
+      "bear1d_y_px_median": 6.2319,
+      "err3d_median_m": 0.2673
+    },
+    {
+      "radius_px": 2.0,
+      "dcx": -0.7530022461829264,
+      "dcy": -1.8528323230242578,
+      "lateral_mm_at_3m": 50.8,
+      "bear2d_px_median": 8.7923,
+      "bear2d_px_p90": 11.8781,
+      "bear1d_x_px_median": 3.3624,
+      "bear1d_y_px_median": 8.0825,
+      "err3d_median_m": 0.256
+    },
+    {
+      "radius_px": 4.0,
+      "dcx": -1.5060044923658529,
+      "dcy": -3.7056646460485156,
+      "lateral_mm_at_3m": 62.3,
+      "bear2d_px_median": 10.7766,
+      "bear2d_px_p90": 13.8593,
+      "bear1d_x_px_median": 4.1154,
+      "bear1d_y_px_median": 9.9332,
+      "err3d_median_m": 0.2506
+    },
+    {
+      "radius_px": 8.0,
+      "dcx": -3.0120089847317058,
+      "dcy": -7.411329292097031,
+      "lateral_mm_at_3m": 85.3,
+      "bear2d_px_median": 14.7569,
+      "bear2d_px_p90": 17.8327,
+      "bear1d_x_px_median": 5.6214,
+      "bear1d_y_px_median": 13.6345,
+      "err3d_median_m": 0.2373
+    },
+    {
+      "radius_px": 12.0,
+      "dcx": -4.518013477097559,
+      "dcy": -11.116993938145548,
+      "lateral_mm_at_3m": 108.4,
+      "bear2d_px_median": 18.7435,
+      "bear2d_px_p90": 21.8141,
+      "bear1d_x_px_median": 7.1274,
+      "bear1d_y_px_median": 17.3357,
+      "err3d_median_m": 0.2286
+    },
+    {
+      "radius_px": 16.0,
+      "dcx": -6.0240179694634115,
+      "dcy": -14.822658584194063,
+      "lateral_mm_at_3m": 131.4,
+      "bear2d_px_median": 22.7334,
+      "bear2d_px_p90": 25.8001,
+      "bear1d_x_px_median": 8.6334,
+      "bear1d_y_px_median": 21.0371,
+      "err3d_median_m": 0.2276
+    },
+    {
+      "radius_px": 20.0,
+      "dcx": -7.530022461829264,
+      "dcy": -18.528323230242577,
+      "lateral_mm_at_3m": 154.5,
+      "bear2d_px_median": 26.7253,
+      "bear2d_px_p90": 29.7886,
+      "bear1d_x_px_median": 10.1394,
+      "bear1d_y_px_median": 24.7383,
+      "err3d_median_m": 0.2338
+    }
+  ],
+  "radial_slopes": [
+    0.9884,
+    0.9922,
+    0.9951,
+    0.9967,
+    0.9975,
+    0.998
+  ],
+  "tolerance_mm": 50.0,
+  "px_to_mm_at_3m": 5.7819,
+  "load_s": 4.51,
+  "caveat": "本图 GT 主点偏移 (5.6,13.7) px 偏大，疑因 demo 图为渲染图；真实照片主点通常更接近中心，故 s2 是上界而非典型值。"
+}

@@ -1,0 +1,13 @@
+OK   /api/health                  200  563 bytes
+     health.ok=True tools=1.2.0 backend.ready=True model=deepseek-flash scenes=5
+OK   /                            200  13892 bytes
+OK   /app.js                      200  44314 bytes
+OK   /vendor/three.module.js      200  1304820 bytes
+OK   /vendor/OrbitControls.js     200  32134 bytes
+OK   /data/index.json             200  2789 bytes
+     index scenes=5 n_batches=4
+OK   /data/living_room.scene.json 200  41878 bytes
+     scene nodes=9 edges=133 image_url=assets/living_room/rgb.png
+OK   /data/runs.json              200  82991 bytes
+OK   /assets/living_room/rgb.png  200  448668 bytes
+OK   /assets/living_room/masks/sofa_1.png 200  1056 bytes

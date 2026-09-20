@@ -1,0 +1,20 @@
+﻿.......F................................................................ [ 74%]
+.........................                                                [100%]
+================================== FAILURES ===================================
+_ TestNumericBacking.test_a_plausible_answer_is_not_created_by_the_tolerance __
+
+self = <test_agent_verifier.TestNumericBacking object at 0x00000287898E80B0>
+
+    def test_a_plausible_answer_is_not_created_by_the_tolerance(self):
+>       assert verify(submission(2.5030), trace=DISTANCE_TRACE).level == "unsupported"
+E       AssertionError: assert 'supported' == 'unsupported'
+E         
+E         - unsupported
+E         ? --
+E         + supported
+
+tests\test_agent_verifier.py:123: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_agent_verifier.py::TestNumericBacking::test_a_plausible_answer_is_not_created_by_the_tolerance
+1 failed, 96 passed in 12.75s
+exit=1

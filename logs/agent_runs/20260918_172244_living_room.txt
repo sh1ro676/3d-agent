@@ -1,0 +1,84 @@
+==============================================================================
+自研 3D Spatial Agent —— llm
+==============================================================================
+场景：living_room: 9 objects / 133 edges (up_axis=-y, scale=1.000)
+场景清单（scene_hint，无坐标）：{"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}
+动作空间（11 个）：list_objects, get_object, find_object, single_object, find_nearest, find_farthest, query_relation, get_3d_position, get_3d_extent, calculate_distance, calculate_angle
+
+==============================================================================
+问题：场景里一共有几个物体？
+状态：ok   答案：9   渲染：9（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）
+生成次数：1   工具调用：1   耗时：1.2 s   成本：¥0.0055
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+-- 生成的程序 --
+from collections import Counter
+
+res = list_objects(scene_id="living_room")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+
+objs = res.value
+count = len(objs)
+labels = Counter(o["label"] for o in objs)
+
+submit(
+    count,
+    target_ids=[o["object_id"] for o in objs],
+    evidence=[
+        "list_objects(scene_id='living_room') returned %d objects" % count,
+        "label breakdown: " + ", ".join("%s=%d" % (k, v) for k, v in sorted(labels.items())),
+    ],
+)
+
+==============================================================================
+问题：沙发（sofa）和桌子（table）之间的三维距离是多少米？
+状态：ok   答案：1.5221854777889445   渲染：1.52219（指认：sofa_1、table_1）
+生成次数：1   工具调用：3   耗时：1.8 s   成本：¥0.0071
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+-- 生成的程序 --
+from math import isfinite
+
+scene_id = "living_room"
+
+# 1) 找到沙发
+res = single_object(scene_id=scene_id, label="sofa")
+if not res.ok:
+    submit("unknown", evidence=[f"single_object(sofa) 失败: {res.error.code}"])
+else:
+    sofa = res.value
+    sofa_id = sofa["object_id"]
+
+    # 2) 找到桌子
+    res2 = single_object(scene_id=scene_id, label="table")
+    if not res2.ok:
+        submit("unknown", evidence=[f"single_object(table) 失败: {res2.error.code}"])
+    else:
+        table = res2.value
+        table_id = table["object_id"]
+
+        # 3) 计算三维欧氏距离
+        res3 = calculate_distance(scene_id=scene_id, a=sofa_id, b=table_id)
+        if not res3.ok:
+            submit("unknown", evidence=[f"calculate_distance 失败: {res3.error.code}"])
+        else:
+            d = res3.value
+            if d is None or not isfinite(float(d)):
+                submit("unknown", evidence=["距离返回值非法"])
+            else:
+                submit(
+                    float(d),
+                    target_ids=[sofa_id, table_id],
+                    evidence=[
+                        f"sofa id={sofa_id}, table id={table_id}",
+                        f"calculate_distance(sofa, table) = {d} 米",
+                    ],
+                )
+
+==============================================================================
+总用量：{"calls": 2, "failed_calls": 0, "retried_calls": 0, "truncated": 0, "prompt_tokens": 2764, "completion_tokens": 476, "cost_cny": 0.012576, "unpriced_calls": 0, "latency_s": 2.907, "by_purpose": {"synthesize": {"calls": 2, "prompt_tokens": 2764, "completion_tokens": 476, "cost_cny": 0.012576, "latency_s": 2.9065352999987226}}}

@@ -1,0 +1,424 @@
+{
+  "unidepth": {
+    "repo": "lpiccinelli/unidepth-v2-vits14",
+    "params_m": 34.2,
+    "load_s": 3.88,
+    "latency_ms": 523.7,
+    "peak_vram_alloc_mb": 486.3,
+    "peak_vram_reserved_mb": 604.0,
+    "keys": {
+      "confidence": [
+        1,
+        1,
+        480,
+        640
+      ],
+      "intrinsics": [
+        1,
+        3,
+        3
+      ],
+      "radius": [
+        1,
+        1,
+        480,
+        640
+      ],
+      "depth": [
+        1,
+        1,
+        480,
+        640
+      ],
+      "points": [
+        1,
+        3,
+        480,
+        640
+      ],
+      "rays": [
+        1,
+        3,
+        480,
+        640
+      ],
+      "depth_features": [
+        1,
+        256,
+        35,
+        46
+      ]
+    }
+  },
+  "consistency": {
+    "verified": true,
+    "identities": {
+      "points == rays * radius": 0.0008691549301147461,
+      "points_z == depth": 0.0,
+      "norm(points) == radius": 0.0
+    },
+    "max_err_m": 0.1168,
+    "mean_err_m": 0.10344,
+    "rel_max_pct": 5.304,
+    "rel_mean_pct": 3.693,
+    "depth_key": "depth",
+    "points_key": "points",
+    "rays_key": "rays",
+    "radius_key": "radius",
+    "intrinsics_key": "intrinsics",
+    "depth_range_m": [
+      1.3763,
+      3.9738
+    ],
+    "K": [
+      163.73776245117188,
+      163.41827392578125,
+      322.0,
+      248.1103515625
+    ]
+  },
+  "gdino": {
+    "model_id": "D:\\3D_Spatial_Agent\\.cache\\models\\grounding-dino-tiny",
+    "prompt": "sofa. chair. table. picture. mirror.",
+    "params_m": 172.3,
+    "load_s": 1.25,
+    "latency_ms": 709.0,
+    "peak_vram_alloc_mb": 1902.8,
+    "peak_vram_reserved_mb": 2306.0,
+    "n_detections": 9,
+    "box_format": "xyxy, absolute pixels, origin top-left",
+    "detections": [
+      {
+        "label": "sofa",
+        "score": 0.8359,
+        "box_xyxy": [
+          286.3,
+          215.2,
+          632.2,
+          363.7
+        ]
+      },
+      {
+        "label": "picture",
+        "score": 0.795,
+        "box_xyxy": [
+          425.0,
+          46.6,
+          566.7,
+          173.0
+        ]
+      },
+      {
+        "label": "mirror",
+        "score": 0.6763,
+        "box_xyxy": [
+          226.5,
+          25.8,
+          341.9,
+          197.2
+        ]
+      },
+      {
+        "label": "sofa chair",
+        "score": 0.4395,
+        "box_xyxy": [
+          6.8,
+          231.8,
+          237.0,
+          403.7
+        ]
+      },
+      {
+        "label": "picture",
+        "score": 0.5013,
+        "box_xyxy": [
+          157.0,
+          98.7,
+          190.4,
+          127.8
+        ]
+      },
+      {
+        "label": "picture",
+        "score": 0.4885,
+        "box_xyxy": [
+          160.4,
+          129.5,
+          192.6,
+          157.3
+        ]
+      },
+      {
+        "label": "chair",
+        "score": 0.5281,
+        "box_xyxy": [
+          6.7,
+          346.7,
+          235.0,
+          475.0
+        ]
+      },
+      {
+        "label": "table",
+        "score": 0.3994,
+        "box_xyxy": [
+          359.3,
+          334.0,
+          632.9,
+          478.8
+        ]
+      },
+      {
+        "label": "picture",
+        "score": 0.3325,
+        "box_xyxy": [
+          71.1,
+          127.4,
+          93.2,
+          165.0
+        ]
+      }
+    ]
+  },
+  "distance_demo": {
+    "centres": {
+      "sofa": [
+        2.4478,
+        0.8752,
+        2.9917
+      ],
+      "picture#1": [
+        3.9222,
+        -3.0242,
+        3.6324
+      ],
+      "mirror": [
+        -0.8139,
+        -3.0029,
+        3.6569
+      ],
+      "sofa chair": [
+        -2.808,
+        1.0439,
+        2.3495
+      ],
+      "picture#2": [
+        -3.2462,
+        -2.922,
+        3.6113
+      ],
+      "picture#3": [
+        -3.2402,
+        -2.2873,
+        3.6784
+      ],
+      "chair": [
+        -2.0732,
+        1.7888,
+        1.6885
+      ],
+      "table": [
+        1.9067,
+        1.7763,
+        1.7753
+      ],
+      "picture#4": [
+        -5.3272,
+        -2.214,
+        3.6434
+      ]
+    },
+    "pairs": [
+      {
+        "a": "picture#2",
+        "b": "picture#3",
+        "dist_m": 0.6382
+      },
+      {
+        "a": "sofa chair",
+        "b": "chair",
+        "dist_m": 1.2377
+      },
+      {
+        "a": "sofa",
+        "b": "table",
+        "dist_m": 1.6076
+      },
+      {
+        "a": "picture#3",
+        "b": "picture#4",
+        "dist_m": 2.0885
+      },
+      {
+        "a": "picture#2",
+        "b": "picture#4",
+        "dist_m": 2.1983
+      },
+      {
+        "a": "mirror",
+        "b": "picture#2",
+        "dist_m": 2.4341
+      },
+      {
+        "a": "mirror",
+        "b": "picture#3",
+        "dist_m": 2.5298
+      },
+      {
+        "a": "sofa chair",
+        "b": "picture#3",
+        "dist_m": 3.6124
+      },
+      {
+        "a": "chair",
+        "b": "table",
+        "dist_m": 3.9809
+      },
+      {
+        "a": "sofa chair",
+        "b": "picture#2",
+        "dist_m": 4.1847
+      },
+      {
+        "a": "sofa",
+        "b": "picture#1",
+        "dist_m": 4.2178
+      },
+      {
+        "a": "sofa chair",
+        "b": "picture#4",
+        "dist_m": 4.3167
+      },
+      {
+        "a": "mirror",
+        "b": "picture#4",
+        "dist_m": 4.5818
+      },
+      {
+        "a": "picture#3",
+        "b": "chair",
+        "dist_m": 4.6836
+      },
+      {
+        "a": "mirror",
+        "b": "sofa chair",
+        "dist_m": 4.6971
+      },
+      {
+        "a": "picture#1",
+        "b": "mirror",
+        "dist_m": 4.7362
+      },
+      {
+        "a": "sofa",
+        "b": "chair",
+        "dist_m": 4.7929
+      },
+      {
+        "a": "sofa chair",
+        "b": "table",
+        "dist_m": 4.8057
+      },
+      {
+        "a": "sofa",
+        "b": "mirror",
+        "dist_m": 5.1108
+      },
+      {
+        "a": "picture#2",
+        "b": "chair",
+        "dist_m": 5.2215
+      },
+      {
+        "a": "sofa",
+        "b": "sofa chair",
+        "dist_m": 5.2975
+      },
+      {
+        "a": "mirror",
+        "b": "chair",
+        "dist_m": 5.3312
+      },
+      {
+        "a": "chair",
+        "b": "picture#4",
+        "dist_m": 5.5165
+      },
+      {
+        "a": "picture#1",
+        "b": "table",
+        "dist_m": 5.5278
+      },
+      {
+        "a": "mirror",
+        "b": "table",
+        "dist_m": 5.8124
+      },
+      {
+        "a": "sofa",
+        "b": "picture#3",
+        "dist_m": 6.5441
+      },
+      {
+        "a": "picture#3",
+        "b": "table",
+        "dist_m": 6.8283
+      },
+      {
+        "a": "sofa",
+        "b": "picture#2",
+        "dist_m": 6.8719
+      },
+      {
+        "a": "picture#1",
+        "b": "picture#2",
+        "dist_m": 7.1691
+      },
+      {
+        "a": "picture#1",
+        "b": "picture#3",
+        "dist_m": 7.2004
+      },
+      {
+        "a": "picture#2",
+        "b": "table",
+        "dist_m": 7.2109
+      },
+      {
+        "a": "picture#1",
+        "b": "chair",
+        "dist_m": 7.9302
+      },
+      {
+        "a": "picture#1",
+        "b": "sofa chair",
+        "dist_m": 7.9681
+      },
+      {
+        "a": "sofa",
+        "b": "picture#4",
+        "dist_m": 8.3915
+      },
+      {
+        "a": "table",
+        "b": "picture#4",
+        "dist_m": 8.47
+      },
+      {
+        "a": "picture#1",
+        "b": "picture#4",
+        "dist_m": 9.2848
+      }
+    ],
+    "closest_any": {
+      "a": "picture#2",
+      "b": "picture#3",
+      "dist_m": 0.6382
+    },
+    "closest_distinct_types": {
+      "a": "sofa chair",
+      "b": "chair",
+      "dist_m": 1.2377
+    }
+  }
+}

@@ -1,0 +1,16 @@
+=== [upload_probe] 场景里一共有多少个物体？ ===
+  status=ok  answer=9  attempts=2  elapsed=3.73s
+  verdict=supported
+  evidence=["list_objects(scene_id='upload_probe') 返回 9 个物体，len() = 9", "按类别逐类 list_objects 计数: {'chair': 1, 'mirror': 1, 'picture': 4, 'sofa': 1, 'sofa chair': 1, 'table': 1}，求和 = 9", "两种计数一致，确认总数 = 9"]
+  tools=['list_objects', 'list_objects', 'list_objects', 'list_objects', 'list_objects', 'list_objects', 'list_objects']
+  cost=0.019299 CNY  saved=demo_live_20260919_200738_upload_probe.json
+=== [upload_probe] 沙发和桌子之间的三维距离是多少米？ ===
+  status=ok  answer=1.5221854777889445  attempts=1  elapsed=1.71s
+  verdict=supported
+  evidence=["sofa_id=sofa_1, table_id=table_1 (来自 single_object)", "calculate_distance(sofa, table) = 1.522185 米"]
+  tools=['single_object', 'single_object', 'calculate_distance']
+  cost=0.00741 CNY  saved=demo_live_20260919_200739_upload_probe.json
+
+=== [upload_probe] 反事实：移走 table_1 ===
+  ok=True  关系 396 → 308
+  evidence={"scene_id": "upload_probe", "removed": ["table_1"], "n_objects_before": 9, "n_objects_after": 8, "models_rerun": 0, "method": "geometry_v1"}

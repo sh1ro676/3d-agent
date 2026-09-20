@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VADAR 可借鉴性评估与路径选择</title>
+<style>
+:root{--fg:#1a1a1a;--fg2:#5f5e5a;--bg:#ffffff;--bg2:#f7f6f3;--bd:#e3e1db;--acc:#185fa5;--accbg:#e6f1fb;--warn:#854f0b;--warnbg:#faeeda;--ok:#0f6e56;--okbg:#e1f5ee;--no:#a32d2d;--nobg:#fcebeb;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg2);color:var(--fg);font-family:-apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif;font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:36px;align-items:start}
+nav{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto;padding:20px 0;font-size:12.5px;line-height:1.5}
+nav .nvt{font-weight:500;font-size:12px;color:var(--fg2);letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase}
+nav a{display:block;color:var(--fg2);text-decoration:none;padding:3px 0 3px 9px;border-left:2px solid transparent}
+nav a:hover{color:var(--acc);border-left-color:var(--acc)}
+nav a.t2{padding-left:9px}
+nav a.t3{padding-left:22px;font-size:12px;color:#88867f}
+main{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:44px 52px;min-width:0}
+h1{font-size:27px;font-weight:500;line-height:1.35;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:21px;font-weight:500;margin:48px 0 14px;padding-top:22px;border-top:1px solid var(--bd);letter-spacing:-.01em}
+h2:first-of-type{border-top:none;padding-top:0}
+h3{font-size:17px;font-weight:500;margin:32px 0 10px;color:#0f0f0f}
+h4{font-size:15px;font-weight:500;margin:24px 0 8px;color:var(--fg2)}
+p{margin:12px 0}
+strong{font-weight:500;color:#0f0f0f}
+code{font-family:"Cascadia Mono",Consolas,"SF Mono",Menlo,monospace;font-size:.875em;background:var(--bg2);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:#7a3d0a;word-break:break-word}
+pre.code{background:#fbfaf8;border:1px solid var(--bd);border-radius:9px;padding:15px 18px;overflow-x:auto;margin:16px 0;line-height:1.6}
+pre.code code{background:none;border:none;padding:0;color:#26251f;font-size:12.6px;white-space:pre}
+table{border-collapse:collapse;width:100%;margin:18px 0;font-size:13.4px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--bd);padding:8px 11px;text-align:left;vertical-align:top}
+th{background:var(--bg2);font-weight:500;white-space:nowrap}
+tbody tr:nth-child(even){background:#fcfbf9}
+ul,ol{margin:12px 0;padding-left:24px}
+li{margin:5px 0}
+hr{border:none;border-top:1px solid var(--bd);margin:36px 0}
+blockquote{margin:18px 0;padding:13px 18px;background:var(--accbg);border-left:3px solid var(--acc);border-radius:0 8px 8px 0;color:#12456f}
+blockquote p{margin:0}
+h2+p,h3+p{margin-top:8px}
+@media(max-width:940px){.wrap{grid-template-columns:1fr;gap:0}nav{position:static;max-height:none;border-bottom:1px solid var(--bd);margin-bottom:20px}main{padding:28px 22px;border-radius:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><div class="nvt">目录</div>
+<a class="t1" href="#vadar">VADAR 可借鉴性评估与路径选择</a>
+<a class="t2" href="#0">0. 摘要</a>
+<a class="t2" href="#1-vadar">1. VADAR 的三层拆解</a>
+<a class="t3" href="#11">1.1 第一层：真正值钱的那一条 —— 动作空间设计</a>
+<a class="t3" href="#12">1.2 第二层：可借鉴但需重写</a>
+<a class="t3" href="#13">1.3 第三层：必须扔掉的三个包袱</a>
+<a class="t2" href="#2-vadar-3d">2. 一个额外的发现：VADAR 主动丢掉了 3D 信息</a>
+<a class="t2" href="#3">3. 我之前判断的更正（诚实记录）</a>
+<a class="t2" href="#4">4. 阻塞项逐条判定</a>
+<a class="t2" href="#5">5. 推荐路径：借骨架、换实现</a>
+<a class="t3" href="#51-vadar">5.1 保留什么（来自 VADAR 的骨架）</a>
+<a class="t3" href="#52-vadar">5.2 新架构（相对 VADAR 的三处实质升级）</a>
+<a class="t3" href="#53-windows">5.3 新版技术栈（全部可在 Windows 原生运行）</a>
+<a class="t2" href="#6">6. 三条路径对比与建议</a>
+<a class="t2" href="#7">7. 新增一个实验臂：动作空间对比</a>
+<a class="t2" href="#8">8. 对原方案的影响</a>
+<a class="t3" href="#81">8.1 阶段路线调整</a>
+<a class="t3" href="#82-vadar">8.2 需要保留 VADAR 源码的理由</a>
+<a class="t3" href="#83">8.3 不再需要的东西</a>
+<a class="t2" href="#9">9. 唯一剩下的真问题</a>
+<a class="t2" href="#10">10. 下一步</a>
+</nav>
+<main>
+<h1 id="vadar">VADAR 可借鉴性评估与路径选择</h1>
+<blockquote>
+<p>评估日期：2026-09-15
+结论一句话：<strong>没有无法克服的问题，但正确做法是「借 VADAR 的技术路线、重写实现」，而不是「在 VADAR 代码上打补丁」。</strong></p>
+</blockquote>
+<hr />
+<h2 id="0">0. 摘要</h2>
+<p>你提的定位是：VADAR 只作参考，目标是用国产模型做一个同类系统，遇到无法克服的问题就换路径。</p>
+<p>核查后的答案是：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VADAR 有值得借鉴的东西吗？</td>
+<td><strong>有，而且核心就一条，但它是整个项目最值钱的设计决策</strong></td>
+</tr>
+<tr>
+<td>有无法克服的问题吗？</td>
+<td><strong>没有。一条都没有。</strong></td>
+</tr>
+<tr>
+<td>需要换路径吗？</td>
+<td>不需要换"技术路线"，但需要换"实现载体"——<strong>不用 VADAR 的代码框架</strong></td>
+</tr>
+<tr>
+<td>我之前的判断有错吗？</td>
+<td><strong>有，两处说重了。第 3 节逐条更正</strong></td>
+</tr>
+<tr>
+<td>意外的收获</td>
+<td><strong>WSL2 不再是必需项。整条视觉栈可以在 Windows 原生跑</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-vadar">1. VADAR 的三层拆解</h2>
+<p>把一个开源项目"拆开来看"时，要区分三种东西：<strong>思想</strong>（能抄）、<strong>代码</strong>（能改）、<strong>包袱</strong>（必须扔）。混在一起谈就会得出"要么全用要么全弃"的错误结论。</p>
+<h3 id="11">1.1 第一层：真正值钱的那一条 —— 动作空间设计</h3>
+<p><strong>VADAR 的核心贡献不是 agent 架构，是它给 LLM 选的"动作空间"：让模型输出一段 Python 程序，而不是输出一串 JSON 工具调用。</strong></p>
+<p>这个区别在<strong>空间推理</strong>任务上被放大成决定性差异。看下面这个典型问题：</p>
+<blockquote>
+<p>"哪个椅子离门最近？"</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>JSON tool calling</th>
+<th>程序合成（VADAR 的做法）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需要几步</td>
+<td>4 步以上，每步一次模型往返</td>
+<td>1 次生成</td>
+</tr>
+<tr>
+<td>能否表达 <code>argmin</code></td>
+<td>❌ 表达不了。只能"逐个比较、记住最小的"，靠上下文维持状态</td>
+<td>✅ <code>min(chairs, key=lambda c: dist(c, door_pos))</code></td>
+</tr>
+<tr>
+<td>能否做算术</td>
+<td>❌ 只能让模型自己算，容易错</td>
+<td>✅ 交给 Python</td>
+</tr>
+<tr>
+<td>能否做过滤/聚合</td>
+<td>❌ 极难</td>
+<td>✅ <code>[c for c in chairs if c.x &lt; door.x]</code></td>
+</tr>
+<tr>
+<td>能否循环</td>
+<td>❌ 不能</td>
+<td>✅ <code>for obj in objs: ...</code></td>
+</tr>
+<tr>
+<td>出错后</td>
+<td>好定位（知道哪一步错）</td>
+<td>差一些（整段程序一起失败）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>空间问题的本质是"组合 + 算术 + 聚合"</strong>：找最近的、数一共有几个、判断在不在上面、算面积比。这些恰好是 JSON function calling 最不擅长的，也恰好是 Python 最擅长的。</p>
+<p>所以：<strong>这一条必须抄，而且要作为整个项目的技术底座。</strong> 这是 VADAR 论文里最经得起时间考验的部分。</p>
+<h3 id="12">1.2 第二层：可借鉴但需重写</h3>
+<table>
+<thead>
+<tr>
+<th>借鉴点</th>
+<th>VADAR 的做法</th>
+<th>我们的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>感知与推理分离</strong></td>
+<td>视觉模型只负责 <code>loc</code> / <code>depth</code> / 分割，空间关系全部由代码算</td>
+<td>保留，并<strong>强化</strong>——把几何计算做成独立的一层</td>
+</tr>
+<tr>
+<td><strong>两段式 prompt 结构</strong></td>
+<td>先让模型提"签名"（函数名+docstring），再让它写程序</td>
+<td>简化为<strong>一段式</strong>：给定固定工具文档，直接生成程序</td>
+</tr>
+<tr>
+<td><strong>工具文档即 prompt</strong></td>
+<td><code>MODULES_SIGNATURES</code> 字符串注入 prompt</td>
+<td>保留这个思路，但换成<strong>我们自己固定、带版本号的工具库</strong></td>
+</tr>
+<tr>
+<td><strong>评测协议</strong></td>
+<td>Omni3D-Bench，按"程序能否执行 + 答案是否匹配"打分</td>
+<td>沿用协议，扩展指标（见主方案 §13）</td>
+</tr>
+<tr>
+<td><strong><code>--oracle</code> 上限对照</strong></td>
+<td>给真值绕开视觉检测，单独测"推理能力"</td>
+<td>保留，这个消融设计很聪明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13">1.3 第三层：必须扔掉的三个包袱</h3>
+<h4 id="1-api">包袱 1：运行时动态生成 API ★最需要扔的</h4>
+<p>VADAR 的招牌卖点是"Dynamic API"——面对新问题，先让 LLM 发明一个新函数（SignatureAgent 提签名），再让 LLM 实现它（APIAgent 写代码 + 自测，<strong>失败重试 5 次</strong>），最后才写主程序。</p>
+<p><strong>这个设计对 gpt-4o 是加分项，对 4B 模型是致命的：</strong></p>
+<ul>
+<li>每一环都是一次零容错的生成（正则解析 <code>&lt;signature&gt;</code> / <code>&lt;docstring&gt;</code> / <code>&lt;implementation&gt;</code>，无兜底）</li>
+<li>APIAgent 那 5 次自测重试，本质是在<strong>用算力掩盖模型能力不足</strong>——4B 模型重试 5 次仍然写不对的概率很高</li>
+<li>三环串联，成功率是<strong>乘法</strong>关系。假设每环 80%，0.8³ = 51%</li>
+<li>生成出来的 API 不进版本控制、不可复现，<strong>你的实验无法被自己重跑</strong></li>
+</ul>
+<p><strong>替代方案：固定工具库。</strong> 预先设计好 20–30 个空间/几何工具，写进 prompt，模型只需"选 + 组合"。这样：</p>
+<ul>
+<li>成功率从"乘法"变成"加法"（只有一次生成）</li>
+<li>工具是固定的 → <strong>实验可复现</strong>（这本就是你方案里的创新点 1）</li>
+<li>模型只需理解接口，不需要发明接口——<strong>难度降一个量级</strong></li>
+</ul>
+<p>这不是"降级"，而是把 VADAR 里<strong>为了论文卖点而加的知识负担</strong>卸掉，让 4B 模型能专注在真正的空间推理上。</p>
+<h4 id="2engine">包袱 2：Engine 执行层</h4>
+<p><code>engine/engine.py</code> 用 <code>runpy</code> + <code>sys.settrace</code> + <code>signal.alarm(200)</code> 执行生成的代码。问题：</p>
+<ul>
+<li><code>signal.SIGALRM</code> 是 Unix-only（这是"必须 WSL"的唯一来源）</li>
+<li><code>sys.settrace</code> 造成全局性能污染，异常路径下钩子残留</li>
+<li>用 <code>runpy</code> 在主进程里跑 LLM 生成的代码，<strong>沙箱边界等于没有</strong></li>
+</ul>
+<p><strong>替代方案：子进程 + 超时。</strong> <code>multiprocessing.Process</code> + <code>join(timeout)</code> 或 <code>subprocess</code> + <code>timeout</code>，跨平台、真隔离、能拿到退出码。<strong>顺带把"必须 WSL2"这个约束整个消掉。</strong></p>
+<h4 id="3-openai">包袱 3：钉死的依赖与 OpenAI</h4>
+<ul>
+<li><code>transformers==4.45.2</code>（2024-09）——这个版本里<strong>没有</strong> <code>Sam2Model</code>（2025-08 才进 transformers），也没有新一代 Qwen-VL</li>
+<li><code>vqa()</code> 硬编码 <code>gpt-4o</code>，且用 <code>open(api_key_path)</code> 读 key（无 <code>base_url</code>）</li>
+<li>失败分支是 <code>time.sleep(60)</code> + 无限递归重试 → <strong>网络不通时静默卡死</strong></li>
+</ul>
+<p><strong>替代方案：见第 5 节的新栈。</strong></p>
+<hr />
+<h2 id="2-vadar-3d">2. 一个额外的发现：VADAR 主动丢掉了 3D 信息</h2>
+<p>这条独立于"借鉴还是抛弃"，是<strong>你的项目创新点的地基</strong>，已从源码逐行确认：</p>
+<p><code>unidepth/models/unidepthv2/unidepthv2.py</code> 的 <code>encode_decode</code> 里：</p>
+<pre class="code"><code class="language-python">pts_3d = outputs[&quot;rays&quot;] * outputs[&quot;radius&quot;]
+outputs.update({&quot;points&quot;: pts_3d, &quot;depth&quot;: pts_3d[:, -1:]})
+</code></pre>
+<p><code>infer()</code> 最终返回 <strong>7 个键</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>含义</th>
+<th>VADAR 是否使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>depth</code></td>
+<td><code>points[:, -1:]</code>，即 3D 点的 z 分量</td>
+<td>✅ <strong>只用了这个</strong></td>
+</tr>
+<tr>
+<td><code>points</code></td>
+<td>相机坐标系下的完整 3D 点云 <code>(B,3,H,W)</code></td>
+<td>❌ <strong>丢弃</strong></td>
+</tr>
+<tr>
+<td><code>rays</code></td>
+<td>每个像素的单位方向向量</td>
+<td>❌ <strong>丢弃</strong></td>
+</tr>
+<tr>
+<td><code>intrinsics</code></td>
+<td>相机内参</td>
+<td>❌ <strong>丢弃</strong></td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td>逐像素置信度</td>
+<td>❌ 丢弃</td>
+</tr>
+<tr>
+<td><code>radius</code></td>
+<td>深度范数</td>
+<td>❌ 丢弃</td>
+</tr>
+<tr>
+<td><code>depth_features</code></td>
+<td>深度特征</td>
+<td>❌ 丢弃</td>
+</tr>
+</tbody>
+</table>
+<p>而 VADAR 的 3D 尺寸估计用的是 <code>2D_pixel × depth</code>（连焦距都没除），是个<strong>量纲都不对的近似</strong>。</p>
+<p><strong>结论：不增加任何模型、不增加任何显存，只要改成用 <code>points</code> 做几何计算，就能把"深度标量近似"升级为"真实三维几何"。</strong> 这是本项目最低成本、最高说服力的创新点。</p>
+<hr />
+<h2 id="3">3. 我之前判断的更正（诚实记录）</h2>
+<p>调研中我下过几个过重的结论，逐条更正：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>我说过的</th>
+<th>实际情况</th>
+<th>严重程度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>"UniDepth 依赖 <code>triton&gt;=2.4.0</code>，triton 官方不支持 Windows → 这是比 SIGALRM 更硬的阻塞，必须 WSL2"</td>
+<td><strong>过重。</strong> xformers 在源码里是<strong>软依赖</strong>，失效时回落到 PyTorch 自带的 SDPA。推理路径完全不需要 xformers/triton（证据见下方代码块）</td>
+<td>🔴 结论性错误</td>
+</tr>
+<tr>
+<td>2</td>
+<td>"GroundingDINO / SAM2 自带 CUDA 算子，<code>pip install -e .</code> 要现场编译，需要 MSVC + nvcc 版本严格匹配"</td>
+<td><strong>过重。</strong> 两条退路：(a) transformers 已有<strong>原生纯 PyTorch 版</strong>——<code>GroundingDinoForObjectDetection</code>（2024-04-11 起）、<code>Sam2Model</code>（2025-08-14 起），完全绕开编译；(b) 即便用官方 sam2 仓库，其 README 明写 <code>Failed to build the SAM 2 CUDA extension during installation, you can ignore it and still use SAM 2</code>——该扩展只用于掩码连通域后处理。</td>
+<td>🟠 影响 WSL 决策</td>
+</tr>
+<tr>
+<td>3</td>
+<td>"Windows 上 <code>signal.SIGALRM</code> 不存在 → 原生跑不通 VADAR"</td>
+<td><strong>这条本身正确</strong>（已实测 <code>hasattr(signal,'SIGALRM')=False</code>），但它只堵住<strong>执行 VADAR Engine</strong> 这条路。我们自己写执行器，该约束归零。</td>
+<td>🟢 结论仍成立但适用范围小得多</td>
+</tr>
+<tr>
+<td>4</td>
+<td>"<code>vqa()</code> 是 CLEVR/GQA 专属模块"</td>
+<td><strong>已更正过一次</strong>：它在 Omni3D 分支里同样存在，且被写进给模型看的 API 文档。<strong>主模型必须多模态。</strong></td>
+<td>🟠 关键约束（保留）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>净效果：WSL2 从"必须"降级为"可选"。</strong> 三处硬依赖（SIGALRM / 编译链 / 脚本平台假设）里，前两处随"自建实现"消失，第三处是 bash 脚本，Git Bash 能跑。整条栈可以在 Windows 原生跑通。</p>
+<h4 id="1">更正 1 的源码证据</h4>
+<p><code>unidepth/models/backbones/metadinov2/attention.py</code>（UniDepth 的 DINOv2 backbone 注意力层）：</p>
+<pre class="code"><code class="language-python">try:
+    from xformers.ops import fmha, memory_efficient_attention, unbind
+    XFORMERS_AVAILABLE = True
+except ImportError:
+    logger.warning(&quot;xFormers not available&quot;)
+    XFORMERS_AVAILABLE = False
+
+XFORMERS_AVAILABLE = XFORMERS_AVAILABLE and torch.cuda.is_available()
+
+
+class MemEffAttention(Attention):
+    def forward(self, x: torch.Tensor, attn_bias=None) -&gt; torch.Tensor:
+        # new pytorch have good attn efficient, no need for xformers
+        if not XFORMERS_AVAILABLE or x.device.type == &quot;cpu&quot;:
+            assert attn_bias is None, &quot;xFormers is required for nested tensors usage&quot;
+            return super().forward(x)          # ← 回落路径
+
+        B, N, C = x.shape
+        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads)
+        q, k, v = unbind(qkv, 2)
+        x = memory_efficient_attention(q, k, v, attn_bias=attn_bias)
+        ...
+</code></pre>
+<p>而父类 <code>Attention.forward</code> 用的是 <code>F.scaled_dot_product_attention(qkv[0], qkv[1], qkv[2])</code> —— PyTorch 2.x 自带的高效注意力（本机 <code>torch 2.6.0+cu124</code> 在 4060 上已确认该函数可用）。</p>
+<p>其余文件的核查结果：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>xformers / triton</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unidepth/models/encoder.py</code></td>
+<td>无（只 import torch / torch.nn / 本地 backbones）</td>
+</tr>
+<tr>
+<td><code>unidepth/models/unidepthv2/unidepthv2.py</code></td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>unidepth/models/backbones/convnext.py</code></td>
+<td>无（纯 torch + timm）</td>
+</tr>
+<tr>
+<td><code>unidepth/models/backbones/dinov2.py</code></td>
+<td>无（只从 <code>.metadinov2</code> 导入）</td>
+</tr>
+<tr>
+<td><code>pyproject.toml</code></td>
+<td><code>build-backend = "setuptools.build_meta"</code>，<strong>无 <code>ext_modules</code></strong> → 纯 Python 安装</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结论：<code>requirements.txt</code> 里的 <code>triton&gt;=2.4.0</code> / <code>xformers&gt;=0.0.26</code> 是过度声明。</strong> 装的时候可以不管它们（或装上但不生效），推理照跑。</p>
+<h4 id="2">更正 2 的官方表述</h4>
+<ul>
+<li>transformers 的 <code>GroundingDinoForObjectDetection</code> 文档注明该模型 <em>"contributed to Hugging Face Transformers on 2024-04-11"</em>，官方用法是 <code>AutoProcessor</code> + <code>AutoModelForZeroShotObjectDetection.from_pretrained("IDEA-Research/grounding-dino-tiny")</code></li>
+<li>transformers 的 <code>Sam2Model</code> 文档注明 <em>"contributed to Hugging Face Transformers on 2025-08-14"</em>，官方用法 <code>Sam2Model.from_pretrained("facebook/sam2.1-hiera-large")</code>，并提供 <code>pipeline("mask-generation", ...)</code></li>
+<li>官方 sam2 仓库 README：<em>"If you see a message like <code>Failed to build the SAM 2 CUDA extension</code> during installation, you can ignore it and still use SAM 2"</em></li>
+</ul>
+<hr />
+<h2 id="4">4. 阻塞项逐条判定</h2>
+<table>
+<thead>
+<tr>
+<th>阻塞项</th>
+<th>性质</th>
+<th>判定</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>signal.SIGALRM</code> 不存在</td>
+<td>平台 API</td>
+<td>✅ <strong>可绕</strong></td>
+<td>自建执行器用子进程超时；不改 VADAR 时才是问题</td>
+</tr>
+<tr>
+<td>GroundingDINO 编译</td>
+<td>构建链</td>
+<td>✅ <strong>可绕</strong></td>
+<td>transformers 原生纯 PyTorch 版</td>
+</tr>
+<tr>
+<td>SAM2 编译</td>
+<td>构建链</td>
+<td>✅ <strong>可绕</strong></td>
+<td>扩展可选（官方明示）+ transformers 原生版</td>
+</tr>
+<tr>
+<td><code>xformers</code> / <code>triton</code></td>
+<td>依赖声明</td>
+<td>✅ <strong>不存在</strong></td>
+<td>源码 try/except + SDPA 回落</td>
+</tr>
+<tr>
+<td>OpenAI 不可达</td>
+<td>网络</td>
+<td>✅ <strong>可换</strong></td>
+<td>8 个国产端点实测 401（服务器已应答）</td>
+</tr>
+<tr>
+<td><strong><code>vqa()</code> 需要 VLM 不是 LLM</strong></td>
+<td><strong>能力约束</strong></td>
+<td>⚠️ <strong>不能绕，只能满足</strong></td>
+<td>主模型必须多模态；Qwen3-VL / DeepSeek-V4-Flash-Vision 满足</td>
+</tr>
+<tr>
+<td>4B 模型能否驱动程序合成</td>
+<td><strong>能力未知</strong></td>
+<td>⚠️ <strong>未验证，是最大风险</strong></td>
+<td>见第 9 节，这个必须尽早测</td>
+</tr>
+<tr>
+<td>VADAR 三段式零容错正则</td>
+<td>设计缺陷</td>
+<td>✅ <strong>已绕开</strong></td>
+<td>不用它的 agent 层</td>
+</tr>
+<tr>
+<td>Omni3D-Bench 许可</td>
+<td>法务</td>
+<td>⚠️ CC BY-NC</td>
+<td>课程作业可用，不可商用</td>
+</tr>
+<tr>
+<td><code>predefined_modules.py:19</code> 硬编码包名 <code>VADAR</code></td>
+<td>命名约束</td>
+<td>✅ <strong>归零</strong></td>
+<td>不用它的代码就不受约束</td>
+</tr>
+</tbody>
+</table>
+<p><strong>唯一真正的未知是"4B 级模型能不能守住这个协议"，不是环境能不能搭。</strong> 这是好消息——未知项从"一堆环境问题"收敛成一个"跑一次就出答案"的实验。</p>
+<hr />
+<h2 id="5">5. 推荐路径：借骨架、换实现</h2>
+<h3 id="51-vadar">5.1 保留什么（来自 VADAR 的骨架）</h3>
+<pre class="code"><code>用户问题
+   ↓
+LLM 生成一段 Python 程序          ← 抄 VADAR 的动作空间（第 1.1 节）
+   ↓
+程序调用【固定工具库】              ← 替换 VADAR 的运行时 API 生成
+   ├── 视觉基元：detect / segment / metric_depth
+   └── 几何工具：get_3d_pos / distance / angle / nearest / above / left_of
+   ↓
+子进程执行（带超时）                ← 替换 VADAR 的 runpy + settrace + SIGALRM
+   ↓
+「观测」回灌给 LLM（可选多轮）       ← VADAR 没有这一环，我们补上
+   ↓
+最终答案 + 3D Viewer 高亮
+</code></pre>
+<h3 id="52-vadar">5.2 新架构（相对 VADAR 的三处实质升级）</h3>
+<ol>
+<li><strong>几何接地</strong>：一切空间量来自 <code>UniDepth.points</code> 的真实 3D 坐标，不由 LLM/VLM 判断</li>
+<li><strong>固定工具库</strong>：可复现、可评测、可做工具选择准确率</li>
+<li><strong>观测闭环</strong>：VADAR 是"生成即终局"，我们允许"执行 → 看结果 → 再生成"，这是从"程序合成"升级成"Agent"的那一步</li>
+</ol>
+<h3 id="53-windows">5.3 新版技术栈（全部可在 Windows 原生运行）</h3>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>组件</th>
+<th>来源</th>
+<th>Windows</th>
+<th>4060 8GB</th>
+<th>许可</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>检测</td>
+<td><code>IDEA-Research/grounding-dino-tiny</code> 或 SwinT-OGC</td>
+<td><strong>transformers 原生</strong></td>
+<td>✅ 纯 torch</td>
+<td>✅</td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td>检测（备选）</td>
+<td>Qwen3-VL 直接输出 bbox</td>
+<td>Ollama / API</td>
+<td>✅</td>
+<td>✅</td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td>分割</td>
+<td><code>facebook/sam2.1-hiera-base-plus</code></td>
+<td><strong>transformers 原生</strong></td>
+<td>✅ 纯 torch</td>
+<td>✅ 降分辨率</td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td>3D</td>
+<td><code>lpiccinelli/unidepth-v2-vits14</code></td>
+<td>pip（<strong>纯 Python 安装</strong>）</td>
+<td>✅ SDPA 回落</td>
+<td>✅ 最轻</td>
+<td>CC BY-NC</td>
+</tr>
+<tr>
+<td>几何</td>
+<td>NumPy / SciPy</td>
+<td>pip</td>
+<td>✅</td>
+<td>CPU</td>
+<td>BSD</td>
+</tr>
+<tr>
+<td>LLM（本地）</td>
+<td><code>qwen3.5:4b</code>（3.4 GB）</td>
+<td>Ollama</td>
+<td>✅</td>
+<td>✅</td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td>LLM（本地大）</td>
+<td><code>qwen3.5:9b</code>（6.6 GB）</td>
+<td>Ollama</td>
+<td>✅</td>
+<td>⚠️ 紧张</td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td>LLM（云端）</td>
+<td><code>deepseek-v4-flash-vision-exp</code></td>
+<td>API</td>
+<td>✅</td>
+<td>—</td>
+<td>见官方</td>
+</tr>
+<tr>
+<td>执行器</td>
+<td><code>multiprocessing</code> + 超时</td>
+<td>标准库</td>
+<td>✅</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Viewer</td>
+<td>Rerun（调试）→ Three.js（答辩）</td>
+<td>pip / npm</td>
+<td>✅</td>
+<td>—</td>
+<td>MIT</td>
+</tr>
+</tbody>
+</table>
+<p>已验证的环境事实（本机实测）：</p>
+<ul>
+<li><code>base</code> 环境：<strong>Python 3.13.9，torch 2.6.0+cu124，<code>cuda.is_available()=True</code>，4060 sm_89，<code>F.scaled_dot_product_attention</code> 可用</strong></li>
+<li><code>mytorch</code> 环境：Python 3.9.25 —— <strong>过旧，不可用</strong>（UniDepth 要求 ≥3.10，SAM2 要求 ≥3.10）</li>
+<li><code>transformers</code> 尚未安装</li>
+</ul>
+<p>→ 需要新建一个 <strong>Python 3.11</strong> 的干净环境（3.11 是 transformers + timm + UniDepth 三方兼容最稳的点）。</p>
+<hr />
+<h2 id="6">6. 三条路径对比与建议</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>路径 A：修补 VADAR</th>
+<th><strong>路径 B：借骨架自建（推荐）</strong></th>
+<th>路径 C：端到端 VLM 问答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>做法</td>
+<td>在 WSL 里跑原版，打补丁换 LLM</td>
+<td>抄动作空间设计，自己写工具库/执行器/Agent</td>
+<td>直接问 Qwen3-VL "哪个椅子离门最近"</td>
+</tr>
+<tr>
+<td>保留 VADAR 代码</td>
+<td>大部分</td>
+<td><strong>只保留设计思想</strong></td>
+<td>无</td>
+</tr>
+<tr>
+<td>Windows 原生</td>
+<td>❌ 需 WSL</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>可复现性</td>
+<td>差（动态 API）</td>
+<td><strong>好（固定工具库）</strong></td>
+<td>中</td>
+</tr>
+<tr>
+<td>4B 模型可行性</td>
+<td>❌ 要扛三段零容错生成</td>
+<td>✅ 一次生成 + 固定接口</td>
+<td>✅ 最简单</td>
+</tr>
+<tr>
+<td>创新空间</td>
+<td>小</td>
+<td><strong>大（3 个创新点都在这）</strong></td>
+<td>几乎没有</td>
+</tr>
+<tr>
+<td>答辩说服力</td>
+<td>"我复现了"</td>
+<td><strong>"我做了真几何 + 真 Agent"</strong></td>
+<td>"我调了个 API"</td>
+</tr>
+<tr>
+<td>定量实验</td>
+<td>只能做换模型对比</td>
+<td><strong>能做 A–F 消融</strong></td>
+<td>只能测准确率</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>❌ 推荐度低</td>
+<td>✅ <strong>推荐</strong></td>
+<td>⚠️ 可作为对照臂（Baseline 0）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>建议走路径 B，同时把路径 C 保留为一个消融臂。</strong></p>
+<p>理由：路径 C（端到端 VLM 直接答）恰好是你要反驳的那个"LLM 看图猜答案"的反面教材。<strong>把它做成 Baseline 0 跑一遍，量出它的错误率，然后证明"程序合成 + 真几何"好多少</strong> —— 这对答辩极有说服力，而且成本几乎为零（同一个 Ollama 端点，换一个 prompt）。</p>
+<hr />
+<h2 id="7">7. 新增一个实验臂：动作空间对比</h2>
+<p>既然第 1.1 节论证了"程序合成优于 JSON tool calling"，这个论断<strong>必须用实验证明，不能只是论证</strong>。所以消融表里应该新增一臂：</p>
+<table>
+<thead>
+<tr>
+<th>臂</th>
+<th>动作空间</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A′</td>
+<td>JSON tool calling（Qwen3-VL 原生 function calling）</td>
+<td>对照组</td>
+</tr>
+<tr>
+<td>B′</td>
+<td>程序合成（固定工具库）</td>
+<td>实验组</td>
+</tr>
+</tbody>
+</table>
+<p><strong>测什么</strong>：多步任务的端到端成功率、平均往返次数、聚合类问题（"有几个…"、"哪个最近"）的准确率。</p>
+<p><strong>预期</strong>：在多步/聚合类问题上程序合成明显占优；在单步简单问题上 tool calling 可能持平。<strong>这种"有条件的优势"比"全面碾压"更像真结论，也更难被答辩老师挑毛病。</strong></p>
+<p>这个实验是免费的——同一个模型、同一套工具、同一个数据集，只换动作空间。工作量小、结论硬。</p>
+<hr />
+<h2 id="8">8. 对原方案的影响</h2>
+<h3 id="81">8.1 阶段路线调整</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>原计划</th>
+<th>调整后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 环境</td>
+<td>WSL2 + Ubuntu-22.04 + 编译链</td>
+<td><strong>改为：Windows 原生 Python 3.11 venv + transformers + UniDepth</strong>。WSL2 降为可选（只在想跑原版 VADAR 做对照时才需要）</td>
+</tr>
+<tr>
+<td>1 跑通原版</td>
+<td>在 WSL 里跑 VADAR</td>
+<td><strong>改：不跑 VADAR 原版</strong>。改为跑通"我们自己最小 pipeline"（一张图 → 检测 → 3D 点 → 一个问题 → 程序生成 → 执行 → 答案）</td>
+</tr>
+<tr>
+<td>2 吃透架构</td>
+<td>逐文件精读 VADAR</td>
+<td><strong>改：已完成</strong>（本次调研已做完），产出的是设计决策而非代码理解</td>
+</tr>
+<tr>
+<td>3 接开源 LLM</td>
+<td>打补丁换 Generator</td>
+<td><strong>改：不需要补丁</strong>，直接对新栈写 OpenAI 兼容客户端</td>
+</tr>
+<tr>
+<td>5–7 工具库/SceneGraph/Agent</td>
+<td>不变</td>
+<td>不变，但<strong>基础从 VADAR 的 Engine 换成自建执行器</strong></td>
+</tr>
+<tr>
+<td>新增</td>
+<td>—</td>
+<td><strong>动作空间对比实验（第 7 节）</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-vadar">8.2 需要保留 VADAR 源码的理由</h3>
+<p>只为一个用途：<strong>读它的 prompt 和工具签名设计作为参考</strong>（<code>prompts/modules.py</code> 的 <code>MODULES_SIGNATURES</code> 已经把"空间问题需要哪些基元"梳理过一遍，有参考价值）。</p>
+<p><code>vendor/VADAR/</code> 保留，但<strong>不再是构建依赖</strong>。</p>
+<h3 id="83">8.3 不再需要的东西</h3>
+<ul>
+<li>❌ WSL2 + Ubuntu（可选）</li>
+<li>❌ <code>phase0/00_install_wsl.ps1</code>、<code>phase0/01_setup_ubuntu.sh</code>（降级为"可选：跑原版对照用"）</li>
+<li>❌ <code>phase0/03_vadar_llm_bridge.py</code>（运行时适配器——既然不用 VADAR 代码，就没有要适配的绑定）</li>
+<li>❌ <code>phase0/02_probe_llm_api.py</code> 里的"用 VADAR 原版正则测标签"部分（正则不再是我们的契约）——<strong>但它的国产端点连通性表仍然有效</strong></li>
+<li>✅ 保留：<code>phase0/04_install_ollama.ps1</code>、<code>phase0/probe3d.py</code>（改一下 import 路径即可）</li>
+</ul>
+<hr />
+<h2 id="9">9. 唯一剩下的真问题</h2>
+<p>环境和路径问题全部解决后，<strong>项目成败收敛到一个未被验证的能力问题</strong>：</p>
+<blockquote>
+<p><strong>4B 级模型（<code>qwen3.5:4b</code>，3.4 GB）能不能守住"给定固定工具文档 → 生成一段可执行、语法正确、调用合法工具、结果正确"这个协议？</strong></p>
+</blockquote>
+<p>为什么这是真问题：</p>
+<ul>
+<li>这是一次<strong>零容错的生成</strong>。虽然有观测闭环可以补救，但首轮成功率直接决定迭代成本</li>
+<li>VADAR 用的是 gpt-4o 才拿到 40.4 分，能力差距是数量级的</li>
+<li>如果答案是"完全不行"，则顺序要反过来：<strong>先做 QLoRA 微调，再接模型</strong>（微调不是锦上添花，而是可行性前提）——这会改变 Phase 3 和 Phase 9 的先后</li>
+</ul>
+<p>怎么测（零成本、零依赖、不需要 GPU、不需要 API key）：</p>
+<p>用<strong>我们自己的固定工具文档</strong> + 20 道空间问题，让 <code>qwen3.5:4b</code> 生成程序，用 <strong>AST 静态检查</strong>（不用真执行）评估四个维度：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>检查方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语法正确</td>
+<td><code>ast.parse()</code> 是否通过</td>
+</tr>
+<tr>
+<td>工具是否合法</td>
+<td>所有被调用的函数名是否都在白名单内</td>
+</tr>
+<tr>
+<td>参数是否合法</td>
+<td>是否用了不存在的参数名（捕捉幻觉）</td>
+</tr>
+<tr>
+<td>是否产出 <code>final_result</code></td>
+<td>是否有变量赋值给约定名</td>
+</tr>
+</tbody>
+</table>
+<p>这四项<strong>只需 AST 就能判</strong>，不需要装 torch、不需要跑视觉模型、不需要联网。<strong>一次批量跑 20 道题，半小时内就能得到"4B 能不能用"的定量答案。</strong></p>
+<hr />
+<h2 id="10">10. 下一步</h2>
+<ol>
+<li><strong>建新环境</strong>：Python 3.11 venv（D 盘），装 <code>transformers</code> + <code>torch</code>（已有 2.6.0+cu124 可复用）+ <code>timm</code> + <code>einops</code> + <code>unidepth</code></li>
+<li><strong>验证视觉栈</strong>：改好的 <code>probe3d.py</code> 跑一次，确认真实显存/延迟，并打印 <code>points</code> / <code>rays</code> / <code>intrinsics</code></li>
+<li><strong>测 4B 能力</strong>（关键）：用固定工具文档 + AST 检查器，得到首轮成功率</li>
+<li><strong>根据 3 的结果决定 Phase 顺序</strong>：成功率可接受 → 正常推进；不可接受 → 先做数据集合成 + QLoRA</li>
+</ol>
+<p><strong>这三步都不需要 API key，不需要 WSL，不需要租卡。</strong></p>
+</main>
+</div>
+</body>
+</html>

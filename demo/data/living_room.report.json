@@ -1,0 +1,1357 @@
+{
+ "scene_id": "living_room",
+ "summary": "场景 living_room 共 9 个物体：chair × 1、mirror × 1、picture × 4、sofa × 1、sofa chair × 1、table × 1。\n最紧凑的三组相邻关系：picture_2→picture_3 0.62 m；picture_3→picture_2 0.62 m；chair_1→sofa_chair_1 1.47 m。\n方位（左侧）：sofa_1 在 picture_1 的左侧；mirror_1 在 table_1 的左侧；chair_1 在 table_1 的左侧；picture_2 在 sofa_chair_1 的左侧。\n方位（右侧）：sofa_1 在 mirror_1 的右侧；sofa_1 在 chair_1 的右侧；sofa_1 在 picture_2 的右侧；sofa_1 在 picture_3 的右侧。\n方位（前方）：sofa_1 在 picture_1 的前方；sofa_1 在 mirror_1 的前方；sofa_1 在 picture_2 的前方；sofa_1 在 picture_3 的前方。\n方位（后方）：sofa_1 在 chair_1 的后方；sofa_1 在 sofa_chair_1 的后方；sofa_1 在 table_1 的后方；picture_1 在 chair_1 的后方。\n方位（上方）：sofa_1 在 chair_1 的上方；sofa_1 在 table_1 的上方；picture_1 在 mirror_1 的上方；picture_1 在 chair_1 的上方。\n方位（下方）：sofa_1 在 picture_1 的下方；sofa_1 在 mirror_1 的下方；sofa_1 在 picture_2 的下方；sofa_1 在 picture_3 的下方。\n**尺度未校正**：相对关系可信，绝对米数不可引用。\n注意：未记录内参来源（旧版 scene.json）—— 无法判断横向尺度是否可信。\n注意：重力方向不可靠（up_axis=-y, reason=band_not_horizontal）：`above`/`below` 可能整体翻转。\n注意：3 个物体的掩码点数少于 1000（[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]）—— 很可能是伪物体而非真实存在：点云质心不可信，物体计数与关系边数都会因此偏高。实测分界为伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。",
+ "quality": {
+  "scale_calibrated": false,
+  "scale_factor": 1.0,
+  "intrinsics_source": "unknown",
+  "up_axis": "-y",
+  "up_axis_tilt_deg": 63.04,
+  "up_axis_reliable": false,
+  "n_objects": 9,
+  "n_low_point_objects": 3,
+  "n_edges_precomputed": 133
+ },
+ "relation_summary": {
+  "n_pairs_total": 36,
+  "n_pairs_reported": 36
+ },
+ "caveats": [
+  "尺度未校正（scale_factor=1.0）：全部米制数字共享同一个未知比例因子，**相对关系可信、绝对数值不可采信**。要引用绝对值需先 calibrate_scale。",
+  "未记录内参来源（旧版 scene.json）—— 无法判断横向尺度是否可信。",
+  "重力方向不可靠（up_axis=-y, reason=band_not_horizontal）：`above`/`below` 可能整体翻转。",
+  "3 个物体的掩码点数少于 1000（[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]）—— 很可能是伪物体而非真实存在：点云质心不可信，物体计数与关系边数都会因此偏高。实测分界为伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。"
+ ],
+ "truncated": false,
+ "objects": [
+  {
+   "id": "sofa_1",
+   "label": "sofa",
+   "centroid_m": [
+    2.4003,
+    1.0316,
+    2.864
+   ],
+   "extent_m": {
+    "w": 6.705,
+    "h": 2.349,
+    "l": 1.129
+   },
+   "confidence": 0.836,
+   "centroid_source": "mask",
+   "n_points": 23841,
+   "attributes": {}
+  },
+  {
+   "id": "picture_1",
+   "label": "picture",
+   "centroid_m": [
+    3.8832,
+    -3.0333,
+    3.6307
+   ],
+   "extent_m": {
+    "w": 2.92,
+    "h": 2.693,
+    "l": 0.211
+   },
+   "confidence": 0.795,
+   "centroid_source": "mask",
+   "n_points": 16137,
+   "attributes": {}
+  },
+  {
+   "id": "mirror_1",
+   "label": "mirror",
+   "centroid_m": [
+    -0.8036,
+    -2.9224,
+    3.6636
+   ],
+   "extent_m": {
+    "w": 2.571,
+    "h": 3.69,
+    "l": 0.283
+   },
+   "confidence": 0.676,
+   "centroid_source": "mask",
+   "n_points": 18015,
+   "attributes": {}
+  },
+  {
+   "id": "chair_1",
+   "label": "chair",
+   "centroid_m": [
+    -1.9961,
+    1.8474,
+    1.5844
+   ],
+   "extent_m": {
+    "w": 2.716,
+    "h": 0.935,
+    "l": 0.787
+   },
+   "confidence": 0.528,
+   "centroid_source": "mask",
+   "n_points": 18785,
+   "attributes": {}
+  },
+  {
+   "id": "picture_2",
+   "label": "picture",
+   "centroid_m": [
+    -3.2434,
+    -2.9075,
+    3.612
+   ],
+   "extent_m": {
+    "w": 0.722,
+    "h": 0.655,
+    "l": 0.06
+   },
+   "confidence": 0.501,
+   "centroid_source": "mask",
+   "n_points": 965,
+   "attributes": {}
+  },
+  {
+   "id": "picture_3",
+   "label": "picture",
+   "centroid_m": [
+    -3.2396,
+    -2.2867,
+    3.678
+   ],
+   "extent_m": {
+    "w": 0.716,
+    "h": 0.609,
+    "l": 0.078
+   },
+   "confidence": 0.489,
+   "centroid_source": "mask",
+   "n_points": 893,
+   "attributes": {}
+  },
+  {
+   "id": "sofa_chair_1",
+   "label": "sofa chair",
+   "centroid_m": [
+    -2.8881,
+    0.9837,
+    2.3736
+   ],
+   "extent_m": {
+    "w": 3.41,
+    "h": 2.242,
+    "l": 1.907
+   },
+   "confidence": 0.44,
+   "centroid_source": "mask",
+   "n_points": 29108,
+   "attributes": {}
+  },
+  {
+   "id": "table_1",
+   "label": "table",
+   "centroid_m": [
+    1.7952,
+    1.8126,
+    1.706
+   ],
+   "extent_m": {
+    "w": 3.005,
+    "h": 1.478,
+    "l": 1.286
+   },
+   "confidence": 0.399,
+   "centroid_source": "mask",
+   "n_points": 30660,
+   "attributes": {}
+  },
+  {
+   "id": "picture_4",
+   "label": "picture",
+   "centroid_m": [
+    -5.3458,
+    -2.2068,
+    3.6395
+   ],
+   "extent_m": {
+    "w": 0.38,
+    "h": 0.81,
+    "l": 0.184
+   },
+   "confidence": 0.332,
+   "centroid_source": "mask",
+   "n_points": 809,
+   "attributes": {}
+  }
+ ],
+ "provenance": {
+  "scene_json": "dataset\\scenes\\living_room",
+  "tools_version": "1.1.0",
+  "method": "geometry_v1",
+  "detail": "full",
+  "n_objects": 9,
+  "n_pairs_total": 36,
+  "gpu_used_mb": null,
+  "latency_ms": {
+   "describe_scene": 6.85,
+   "summarize_scene": 13.32,
+   "diagnose_failure": 0.15,
+   "counterfactual": 19.63
+  }
+ },
+ "diagnosis": {
+  "scene_id": "living_room",
+  "question_id": null,
+  "question": null,
+  "stage": "尺度",
+  "findings": [
+   {
+    "stage": "尺度",
+    "severity": 7.0,
+    "reason": "重力方向不可靠（up_axis=-y）",
+    "detail": "reason=band_not_horizontal —— `above`/`below` 可能整体翻转。",
+    "fix": "补多视角或显式给出重力方向；单图下该量本质上只能估。"
+   },
+   {
+    "stage": "尺度",
+    "severity": 6.0,
+    "reason": "尺度未校正（scale_factor=1.0）",
+    "detail": "绝对米数含未知比例因子；相对关系不受影响。",
+    "fix": "用场景内已知尺寸物体或数据集 GT 做一次 calibrate_scale。"
+   },
+   {
+    "stage": "检测",
+    "severity": 5.0,
+    "reason": "4 个物体的三维尺寸超过 3.0 m",
+    "detail": "最大几项 [('sofa_1', 6.7), ('mirror_1', 3.69), ('sofa_chair_1', 3.41), ('table_1', 3.0)]。",
+    "fix": "尺寸越界多半是**内参或掩码外溢的症状**，先查上面「尺度」那几条 —— 不要直接改尺寸公式。"
+   },
+   {
+    "stage": "检测",
+    "severity": 4.5,
+    "reason": "3 个物体的掩码点数不足 1000",
+    "detail": "[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]。实测分界：伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。",
+    "fix": "这些多半是伪物体（低分检测框）：考虑按 score 或点数过滤后重建，并把它们标成 LOW_CONFIDENCE 而不是当作确定物体。"
+   }
+  ]
+ },
+ "counterfactual": {
+  "diff": {
+   "removed_objects": [
+    "sofa_1"
+   ],
+   "n_relations_before": 396,
+   "n_relations_after": 308,
+   "removed_relations": [
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 5.288357,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 312.782778,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 1.522185,
+      "delta_x": 0.605108,
+      "delta_y": -0.780998,
+      "delta_z": 1.157987,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "distance",
+     "value_m": 6.5941,
+     "metric": {
+      "distance_m": 6.594056,
+      "delta_x": 5.639821,
+      "delta_y": 3.318345,
+      "delta_z": -0.813994,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -3.239555,
+      "b_y": -2.286749,
+      "b_z": 3.678014
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -0.605108,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -4.302311,
+      "tol_v": 0.05,
+      "overlap_h1": 0.0,
+      "overlap_h2": 1.0,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "below",
+     "value": true,
+     "metric": {
+      "delta_up": 3.954007,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "front_of",
+     "value": false,
+     "metric": {
+      "delta_z": 1.279593,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "below",
+     "value": true,
+     "metric": {
+      "delta_up": 4.064922,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 6.594056,
+      "delta_x": 5.639821,
+      "delta_y": 3.318345,
+      "delta_z": -0.813994,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "distance",
+     "value_m": 6.923,
+     "metric": {
+      "distance_m": 6.922972,
+      "delta_x": 5.643697,
+      "delta_y": 3.939122,
+      "delta_z": -0.748022,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -3.243432,
+      "b_y": -2.907526,
+      "b_z": 3.612042
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -3.318345,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "behind",
+     "value": true,
+     "metric": {
+      "delta_z": -1.279593,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 8.894042,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -0.17785,
+      "tol_v": 0.05,
+      "overlap_h1": 0.0,
+      "overlap_h2": 0.0,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 6.922972,
+      "delta_x": 5.643697,
+      "delta_y": 3.939122,
+      "delta_z": -0.748022,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -3.939122,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 5.151498,
+      "delta_x": 3.203826,
+      "delta_y": 3.954007,
+      "delta_z": -0.799536,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "distance",
+     "value_m": 5.3113,
+     "metric": {
+      "distance_m": 5.311264,
+      "delta_x": 5.288357,
+      "delta_y": 0.047938,
+      "delta_z": 0.490408,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -2.888092,
+      "b_y": 0.983658,
+      "b_z": 2.373612
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 4.394358,
+      "delta_x": -1.482913,
+      "delta_y": 4.064922,
+      "delta_z": -0.766654,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -3.203826,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "right_of",
+     "value": false,
+     "metric": {
+      "delta_x": 1.482913,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 8.43148,
+      "delta_x": 7.746073,
+      "delta_y": 3.238347,
+      "delta_z": -0.775441,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 5.311264,
+      "delta_x": 5.288357,
+      "delta_y": 0.047938,
+      "delta_z": 0.490408,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 4.65093,
+      "delta_x": 4.396395,
+      "delta_y": -0.815784,
+      "delta_z": 1.279593,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "front_of",
+     "value": true,
+     "metric": {
+      "delta_z": -0.813994,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "behind",
+     "value": false,
+     "metric": {
+      "delta_z": 0.813994,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "below",
+     "value": true,
+     "metric": {
+      "delta_up": 3.238347,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 523.365501,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "front_of",
+     "value": true,
+     "metric": {
+      "delta_z": -0.748022,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "distance",
+     "value_m": 4.3944,
+     "metric": {
+      "distance_m": 4.394358,
+      "delta_x": -1.482913,
+      "delta_y": 4.064922,
+      "delta_z": -0.766654,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": 3.883179,
+      "b_y": -3.033326,
+      "b_z": 3.630674
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 0.605108,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "behind",
+     "value": false,
+     "metric": {
+      "delta_z": 0.748022,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 632.000612,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "below",
+     "value": false,
+     "metric": {
+      "delta_up": -0.815784,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 4.394358,
+      "delta_x": -1.482913,
+      "delta_y": 4.064922,
+      "delta_z": -0.766654,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -4.95272,
+      "tol_v": 0.05,
+      "overlap_h1": 0.0,
+      "overlap_h2": 1.0,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -7.746073,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -0.047938,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 1.218957,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "below",
+     "value": true,
+     "metric": {
+      "delta_up": 3.939122,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 3.203826,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "distance",
+     "value_m": 1.5222,
+     "metric": {
+      "distance_m": 1.522185,
+      "delta_x": 0.605108,
+      "delta_y": -0.780998,
+      "delta_z": 1.157987,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": 1.795158,
+      "b_y": 1.812595,
+      "b_z": 1.706032
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "left_of",
+     "value": true,
+     "metric": {
+      "delta_x": -1.482913,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 6.594056,
+      "delta_x": 5.639821,
+      "delta_y": 3.318345,
+      "delta_z": -0.813994,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -4.396395,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 7.746073,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 1.522185,
+      "delta_x": 0.605108,
+      "delta_y": -0.780998,
+      "delta_z": 1.157987,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "above",
+     "value": true,
+     "metric": {
+      "delta_up": 0.780998,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 6.922972,
+      "delta_x": 5.643697,
+      "delta_y": 3.939122,
+      "delta_z": -0.748022,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -5.643697,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 4.396395,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "distance",
+     "value_m": 5.1515,
+     "metric": {
+      "distance_m": 5.151498,
+      "delta_x": 3.203826,
+      "delta_y": 3.954007,
+      "delta_z": -0.799536,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -0.80356,
+      "b_y": -2.92241,
+      "b_z": 3.663556
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -4.30855,
+      "tol_v": 0.05,
+      "overlap_h1": 0.0,
+      "overlap_h2": 1.0,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "distance",
+     "value_m": 8.4315,
+     "metric": {
+      "distance_m": 8.43148,
+      "delta_x": 7.746073,
+      "delta_y": 3.238347,
+      "delta_z": -0.775441,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -5.345808,
+      "b_y": -2.206751,
+      "b_z": 3.639461
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 5.151498,
+      "delta_x": 3.203826,
+      "delta_y": 3.954007,
+      "delta_z": -0.799536,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "below",
+     "value": true,
+     "metric": {
+      "delta_up": 3.318345,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -3.954007,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "front_of",
+     "value": false,
+     "metric": {
+      "delta_z": 0.490408,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -4.064922,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 10.710102,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 8.43148,
+      "delta_x": 7.746073,
+      "delta_y": 3.238347,
+      "delta_z": -0.775441,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "behind",
+     "value": true,
+     "metric": {
+      "delta_z": -0.490408,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "above",
+     "value": false,
+     "metric": {
+      "delta_up": -3.238347,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "distance",
+     "value_m": 4.6509,
+     "metric": {
+      "distance_m": 4.65093,
+      "delta_x": 4.396395,
+      "delta_y": -0.815784,
+      "delta_z": 1.279593,
+      "a_x": 2.400265,
+      "a_y": 1.031596,
+      "a_z": 2.86402,
+      "b_x": -1.99613,
+      "b_y": 1.84738,
+      "b_z": 1.584427
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -1.895703,
+      "tol_v": 0.05,
+      "overlap_h1": 0.0,
+      "overlap_h2": 0.879791,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -5.639821,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "front_of",
+     "value": false,
+     "metric": {
+      "delta_z": 1.157987,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "far",
+     "value": true,
+     "metric": {
+      "distance_m": 4.65093,
+      "delta_x": 4.396395,
+      "delta_y": -0.815784,
+      "delta_z": 1.279593,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "chair_1",
+     "type": "above",
+     "value": true,
+     "metric": {
+      "delta_up": 0.815784,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "below",
+     "value": false,
+     "metric": {
+      "delta_up": 0.047938,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "behind",
+     "value": true,
+     "metric": {
+      "delta_z": -1.157987,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.019719,
+      "volume_ratio": 3.113076,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -0.381063,
+      "tol_v": 0.05,
+      "overlap_h1": 1.0,
+      "overlap_h2": 0.076472,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_3",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 5.639821,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "near",
+     "value": false,
+     "metric": {
+      "distance_m": 5.311264,
+      "delta_x": 5.288357,
+      "delta_y": 0.047938,
+      "delta_z": 0.490408,
+      "thresh_m": 1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "sofa_chair_1",
+     "type": "right_of",
+     "value": true,
+     "metric": {
+      "delta_x": -5.288357,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "table_1",
+     "type": "below",
+     "value": false,
+     "metric": {
+      "delta_up": -0.780998,
+      "tol": 0.05,
+      "up_axis": 1.0,
+      "up_sign": -1.0
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "front_of",
+     "value": true,
+     "metric": {
+      "delta_z": -0.799536,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "front_of",
+     "value": true,
+     "metric": {
+      "delta_z": -0.766654,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_2",
+     "type": "left_of",
+     "value": false,
+     "metric": {
+      "delta_x": 5.643697,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "behind",
+     "value": false,
+     "metric": {
+      "delta_z": 0.799536,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "behind",
+     "value": false,
+     "metric": {
+      "delta_z": 0.766654,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "front_of",
+     "value": true,
+     "metric": {
+      "delta_z": -0.775441,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "inside",
+     "value": false,
+     "metric": {
+      "contain_ratio": 0.0,
+      "volume_ratio": 6.608472,
+      "min_contain": 0.9
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "mirror_1",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -6.511986,
+      "tol_v": 0.05,
+      "overlap_h1": 0.451359,
+      "overlap_h2": 1.0,
+      "min_overlap": 0.5
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_4",
+     "type": "behind",
+     "value": false,
+     "metric": {
+      "delta_z": 0.775441,
+      "tol": 0.05
+     }
+    },
+    {
+     "a": "sofa_1",
+     "b": "picture_1",
+     "type": "on",
+     "value": false,
+     "metric": {
+      "gap_v_m": -6.067326,
+      "tol_v": 0.05,
+      "overlap_h1": 1.0,
+      "overlap_h2": 1.0,
+      "min_overlap": 0.5
+     }
+    }
+   ],
+   "flipped_relations": []
+  },
+  "relation_summary": {
+   "relation_true_counts": {
+    "distance": 28,
+    "far": 27,
+    "right_of": 20,
+    "above": 20,
+    "behind": 12,
+    "left_of": 7,
+    "front_of": 8,
+    "below": 6,
+    "near": 1
+   },
+   "n_pairs": 28,
+   "nearest_neighbour": {
+    "picture_1": {
+     "object_id": "mirror_1",
+     "distance_m": 4.6882
+    },
+    "mirror_1": {
+     "object_id": "picture_2",
+     "distance_m": 2.4405
+    },
+    "chair_1": {
+     "object_id": "sofa_chair_1",
+     "distance_m": 1.4712
+    },
+    "picture_2": {
+     "object_id": "picture_3",
+     "distance_m": 0.6243
+    },
+    "picture_3": {
+     "object_id": "picture_2",
+     "distance_m": 0.6243
+    },
+    "sofa_chair_1": {
+     "object_id": "chair_1",
+     "distance_m": 1.4712
+    },
+    "table_1": {
+     "object_id": "chair_1",
+     "distance_m": 3.7934
+    },
+    "picture_4": {
+     "object_id": "picture_3",
+     "distance_m": 2.1081
+    }
+   }
+  }
+ }
+}
