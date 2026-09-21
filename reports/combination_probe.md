@@ -318,7 +318,7 @@ attributes, bbox_2d, centroid_m, distance_m, extent_m, frame, h, l, label, mask_
   | `derived:count` | 整数答案 ≤ trace 里**显式的人口数** | `weak` |
   | —— | 都没有 | `unsupported` |
 
-  既保住了原来的能力（VADAR 那种凭空出现的 `998.65` 仍被拒：它不在任何量值区间内、
+  既保住了原来的能力（凭空出现的 `998.65` 仍被拒：它不在任何量值区间内、
   也不是合法计数），又不再把「对的派生量」当垃圾扔掉。
 - ⚠ 两条刻意的**收窄**，都是为了让口径不悄悄变宽：
   ① 派生量判 `weak` 而不判 `supported`（软检查 `numeric_backed_exact`）——

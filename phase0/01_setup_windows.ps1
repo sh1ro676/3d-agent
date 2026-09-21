@@ -25,7 +25,7 @@ Deliberately NOT installed
   triton, xformers        training-only (see above)
   torchaudio              unused at inference
   gradio, wandb, tables   demo / training / dataset tooling
-  VADAR's numpy==1.25.0   conflicts with UniDepth's numpy>=2.0.0
+  旧的 numpy==1.25.0      conflicts with UniDepth's numpy>=2.0.0
 
 Everything is written to D: -- C: has under 25 GB free, and the torch cu124
 wheel alone is roughly 2.4 GB.

@@ -245,7 +245,7 @@ def static_check(
         errors.append(
             "程序里没有调用 `submit()`。答案必须由 "
             "`submit(answer, target_ids=[...], evidence=[\"...\"])` 交出 —— "
-            "没有它就没有答案（VADAR 用『命名空间里有没有 final_result』取答案，"
+            "没有它就没有答案（靠『命名空间里有没有 final_result』取答案的做法，"
             "缺失时静默算成错答案，本项目明确判失败）。"
         )
 

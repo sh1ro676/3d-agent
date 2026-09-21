@@ -101,7 +101,7 @@ class TestMrA:
         r = compute_metrics([rec("float", "0.0", "0.0")])
         assert r["submetrics"]["numeric_other_mra"] == 0.0
 
-    def test_threshold_list_matches_vadar(self):
+    def test_threshold_list_matches_paper_spec(self):
         assert MRA_THRESHOLDS == (0.5, 0.45, 0.40, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05)
         assert len(MRA_THRESHOLDS) == 10
 
@@ -171,7 +171,7 @@ class TestAggregationVerification:
 
 class TestExactMatch:
     def test_exact_match_is_stricter_than_mra(self):
-        """VADAR 的 results.txt 里那个 Accuracy 是逐题字符串相等；
+        """上游的 results.txt 里那个 Accuracy 是逐题字符串相等；
         数值题几乎不可能命中。这里确认它**不会**被误当成 MRA。"""
         r = compute_metrics([rec("float", "2.0", "2.00")])
         assert r["exact_match_accuracy"] == 0.0

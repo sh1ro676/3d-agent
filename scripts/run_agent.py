@@ -90,7 +90,7 @@ def build_parser() -> argparse.ArgumentParser:
                     help="★ 关闭视觉语义（角色②）：get_attributes 返回 CAPABILITY_DISABLED。"
                          "这是消融开关，不是「关掉一个工具」")
     ap.add_argument("--vision-model", default=None,
-                    help="覆盖 SPATIAL_VISION_MODEL / VADAR_VISION_MODEL（不硬编码模型名的落地方式）")
+                    help="覆盖 SPATIAL_VISION_MODEL（不硬编码模型名的落地方式）")
     ap.add_argument("--vision-base-url", default=None, help="覆盖视觉端点 base_url")
     ap.add_argument("--questions-file", default=None,
                     help="批量题集 JSON：[{question, answer_type}, ...] 或字符串列表。"

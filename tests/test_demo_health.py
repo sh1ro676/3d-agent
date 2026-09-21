@@ -34,12 +34,9 @@ for _p in (str(ROOT), str(ROOT / "scripts")):
 import serve_demo  # noqa: E402
 from serve_demo import _backend_state  # noqa: E402
 
-#: 任何一条被设上都会让"缺 key"这个场景测不出来（含 `SPATIAL_*` 别名）。
+#: 任何一条被设上都会让"缺 key"这个场景测不出来。
 _SECRET_ENV = (
-    "SPATIAL_API_KEY", "VADAR_API_KEY",
-    "SPATIAL_BASE_URL", "VADAR_BASE_URL",
-    "SPATIAL_MODEL", "VADAR_MODEL",
-    "SPATIAL_ENV_FILE", "VADAR_ENV_FILE",
+    "SPATIAL_API_KEY", "SPATIAL_BASE_URL", "SPATIAL_MODEL", "SPATIAL_ENV_FILE",
 )
 
 
@@ -66,11 +63,11 @@ class TestReadyIsNotProcessHistory:
         修复前外层 true / 内层 false，自相矛盾；现在两者都该是 true。
         """
         _use_env_file(monkeypatch, tmp_path,
-                      "VADAR_API_KEY=sk-test-plaintext-must-not-leak\n"
-                      "VADAR_BASE_URL=https://example.invalid/v1\n"
-                      "VADAR_MODEL=test-model\n")
+                      "SPATIAL_API_KEY=sk-test-plaintext-must-not-leak\n"
+                      "SPATIAL_BASE_URL=https://example.invalid/v1\n"
+                      "SPATIAL_MODEL=test-model\n")
         # 前提：进程环境里确实一个都没设（否则测不到"靠自加载"这条路径）
-        assert os.environ.get("VADAR_API_KEY") is None
+        assert os.environ.get("SPATIAL_API_KEY") is None
 
         state = _backend_state()
 
@@ -81,9 +78,9 @@ class TestReadyIsNotProcessHistory:
     def test_two_consecutive_calls_agree(self, monkeypatch, tmp_path, clean_env):
         """配置没变，两次调用必须完全一致 —— 这条就是"历史依赖"的回归。"""
         _use_env_file(monkeypatch, tmp_path,
-                      "VADAR_API_KEY=sk-test-plaintext-must-not-leak\n"
-                      "VADAR_BASE_URL=https://example.invalid/v1\n"
-                      "VADAR_MODEL=test-model\n")
+                      "SPATIAL_API_KEY=sk-test-plaintext-must-not-leak\n"
+                      "SPATIAL_BASE_URL=https://example.invalid/v1\n"
+                      "SPATIAL_MODEL=test-model\n")
         first, second = _backend_state(), _backend_state()
         assert first["ready"] == second["ready"] is True
 
@@ -93,9 +90,9 @@ class TestReadyIsNotProcessHistory:
         修复前这里正是"外层 true / 内层 false" —— 会把未配置的后端谎报成可用。
         """
         _use_env_file(monkeypatch, tmp_path,
-                      "VADAR_API_KEY=\n"
-                      "VADAR_BASE_URL=https://example.invalid/v1\n"
-                      "VADAR_MODEL=test-model\n")
+                      "SPATIAL_API_KEY=\n"
+                      "SPATIAL_BASE_URL=https://example.invalid/v1\n"
+                      "SPATIAL_MODEL=test-model\n")
 
         state = _backend_state()
 
@@ -115,13 +112,13 @@ class TestFailurePathsAreVisible:
         静默把它当成"未配置"，会让人去查环境变量，而真正的问题在文件里。
         """
         _use_env_file(monkeypatch, tmp_path,
-                      "VADAR_API_KEY=aaa\nVADAR_API_KEY=bbb\n")
+                      "SPATIAL_API_KEY=aaa\nSPATIAL_API_KEY=bbb\n")
 
         state = _backend_state()          # 不该抛
 
         assert state["ready"] is False
         assert state["error"], "配置错误必须带出来"
-        assert "重复" in state["error"] or "VADAR_API_KEY" in state["error"]
+        assert "重复" in state["error"] or "SPATIAL_API_KEY" in state["error"]
 
     def test_no_key_plaintext_in_payload(self, monkeypatch, tmp_path, clean_env):
         """`/api/health` 是 HTTP 响应 —— 密钥只能以掩码出现。
@@ -129,9 +126,9 @@ class TestFailurePathsAreVisible:
         `_backend_state` 额外投影了 `env_report`，那几个字段必须都是脱敏的。
         """
         key = _use_env_file(monkeypatch, tmp_path,
-                            "VADAR_API_KEY=sk-test-plaintext-must-not-leak\n"
-                            "VADAR_BASE_URL=https://example.invalid/v1\n"
-                            "VADAR_MODEL=test-model\n")
+                            "SPATIAL_API_KEY=sk-test-plaintext-must-not-leak\n"
+                            "SPATIAL_BASE_URL=https://example.invalid/v1\n"
+                            "SPATIAL_MODEL=test-model\n")
 
         payload = json.dumps(_backend_state(), ensure_ascii=False)
 

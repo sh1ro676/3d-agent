@@ -1,4 +1,4 @@
-"""`vision` —— L1 感知层，对应 `vendor/VADAR/engine/predefined_modules.py`。
+"""`vision` —— L1 感知层（检测 / 分割 / 度量深度）。
 
 对外分工（方案文档 §17 的目录树）：
 
@@ -17,11 +17,11 @@
         from vision.geometry import centroid_of          # 轻，随手可用
         from vision.registry import PerceptionStack      # 重，会拉起三个模型
 
-与 VADAR 的三处关键差别（写进报告用）：
-    ① VADAR 的 `depth()` 只回一个标量；这里的 `lift()` 回**整片点云 + 内参**。
-    ② VADAR 的分割与检测在 CLEVR/GQA 支线才用；这里 Omni3D 主路径也必须分割，
+与早期基线的三处关键差别（写进报告用）：
+    ① 早期基线取深度只回一个标量；这里的 `lift()` 回**整片点云 + 内参**。
+    ② 早期基线的分割与检测只在支线才用；这里 Omni3D 主路径也必须分割，
        因为掩码质心是正确性要求，不是可选优化（见 `geometry.py` 抬头）。
-    ③ VADAR 的模型是模块级单例、无法卸载；这里的模型由 `PerceptionStack`
+    ③ 早期基线的模型是模块级单例、无法卸载；这里的模型由 `PerceptionStack`
        显式持有并可 `unload()`，显存是被记账的（§5「常驻 vs 峰值」）。
 """
 

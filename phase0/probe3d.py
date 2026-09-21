@@ -4,16 +4,16 @@ Phase 0 / Step 3 -- verify the 3D geometry pipeline on the RTX 4060 Laptop 8 GB.
 
 This script exists to answer one question with evidence, not opinion:
 
-    Does UniDepth return real 3D geometry that VADAR throws away?
+    Does UniDepth return real 3D geometry that the project is currently throwing away?
 
-VADAR reads only the "depth" key -- see engine/predefined_modules.py:375 and :395:
+Only the "depth" key was being read; the "points" key went unused:
 
     preds = self.unidepth_model.infer(rgb)["depth"].squeeze().cpu().numpy()
 
 UniDepth's own documentation says the same infer() call also returns `points`
 (camera-frame XYZ cloud) and `intrinsics` (the K matrix). This script:
 
-  A. loads UniDepth exactly the way VADAR does (uint8, (3,H,W), no batch dim)
+  A. loads UniDepth the way the project does (uint8, (3,H,W), no batch dim)
      and prints every key it actually returns, with shapes and dtypes
   B. cross-checks `points` against `depth` + `intrinsics`: back-projects a few
      pixels through K and compares against the published point cloud. If they
@@ -161,10 +161,10 @@ def run_unidepth(image: Image.Image, device: torch.device, repo: str):
     print(f"  load time           : {load_s:.1f} s")
 
     reset_peak()
-    # EXACTLY how VADAR builds the input: uint8, no batch dim, no normalisation
+    # EXACTLY how the project builds the input: uint8, no batch dim, no normalisation
     rgb = torch.from_numpy(np.array(image)).permute(2, 0, 1).to(device)
     print(f"  input tensor        : shape={tuple(rgb.shape)}  dtype={rgb.dtype}"
-          f"   <- VADAR's own call convention")
+          f"   <- the project's own call convention")
 
     with torch.no_grad():
         if device.type == "cuda":
@@ -251,8 +251,8 @@ def run_unidepth(image: Image.Image, device: torch.device, repo: str):
     print("        out['radius'] = points.norm(dim=1, keepdim=True)")
     print("        out['depth']  = points[:, -1:]")
     print("      and unidepthv2.py:376-377 builds points as rays * radius.")
-    print("      So VADAR reading only 'depth' (predefined_modules.py:375/:395)")
-    print("      is reading the z column of the cloud and throwing x, y away.")
+    print("      So reading only 'depth' is reading the z column of the cloud")
+    print("      and throwing x, y away.")
 
     # ---- B2. cross-check against a pinhole back-projection ---------------
     fx, fy, cx, cy = float(K[0, 0]), float(K[1, 1]), float(K[0, 2]), float(K[1, 2])
@@ -318,10 +318,10 @@ def run_unidepth(image: Image.Image, device: torch.device, repo: str):
             print("           indoor scene, which is what makes 3D distances meaningful")
             print("         - the cloud agrees with an independent pinhole reconstruction")
             print("           to within a few percent")
-            print("         -> The project's core innovation is CONFIRMED. VADAR sizes")
-            print("            objects as 2D_pixels * depth with no focal length at all")
-            print("            (predefined_modules.py), so real distances are impossible")
-            print("            there. Here they cost zero extra models and zero extra VRAM.")
+            print("         -> The project's core innovation is CONFIRMED. The upstream")
+            print("            implementation sized objects as 2D_pixels * depth with no focal")
+            print("            length at all, so real distances were impossible there.")
+            print("            Here they cost zero extra models and zero extra VRAM.")
         else:
             print()
             print("  [WARN] disagreement is larger than the expected few percent.")
@@ -672,8 +672,8 @@ def main() -> int:
     print(f"  measured numbers written to {args.out}")
     print("  Replace the estimates in 3D_Spatial_Agent_技术调研与实施方案.md with these.")
     print()
-    print("  NOTE: this probe does NOT run the VADAR pipeline end to end, and it")
-    print("  does NOT touch the LLM. Phase 1 is where the original repo runs.")
+    print("  NOTE: this probe does NOT run the full QA pipeline end to end, and it")
+    print("  does NOT touch the LLM.")
 
     try:
         Path(args.out).write_text(json.dumps(RESULT, indent=2, ensure_ascii=False),

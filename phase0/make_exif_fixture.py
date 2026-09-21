@@ -4,7 +4,7 @@ r"""造一张**带真值**的 EXIF fixture，用来端到端验证 `--intrinsics
 ## 为什么必须自己造
 
 实测仓库里所有图片的 EXIF **全为空**（`scripts/inspect_exif.py` 的结果：
-`vendor/UniDepth/assets/demo/rgb.png` 与 `vendor/VADAR/.../demo.jpg` 都是 0 个标签）。
+`vendor/UniDepth/assets/demo/rgb.png` 也是 0 个标签）。
 而真实照片几乎都带 EXIF。于是 EXIF 这条路**无法用仓库素材端到端验证**。
 
 自己造的时候有一个陷阱：如果只造一张「有 EXIF 的图」，验证就退化成

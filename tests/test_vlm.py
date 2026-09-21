@@ -465,8 +465,7 @@ class TestSettingsComeFromEnv:
 
     def test_falls_back_to_the_text_endpoint_when_vision_is_unset(self, monkeypatch):
         for k in ("SPATIAL_VISION_MODEL", "SPATIAL_VISION_BASE_URL",
-                  "SPATIAL_VISION_API_KEY", "VADAR_VISION_MODEL",
-                  "VADAR_VISION_BASE_URL", "VADAR_VISION_API_KEY"):
+                  "SPATIAL_VISION_API_KEY"):
             monkeypatch.delenv(k, raising=False)
         monkeypatch.setenv("SPATIAL_MODEL", "deepseek-flash")
         monkeypatch.setenv("SPATIAL_API_KEY", "sk-text")
@@ -486,10 +485,9 @@ class TestSettingsComeFromEnv:
 
         这是一条刻意的边界：单靠一个 key 无法判断端点是否另有一套，
         贸然切换会让"我明明填了 key"变成"它去连了一个不存在的服务"。
-        端点由 `model` 或 `base_url` 触发（与 phase0 的桥接层同口径）。
+        端点由 `model` 或 `base_url` 触发。
         """
-        for k in ("SPATIAL_VISION_MODEL", "SPATIAL_VISION_BASE_URL",
-                  "VADAR_VISION_MODEL", "VADAR_VISION_BASE_URL"):
+        for k in ("SPATIAL_VISION_MODEL", "SPATIAL_VISION_BASE_URL"):
             monkeypatch.delenv(k, raising=False)
         monkeypatch.setenv("SPATIAL_VISION_API_KEY", "sk-vision-only")
         monkeypatch.setenv("SPATIAL_MODEL", "deepseek-flash")

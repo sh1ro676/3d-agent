@@ -234,7 +234,7 @@ class TestRetry:
     def test_no_submit_at_runtime(self, scene):
         """`submit` 写在走不到的分支里 → 静态检查过得去，运行期才不会交答案。
 
-        这条对应 VADAR 最贵的那类失败：命名空间里没有 `final_result` 就给空串，
+        这条对应最贵的那类失败：命名空间里没有 `final_result` 就给空串，
         然后**静默算错**。这里必须明确判 `no_submit`。
         """
         src = "```python\nif False:\n    submit(1, evidence=['x'])\n```"

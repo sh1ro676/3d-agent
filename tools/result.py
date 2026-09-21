@@ -3,15 +3,15 @@
 五个工具层（L1–L5）、三个角色，**返回值全部是它**。因此这个文件的口径一旦定下来，
 整条链路上「成功 / 失败 / 证据 / 耗时」四件事的表达方式就统一了。
 
-三处设计上的「堵死」，逐条对应 VADAR 的一个具体缺陷：
+三处设计上的「堵死」，逐条对应早期基线实现的一个具体缺陷：
 
 1. **`ok` 是显式布尔，不是靠「有没有 value」推断。**
-   VADAR 靠命名空间里有没有 `final_result` 这个变量来取答案（`engine.py:292-303`），
+   早期基线靠命名空间里有没有 `final_result` 这个变量来取答案，
    缺失时静默给 `""` 然后算错 —— 不报错。这里 `__post_init__` 强制：
    失败必须携带 `ToolError`，成功不许携带 —— 构造不出「静默失败」这种对象。
 
 2. **错误码是枚举，且每个码自带 `recovery`。**
-   VADAR 把 traceback 原样回灌给模型，模型得自己猜「这错该怎么救」。
+   早期基线把原始 traceback 回灌给模型，模型得自己猜「这错该怎么救」。
    这里 `ErrorCode` → `Recovery` 的映射是写死在代码里的，
    模型直接读 `error.recovery` 就知道下一步该 `retry_query` 还是 `abstain`。
 
@@ -179,12 +179,12 @@ class ToolResult:
 
     def __post_init__(self) -> None:
         # 这两条不变量就是「堵死静默失败」的地方。
-        # 构造不出「失败但没有 error」的对象，VADAR 那种缺失即静默算错就不可能发生。
+        # 构造不出「失败但没有 error」的对象，「缺失即静默算错」就不可能发生。
         if self.ok and self.error is not None:
             raise ValueError("ok=True 的结果不应携带 error")
         if not self.ok and self.error is None:
             raise ValueError(
-                "ok=False 必须携带 error —— 否则就是 VADAR 式的静默失败"
+                "ok=False 必须携带 error —— 否则就是静默失败"
                 "（engine.py:292-303 缺失 final_result 时给 \"\" 然后算错）"
             )
 

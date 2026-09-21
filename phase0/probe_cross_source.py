@@ -20,7 +20,7 @@
 
     B 段（GPU，约 1 分钟）—— 「相机头预测的视场不可信」是否跨来源成立
         素材：8 张真实场景照片（Picsum / Pexels / Unsplash / Pixabay，横竖方混合）
-        + VADAR 自带的 demo.jpg（1440×1920 竖幅，另一个房间）+ UniDepth 自带 demo。
+        + UniDepth 自带 demo。
         判断的是**行为稳定性**：如果模型对所有来源都输出同一个不可信的视场，
         那么 §21 那条「相机头不可信」就不只是这一张图的巧合。
 
@@ -76,7 +76,6 @@ B_IMAGES: list[tuple[str, str, str]] = [
     ("pexels_photo", ".cache/cross_source/pexels_photo.jpg", "Pexels 1600×1137"),
     ("unsplash_photo", ".cache/cross_source/unsplash_photo.jpg", "Unsplash 1600×1068"),
     ("pixabay_tree", ".cache/cross_source/pixabay_tree.jpg", "Pixabay 1280×797"),
-    ("vadar_demo", "vendor/VADAR/demo-notebook/resources/demo.jpg", "VADAR demo 1440×1920 竖幅，另一个房间"),
     ("unidepth_demo", "vendor/UniDepth/assets/demo/rgb.png", "UniDepth demo 640×480（基准图，已知 3D 误差 1.943 m）"),
 ]
 
@@ -664,7 +663,7 @@ def write_report(a: dict | None, b: dict | None, c: dict | None = None) -> None:
     L.append("     **没有手机**。注意最小的 MFT 那台（crop 2.0）**照样逃得掉 check_fov**，")
     L.append("     所以「漏报」不是传感器太大造成的巧合；手机（crop≈5–7）反而是唯一兜得住的一档。")
     L.append("   - B 段素材 8 张里 6 张经 CDN 重编码（Picsum/Pexels/Unsplash/Pixabay），")
-    L.append("     压缩伪影与本机照片可能不同；仅 VADAR demo 与原图同源。")
+    L.append("     压缩伪影与本机照片可能不同。")
     L.append("")
     REPORT.write_text("\n".join(L), encoding="utf-8")
 

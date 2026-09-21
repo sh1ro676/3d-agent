@@ -4,7 +4,7 @@
 
 口径从哪来
 ----------
-四个子指标的定义**逐行对齐** `vendor/VADAR/engine/engine.py:356 write_summarized_results`
+四个子指标的定义**逐行对齐**上游实现的 `write_summarized_results`
 （numeric-count / numeric-other MRA / yes-no / multi-choice），
 因为那是论文表格的出处，不能自己另发明一套。
 
@@ -22,14 +22,14 @@ Total 的聚合方式：论文没写，所以这里不猜 —— 见 `derive_tot
 
 两个精度口径（必须同时报，否则会误读）
 --------------------------------------
-VADAR 原实现在解析失败时是 **跳过该题**（`continue`）而不是记为答错：
+上游原实现在解析失败时是 **跳过该题**（`continue`）而不是记为答错：
 
     engine.py:378-382   try: pred = int(pred) except: continue     # 分子分母都不加
 
 后果是**准确率被系统性高估**：一个只会输出乱码的模型，
 在这些题上不会被扣分。所以本模块同时给出：
 
-    vadarspec  —— 逐行复刻，用于和论文表格对话
+    paper-spec —— 逐行复刻，用于和论文表格对话
     strict     —— 解析失败记 0 分、分母不减，用于「真实能力」叙述
 
 两者都落盘。报告里引用哪一个必须写清楚，这正是 §16.2 说的「口径要能归因」。
@@ -56,7 +56,7 @@ MRA_THRESHOLDS = (0.5, 0.45, 0.40, 0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0.05)
 #: 键是方法名，值是 (numeric-count, numeric-other, y/n, multi-choice, Total, 是否同批次)。
 #:
 #: **`same_run` 这一位是关键**：ViperGPT / VisProg 是别人跑的、题集与题数未知，
-#: 把它们和 VADAR/GPT4o 放在同一个方程里解，等于假设两批人用了同一份题数分布。
+#: 把它们和同批次方法放在同一个方程里解，等于假设两批人用了同一份题数分布。
 #: 实测（2026-09-17）证实这个假设不成立：表 1 的 8 个方法残差 ≤0.04pp，
 #: 而 ViperGPT/VisProg 残差 −6.7 / −7.6pp。所以判据只用 same_run=True 的行。
 PAPER_OMNI3D_LEADERBOARD = {
@@ -68,8 +68,8 @@ PAPER_OMNI3D_LEADERBOARD = {
     "Gemini1.5-Flash":  (24.3, 27.6, 51.1, 52.9, 35.0, True),
     "Molmo":            (21.4, 21.7, 29.3, 41.2, 26.1, True),
     "SpaceMantis":      (20.0, 21.7, 50.6, 48.2, 30.3, True),
-    # 表 1 + 表 2 的 VADAR 行（两表一致，同一个 run）
-    "VADAR":            (21.7, 35.5, 56.0, 57.6, 40.4, True),
+    # 论文方法行（表 1 与表 2 一致，同一个 run）
+    "paper-method":     (21.7, 35.5, 56.0, 57.6, 40.4, True),
     # 表 2 程序合成方法 —— 外部批次，题数分布未公开，不参与判据
     "ViperGPT":         (20.0, 15.4, 56.0, 42.4, 33.5, False),
     "VisProg":          (2.9,  0.9,  54.7, 25.9, 21.1, False),
@@ -90,7 +90,7 @@ def _record_ok(r: dict) -> bool:
 
 
 def compute_metrics(records: Iterable[dict]) -> dict:
-    """按 VADAR 口径算四个子指标。**逐行复刻 engine.py:356-420。**
+    """按上游口径算四个子指标。**逐行复刻 engine.py:356-420。**
 
     records 每项形如：
         {"answer_type": "int|float|str", "ground_truth": ..., "prediction": ...}
@@ -106,7 +106,7 @@ def compute_metrics(records: Iterable[dict]) -> dict:
 
     所以「预测无法解析」= **记 0 分**，不是「该题被排除」。
     两者差别很大：排除会抬高准确率，记 0 分会压低。
-    曾经的解读（「VADAR 会跳过解析失败的题、系统性高估」）是错的，
+    曾经的解读（「上游会跳过解析失败的题、系统性高估」）是错的，
     这里按真实行为实现，并且**不加**任何额外的宽松/严格开关 ——
     多一个口径就多一处解释空间，而这里本来只有一个。
 
@@ -194,7 +194,7 @@ def compute_metrics(records: Iterable[dict]) -> dict:
         "multi_choice": acc(ok["multi_choice"], n["multi_choice"]),
     }
 
-    # VADAR 自己的 results.txt 里还有一个「逐题字符串相等」的 Accuracy
+    # 上游自己的 results.txt 里还有一个「逐题字符串相等」的 Accuracy
     # （engine.py:436-535），口径比上面四个粗得多 —— 它比较的是
     # `str(预测) == 真值`，float 题因此几乎不可能命中。
     # 保留它是为了能和 results.txt 对上；**不要**把它当主指标，

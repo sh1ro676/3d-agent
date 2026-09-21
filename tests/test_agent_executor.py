@@ -4,7 +4,7 @@
 
     ① 程序能读到 `ctx.scene` → 「坐标只能来自工具返回值」变成提示词祈祷
     ② `open` 可用 → 绝对路径被当转义字符（Windows `\\3D`→`\\x03`），生成程序整段作废
-    ③ 程序正常结束但没有 `submit` → VADAR 静默给空串并算错
+    ③ 程序正常结束但没有 `submit` → 早期基线静默给空串并算错
     ④ 几何算飞了给出 `nan` → 一路活到最后，变成一个"看着像数字"的答案
 
 另外还钉住三件事：`submit` 的证据下限、`answer_type` 的前置约束、
@@ -90,7 +90,7 @@ class TestSandbox:
         assert out.ok and out.submission.answer == 4
 
     def test_open_is_unavailable(self, ctx):
-        """反面：VADAR 的 `open("{result_file}",...)` 就是从这里炸的。"""
+        """反面：早期基线的 `open("{result_file}",...)` 就是从这里炸的。"""
         out = execute_program("f = open('x.txt', 'w')", ctx)
         assert out.ok is False and out.stage == "runtime"
         assert "NameError" in out.message or "open" in out.message
@@ -304,7 +304,7 @@ class TestStages:
         assert out.tool_calls == 0
 
     def test_no_submit_is_an_explicit_failure(self, ctx):
-        """③ 这是 VADAR 静默给 0 分的那条路，这里必须明确判失败。"""
+        """③ 这是「静默给 0 分」的那条路，这里必须明确判失败。"""
         out = execute_program("x = 1 + 1", ctx)
         assert out.ok is False and out.stage == "no_submit"
         assert "final_result" in out.message or "submit" in out.message
@@ -326,7 +326,7 @@ class TestStages:
     def test_ignoring_a_tool_failure_is_loud_not_silent(self, ctx):
         """不判 `res.ok` 就取 `res.value` → None → 契约报错。
 
-        ★ 这一条是「静默失败」的正面反例：VADAR 会拿一个空值继续算，
+        ★ 这一条是「静默失败」的正面反例：早期基线会拿一个空值继续算，
         这里必须在交答案的那一刻停住。同时 trace 里留着真实的错误码。
         """
         src = "res = get_3d_position(object_id='chair_9')\nsubmit(res.value, evidence=['x'])"

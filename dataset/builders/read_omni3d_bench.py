@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""read_omni3d_bench.py —— 把 Omni3D-Bench 的 parquet 展开成 VADAR 期望的目录布局。
+"""read_omni3d_bench.py —— 把 Omni3D-Bench 的 parquet 展开成本项目数据集契约的目录布局。
 
 为什么需要这一层
 ----------------
-HF 仓库里只有一个 parquet（106 MB），而 VADAR 的 `evaluate.py` 期望的是：
+HF 仓库里只有一个 parquet（106 MB），而本项目的数据集契约期望的是：
 
     data/omni3d-bench/annotations.json      # {"questions": [ {...}, ... ]}
     data/omni3d-bench/images/<image_filename>
 
-而且字段名是硬约定（都在 VADAR 源码里读出来的，不是猜的）：
+而且字段名是硬约定 —— 逐条从上游实现的源码里读出来的，不是猜的：
     evaluate.py:29          questions = questions_data["questions"]
     evaluate.py:42          random.sample(questions, num_api_questions)
     agents.py:157,806       question_data["image_filename"]
@@ -17,9 +17,13 @@ HF 仓库里只有一个 parquet（106 MB），而 VADAR 的 `evaluate.py` 期�
     engine.py:110           os.path.join(images_folder_path, question["image_filename"])
     engine.py:434-443       question["answer_type"], question["answer"]
 
+    ⚠ 上面几处行号指向的是**已从本仓库移除**的早期基线检出。之所以保留，
+      是因为它们解释了「字段名为什么恰好是这几个」；要核对时按 README 的
+      参考文献找回上游即可。
+
 所以本脚本做三件事：
     ① 读 parquet，把每行的图像字节写成 `images/<image_id>.png`
-    ② 生成 `annotations.json`（VADAR 字段名 + 原样保留其余列到 `_extra`）
+    ② 生成 `annotations.json`（约定字段名 + 原样保留其余列到 `_extra`）
     ③ 把 schema、answer_type 分布、去重后的图片数等写进 `read_report.json`
 
 为什么要单独写 `_extra`
@@ -52,12 +56,12 @@ IMAGES_DIR = os.path.join(OUT_DIR, "images")
 ANNOTATIONS = os.path.join(OUT_DIR, "annotations.json")
 REPORT = os.path.join(OUT_DIR, "read_report.json")
 
-#: 候选列名 → VADAR 字段。按优先级找第一个存在的。
+#: 候选列名 → 约定字段。按优先级找第一个存在的。
 #: 实测（2026-09-17，parquet schema）真实列名是：
 #:     image_index / image / q_index / question / answer / answer_type
-#: 注意 `q_index` —— 不是 `question_index`。VADAR 消费时要求
-#: `question["question_index"]`（agents.py:132、engine.py:107），
-#: 所以这里必须显式重命名，而不是靠模糊匹配碰运气。
+#: 注意 `q_index` —— 不是 `question_index`。下游契约要的是
+#: `question["question_index"]`，所以这里必须显式重命名，
+#: 而不是靠模糊匹配碰运气。
 FIELD_CANDIDATES = {
     "image_index": ["image_index", "image_id", "image_name", "id"],
     "question_index": ["question_index", "q_index", "question_id", "qid"],
@@ -232,7 +236,7 @@ def export(limit=None, overwrite=False):
     from collections import Counter
 
     # str 类里混着 yes/no 和 multi-choice，必须按**答案取值**再切一刀 ——
-    # 只看 answer_type 会以为 str 是一类，而 VADAR 的指标把 str 拆成两类
+    # 只看 answer_type 会以为 str 是一类，而本项目的指标把 str 拆成两类
     # （engine.py:392-406）。这个拆分是「Total 聚合口径能否被反推」的关键输入。
     n_yn = sum(1 for q in questions
                if q["answer_type"] == "str" and str(q["answer"]) in ("yes", "no"))
@@ -295,7 +299,7 @@ def export(limit=None, overwrite=False):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Omni3D-Bench parquet → VADAR 目录布局")
+    ap = argparse.ArgumentParser(description="Omni3D-Bench parquet → 本项目数据集目录布局")
     ap.add_argument("--inspect", action="store_true", help="只看 schema / 字段映射")
     ap.add_argument("--limit", type=int, default=None, help="只处理前 N 行")
     ap.add_argument("--overwrite", action="store_true", help="重写已存在的图片")

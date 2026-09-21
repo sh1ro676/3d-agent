@@ -43,23 +43,14 @@ h2+p,h3+p{margin-top:8px}
 <div class="wrap">
 <nav><div class="nvt">目录</div>
 <a class="t1" href="#3d-spatial-agent">3D Spatial Agent 项目技术调研与实施方案</a>
-<a class="t2" href="#2026-09-15">⚠️ 路径变更声明（2026-09-15 追加）</a>
+<a class="t2" href="#2026-09-20">⚠️ 文档变更声明（2026-09-20 追加）</a>
 <a class="t2" href="#1">1. 项目目标</a>
-<a class="t2" href="#2-vadar">2. 为什么 VADAR 适合作为基础（也说明它的真实局限）</a>
-<a class="t2" href="#3-vadar">3. VADAR 当前架构（实际文件树 + 数据流）</a>
-<a class="t2" href="#4-vadar-agent">4. VADAR 当前 Agent 机制（逐类拆解）</a>
-<a class="t3" href="#signatureagentagentsagentspy49-207">SignatureAgent（agents/agents.py:49-207）</a>
-<a class="t3" href="#apiagentagentsagentspy210-724">APIAgent（agents/agents.py:210-724）</a>
-<a class="t3" href="#programagentagentsagentspy727-875">ProgramAgent（agents/agents.py:727-875）</a>
-<a class="t3" href="#engineengineenginepy29-606">Engine（engine/engine.py:29-606）</a>
-<a class="t2" href="#5-vadar">5. VADAR 视觉模块（真实实现 + 显存现实）</a>
-<a class="t3" href="#51-points-1">5.1 「points 是真几何」已实测确认（创新点 1 的地基）</a>
-<a class="t2" href="#6-vadar-llm">6. VADAR 当前 LLM 接口（精确到行）</a>
-<a class="t2" href="#7-openai-phase003_vadar_llm_bridgepy">7. 如何替换 OpenAI（已实现，见 phase0/03_vadar_llm_bridge.py）</a>
-<a class="t3" href="#71-generator-4">7.1 唯一入口是 Generator，但有 4 个模块级绑定要一起换</a>
-<a class="t3" href="#72">7.2 分三档</a>
-<a class="t3" href="#73-5-phase0llm_backendmd">7.3 换模型后才会暴露的 5 个坑（都已实测，详见 phase0/LLM_BACKEND.md）</a>
-<a class="t3" href="#74-deepseek-2026-09-17-15">7.4 DeepSeek 后端实测（2026-09-17，真实调用 15 次）</a>
+<a class="t2" href="#2">2. 早期参考实现：评估结论与弃用理由</a>
+<a class="t3" href="#21-llm-python">2.1 只保留一样东西：动作空间 = LLM 输出 Python 程序</a>
+<a class="t3" href="#22">2.2 它的局限：这些直接决定了创新点在哪</a>
+<a class="t3" href="#23">2.3 据此定下的自研架构（三条）</a>
+<a class="t3" href="#24-points">2.4 「points 是真几何」—— 升级到真三维不需要任何新模型</a>
+<a class="t3" href="#25-llm-venv">2.5 视觉栈必须与 LLM 分 venv、分进程</a>
 <a class="t2" href="#8-llm-8gb-4060-2026-09">8. 开源 LLM 推荐（针对 8GB 4060 的实测生态，2026-09）</a>
 <a class="t3" href="#80-api-ollama-2026-09-15">8.0 零 API 起点：本地跑起来要什么（已在 Ollama 官方库核实，2026-09-15）</a>
 <a class="t3" href="#81">8.1 云端主模型推荐（作为对照臂 / 决定性实验）</a>
@@ -67,6 +58,7 @@ h2+p,h3+p{margin-top:8px}
 <a class="t3" href="#83">8.3 环境版本冲突（重要）</a>
 <a class="t3" href="#84">8.4 微调工具链</a>
 <a class="t3" href="#85">8.5 模型不是硬依赖：约束分层、替代方案、架构要求</a>
+<a class="t3" href="#86-ab2026-09-17-15">8.6 云端后端实测：双端点路由与思考模式 A/B（2026-09-17，真实调用 15 次）</a>
 <a class="t2" href="#9-40608gb-laptop">9. 4060（8GB / Laptop）可行性分析</a>
 <a class="t3" href="#91-2026-09-15">9.1 本机实测环境（2026-09-15 逐项实测）</a>
 <a class="t3" href="#92">9.2 逐模块可行性</a>
@@ -76,18 +68,18 @@ h2+p,h3+p{margin-top:8px}
 <a class="t3" href="#101">10.1 目标（不是让它会聊天，而是让它会调工具）</a>
 <a class="t3" href="#102-4060">10.2 训练配置（4060 可行区间）</a>
 <a class="t3" href="#103">10.3 数据集设计（本项目的核心资产）</a>
-<a class="t2" href="#11-3d-tool-library-vadar-api">11. 我们的 3D Tool Library（自研，替代 VADAR 的随机 API）</a>
+<a class="t2" href="#11-3d-tool-library-api">11. 我们的 3D Tool Library（自研，替代参考实现的随机 API）</a>
 <a class="t3" href="#111">11.1 工具分层</a>
 <a class="t3" href="#1111-2026-09-16">11.1.1 实现记录（2026-09-16）—— 五个工具里落了四个</a>
-<a class="t3" href="#112-vadar">11.2 与 VADAR 原工具的关系</a>
+<a class="t3" href="#112">11.2 与参考实现原工具的关系</a>
 <a class="t2" href="#12-3d-scene-graph">12. 3D Scene Graph</a>
 <a class="t3" href="#121">12.1 是否值得做？——值得，而且是最高性价比的中间层</a>
 <a class="t3" href="#122">12.2 数据结构</a>
 <a class="t3" href="#123">12.3 构建方式（单遍卷积式）</a>
 <a class="t3" href="#124">12.4 更新方式</a>
 <a class="t3" href="#125-agent">12.5 如何被 Agent 调用 &amp; 作为中间表示</a>
-<a class="t2" href="#13-agent-vadar">13. 新 Agent 架构（比 VADAR 更适合本项目）</a>
-<a class="t3" href="#131-vadar-vs">13.1 VADAR vs 新架构</a>
+<a class="t2" href="#13-agent">13. 新 Agent 架构（面向本项目的自研设计）</a>
+<a class="t3" href="#131-vs">13.1 参考实现 vs 新架构</a>
 <a class="t3" href="#132-langgraph">13.2 建议实现：先轻量自研，不急上 LangGraph</a>
 <a class="t3" href="#133-2026-09-16">13.3 三角色接口契约（2026-09-16 定稿）</a>
 <a class="t2" href="#14-demo">14. Demo 架构</a>
@@ -102,12 +94,12 @@ h2+p,h3+p{margin-top:8px}
 <a class="t3" href="#162">16.2 建议的消融主表</a>
 <a class="t3" href="#163-12">16.3 评价指标（12 项，全部要能落表）</a>
 <a class="t3" href="#164">16.4 实验纪律（避免答辩被问倒）</a>
-<a class="t2" href="#17-vadar">17. 项目目录（按 VADAR 实际结构重新设计）</a>
+<a class="t2" href="#17">17. 项目目录</a>
 <a class="t2" href="#18-phase-013">18. 分阶段路线（Phase 0–13）</a>
-<a class="t3" href="#phase-0">Phase 0 — 环境配置</a>
-<a class="t3" href="#phase-1-vadar">Phase 1 — VADAR 原始版本跑通（基础设施已完成，等一次实跑）</a>
+<a class="t3" href="#phase-0-windows-wsl">Phase 0 — 环境配置（已完成：Windows 原生，未装 WSL）</a>
+<a class="t3" href="#phase-1-2026-09-20">Phase 1 — ~~上游原版跑通~~ 已移除（2026-09-20）</a>
 <a class="t3" href="#phase-1b-2026-09-16">Phase 1b — 自建骨架：场景图 + 工具库 + 信封（2026-09-16 已完成）</a>
-<a class="t3" href="#phase-2-vadar-agent-architecture">Phase 2 — 彻底理解 VADAR Agent architecture</a>
+<a class="t3" href="#phase-2-agent-architecture-2">Phase 2 — ~~彻底理解上游 Agent architecture~~ 已并入 §2</a>
 <a class="t3" href="#phase-3-llm">Phase 3 — 接入开源 LLM</a>
 <a class="t3" href="#phase-4-4060">Phase 4 — 4060 本地运行视觉模型（显存工程）</a>
 <a class="t3" href="#phase-5-3d-spatial-tools">Phase 5 — 实现 3D Spatial Tools</a>
@@ -121,8 +113,8 @@ h2+p,h3+p{margin-top:8px}
 <a class="t3" href="#phase-13-demo">Phase 13 — 答辩 Demo</a>
 <a class="t2" href="#19">19. 风险点（按「会毁掉项目的程度」排序）</a>
 <a class="t2" href="#20">20. 第一阶段具体操作</a>
-<a class="t3" href="#step-01-wsl2-ubuntu-a-vadar-3060">Step 0.1 — 装 WSL2 + Ubuntu（可选：仅「路径 A / 原版 VADAR 基线」需要，约 30–60 分钟含一次重启）</a>
-<a class="t3" href="#step-02-5">Step 0.2 — 确认项目目录（约 5 分钟）</a>
+<a class="t3" href="#step-01-wsl2-ubuntu-2026-09-20">Step 0.1 — ~~装 WSL2 + Ubuntu~~ 已作废（2026-09-20）</a>
+<a class="t3" href="#step-02">Step 0.2 — 项目目录与环境变量</a>
 <a class="t3" href="#step-03-python-windows">Step 0.3 — 建视觉栈 Python 环境（Windows 原生，一条脚本）</a>
 <a class="t3" href="#step-03b-1">Step 0.3b — 环境自检（约 1 分钟）</a>
 <a class="t3" href="#step-04-step-03">Step 0.4 — 视觉模型的依赖裁剪（已包含在 Step 0.3 的脚本里）</a>
@@ -162,60 +154,54 @@ h2+p,h3+p{margin-top:8px}
 <a class="t3" href="#243-total">24.3 Total 的聚合口径：不是猜的，是验算出来的</a>
 <a class="t3" href="#244">24.4 子指标口径里两个会静默算错的地方</a>
 <a class="t3" href="#245">24.5 稳定入口必须按「这次到底发生了什么」分流（同日晚，实测踩到）</a>
+<a class="t3" href="#246-2-gt-12026-09-19">24.6 「验收标准自己会答错」的三个实例：巧合命中 ×2 与 GT 口径 ×1（2026-09-19 第十轮）</a>
 <a class="t2" href="#_10">附：本次调研的关键事实汇总（供交叉核对）</a>
 </nav>
 <main>
 <h1 id="3d-spatial-agent">3D Spatial Agent 项目技术调研与实施方案</h1>
 <blockquote>
-<p>调研对象：VADAR — <em>Visual Agentic AI for Spatial Reasoning with a Dynamic API</em> (CVPR 2025)
-仓库：https://github.com/damianomarsili/VADAR
-核查方式：<strong>实际克隆 main 分支并逐文件精读</strong>，不是读论文摘要推测
-核查到的 commit：<code>56018ebc2ecf7a430fc94e64e80e2768b0931739</code>（2025-06-16）
+<p>定位：<strong>自建的三维空间智能体</strong>。感知层接三个开源模型，Agent 层与工具层自研。
 本机实测硬件：<strong>NVIDIA GeForce RTX 4060 Laptop GPU，8188 MiB，驱动 560.76，CUDA Toolkit 12.6</strong>
-文档日期：2026-09-14</p>
+文档起于 2026-09-14，此后逐轮追加实测结论（每节标注日期）。</p>
 </blockquote>
-<p>本文中所有关于 VADAR 的陈述都标注了来源（文件:行号）。凡是估算值都显式标注「估算」，凡是不确定项都标注「不确定」。</p>
+<p>凡是估算值都显式标注「估算」，凡是不确定项都标注「不确定」。<strong>实测值才算数。</strong></p>
 <hr />
 <blockquote>
-<h2 id="2026-09-15">⚠️ 路径变更声明（2026-09-15 追加）</h2>
-<p><strong>先读 <code>VADAR可借鉴性评估与路径选择.md</code>。本文档的下述结论已被其取代：</strong></p>
+<h2 id="2026-09-20">⚠️ 文档变更声明（2026-09-20 追加）</h2>
+<p>本文档早期版本以一份第三方出处（一个「程序合成式 3D 空间问答」的开源研究实现）作为改造
+基础，并对其做过逐文件的静态审计（原 §2–§7）。<strong>该检出与配套审计文档已移出本仓库：</strong></p>
 <table>
 <thead>
 <tr>
-<th>本文档章节</th>
-<th>原结论</th>
-<th>现行结论</th>
+<th>早期写法</th>
+<th>现行写法</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>§9.3 第 4 条、§20 开头</td>
-<td>「<strong>必须</strong>使用 WSL2，Windows 原生跑不通」</td>
-<td><strong>WSL2 降为可选。</strong> 三处平台阻塞（<code>signal.SIGALRM</code> / GroundingDINO 编译 / SAM2 编译）中，前两处随「不基于 VADAR 代码实现」而消失：UniDepth 的 xformers 有 SDPA 回落（源码 <code>try/except</code>），GroundingDINO 与 SAM2 在 transformers 里已有纯 PyTorch 原生版</td>
+<td>「基于该实现改造」</td>
+<td><strong>自建实现</strong>。只保留「动作空间 = LLM 输出 Python 程序」这一设计取向</td>
 </tr>
 <tr>
-<td>§1「核心目标」中的「跑通 VADAR → 换掉 OpenAI」</td>
-<td>基于 VADAR 代码改造</td>
-<td><strong>改为「借 VADAR 的技术路线、重写实现」</strong>——保留「LLM 生成 Python 程序」这一动作空间设计，弃用其 agent 层、Engine 层与动态 API 生成</td>
+<td>必须 WSL2 + 编译链</td>
+<td><strong>Windows 原生 Python venv + transformers 原生实现</strong>（§20 Step 0.3）</td>
 </tr>
 <tr>
-<td>Phase 0 / Phase 1 的 WSL 路线</td>
-<td>WSL2 + Ubuntu-22.04 + 编译链</td>
-<td><strong>Windows 原生 Python 3.11 venv + transformers + UniDepth</strong></td>
+<td>实验臂 A = 上游原版基线</td>
+<td><strong>已移除</strong>。早期 6 次真跑留在 <code>results/A/</code>，但<strong>当前不可复现</strong></td>
 </tr>
 <tr>
-<td>§20 Step 0.1–0.3</td>
-<td>装 WSL2、编译视觉栈</td>
-<td>降级为「可选：仅在想跑原版 VADAR 做对照时使用」</td>
+<td>§3–§7 的逐类拆解</td>
+<td><strong>已压缩合并进 §2</strong>（行号引用随检出移除而不可复核）</td>
 </tr>
 </tbody>
 </table>
-<p><strong>本文档中未被取代、依然有效的部分</strong>：§3 起对 VADAR 架构与代码机制的所有描述（这些是事实）、§4 视觉模块分析、§6–§7 LLM 接口分析、§10–§15 工具库 / Scene Graph / Agent / Demo / 创新点设计、§16–§18 实验设计与目录结构。网络实测表（§20）也依然有效。</p>
-<p>变更的<strong>根本原因</strong>：原方案假设「在 VADAR 代码上打补丁」，因此继承了它全部的平台与依赖约束；新定位是「VADAR 只作参考」，那些约束随之归零。</p>
+<p><strong>依然有效</strong>：§8–§15（LLM 选型 / 可行性 / QLoRA / 工具库 / Scene Graph / Agent / Demo / 创新点）、
+§16–§18（实验设计 / 目录 / 路线）、§20 的网络与显存实测表、§21–§24（内参杠杆与数据契约）。</p>
 </blockquote>
 <hr />
 <h2 id="1">1. 项目目标</h2>
-<p>把 VADAR 从一个「程序合成式空间问答系统」升级成一个 <strong>3D Spatial Agent（运行在真实三维场景上的视觉智能体）</strong>。</p>
+<p>把「一张 2D 照片 + 一句自然语言空间问题」做成一个<strong>几何可验证</strong>的三维空间智能体。</p>
 <p>三层结构：</p>
 <table>
 <thead>
@@ -248,10 +234,10 @@ h2+p,h3+p{margin-top:8px}
 </tr>
 </tbody>
 </table>
-<p><strong>核心目标不是复现论文</strong>，而是：</p>
-<pre class="code"><code>跑通 VADAR → 彻底理解其机制 → 换掉 OpenAI → 用真实 3D 几何重建工具层
-→ 构建自己的 Scene Graph → 自研 Agent 循环 → 自建工具调用数据集
-→ 在 4060 上做 QLoRA → 定量消融 → 答辩级可交互 Demo
+<p><strong>核心目标不是复现任何论文</strong>，而是：</p>
+<pre class="code"><code>自建感知层与工具库 → 用真实 3D 几何重建工具层 → 构建 Scene Graph
+→ 自研 Agent 循环与边界契约 → 自建工具调用数据集 → 在 4060 上做 QLoRA
+→ 定量消融 → 答辩级可交互 Demo
 </code></pre>
 <p>一句话定位：<strong>让 Agent 不再「看图猜空间关系」，而是「调工具算空间关系」。</strong></p>
 <p>典型目标任务：</p>
@@ -284,311 +270,90 @@ Agent：<code>find_object("door")</code> → <code>find_object("chair")</code> �
 </tr>
 </tbody>
 </table>
-<p>第 2 类容易被漏掉，但它是「<strong>3D Spatial</strong>」这个定位应有的产出：在 L1–L4 里场景图只是「跑完就丢」的内部表示，
-L5 让它成为可保存、可复查、可对比的交付物，并给出<strong>独立于问答准确率</strong>的新指标
+<p>第 2 类容易被漏掉，但它是「<strong>3D Spatial</strong>」这个定位应有的产出：在 L1–L4 里场景图只是「跑完就丢」
+的内部表示，L5 让它成为可保存、可复查、可对比的交付物，并给出<strong>独立于问答准确率</strong>的新指标
 （§16.3 指标 11–12）。<strong>它不依赖任何提问</strong> —— 场景构建完成即可导出。</p>
 <blockquote>
 <p><strong>为什么必须显式写进方案</strong>：如果只把场景图当内部实现，整篇报告就只剩「问答准确率」一张表，
 看起来像一个问答工具；把它升为一类输出，项目才真正落在 3D 场景理解上。</p>
 </blockquote>
 <hr />
-<h2 id="2-vadar">2. 为什么 VADAR 适合作为基础（也说明它的真实局限）</h2>
-<p><strong>适合的理由（有代码依据）：</strong></p>
-<ol>
-<li><strong>它是真正的 3D 空间推理项目，不是 VQA 套壳</strong>。它的预定义视觉基元直接包含度量深度：<code>depth(image, bbox)</code> 返回物体到相机的<strong>米制距离</strong>（<code>engine/predefined_modules.py:390-408</code>），并且 prompt 里明确定义了「3D size = 2D size × depth」（<code>prompts/program_prompt.py:60</code>）。这使它天然接得上 3D Vision。</li>
-<li><strong>它已经是一个「工具调用」系统</strong>——只是用 Python 程序合成实现的，而不是 JSON function calling。预定义工具在 <code>prompts/modules.py</code>，运行时生成的工具在 <code>api.json</code>，工具真的被 <code>exec</code> 执行并返回真实视觉结果。你要做的「工具库」不是从零发明，而是<strong>升级 + 加几何层</strong>。</li>
-<li><strong>它天然支持消融实验</strong>。它的三段式（Signature/API/Program）和 <code>--oracle</code> 开关（用 GT 场景数据替换真实视觉模块，<code>engine/oracle.py</code>）提供了现成的「关掉视觉 / 关掉 LLM」对照臂：论文报告 VADAR 40.4 vs VADAR+oracle 94.4（<code>RESULTS.md:21,37</code>）。<strong>这个 54 个百分点的 gap 就是你项目的整个实验空间</strong>——它清楚地告诉你瓶颈在哪里。</li>
-<li><strong>代码量小、可读、无框架依赖</strong>。全仓库 33 个文件，核心 Python 约 2100 行，没有 LangChain/Hydra/复杂配置系统。你可以在一周内完全掌握。</li>
-</ol>
-<p><strong>必须正视的局限（这决定了你的创新点在哪里）：</strong></p>
+<h2 id="2">2. 早期参考实现：评估结论与弃用理由</h2>
+<blockquote>
+<p><strong>本节口径</strong>：本节合并自原 §2–§7。原 §3–§7 是对一份第三方检出的逐类拆解（含大量
+<code>文件:行号</code> 引用）；该检出与配套审计文档已于 2026-09-20 移出本仓库，行号<strong>已无法复核</strong>，
+因此这里只保留<strong>仍然影响本项目设计</strong>的结论。节号保持原状（下文直接接 §8），以免打断
+全文的交叉引用。</p>
+</blockquote>
+<h3 id="21-llm-python">2.1 只保留一样东西：动作空间 = LLM 输出 Python 程序</h3>
+<p>早期评估的出发点是找一份「已经是 3D 空间推理、且动作空间是程序而不是 JSON function call」
+的参考实现。它确实满足这一点：预定义视觉基元里有<strong>度量深度</strong>；三个角色（提签名 / 写实现 /
+出程序）各调一次 LLM，生成的 Python 程序真被执行并返回真实的视觉结果；另有一个「用 GT 场景
+数据替换视觉模块」的开关，说明作者也认为瓶颈在视觉而非推理。</p>
+<p><strong>本项目保留的就是这一条设计</strong>：LLM 的输出是一段<strong>可静态检查、可执行、可留证据</strong>的程序，
+而不是一串 tool-call。其余全部弃用，理由见 2.2。</p>
+<h3 id="22">2.2 它的局限：这些直接决定了创新点在哪</h3>
 <table>
 <thead>
 <tr>
 <th>局限</th>
-<th>代码证据</th>
-<th>影响</th>
+<th>现象</th>
+<th>对本项目的影响</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>它不是 tool-calling agent，是 program synthesis</strong></td>
-<td><code>agents/agents.py</code> 三个 Agent 全部是「生成 Python 代码」，执行靠 <code>runpy.run_path</code>（<code>engine/engine.py:597</code>）</td>
-<td>「换 LLM」不等于「换 Agent」。你要写的 Agent 循环是<strong>新增</strong>的，不是改的</td>
+<td><strong>不是 tool-calling agent，是 program synthesis</strong></td>
+<td>三个角色各生成一段 Python，执行靠 <code>runpy</code></td>
+<td>「换 LLM」≠「换 Agent」。我们的 Agent 契约是<strong>新增</strong>的，不是改的</td>
 </tr>
 <tr>
-<td><strong>它拿不到真实 3D 坐标</strong></td>
-<td><code>predefined_modules.py:375</code> 只取 <code>infer(rgb)["depth"]</code>，丢掉了 UniDepth 同时返回的 <code>points</code>（相机坐标系点云）和 <code>intrinsics</code></td>
-<td>这是本项目<strong>最大且最容易实现的真实创新点</strong>（见 §14 创新点 1）</td>
+<td><strong>拿不到真实 3D 坐标</strong></td>
+<td>只取单目深度的 <strong>z 标量</strong>，丢掉了同一次 <code>infer()</code> 已算好的 <code>points</code>（相机系点云）与 <code>intrinsics</code></td>
+<td><strong>最大、也最容易实现的真实创新点</strong>（见 2.4、§11.1）</td>
 </tr>
 <tr>
-<td><strong>3D 尺寸是缺焦距的近似</strong></td>
-<td>prompt 定义 <code>3D size = 2D size × depth</code>（<code>program_prompt.py:60</code>），没有除以焦距</td>
+<td><strong>3D 尺寸公式量纲不成立</strong></td>
+<td>用「2D 像素 × 深度」算真实尺寸，<strong>式子里没有焦距</strong></td>
 <td>尺度系统性偏差，可量化、可改进、可写进实验</td>
 </tr>
 <tr>
-<td><strong>API 是运行时随机抽样生成的</strong></td>
-<td><code>evaluate.py:42</code> <code>random.sample(questions, args.num_api_questions)</code>，默认 10 题</td>
-<td>结果不可复现，工具集每次不同，无法做稳定评测</td>
+<td><strong>工具集是运行时随机抽样生成的</strong></td>
+<td>先随机抽 10 道题再据此生成方法，且无固定种子</td>
+<td>结果不可复现、工具集每次不同 ⟹ <strong>不能作评测基线</strong>；我们的动作空间改为<strong>显式白名单</strong></td>
 </tr>
 <tr>
-<td><strong>VQA 依赖闭源 VLM</strong></td>
-<td><code>predefined_modules.py:226</code> 硬编码 <code>Generator("gpt-4o", ...)</code></td>
-<td><strong>纯文本开源 LLM 无法替换 <code>vqa()</code></strong>，必须用开源 VLM 或保留 API（见 §7）</td>
+<td><strong>视觉问答绑死闭源 VLM</strong></td>
+<td>内部硬编码 <code>Generator("gpt-4o")</code></td>
+<td>纯文本开源 LLM 替不掉视觉通道；我们把视觉语义拆给独立小 VLM（§13.3 角色②）</td>
 </tr>
 <tr>
-<td><strong>无法在原生 Windows 运行</strong></td>
-<td><code>engine.py:594</code> 与 <code>agents/agents.py:572</code> 使用 <code>signal.SIGALRM</code> / <code>signal.alarm</code>，Unix-only</td>
-<td>本机必须走 <strong>WSL2</strong>（见 §20）</td>
+<td><strong>本体只能在 Unix 跑</strong></td>
+<td>用 <code>signal.alarm</code> / <code>SIGALRM</code> 做超时</td>
+<td>自研执行器改用<strong>独立计时线程强杀</strong>，不碰 <code>signal</code>（§20 Step 0.3）</td>
 </tr>
 <tr>
-<td><strong>仓库已停更 15 个月</strong></td>
-<td>最后 push 2025-06-16</td>
-<td>依赖全为 2024 年版本，与 2026 年的模型生态冲突（见 §9.3）</td>
+<td><strong>上游停更 15 个月</strong></td>
+<td>依赖锁在 2024 年的版本</td>
+<td>与 2026 年的模型生态冲突（§8.3、§9.3）</td>
 </tr>
 </tbody>
 </table>
-<p><strong>结论</strong>：VADAR 是一块好地基，但它的「3D」是<strong>深度级近似</strong>，它的「Agent」是<strong>代码生成器</strong>。这两点正好对应你项目的两个主要创新方向。</p>
-<hr />
-<h2 id="3-vadar">3. VADAR 当前架构（实际文件树 + 数据流）</h2>
-<pre class="code"><code>VADAR/                          (33 files, Python ~2100 行)
-├── README.md                   # 论文入口、评测命令、产物结构
-├── RESULTS.md                  # 论文全部数值结果表
-├── requirements.txt            # 10 个包，含 openai==1.51.2, transformers==4.45.2
-├── setup.sh                    # 从源码装 SAM2 / UniDepth / GroundingDINO + torch 2.2.0 cu122
-├── download_data.sh            # 下 Omni3D-Bench + CLEVR subset
-├── evaluate.py                 # 唯一入口：串起 4 个阶段
-├── agents/
-│   └── agents.py               # (33 KB) SignatureAgent / APIAgent / ProgramAgent
-├── engine/
-│   ├── engine.py               # (22 KB) 程序执行器 + 打分 + CSV 输出
-│   ├── engine_utils.py         # Generator(LLM 封装) + 图像/缩进工具 + set_devices
-│   ├── predefined_modules.py   # (25 KB) ★ 真正的视觉基元实现（loc/vqa/depth/...）
-│   └── oracle.py               # CLEVROracle：用 GT 场景数据替换视觉模块
-├── prompts/
-│   ├── modules.py              # ★ 预定义工具签名（MODULES_SIGNATURES / _CLEVR）
-│   ├── signature_prompt.py     # 让 LLM 提出新方法签名
-│   ├── api_prompt.py           # 让 LLM 实现方法体（含 few-shot 实现示例）
-│   ├── program_prompt.py       # 让 LLM 解题写程序（含 4 个伪代码示例）
-│   └── vqa_prompt.py           # VQA 子任务的 VLM 提示词
-└── demo-notebook/
-    ├── quickstart.ipynb        # (723 KB, 含输出) 单图端到端演示
-    ├── notebook_imports.py     # ★ notebook 的独立实现（与 engine/ 有重复代码）
-    └── resources/prompts/*.py  # notebook 用的提示词副本
-</code></pre>
-<p><strong>实际数据流（<code>evaluate.py:25-78</code>）：</strong></p>
-<pre class="code"><code>annotations.json (500 题)
-   │
-   ├─(随机抽 10 题)──► SignatureAgent  ──► generated_signatures.json
-   │                     · 让 LLM 看 10 个问题，提出需要的新方法签名
-   │                     · 输出 &lt;docstring&gt; + &lt;signature&gt; 标签
-   ▼
-APIAgent  ──► api.json + 每个方法的 executable_program.py + result.json
-   · 让 LLM 实现方法体（&lt;implementation&gt; 标签）
-   · 立即 exec 一次自测（假参数：int=25, float=1.0, image=白色图）
-   · 失败则把 traceback 回灌给 LLM，最多重试 5 次（agents.py:333）
-   · 支持递归实现「未定义方法」（agents.py:487-539）
-   ▼
-ProgramAgent  ──► programs.json
-   · 把 (预定义签名 + 生成的方法签名) 全部塞进 prompt
-   · 让 LLM 输出 &lt;program&gt;，要求答案存进变量 final_result
-   ▼
-Engine  ──► execution.json / csv / results.txt / 每题 trace.html
-   · 把 API 方法 + 程序写进一个 .py 文件，runpy.run_path 执行
-   · sys.settrace 记录每一行 → 生成 trace.html（可视化执行轨迹）
-   · signal.alarm(200) 超时保护；失败最多重写 5 次（engine.py:265）
-   · 最后把 namespace 里可 JSON 序列化的变量全部 dump 到 result.json
-</code></pre>
-<p><strong>关键机制细节：</strong></p>
-<ul>
-<li><strong>没有「Agent 循环」</strong>。三个 Agent 各调用一次 LLM（APIAgent 每个方法调一次），没有「观察 → 再决策」的循环。所谓「多步推理」发生在<strong>生成的 Python 程序内部</strong>，由 <code>Engine</code> 执行，而不是由 LLM 逐步决策。</li>
-<li><strong>没有 function calling / JSON schema</strong>。全部靠正则解析 XML 风格标签：<code>&lt;docstring&gt;</code> <code>&lt;signature&gt;</code> <code>&lt;implementation&gt;</code> <code>&lt;program&gt;</code> <code>&lt;answer&gt;</code>。</li>
-<li><strong>没有状态管理 / 记忆</strong>。唯一的状态是 <code>self.namespace</code> 字典。</li>
-<li><strong>有重试与错误处理</strong>，这点值得保留并升级：APIAgent 5 次实现重试、Engine 5 次程序重写、<code>signal.alarm</code> 超时、死循环检测（<code>agents.py:492-507</code>）。</li>
-</ul>
-<hr />
-<h2 id="4-vadar-agent">4. VADAR 当前 Agent 机制（逐类拆解）</h2>
-<h3 id="signatureagentagentsagentspy49-207"><code>SignatureAgent</code>（<code>agents/agents.py:49-207</code>）</h3>
-<ul>
-<li>输入：预定义签名（<code>MODULES_SIGNATURES</code>）+ 一批问题文本（<strong>注意：不给图片</strong>）</li>
-<li>输出：新的方法签名 + docstring，追加到 <code>self.signatures</code>，供后续批次继续累积</li>
-<li>强制约束：新方法名必须以 <code>_</code> 开头（<code>signature_prompt.py:28</code>）</li>
-<li><strong>发现的问题</strong>：<code>SignatureAgent.__init__</code> 调用 <code>super().__init__(model_name, write_results)</code> 时<strong>没有传 <code>dataset</code></strong>（<code>agents.py:54</code>），而 <code>Agent.__init__</code> 的 <code>dataset</code> 默认值是 <code>"clevr"</code>（<code>agents.py:42</code>）。因此 <code>self.dataset</code> <strong>永远是 <code>"clevr"</code></strong>，<code>get_signatures()</code> 里 <code>if self.dataset in ["clevr","gqa"]</code> 恒为真（<code>agents.py:117</code>），<strong>评测 Omni3D 时也会用 CLEVR 的 signature prompt</strong>。这是一个真实存在的不一致，你在 Phase 2 复现时可以亲眼验证。</li>
-</ul>
-<h3 id="apiagentagentsagentspy210-724"><code>APIAgent</code>（<code>agents/agents.py:210-724</code>）</h3>
-<ul>
-<li>输入：一个方法的 docstring + signature</li>
-<li>输出：方法体实现（去掉 <code>def</code> 行，只留缩进代码体）</li>
-<li>自测机制：<code>test_implementation()</code>（<code>agents.py:350</code>）把所有方法写进一个临时 <code>.py</code>，用<strong>假参数</strong>跑一遍</li>
-<li>假参数按 docstring 里 <code>Args:</code> 声明的类型生成（<code>image</code>→1000×500 白图，<code>int</code>→25，<code>list</code>→<code>[25,25,50,50]</code> 等，<code>agents.py:422-437</code>）</li>
-<li>这是它「零真实数据自测」的聪明设计，但也是<strong>假阳性来源</strong>：一个方法在假参数下能跑通，不代表在真数据上语义正确</li>
-<li>递归实现：如果报 <code>name 'X' is not defined</code>，就去签名表里找 <code>X</code> 并递归实现它（<code>agents.py:487-539</code>）</li>
-<li>死循环保护：<code>method_stack</code> 里检测 <code>A→B→A→B</code> 模式（<code>agents.py:492-507</code>）</li>
-</ul>
-<h3 id="programagentagentsagentspy727-875"><code>ProgramAgent</code>（<code>agents/agents.py:727-875</code>）</h3>
-<ul>
-<li>输入：问题文本 + 全部工具签名（预定义 + 生成的）</li>
-<li>输出：<code>&lt;program&gt;</code> 里的 Python 程序</li>
-<li>提示词里有 4 个伪代码示例（<code>program_prompt.py:8-44</code>），教模型「先 loc 定位、再逐物体判断、最后计数」</li>
-<li>硬性要求：答案存进 <code>final_result</code>；prompt 里重复了 3 次（明显的提示工程痕迹）</li>
-</ul>
-<h3 id="engineengineenginepy29-606"><code>Engine</code>（<code>engine/engine.py:29-606</code>）</h3>
-<ul>
-<li>拼接 <code>api_methods</code> + 程序体 + 一段「序列化 namespace」的尾巴，写成一个完整 <code>.py</code> 文件</li>
-<li><code>runpy.run_path</code> 执行；<code>sys.settrace</code> 钩住每一行写入 <code>trace.html</code></li>
-<li>程序体里 <code>return xxx</code> 会被替换为 <code>final_result = xxx</code>（<code>agents.py:448-450</code>）</li>
-<li>答案规整：bool → "yes"/"no"，str → 小写（<code>engine.py:294-301</code>）</li>
-</ul>
-<hr />
-<h2 id="5-vadar">5. VADAR 视觉模块（真实实现 + 显存现实）</h2>
-<blockquote>
-<p><strong>术语约定：本文所称「视觉栈」= 把一张 2D 照片变成结构化 3D 信息的那串本地模型流水线。</strong>
-在 Omni3D 路径下由三个模型串联组成：
-<strong>GroundingDINO</strong>（开放词汇检测 → bbox）→ <strong>SAM2</strong>（像素级分割 → mask）→ <strong>UniDepth V2</strong>（单目深度 → 每像素 3D 坐标）。
-合计约 1.2 GB，<strong>必须本地</strong>（三者均无托管 API 可换），但对 8 GB 毫无压力（见 §9.4）。
-下游的「几何计算」（质心 / 距离 / 相对方位）属几何层，<strong>不属于视觉栈</strong>；它的输出是纯文本数字。</p>
-</blockquote>
-<p><strong>核心文件 <code>engine/predefined_modules.py</code>。5 个预定义模块：</strong></p>
-<table>
-<thead>
-<tr>
-<th>模块类</th>
-<th>名称</th>
-<th>Omni3D 用什么</th>
-<th>CLEVR/GQA 用什么</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>LocateModule</code> (L56)</td>
-<td><code>loc</code></td>
-<td><strong>GroundingDINO</strong> SwinT-OGC</td>
-<td><strong>Molmo-7B-D</strong>（点坐标）</td>
-</tr>
-<tr>
-<td><code>VQAModule</code> (L216)</td>
-<td><code>vqa</code></td>
-<td><strong>gpt-4o</strong>（闭源，硬编码）</td>
-<td>SAM2 抠图 + <strong>gpt-4o</strong></td>
-</tr>
-<tr>
-<td><code>DepthModule</code> (L358)</td>
-<td><code>depth</code></td>
-<td><strong>UniDepthV2 ViT-S14</strong></td>
-<td>同左</td>
-</tr>
-<tr>
-<td><code>SameObjectModule</code> (L411)</td>
-<td><code>same_object</code></td>
-<td><strong>纯 IoU &gt; 0.92</strong>（无视觉模型）</td>
-<td>SAM2 mask → IoU</td>
-</tr>
-<tr>
-<td><code>Get2DObjectSize</code> (L512)</td>
-<td><code>get_2D_object_size</code></td>
-<td>纯 bbox 算术</td>
-<td>SAM2 mask → bbox</td>
-</tr>
-<tr>
-<td><code>ResultModule</code> (L587)</td>
-<td><code>result</code></td>
-<td>只写 trace</td>
-<td>同左</td>
-</tr>
-</tbody>
-</table>
-<p><strong>这带来一个对你极其有利的事实：</strong></p>
-<blockquote>
-<p><strong>Omni3D 路径（论文主 benchmark）完全不需要 Molmo-7B。</strong>
-Molmo-7B-D-0924 只在 <code>dataset in ["clevr","gqa"]</code> 时加载（<code>predefined_modules.py:615-627</code>），它也正是唯一放不进 8GB 的模型。</p>
-</blockquote>
-<p><strong>显存：三个视觉模型现已全部实测（2026-09-16，不再有估算值）</strong></p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>参数/权重</th>
-<th>哪些路径用</th>
-<th>4060 8GB 判断</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>UniDepthV2 ViT-S14</strong></td>
-<td><strong>34.2 M 参数 / 权重 130.4 MB</strong></td>
-<td><strong>所有路径</strong></td>
-<td>✅ <strong>实测峰值 486 MB allocated / 604 MB reserved</strong>（640×480）</td>
-</tr>
-<tr>
-<td><strong>GroundingDINO SwinT-OGC</strong>（经 <code>IDEA-Research/grounding-dino-tiny</code> 以 transformers 原生加载）</td>
-<td><strong>172.3 M 参数 / 657 MiB fp32</strong></td>
-<td>Omni3D 定位</td>
-<td>✅ <strong>实测峰值 1761–1903 MB allocated / 2152–2306 MB reserved</strong>（640×480，fp32）</td>
-</tr>
-<tr>
-<td><strong>SAM2.1 hiera base+</strong>（transformers 原生 <code>Sam2Model</code>）</td>
-<td><strong>73.3 M 参数 / 279.7 MiB fp32</strong></td>
-<td><strong>主路径也要</strong>（三维质心靠它去背景）</td>
-<td>✅ <strong>实测峰值 647 MB allocated / 928 MB reserved</strong>；单框 <strong>282 ms</strong>、9 框批量 <strong>179 ms</strong></td>
-</tr>
-<tr>
-<td><strong>Molmo-7B-D-0924</strong></td>
-<td>bf16 ≈ 15 GB</td>
-<td><strong>仅 CLEVR/GQA 定位</strong></td>
-<td>❌ 放不进；4bit ≈ 5 GB 理论可行但很挤（不确定）</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>GroundingDINO 那一行有个<strong>容易搞错的点</strong>：<code>grounding-dino-tiny</code> 不是"另一个更小的模型"，
-它就是 VADAR 用的那个 <strong>SwinT-OGC 权重的 transformers 移植版</strong>（172.3 M 参数，fp32 657 MiB，
-与原版 0.69 GB 的 <code>groundingdino_swint_ogc.pth</code> 是同一套权重）。换的是<strong>加载方式</strong>，不是模型。</p>
-<p>SAM2 同理：<code>sam2.1-hiera-base-plus</code> 就是 <code>facebookresearch/sam2</code> 那一套权重，改用 transformers
-的 <code>Sam2Model</code> 加载，<strong>不需要编译 CUDA 扩展</strong>，也不需要装 <code>sam2</code> 包。</p>
-<p>实测来源：<code>phase0/probe3d.py</code>（UniDepth + GroundingDINO）与 <code>phase0/probe_sam2.py</code>（SAM2）——
-均为 2026-09-16，RTX 4060 Laptop 8188 MiB，torch 2.6.0+cu124。完整结果见
-<code>phase0/probe3d_result.json</code> 与 <code>phase0/probe_sam2_result.json</code>。
-UniDepth 加载 3.1 s；GroundingDINO 加载 1.2–2.0 s；SAM2 加载 <strong>0.6 s</strong>。</p>
-</blockquote>
-<p><strong>⭐ 常驻与峰值必须分开说 —— 三模型同时驻留只占 14.7%</strong></p>
-<p><code>probe_sam2.py</code> C 段在<strong>三个模型都持有引用</strong>的前提下实测：</p>
-<table>
-<thead>
-<tr>
-<th>状态</th>
-<th>显存</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>仅 SAM2</td>
-<td>291 MB</td>
-</tr>
-<tr>
-<td>+ UniDepth</td>
-<td>541 MB</td>
-</tr>
-<tr>
-<td><strong>+ GroundingDINO（三模型全部驻留）</strong></td>
-<td><strong>1200 MB = 8188 MiB 的 14.7%</strong></td>
-</tr>
-</tbody>
-</table>
-<p>这与「峰值相加 2.9 GB」并不矛盾，而是两个不同的量：</p>
-<blockquote>
-<p><strong>峰值里绝大部分是推理激活，算完立即释放；常驻的只是权重。</strong>
-对 8GB 的真正含义是：<strong>视觉栈常驻 1.2 GB，留出约 6.9 GB 给 LLM</strong> ——
-4B 级模型量化后完全放得下，这也是「本地 LLM 可选」这条路在显存上成立的原因。</p>
-<p>⚠️ 上表数字必须在<strong>持有模型引用</strong>时测量：<code>run_gdino()</code> 这类把 model 存在局部变量的写法，
-函数一返回权重就被回收，量出来的"常驻"会低得离谱（本探针第一版就踩了这个坑，
-报出 291 MB，即只剩 SAM2）。</p>
-</blockquote>
-<p>主路径每帧的视觉开销：<code>detect</code> + <code>segment</code>(9 框批量) + <code>depth</code> ≈ <strong>1.3–2.0 s</strong>，一次构建、后续纯 CPU 查询。</p>
-<blockquote>
-<p><strong>注意 UniDepth 的实测值比原估算小一个数量级</strong> —— 原表写「&lt; 2 GB」是按 7B 级模型的直觉猜的，
-实际 ViT-S14 只要 0.6 GB。</p>
-</blockquote>
-<h3 id="51-points-1">5.1 「<code>points</code> 是真几何」已实测确认（创新点 1 的地基）</h3>
-<p>这是全项目唯一无法靠读代码回答、必须真机验证的问题。结论是<strong>成立</strong>，三条证据：</p>
+<p><strong>结论</strong>：它可以当参考，不能当地基 —— 它的「3D」是<strong>深度标量级近似</strong>，它的「Agent」是
+<strong>一次性代码生成器</strong>。这两点正好对应本项目的两个主要创新方向。</p>
+<h3 id="23">2.3 据此定下的自研架构（三条）</h3>
+<ol>
+<li><strong>动作空间显式白名单化</strong>：<code>QA_TOOLSET</code> 是 12 个工具的元组，提示词渲染 / 静态检查 / 执行器
+   <strong>三处共用同一份</strong>。「注册表里有什么」≠「这一臂该看见什么」—— 混同会让新工具<strong>静默改变
+   已跑臂的动作空间</strong>，归因随之失效。</li>
+<li><strong>提交契约替代魔法变量</strong>：<code>submit(..., evidence≥1)</code> 取代「扫描命名空间猜哪个变量是答案」——
+   后者是静默缺陷的温床，命名空间里没有答案时它照样「成功」返回。</li>
+<li><strong>视觉语义与空间几何拆开</strong>：关系一律由几何计算，VLM 只判颜色/材质；并<strong>在类型层面</strong>让空间
+   参数写不出来（<code>describe(attrs=Literal[...])</code> 不含任何空间参数）
+   ⟹ <strong>空间幻觉在类型层面构造不出来</strong>。</li>
+</ol>
+<h3 id="24-points">2.4 「<code>points</code> 是真几何」—— 升级到真三维不需要任何新模型</h3>
+<p>全项目唯一无法靠读代码回答、必须真机验证的问题。结论是<strong>成立</strong>（2026-09-16 实测）：</p>
 <table>
 <thead>
 <tr>
@@ -606,314 +371,34 @@ UniDepth 加载 3.1 s；GroundingDINO 加载 1.2–2.0 s；SAM2 加载 <strong>0
 <td><strong>完全相同（max|diff| = 0.000e+00）</strong></td>
 </tr>
 <tr>
-<td><code>norm(points) == radius</code></td>
-<td>完全相同（0.000e+00）；<code>points == rays × radius</code> 差 8.7e-4</td>
-</tr>
-<tr>
 <td><code>depth</code> 的量级（真实室内照片）</td>
 <td><strong>[1.376, 3.974] m</strong> —— 单位就是米</td>
 </tr>
 </tbody>
 </table>
-<p><strong>三条由此得出的、必须写进报告的事实：</strong></p>
+<p><strong>三条必须写进报告的事实：</strong></p>
 <ol>
-<li><strong><code>depth</code> 不是独立测量量。</strong> <code>unidepthv2.py:335</code> 就是 <code>out["depth"] = points[:, -1:]</code>——VADAR 读的那个 <code>depth</code> <strong>本来就是点云的 z 列</strong>。VADAR 相当于拿到了完整 XYZ，然后只留 z、把 x 和 y 丢掉（<code>predefined_modules.py:375</code>、<code>:395</code>）。<strong>升级到真三维不需要任何新模型、任何新显存。</strong></li>
-<li><strong>VADAR 的 3D 尺寸公式量纲不成立。</strong> 它用 <code>2D 像素 × depth</code> 算真实尺寸，<strong>整个式子里没有焦距</strong>（<code>points</code> 早在 <code>infer()</code> 里就被算好了，但 VADAR 没取）。所以在真实场景里它给出的"三维尺寸"没有物理意义。</li>
-<li><strong><code>intrinsics</code> 不要用来重建点云。</strong> 用返回的 K 做针孔反投影，与 <code>points</code> 只对到 <strong>相对误差 3.7%（均值）/ 5.3%（最大）</strong>。原因是：<code>rays</code> 是 decoder <strong>预测</strong>出来的方向场（<code>unidepthv2.py:375</code>），不是解析针孔网格；<code>intrinsics</code> 是<strong>另一个独立的预测头</strong>；而且 <code>infer()</code> 会先把图像 padding 到比例区间、resize 到像素区间，跑完再裁回原尺寸（<code>:282-336</code>），K 是解析式换算回去的。<strong>两个来源本就不等同，差几个百分点是正常量级。正确用法是直接用 <code>points</code>。</strong></li>
+<li><strong><code>depth</code> 不是独立测量量，它就是点云的 z 列</strong>。完整 XYZ 早就在手里，只留 z 是一次<strong>主动丢弃</strong>
+   ⟹ <strong>升级到真三维不需要任何新模型、任何新显存。</strong></li>
+<li><strong>「2D 尺寸 × 深度」量纲不成立</strong>：式子里没有焦距，真实场景里这样算出的「三维尺寸」没有物理意义。</li>
+<li><strong>不要用 <code>intrinsics</code> 反投影重建点云</strong>：用返回的 K 做针孔反投影，与 <code>points</code> 只对到
+   <strong>相对误差 3.7%（均值）/ 5.3%（最大）</strong>。因为 <code>rays</code> 是 decoder <strong>预测</strong>的方向场、<code>intrinsics</code>
+   又是另一个独立预测头，且 <code>infer()</code> 会先 padding → resize → 再裁回，K 是解析式换算回去的。
+   两个来源本就不等同，差几个百分点是正常量级。<strong>正确用法是直接用 <code>points</code>。</strong></li>
 </ol>
 <blockquote>
-<p>这条同时解释了为什么 <code>probe3d.py</code> 的判定标准是<strong>相对误差</strong>而不是绝对误差：在 480p、2–4 m 的场景里要求 2 cm（0.5%）绝对一致，对单目模型是不现实的；3–5% 才是这类输出之间应有的量级。</p>
+<p>量化过程与原始输出见 <code>phase0/probe3d.py</code>。判定标准用<strong>相对误差</strong>而非绝对误差 —— 480p、2–4 m
+的场景里要求 2 cm 绝对一致，对单目模型不现实；3–5% 才是这类输出之间应有的量级。</p>
 </blockquote>
-<p><strong>三个决策结论：</strong></p>
-<ol>
-<li><strong>主战场放 Omni3D-Bench（真实室内场景），CLEVR/GQA 作为可选支线。</strong> 这样视觉栈<strong>全程在 4060 上</strong>。</li>
-<li><strong>不要一开始就碰 Molmo。</strong> 只有当你需要 CLEVR 的坐标点定位时才需要它；那时用云卡跑一次、把结果缓存成 JSON 即可，不必每次推理。</li>
-<li>GroundingDINO 的调用里 <code>device="cuda:0"</code> 与 <code>torch.autocast(device_type="cuda")</code> 是<strong>硬编码</strong>的（<code>predefined_modules.py:185-193</code>），无 CPU 回退。这是坏事也是好事——它逼你确认 CUDA 环境正确。</li>
-</ol>
-<p><strong>另外两个必须知道的事实：</strong></p>
-<ul>
-<li><code>same_object</code> 在 Omni3D 上是<strong>纯几何</strong>（IoU），不调任何模型，也不调 LLM。这说明 VADAR 作者自己也倾向于「几何能算的就不要问模型」——<strong>这正是你 Scene Graph 路线的合法性依据</strong>。</li>
-<li><code>depth</code> 在 Omni3D 上取 bbox 中心点的深度（<code>predefined_modules.py:391-396</code>），<strong>单个采样点，无鲁棒性处理</strong>。门这种细长物体，bbox 中心很可能落在门框、墙、或背景上 → 深度带噪。这是你可以改进的量化点。</li>
-</ul>
-<hr />
-<h2 id="6-vadar-llm">6. VADAR 当前 LLM 接口（精确到行）</h2>
-<p><strong>唯一入口：<code>Generator</code> 类，<code>engine/engine_utils.py:51-107</code>。</strong></p>
-<pre class="code"><code class="language-python">class Generator:
-    def __init__(self, model_name=&quot;gpt-4o&quot;, temperature=0.7, api_key_path=&quot;./api.key&quot;):
-        self.temperature = temperature
-        self.model_name = model_name
-        self.api_key_path = api_key_path
-        with open(self.api_key_path, &quot;r&quot;) as file:
-            self.client = OpenAI(api_key=file.read().strip())   # ← 无 base_url
-
-    def generate(self, prompt, messages=None):
-        ...
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=messages,
-            temperature=self.temperature,                        # ← 无 max_tokens / 无 tools
-        )
-        ...
-        except Exception as e:
-            time.sleep(60)                                       # ← 无限重试，可能挂死
-            return self.generate(prompt, messages)
-</code></pre>
-<p><strong>要替换成开源 LLM，必须改的 3 个位置（全部是真实行号）：</strong></p>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>文件:行</th>
-<th>现状</th>
-<th>改法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>engine/engine_utils.py:52-57</code></td>
-<td><code>Generator</code> 无 <code>base_url</code>，key 从 <code>./api.key</code> 读</td>
-<td>增加 <code>base_url</code> / <code>model_name</code> 参数，支持从环境变量读；<code>api.key</code> 保留但内容可为 <code>dummy</code></td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>engine/predefined_modules.py:226</code></td>
-<td><code>VQAModule</code> 里<strong>硬编码</strong> <code>Generator("gpt-4o", ...)</code></td>
-<td>改为可注入的 VLM 配置（<strong>必须是 VLM</strong>，见下文）</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>agents/agents.py:39 / 52 / 213 / 729</code></td>
-<td>各 Agent 的 <code>model_name</code> 默认值都是 <code>"gpt-4o"</code></td>
-<td>改为从 config 读，默认指向本地端点</td>
-</tr>
-</tbody>
-</table>
-<p><strong>关键陷阱（很多人会踩）：</strong></p>
-<blockquote>
-<p><strong><code>vqa()</code> 需要的是 VLM，不是 LLM。</strong>
-<code>VQAModule.predict()</code>（<code>predefined_modules.py:334-355</code>）构造的 message 里带 <code>{"type":"image_url", ...}</code> base64 图片。一个纯文本的 Qwen/Llama 服务收到这个请求会直接报错或忽略图片。
-所以：<strong>如果你要用开源模型替掉全部 OpenAI 调用，你选的主模型必须是多模态的</strong>。好消息是 Qwen3.5 全系原生多模态（Early Fusion），所以一个 <code>Qwen3.5-4B</code> 端点可以同时服务 <code>vqa()</code> 和三个写代码的 Agent——这是 2026 年相对论文发表时（2025-02）最大的环境红利。</p>
-</blockquote>
-<p><strong>架构建议：LLM 走独立进程，不做 in-process 加载。</strong></p>
-<p>理由（有硬性技术依据）：
-- VADAR 钉死 <code>transformers==4.45.2</code>（2024-10）。而 Qwen3 系列需要 transformers ≥ 4.51，Qwen3.5 需要更新（第三方 AWQ 量化卡甚至要求 <code>transformers&gt;=5.3.0.dev0</code>——<strong>具体最低版本请以官方 model card 为准，此处不确定</strong>）。
-- GroundingDINO / UniDepth / SAM2 都是 <code>pip install -e .</code> 的源码安装，对 transformers 版本敏感。在同一个 venv 里强行升级 transformers，<strong>有较大概率弄坏 <code>loc</code> 与 <code>depth</code></strong>。
-- 分离后还有额外收益：模型可热切换（改一个 <code>base_url</code> 就换模型）、显存可分时复用、崩溃不互相拖累、可以直接用 vLLM 的高吞吐。</p>
-<pre class="code"><code>┌─ venv-vision (VADAR 原依赖, transformers 4.45.2) ─┐   ┌─ venv-llm (vLLM) ─┐
-│  GroundingDINO / SAM2 / UniDepth / Agent 框架      │   │ Qwen3.5-4B        │
-│                         │  HTTP /v1 (OpenAI 兼容)   │   │ :8000             │
-│                         └───────────────────────────┼──►│                   │
-└───────────────────────────────────────────────────┘   └───────────────────┘
-</code></pre>
-<hr />
-<h2 id="7-openai-phase003_vadar_llm_bridgepy">7. 如何替换 OpenAI（已实现，见 <code>phase0/03_vadar_llm_bridge.py</code>）</h2>
-<p><strong>（本节结论已经在 Phase 0 落地成可运行代码，不再是计划。）</strong></p>
-<h3 id="71-generator-4">7.1 唯一入口是 <code>Generator</code>，但有 4 个模块级绑定要一起换</h3>
-<p><code>Generator</code> 定义在 <code>engine/engine_utils.py:51</code>，但<strong>它的实现只有一份拷贝、引用却有 4 处</strong>
-（VADAR 用的是 <code>from ... import Generator</code> 形式，每个模块各自持有一个独立绑定）：</p>
-<table>
-<thead>
-<tr>
-<th>位置</th>
-<th>引用方式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>engine/engine_utils.py:51</code></td>
-<td>定义处</td>
-</tr>
-<tr>
-<td><code>engine/predefined_modules.py:23</code></td>
-<td><code>from .engine_utils import *</code>（星号导入）</td>
-</tr>
-<tr>
-<td><code>engine/engine.py:20-25</code></td>
-<td>显式 from-import（<code>:338</code> 处会新建一个）</td>
-</tr>
-<tr>
-<td><code>agents/agents.py:19-26</code></td>
-<td>显式 from-import（<code>:44</code> 处会新建一个）</td>
-</tr>
-</tbody>
-</table>
-<p><strong>四个命名空间缺一个，就有一部分代码还在走 OpenAI。</strong> 适配器把这四处一起替换。</p>
-<blockquote>
-<p><strong>此处此前判断不准确，已更正</strong>：我曾写「<code>VQAModule</code> 不走 <code>Generator</code> 的默认参数，
-所以必须单独改第 2 处」。实际不必要 —— <code>VQAModule.__init__</code>（<code>predefined_modules.py:226</code>）
-实例化的<strong>就是同一个 <code>Generator</code> 类</strong>，所以只要类本身改成从环境变量取模型名，
-<code>vqa()</code> 自动一起覆盖。真正需要单独处理 <code>VQAModule</code> 的场景只有一个：
-<strong>你想让 <code>vqa()</code> 用另一个（视觉）模型时</strong>。</p>
-</blockquote>
-<h3 id="72">7.2 分三档</h3>
-<p><strong>档 A — 运行时适配器（已实现，推荐）</strong>
-<code>bridge.install()</code> 在导入前替换上述 4 个绑定，<code>vendor/VADAR/</code> <strong>一行不改</strong>。
-好处是实验臂 A（原始基线）永远保持可跑状态。</p>
-<p><strong>档 B — 双端点（成本优化）</strong>
-文本 Agent → <code>deepseek-flash</code>（<strong>规范名</strong>；<code>deepseek-v4-flash</code> / <code>-vision-exp</code> 是遗留别名，
-<code>-pro</code> 已并入 Flash，见 §7.4）；
-<code>vqa()</code> → <code>qwen3-vl-flash</code>（视觉单价低一个数量级，而 <code>vqa()</code> 调用次数最多）。
-适配器按「消息里是否含 <code>image_url</code>」自动路由到视觉端点，无需改 VADAR 代码。</p>
-<p><strong>档 C — 完全离线（可选加分项）</strong>
-三个文本 Agent + <code>vqa()</code> 全部换成本地 vLLM / Ollama 上的 <code>Qwen3.5-4B</code>。
-答辩时可以拔网线演示 —— 但这与「LoRA 训练效果」是两条独立叙事，别混在一张表里。</p>
-<h3 id="73-5-phase0llm_backendmd">7.3 换模型后才会暴露的 5 个坑（都已实测，详见 <code>phase0/LLM_BACKEND.md</code>）</h3>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>位置</th>
-<th>问题</th>
-<th>适配器的处理</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>predefined_modules.py:354</code></td>
-<td><code>&lt;answer&gt;</code> 缺失 → 列表取 <code>[0]</code> → <code>IndexError</code>，整道题作废</td>
-<td>容错兜底 + 告警日志</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>agents.py:89/352/483/668</code></td>
-<td>方法名正则要求字面量 <code>):</code>，<strong>返回值类型注解会击穿它</strong> → <code>AttributeError</code></td>
-<td>探针单独测出来，Phase 3 用提示词约束</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>engine_utils.py:94-96</code></td>
-<td><code>sleep(60)</code> + <strong>无限递归</strong>，4xx 变静默卡死</td>
-<td>4xx 快速失败；仅 429/5xx 退避重试</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>engine_utils.py:89-93</code></td>
-<td>没传 <code>max_tokens</code>，程序可能被静默截断</td>
-<td>显式设置 + 检测 <code>finish_reason=="length"</code></td>
-</tr>
-<tr>
-<td>5</td>
-<td>全局</td>
-<td>DeepSeek V4 默认思考模式：拉长延迟（<strong>同一句「回一个词」输出 token ×12.75</strong>），可能撞 <code>engine.py:594</code> 的 200s 超时；<strong>且会让 <code>temperature</code> 静默失效</strong></td>
-<td><code>VADAR_EXTRA_BODY='{"thinking":{"type":"disabled"}}'</code> —— <strong>参数名已核实、A/B 实测有效</strong>（§7.4）</td>
-</tr>
-</tbody>
-</table>
-<h3 id="74-deepseek-2026-09-17-15">7.4 DeepSeek 后端实测（2026-09-17，真实调用 15 次）</h3>
-<p><strong>（1）模型名口径已变（官方 <code>Models &amp; Pricing</code> 页）</strong></p>
-<table>
-<thead>
-<tr>
-<th>名字</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>deepseek-flash</code></strong>（= DeepSeek-V4.1-Flash）</td>
-<td><strong>规范名</strong>。1M 上下文、384K 输出、<strong>支持 Vision</strong>、Tool Calls</td>
-</tr>
-<tr>
-<td><code>deepseek-v4-flash</code> / <code>deepseek-v4-flash-vision-exp</code></td>
-<td><strong>遗留别名</strong>。对应模型<strong>已退役</strong>，请求由 V4.1-Flash 承接，同价</td>
-</tr>
-<tr>
-<td><code>deepseek-chat</code> / <code>deepseek-reasoner</code></td>
-<td>2026-07-24 已退役</td>
-</tr>
-<tr>
-<td><code>deepseek-v4-pro</code></td>
-<td><strong>有序退役中</strong>：2026-09-14 12:00 起请求全部路由到 V4.1-Flash</td>
-</tr>
-</tbody>
-</table>
-<p>本机实测印证：请求写 <code>deepseek-v4-flash-vision-exp</code>，响应 <code>model_returned</code> 回的是
-<code>deepseek-flash</code> —— 名字不一致，说明是端点做了规范化，不是原样回显。
-价格（元/百万，<strong>高峰 / 空闲</strong>）：输入未命中 <code>3.0 / 1.5</code>、命中 <code>0.10 / 0.05</code>、输出 <code>9.0 / 4.5</code>。
-高峰 = 北京时间 9:00–12:00 与 14:00–18:00。</p>
-<blockquote>
-<p>⚠ <strong>上界臂要换服务商了</strong>：V4 Pro 路由到 Flash 后，<strong>DeepSeek 这边已不存在「强模型档」</strong>，
-换了名字不会换到更强的模型。见 §11.6 的基线说明。</p>
-</blockquote>
-<p><strong>（2）思考模式 A/B —— 关闭参数有效，低温可复现站得住</strong></p>
-<table>
-<thead>
-<tr>
-<th>臂</th>
-<th>出现 <code>reasoning_content</code></th>
-<th>中位延迟</th>
-<th>输出 tokens（2 次合计）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>disabled</code>（带关闭参数）</td>
-<td><strong>否</strong>（2/2）</td>
-<td>0.98 s</td>
-<td><strong>4</strong></td>
-</tr>
-<tr>
-<td><code>default</code>（不带）</td>
-<td><strong>是</strong>（2/2）</td>
-<td>1.22 s</td>
-<td><strong>51</strong>（其中思考 45）</td>
-</tr>
-</tbody>
-</table>
-<p>主路径（T1–T4，13 次调用）<strong>思考痕迹 0 次</strong> ⟹ <code>temperature=0.2</code> <strong>真正生效</strong>，
-实验章节可以声称「本臂关闭思考模式、低温可复现」——但<strong>必须写明这句话</strong>。
-代价侧：开思考时输出 token 是无思考的 <strong>12.75 倍</strong>（同一句「只回一个词」），
-程序合成的输出长达数百 token，<strong>全量实验必须逐臂记账</strong>。</p>
-<p><strong>（3）四类标签与视觉通道：全绿</strong></p>
-<table>
-<thead>
-<tr>
-<th>项</th>
-<th>对应 VADAR 环节</th>
-<th>结果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;program&gt;</code> 标签 + 语法</td>
-<td>ProgramAgent / Engine</td>
-<td><strong>3/3</strong>，全部 <code>ast.parse</code> 通过</td>
-</tr>
-<tr>
-<td>签名提取</td>
-<td>SignatureAgent / APIAgent</td>
-<td><strong>3/3</strong>；<code>has_return_annotation=False</code> ⟹ <strong>坑 2 未触发</strong></td>
-</tr>
-<tr>
-<td><code>&lt;answer&gt;</code> 标签</td>
-<td><code>VQAModule.predict</code></td>
-<td><strong>4/4</strong></td>
-</tr>
-<tr>
-<td>视觉问答答对率</td>
-<td><code>vqa()</code></td>
-<td><strong>4/4</strong>（主模型直接吃图，无需独立视觉端点）</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>⚠ <strong>「未触发」≠「不存在」</strong>：坑 2 的正则确实排斥返回值注解，只是 <code>deepseek-flash</code>
-这三次都没给注解。换提示词或换模型仍可能触发，Phase 3 的提示词约束不要撤。</p>
-</blockquote>
-<p><strong>（4）成本</strong>：整轮 15 次调用 <strong>1945 prompt + 970 completion = 2915 tokens</strong>，
-空闲档 <strong>¥0.0073</strong>、高峰档 ¥0.0146。
-⚠ 这是<strong>下限</strong>：探针用的是极简提示词，真实 VADAR prompt 要带完整 API 文档 + few-shot，
-输入会高一个量级。<strong>真实 per-call 数只能由「跑臂」运行器量出来</strong> ——
-探针能证明的只是「端点机制与计价口径没问题」。</p>
-<blockquote>
-<p><strong>一次值得写进报告的「差点搞错」</strong>：首轮报告的汇总字段 <code>thinking_observed</code>
-曾给出<strong>相反结论</strong>（「思考生效 → <code>temperature</code> 被忽略 → 不得声称低温可复现」）。
-根因是派生代码把 A/B 的<strong>对照组</strong>算进了主路径统计（那一臂故意带思考）。
-已修 + 离线复算验证，原始报告归档在 <code>logs/phase1_probe_raw_2026-09-17.json</code>。
-教训：<strong>一个统计量混入它自己的对照组，就会得出与本实验相反的结论</strong>。</p>
-</blockquote>
+<h3 id="25-llm-venv">2.5 视觉栈必须与 LLM 分 venv、分进程</h3>
+<p>上游把 <code>transformers</code> 钉在 <strong>4.45.2</strong>（2024-10），而 Qwen3 系列需要 ≥ 4.51、Qwen3.5 更新
+（第三方量化卡甚至要求 <code>&gt;=5.3.0.dev0</code> —— <strong>以官方 model card 为准，此处不确定</strong>）。
+GroundingDINO / UniDepth / SAM2 均对 <code>transformers</code> 版本敏感，同一个 venv 里强行升级
+<strong>有较大概率弄坏检测与深度</strong>；分离后还能热切换模型、分时复用显存、崩溃互不拖累。</p>
+<p>三个模型的权重、峰值显存与延迟已全部实测（UniDepth 486/604 MB、GroundingDINO
+1761–1903 / 2152–2306 MB、SAM2 647/928 MB；<strong>三模型同时驻留仅 1200 MB = 8188 MiB 的 14.7%</strong>，
+⟹ 约 6.9 GB 留给 LLM，「本地 LLM 可选」在显存上成立）。⚠ 常驻必须在<strong>持有模型引用</strong>时测，
+否则会低得离谱。完整表格与可复现命令见 <strong>§20 Step 0.5 / 0.5b</strong>。</p>
 <hr />
 <h2 id="8-llm-8gb-4060-2026-09">8. 开源 LLM 推荐（针对 8GB 4060 的实测生态，2026-09）</h2>
 <h3 id="80-api-ollama-2026-09-15">8.0 零 API 起点：本地跑起来要什么（已在 Ollama 官方库核实，2026-09-15）</h3>
@@ -995,7 +480,7 @@ Ollama 官方库当前的家族名是 <strong><code>qwen3.5</code></strong>，�
 <code>04_install_ollama.ps1</code> 已同步改为拉 <code>qwen3.5:4b</code>，并在拉取失败时按 <code>4b → 2b → 9b</code> 自动回退，避免命名再次变动时直接卡死。</p>
 </blockquote>
 <p><strong>必须有一个组件能看图。</strong> <code>vqa()</code> 内联 base64 图片（<code>predefined_modules.py:334-355</code>），且在 Omni3D 分支同样存在（<code>:693</code>）。纯文本模型跑到 <code>vqa()</code> 必然 400。<code>qwen3.5:4b</code> 一个端点同时顶掉「程序合成」和 <code>vqa</code> —— <strong>但这是便利，不是必需</strong>：这两个角色可以拆成两个模型，见 §8.5。</p>
-<p>程序合成要的是<strong>严格照格式输出</strong>，而 <code>qwen3.5</code> 系列带 <code>thinking</code> 能力标签。跑协议测试时建议显式关闭思考模式（参数名随运行时不同，<code>03_vadar_llm_bridge.py</code> 的 <code>VADAR_EXTRA_BODY</code> 可原样透传），否则延迟被拉长，标签还可能被埋进思考块里导致正则提取失败。</p>
+<p>程序合成要的是<strong>严格照格式输出</strong>，而 <code>qwen3.5</code> 系列带 <code>thinking</code> 能力标签。跑协议测试时建议显式关闭思考模式（参数名随运行时不同，用 <code>SPATIAL_EXTRA_BODY</code> 透传即可），否则延迟被拉长，标签还可能被埋进思考块里导致正则提取失败。</p>
 <p><strong>显存预算（实测前的估算，需 Phase 0.7 用真实数字替换）</strong>：</p>
 <pre class="code"><code>qwen3.5:4b 权重（默认量化）        ≈ 3.4 GB
 KV cache @16K, q8_0              ≈ 1.2 GB
@@ -1004,7 +489,7 @@ Windows 桌面占用                 ≈ 0.5 GB
 ─────────────────────────────────────────
 合计                             ≈ 6.1 GB / 8.19 GB     ✅ 可行
 </code></pre>
-<p>再叠加视觉栈（GroundingDINO SwinT-OGC ≈ 0.7 GB + UniDepth ViT-S14 ≈ 0.15 GB）约 4.2 GB 总量 —— <strong>但两者不会同时常驻</strong>：VADAR 的流程是「先跑视觉 → 再问 LLM」，串行关系。若要并发，8 GB 会紧张。</p>
+<p>再叠加视觉栈（GroundingDINO SwinT-OGC ≈ 0.7 GB + UniDepth ViT-S14 ≈ 0.15 GB）约 4.2 GB 总量 —— <strong>但两者不会同时常驻</strong>：流程是「先跑视觉 → 再问 LLM」，串行关系。若要并发，8 GB 会紧张。</p>
 <h3 id="81">8.1 云端主模型推荐（作为对照臂 / 决定性实验）</h3>
 <blockquote>
 <p><strong>主模型：<code>Qwen3.5-4B-Instruct</code>，以 4-bit（AWQ 或 GGUF Q4_K_M）由 vLLM / Ollama 以 OpenAI 兼容端点服务。</strong></p>
@@ -1187,7 +672,7 @@ Windows 桌面占用                 ≈ 0.5 GB
 <ul>
 <li>Qwen3.5 需要 <strong>vLLM ≥ 0.16–0.17</strong>（社区部署贴建议 ≥0.17.0）。</li>
 <li>工具调用需在 vLLM 启动时加：<code>--enable-auto-tool-choice --tool-call-parser qwen3_coder</code>（来自第三方 AWQ 卡的启动说明）。<strong>parser 名称随版本可能变化，以你装到的 vLLM 版本的文档为准。</strong></li>
-<li><strong>不要</strong>试图在 vllm 和 VADAR 视觉栈共用一个 venv（见 §6）。</li>
+<li><strong>不要</strong>试图在 vllm 和视觉栈共用一个 venv（见 §2.5）。</li>
 </ul>
 <h3 id="84">8.4 微调工具链</h3>
 <ul>
@@ -1226,13 +711,13 @@ Windows 桌面占用                 ≈ 0.5 GB
 <td><strong>L3 实现细节</strong></td>
 <td>具体型号、量化档位、服务端点</td>
 <td>我的选型</td>
-<td><strong>换模型 = 改环境变量</strong>，<code>03_vadar_llm_bridge.py</code> 已做成 model-agnostic</td>
+<td><strong>换模型 = 改环境变量</strong>，<code>llm/adapter.py</code> 已做成 model-agnostic</td>
 </tr>
 </tbody>
 </table>
 <p><strong>结论：L1 里真正不可谈判的只有「动作空间是 Python」这一条，它与任何厂商无关。<code>qwen3.5</code> 是 L2∩L3 的当前最优解，不属于 L1。</strong></p>
 <h4 id="12">候选池：为什么筛完只剩 1–2 个族</h4>
-<p>在「一个模型同时干视觉 + 代码」（沿用 VADAR 的形态）这个前提下，四条约束的交集确实很小：</p>
+<p>在「一个模型同时干视觉 + 代码」（沿用早期形态）这个前提下，四条约束的交集确实很小：</p>
 <table>
 <thead>
 <tr>
@@ -1304,7 +789,7 @@ Windows 桌面占用                 ≈ 0.5 GB
 </table>
 <p><strong>④「同族尺寸阶梯」为什么重要（最容易被忽略的一条）：</strong> Qwen3.5 从 0.8b 到 122b 同族、同 tokenizer、同 chat template。这意味着你的 scaling 实验（0.8B → 2B → 4B → 9B）只改变<strong>一个变量：参数量</strong>。若改成跨族对比，模型间差异会混入 tokenizer、chat template、训练数据、对齐策略等混杂因子，scaling 曲线就不再可信。这一条让「默认选 Qwen」从个人偏好升级为<strong>方法学要求</strong>。</p>
 <h4 id="_2">更好的做法：把两个角色拆开</h4>
-<p>VADAR 逼着同一个模型既写程序又答 <code>vqa()</code>，这本身是一个<strong>妥协</strong>——两个任务的最优模型规模差得很远。我们自建时应当拆成三个角色：</p>
+<p>早期形态逼着同一个模型既写程序又答 <code>vqa()</code>，这本身是一个<strong>妥协</strong>——两个任务的最优模型规模差得很远。我们自建时应当拆成三个角色：</p>
 <table>
 <thead>
 <tr>
@@ -1334,11 +819,64 @@ Windows 桌面占用                 ≈ 0.5 GB
 <p>拆开后每条约束都松绑：显存从「一个大模型常驻」变成「小模型 + 小 VLM 可串行加载」，两个角色各自独立可换，还顺带把「语义问题」和「几何问题」在架构上分了家 —— 这正是创新点 1/2 想做的事。</p>
 <h4 id="_3">对代码的硬要求（写进项目规范）</h4>
 <ol>
-<li><strong>禁止硬编码模型名。</strong> 一律走环境变量：<code>VADAR_BASE_URL</code> / <code>VADAR_MODEL</code> / <code>VADAR_VISION_MODEL</code>。</li>
+<li><strong>禁止硬编码模型名。</strong> 一律走环境变量：<code>SPATIAL_BASE_URL</code> / <code>SPATIAL_MODEL</code> / <code>SPATIAL_VISION_MODEL</code>。</li>
 <li><strong>禁止依赖某家私有 API 形态。</strong> 只用 OpenAI 兼容的 <code>chat.completions</code> 子集。</li>
 <li><strong>每个实验臂必须记录模型指纹</strong>：<code>base_url + model + temperature + max_tokens + extra_body</code> 写进结果 JSON。否则换模型后的对比无法归因。</li>
 <li><strong><code>qwen3.5</code> 是默认值，不是前提。</strong> 它若被下架，只影响 Phase 0 的验证速度，不影响方案成立。</li>
 </ol>
+<hr />
+<h3 id="86-ab2026-09-17-15">8.6 云端后端实测：双端点路由与思考模式 A/B（2026-09-17，真实调用 15 次）</h3>
+<p><strong>接入形态</strong>：适配器按「消息里是否含 <code>image_url</code>」自动路由到视觉端点 —— 文本 Agent 走
+<code>deepseek-flash</code>，视觉问答走 <code>qwen3-vl-flash</code>（视觉单价低一个数量级，而它调用次数最多）。
+也可整体切到本地 vLLM / Ollama 上的 <code>Qwen3.5-4B</code>（答辩可拔网线，但与「LoRA 训练效果」是两条
+独立叙事，别混在一张表里）。实现见 <code>llm/adapter.py</code>。</p>
+<p><strong>模型名口径已变</strong>：规范名只有 <strong><code>deepseek-flash</code></strong>（= V4.1-Flash；1M 上下文、384K 输出、
+支持 Vision 与 Tool Calls）。<code>deepseek-v4-flash</code> / <code>…-vision-exp</code> 是遗留别名（对应模型已退役，
+请求由 V4.1-Flash 承接、同价）；<code>deepseek-chat</code> / <code>deepseek-reasoner</code> 于 2026-07-24 退役；
+<code>deepseek-v4-pro</code> 有序退役中。⟹ <strong>DeepSeek 这边已不存在「强模型档」</strong>，换名字换不到更强的模型。
+价格（元/百万，高峰 / 空闲）：输入未命中 <code>3.0 / 1.5</code>、命中 <code>0.10 / 0.05</code>、输出 <code>9.0 / 4.5</code>；
+<strong>高峰 = 北京时间 9:00–12:00 与 14:00–18:00</strong> ⟹ 全量实验放空闲时段，账单减半。</p>
+<p><strong>思考模式 A/B：关闭参数有效、低温可复现站得住</strong></p>
+<table>
+<thead>
+<tr>
+<th>臂</th>
+<th>出现 <code>reasoning_content</code></th>
+<th>中位延迟</th>
+<th>输出 tokens（2 次合计）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>disabled</code>（带关闭参数）</td>
+<td><strong>否</strong>（2/2）</td>
+<td>0.98 s</td>
+<td><strong>4</strong></td>
+</tr>
+<tr>
+<td><code>default</code>（不带）</td>
+<td><strong>是</strong>（2/2）</td>
+<td>1.22 s</td>
+<td><strong>51</strong>（思考占 45）</td>
+</tr>
+</tbody>
+</table>
+<p>主路径 13 次调用<strong>思考痕迹 0 次</strong> ⟹ <code>temperature=0.2</code> 真正生效；开思考时输出 token 是无思考的
+<strong>12.75 倍</strong>（同一句「只回一个词」）⟹ 全量实验必须逐臂记账。</p>
+<p><strong>四类输出标签与视觉通道全绿</strong>：<code>&lt;program&gt;</code> 语法 <strong>3/3</strong> 过 <code>ast.parse</code>、签名提取 <strong>3/3</strong>
+（未触发注解陷阱）、<code>&lt;answer&gt;</code> <strong>4/4</strong>、视觉问答<strong>答对 4/4</strong>（主模型直接吃图，无需独立视觉端点）。
+⚠ <strong>「未触发」≠「不存在」</strong>：换提示词或换模型仍可能触发，提示词约束不要撤。</p>
+<p><strong>成本</strong>：整轮 15 次调用 <strong>2915 tokens</strong>（1945 prompt + 970 completion），空闲档 <strong>¥0.0073</strong>、
+高峰档 ¥0.0146。⚠ 这是<strong>下限</strong> —— 探针用极简提示词，真实 prompt 要带完整 API 文档 + few-shot，
+输入会高一个量级；<strong>真实 per-call 数只能由「跑臂」运行器量出来</strong>，探针能证明的只是
+「端点机制与计价口径没问题」。</p>
+<blockquote>
+<p><strong>一次值得写进报告的「差点搞错」</strong>：首轮汇总字段 <code>thinking_observed</code> 给出过<strong>相反结论</strong>
+（「思考生效 ⟹ <code>temperature</code> 被忽略 ⟹ 不得声称低温可复现」）。根因是派生代码把 A/B 的
+<strong>对照组</strong>算进了主路径统计（那一臂故意带思考）。已修 + 离线复算验证，原始报告归档在
+<code>logs/phase1_probe_raw_2026-09-17.json</code>。
+<strong>教训：一个统计量混入它自己的对照组，就会得出与本实验相反的结论。</strong></p>
+</blockquote>
 <hr />
 <h2 id="9-40608gb-laptop">9. 4060（8GB / Laptop）可行性分析</h2>
 <h3 id="91-2026-09-15">9.1 本机实测环境（2026-09-15 逐项实测）</h3>
@@ -1398,8 +936,8 @@ Windows 桌面占用                 ≈ 0.5 GB
 </table>
 <blockquote>
 <p><strong>两个需要点出来的事实</strong>：</p>
-<p><strong>1. Windows 上 CUDA 是通的。</strong> <code>torch 2.6.0+cu124</code> 在 4060 上 <code>is_available() = True</code>，说明驱动和 GPU 直通没问题。所以"Windows 跑不了 VADAR"<strong>不是</strong>显卡问题，而是平台 API 与编译链问题（Unix 信号 + triton/xformers 无 Windows 支持 + GroundingDINO 需现场编译 CUDA 算子）。</p>
-<p><strong>2. 系统 Python 是 3.13/3.9，而 VADAR 需要 3.10。</strong> 加上 UniDepth 的 <code>requires-python = "&gt;=3.10.0"</code>，<code>mytorch</code>（3.9）也用不上。WSL 里用 Ubuntu 22.04 自带 3.10 是最省事的解法。</p>
+<p><strong>1. Windows 上 CUDA 是通的。</strong> <code>torch 2.6.0+cu124</code> 在 4060 上 <code>is_available() = True</code>，说明驱动和 GPU 直通没问题。所以「Windows 跑不通早期基线」<strong>不是</strong>显卡问题，而是平台 API 与编译链问题（Unix 信号 + triton/xformers 无 Windows 支持 + GroundingDINO 需现场编译 CUDA 算子）。</p>
+<p><strong>2. 系统 Python 是 3.13/3.9，而早期基线要求 3.10。</strong> 加上 UniDepth 的 <code>requires-python = "&gt;=3.10.0"</code>，<code>mytorch</code>（3.9）也用不上。WSL 里用 Ubuntu 22.04 自带 3.10 是最省事的解法。</p>
 </blockquote>
 <h3 id="92">9.2 逐模块可行性</h3>
 <table>
@@ -1485,11 +1023,11 @@ Windows 桌面占用                 ≈ 0.5 GB
 </table>
 <h3 id="93">9.3 硬性结论</h3>
 <ol>
-<li><strong>主开发与主要实验全部在 4060 完成</strong>，Omni3D 路径的视觉栈是「小模型组合」，这是 VADAR 送给你的运气。</li>
+<li><strong>主开发与主要实验全部在 4060 完成</strong>，Omni3D 路径的视觉栈是「小模型组合」，这是小模型组合带来的运气。</li>
 <li><strong>云端只在三种情况下使用</strong>：（a）9B 及以上模型的对照实验；（b）Molmo-7B 的 CLEVR 支线，且只跑一次并缓存；（c）如果 4B QLoRA 在 8GB 上实在 OOM，用一次 4090 24GB 跑最终训练（预算很小）。</li>
 <li><strong>绝不需要为「跑通 pipeline」租 A100</strong>（视觉栈合计仅约 1.2 GB，见 §9.4）。</li>
-<li><strong>VADAR 本体必须跑在 WSL2 里</strong>，但<strong>不是所有事都需要 WSL2</strong>。准确的分工是：
-   - <strong>需要 WSL2</strong>：VADAR 本体（Unix 信号）、三个视觉模型的安装与构建（triton/xformers/编译链）
+<li><strong>WSL2 已经不是必需项</strong>。唯一曾经需要它的场景是跑早期基线本体（Unix 信号）——该检出已移除，所以现在全程 Windows 原生：
+   - <strong>曾经需要 WSL2</strong>：早期基线本体（Unix 信号）、三个视觉模型的源码构建（triton/xformers/编译链）。<strong>现在都不需要</strong>（视觉栈走 transformers 原生实现）
    - <strong>不需要 WSL2</strong>：本地 LLM 服务（Ollama 在 Windows 上直接吃 CUDA）、所有 prompt 协议测试、文档与脚本开发
    - 所以 <strong>Phase 0 的 P0 步骤可以先做掉，不必等重启</strong>（见 §20 优先级表）</li>
 <li><strong>不为了一个能本地完成的任务租云卡。</strong> 本地 Ollama 已经能提供一个完整的 OpenAI 兼容端点，API key 是可选加速项，不是前置依赖。</li>
@@ -1563,7 +1101,7 @@ Windows 桌面占用                 ≈ 0.5 GB
 Phase 0–8 全程 API 即可。视觉栈虽必须本地，但与 LLM 选型无关，不要混为一谈。</p>
 </blockquote>
 <p><strong>对 §20 优先级表的连带影响：</strong> Step 0.7 / 0.8（装 Ollama、测 4B 协议合规性）与 Phase 9 从「P0 / 主线」降为「可选支线」。</p>
-<p><strong>但保留一个反向条件（不要因此彻底删掉这条支线）：</strong> 若后续实测发现云端模型也无法稳定守住 VADAR 的零容错协议（§19 风险表第 1 位），<strong>微调仍是提升协议合规性的唯一手段</strong>，届时该支线重新升为主线。届时再装 Ollama 也不迟——它只是一条 <code>winget install</code> 命令，不存在沉没成本。</p>
+<p><strong>但保留一个反向条件（不要因此彻底删掉这条支线）：</strong> 若后续实测发现云端模型也无法稳定守住那套零容错协议（§19 风险表第 1 位），<strong>微调仍是提升协议合规性的唯一手段</strong>，届时该支线重新升为主线。届时再装 Ollama 也不迟——它只是一条 <code>winget install</code> 命令，不存在沉没成本。</p>
 <h4 id="_5">成本：视觉栈不花钱，唯一成本是电费</h4>
 <table>
 <thead>
@@ -1786,14 +1324,14 @@ Phase 0–8 全程 API 即可。视觉栈虽必须本地，但与 LLM 选型无�
 </tbody>
 </table>
 <hr />
-<h2 id="11-3d-tool-library-vadar-api">11. 我们的 3D Tool Library（自研，替代 VADAR 的随机 API）</h2>
+<h2 id="11-3d-tool-library-api">11. 我们的 3D Tool Library（自研，替代参考实现的随机 API）</h2>
 <p><strong>设计原则（对应你的硬要求）：</strong></p>
 <ol>
 <li>输入输出用 Pydantic / JSON Schema <strong>显式定义</strong>，不再依赖正则解析 XML 标签</li>
 <li>每个工具的返回值必须是<strong>几何证据</strong>（数字、坐标、id），不是自然语言</li>
 <li><strong>空间关系由几何计算，不由 LLM 判断</strong>——<code>left_of</code> 不是问 VQA「这个在左边吗」，而是比较 x 坐标</li>
 <li>工具要能报错（返回结构化 error），Agent 才能重试</li>
-<li>工具集固定、版本化 → 评测可复现（直接解决 VADAR 随机 API 的问题）</li>
+<li>工具集固定、版本化 → 评测可复现（直接解决参考实现随机 API 的问题）</li>
 </ol>
 <h3 id="111">11.1 工具分层</h3>
 <p><strong>L1 — 感知工具（调模型，有 GPU 开销，结果全场景缓存）</strong></p>
@@ -1829,13 +1367,13 @@ Phase 0–8 全程 API 即可。视觉栈虽必须本地，但与 LLM 选型无�
 <td><code>estimate_camera</code></td>
 <td><code>(image_id) -&gt; Intrinsics</code></td>
 <td>3×3 内参</td>
-<td>UniDepthV2（<strong>VADAR 丢掉的</strong>）</td>
+<td>UniDepthV2（<strong>参考实现丢掉的</strong>）</td>
 </tr>
 <tr>
 <td><code>lift_to_3d</code></td>
 <td><code>(image_id, mask) -&gt; PointCloud</code></td>
 <td>相机系点云</td>
-<td>UniDepthV2 <code>points</code>（<strong>VADAR 丢掉的</strong>）</td>
+<td>UniDepthV2 <code>points</code>（<strong>参考实现丢掉的</strong>）</td>
 </tr>
 </tbody>
 </table>
@@ -2219,11 +1757,11 @@ L5 把 <code>SceneGraph</code> 直接当作可交付产品暴露出来：<strong
 明写「先查上面『尺度』那几条」）。<strong>尺寸越界是症状、内参是根因</strong>这条裁决，
 在这一页上不需要任何解释就能看懂 —— 这正是 L5 作为「第一类输出」的价值：
 它把 §21/§22 那些只存在于探针数字里的结论，变成了可直接放进答辩的交付物。</p>
-<h3 id="112-vadar">11.2 与 VADAR 原工具的关系</h3>
+<h3 id="112">11.2 与参考实现原工具的关系</h3>
 <table>
 <thead>
 <tr>
-<th>VADAR 预定义</th>
+<th>参考实现预定义</th>
 <th>我们的替代</th>
 <th>关系</th>
 </tr>
@@ -2257,7 +1795,7 @@ L5 把 <code>SceneGraph</code> 直接当作可交付产品暴露出来：<strong
 </tbody>
 </table>
 <blockquote>
-<p>最后一行值得强调：「用 id 消灭 <code>same_object</code>」是一个可以写进报告的架构性洞察。VADAR 因为每次 <code>loc</code> 都返回裸 bbox，所以必须靠 IoU&gt;0.92 反推「这是不是同一个东西」，这既不准也浪费工具调用。Scene Graph 一次性解决。</p>
+<p>最后一行值得强调：「用 id 消灭 <code>same_object</code>」是一个可以写进报告的架构性洞察。参考实现因为每次 <code>loc</code> 都返回裸 bbox，所以必须靠 IoU&gt;0.92 反推「这是不是同一个东西」，这既不准也浪费工具调用。Scene Graph 一次性解决。</p>
 </blockquote>
 <hr />
 <h2 id="12-3d-scene-graph">12. 3D Scene Graph</h2>
@@ -2265,8 +1803,8 @@ L5 把 <code>SceneGraph</code> 直接当作可交付产品暴露出来：<strong
 <p>三个直接收益：</p>
 <ol>
 <li><strong>消除幻觉</strong>：Agent 只能引用场景图里<strong>真实存在</strong>的 <code>object_id</code>。工具执行时校验 id 存在性，不存在直接返回 error → 幻觉从「静默错误」变成「可捕获错误」。</li>
-<li><strong>把 O(n) 次模型调用降到 O(1)</strong>：VADAR 每问一个新物体就调一次 <code>loc</code>；场景图一次构建、无限次查询，且查询是纯 CPU 数学。</li>
-<li><strong>关系可复现、可单测</strong>：<code>left_of</code> 是一个有 <code>tol</code> 参数的纯函数，可以写单元测试，出问题能定位。VADAR 的对应能力藏在 LLM 生成的代码里，不可测。</li>
+<li><strong>把 O(n) 次模型调用降到 O(1)</strong>：参考实现每问一个新物体就调一次 <code>loc</code>；场景图一次构建、无限次查询，且查询是纯 CPU 数学。</li>
+<li><strong>关系可复现、可单测</strong>：<code>left_of</code> 是一个有 <code>tol</code> 参数的纯函数，可以写单元测试，出问题能定位。参考实现的对应能力藏在 LLM 生成的代码里，不可测。</li>
 </ol>
 <h3 id="122">12.2 数据结构</h3>
 <pre class="code"><code>Node {
@@ -2333,13 +1871,13 @@ SceneGraph {
 <li>这样中间表示一举三得：Agent 的查询后端、Demo 的渲染后端、实验的真值后端。</li>
 </ul>
 <hr />
-<h2 id="13-agent-vadar">13. 新 Agent 架构（比 VADAR 更适合本项目）</h2>
-<h3 id="131-vadar-vs">13.1 VADAR vs 新架构</h3>
+<h2 id="13-agent">13. 新 Agent 架构（面向本项目的自研设计）</h2>
+<h3 id="131-vs">13.1 参考实现 vs 新架构</h3>
 <table>
 <thead>
 <tr>
 <th>维度</th>
-<th>VADAR</th>
+<th>参考实现</th>
 <th>新 3D Spatial Agent</th>
 </tr>
 </thead>
@@ -2395,7 +1933,7 @@ SceneGraph {
 <ol>
 <li>空间问题的本质是「<strong>组合 + 算术 + 聚合</strong>」。「在 4 把椅子里找离门最近的那把」是 <code>min(chairs, key=...)</code> 一行 Python；用 JSON tool call 表达的代价是 5 次往返且无法表达 <code>argmin</code>。</li>
 <li>单轮生成 → <strong>可复现、可 AST 静态检查、token 最省</strong>，而且 LLM 只被调用一次，4B 级模型的错误没有累积空间。</li>
-<li>与 VADAR 的<strong>动作空间直接可比</strong> —— 「程序合成 vs 逐步决策」这才构成一条正式的消融，否则前三个创新点的收益无法与范式收益分离。</li>
+<li>与参考实现的<strong>动作空间直接可比</strong> —— 「程序合成 vs 逐步决策」这才构成一条正式的消融，否则前三个创新点的收益无法与范式收益分离。</li>
 </ol>
 <p>两者<strong>共用同一套工具库与执行器</strong>，唯一区别是「LLM 被调用几次」。接口契约见 §13.3。</p>
 <h3 id="132-langgraph">13.2 建议实现：先轻量自研，不急上 LangGraph</h3>
@@ -2407,7 +1945,7 @@ SceneGraph {
 </blockquote>
 <p><strong>推荐先自研一个约 300 行的循环</strong>，理由：</p>
 <ol>
-<li>VADAR 的提示词是正则标签式的，你需要一层「标签 ↔ JSON schema」的桥，任何框架都帮不上忙</li>
+<li>参考实现的提示词是正则标签式的，你需要一层「标签 ↔ JSON schema」的桥，任何框架都帮不上忙</li>
 <li>你要做 <strong>Tool Selection Accuracy</strong> 这种细粒度指标，需要完全掌控每一步的日志结构</li>
 <li>LangGraph 的状态/图/checkpointer 概念对「单轮 3–6 步的空间问答」是过度设计</li>
 <li>调试成本：自己写的循环出错时 traceback 是直白的</li>
@@ -2500,7 +2038,7 @@ SceneGraph {
 <p><strong>LangGraph 何时才值得引入</strong>：当你要做（a）多智能体分工（planner/executor/verifier 各自独立上下文）、（b）可中断可恢复的长任务、（c）人在回路确认。<strong>这三项在本项目都不是必需</strong>。可以把它列为 Phase 7 的可选扩展，作为报告的「工程选型讨论」素材。</p>
 <hr />
 <h3 id="133-2026-09-16">13.3 三角色接口契约（2026-09-16 定稿）</h3>
-<p><strong>为什么必须拆开</strong>：VADAR 用<strong>同一个模型</strong>既写程序（<code>ProgramAgent</code>，<code>agents.py:727-875</code>）又答视觉问题（<code>vqa()</code> 硬编码 gpt-4o，<code>agents.py:334-355</code>）。这两件事要求的能力<strong>相反</strong> —— 写程序要求严格结构化、可被 AST 解析；看图问答要求自由生成。挤在同一个 prompt 契约里，两个都做不好，而且让「关闭视觉能力」这类消融<strong>根本无法做</strong>。</p>
+<p><strong>为什么必须拆开</strong>：早期形态用<strong>同一个模型</strong>既写程序又答视觉问题，而后者还绑死在闭源 VLM 上。这两件事要求的能力<strong>相反</strong> —— 写程序要求严格结构化、可被 AST 解析；看图问答要求自由生成。挤在同一个 prompt 契约里，两个都做不好，而且让「关闭视觉能力」这类消融<strong>根本无法做</strong>。</p>
 <p>本方案拆成 <strong>三个角色 + 一个信封 + 一个提交契约</strong>，依赖方向严格单向。下面三处「签名层面堵死」是全节的价值所在。</p>
 <h4 id="1-toolresult">(1) 统一返回信封：<code>ToolResult</code></h4>
 <p>五个工具层（L1–L5）、三个角色，<strong>返回值全部是它</strong>。</p>
@@ -2588,7 +2126,7 @@ class ToolResult:
 <strong>空间幻觉在类型层面就写不出来</strong>。这比在提示词里写「请不要判断空间关系」强一个量级：
 前者是架构保证，后者是祈祷。<strong>这一条要进答辩稿。</strong></p>
 <ul>
-<li>承载方式按 §6 的代码规范走环境变量（<code>VADAR_VISION_MODEL</code> / <code>VADAR_VISION_BASE_URL</code>），本地 Qwen3.5 多模态与云端 <code>qwen3-vl-flash</code> 皆可，<strong>不硬编码模型名</strong>。</li>
+<li>承载方式按 §8.5 的代码规范走环境变量（<code>SPATIAL_VISION_MODEL</code> / <code>SPATIAL_VISION_BASE_URL</code>），本地 Qwen3.5 多模态与云端 <code>qwen3-vl-flash</code> 皆可，<strong>不硬编码模型名</strong>。</li>
 <li><code>vlm=None</code> 时 <code>get_attributes</code> 返回 <code>CAPABILITY_DISABLED</code> → 天然构成一个消融臂。</li>
 <li><strong>主路径（纯空间问答）不依赖本角色</strong>，因此它不阻塞 Phase 1；它只影响颜色 / 材质类问题与指代消解的强度。</li>
 <li>输出 <code>value</code> 必须落在 <code>candidates</code> 内（闭集优先）；confidence 低于阈值时<strong>必须上报</strong>，不允许静默取最高分。</li>
@@ -2609,16 +2147,16 @@ def calculate_distance(ctx, a, b) -&gt; ToolResult: ...
 并实现 <code>__bool__</code> 因而 <code>if left_of(a, b):</code> 仍然可写。
 改成这样是因为 §11 设计原则 2 要求「每个工具的返回值必须是几何证据」——
 只回 bool 的话，外层就没法在 <code>Edge.metric</code> 里留下 <code>delta_x</code>，
-「为什么判定为左」这件事就丢了，而那正是相对 VADAR 的卖点之一。</p>
+「为什么判定为左」这件事就丢了，而那正是相对参考实现的卖点之一。</p>
 <p>② <strong>外部层不是「一个关系一个函数」，而是一个 <code>query_relation</code> 统一入口。</strong>
 11 个关系收成一个工具 + 一个枚举参数。理由是 prompt 长度直接受工具文档长度影响
-（VADAR 的 program prompt 实测已达 6965 字符）——让模型记 11 个函数名，
+（参考实现的 program prompt 实测已达 6965 字符）——让模型记 11 个函数名，
 不如让它记一份取值列表。分发表在 <code>scene_graph/relations.py</code> 的 <code>RELATIONS</code>。</p>
 </blockquote>
 <p>分层的必要性：外层要承担 <code>NOT_IN_SCENE</code> 校验与 <code>evidence</code> 组装（因此依赖场景图与 trace）；
 内层是干净数学。<strong>混为一层，关系函数就再也测不了了</strong> —— 而「关系可单测」正是 §12.1 里
-Scene Graph 相对 VADAR 的三条收益之一。</p>
-<h4 id="5-submit-vadar">(5) 提交契约：<code>submit()</code> 取代 VADAR 的魔法变量</h4>
+Scene Graph 相对参考实现的三条收益之一。</p>
+<h4 id="5-submit">(5) 提交契约：<code>submit()</code> 取代参考实现的魔法变量</h4>
 <pre class="code"><code class="language-python">def submit(
     answer,                       # float | int | bool | str，受 answer_type 约束
     target_ids: list[str] = [],   # 被指认的物体 → 直接驱动 Viewer 高亮
@@ -2629,7 +2167,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <thead>
 <tr>
 <th></th>
-<th>VADAR</th>
+<th>参考实现</th>
 <th>本方案</th>
 </tr>
 </thead>
@@ -2661,7 +2199,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 </tr>
 </tbody>
 </table>
-<p><code>answer</code> 类型与 Omni3D-Bench 的 <code>answer_type</code>（int / float / str）对齐，<strong>因此结果可直接与 VADAR 同表对比</strong> —— 这个兼容性是有意保留的。</p>
+<p><code>answer</code> 类型与 Omni3D-Bench 的 <code>answer_type</code>（int / float / str）对齐，<strong>因此结果可与论文报告的基线同表对比</strong> —— 这个兼容性是有意保留的。</p>
 <p><strong>答案的自然语言渲染：模板为主，LLM 仅作可选润色。</strong> 这是整条链路里<strong>最后一个可能篡改数字的环节</strong>：
 模板只做拼装（<code>"{label} 最近，距离 {value:.2f} m"</code>），数值槽位由 <code>submit</code> 的参数锁定；
 需要自然解释时才开一次 LLM 润色，且<strong>不得改写任何数值槽位</strong>。这样「输出可审计」才是真的可审计。</p>
@@ -2719,7 +2257,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <blockquote>
 <p><code>planner="on"</code> 在<strong>程序合成范式下含义变了</strong>：不是「逐步规划」，而是「生成前先让 LLM 列出需要的
 工具类别与推理链，再出程序」。它仍是可开关的臂 G，但报告里必须命名为 <strong>planning-then-synthesis</strong>，
-不能沿用 VADAR 的逐步 planner 叙事。</p>
+不能沿用参考实现的逐步 planner 叙事。</p>
 </blockquote>
 <hr />
 <h2 id="14-demo">14. Demo 架构</h2>
@@ -2826,7 +2364,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <tbody>
 <tr>
 <td>1</td>
-<td><strong>几何接地的 3D 工具库</strong>（用 UniDepth 的 <code>points</code>+<code>intrinsics</code>，VADAR 丢掉的）</td>
+<td><strong>几何接地的 3D 工具库</strong>（用 UniDepth 的 <code>points</code>+<code>intrinsics</code>，参考实现丢掉的）</td>
 <td>中</td>
 <td>强（3D 定位误差、距离/尺寸精度可量化）</td>
 <td>大</td>
@@ -2872,13 +2410,13 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 </tbody>
 </table>
 <h3 id="3">为什么这 3 个是对的</h3>
-<p><strong>创新点 1（工具库）</strong>：VADAR 的 <code>depth()</code> 返回一个标量，<code>same_object()</code> 靠 IoU，<code>3D size = 2D × depth</code> 缺焦距。而 UniDepth 的同一个 <code>infer()</code> 调用<strong>本来就返回 <code>points</code>（相机系点云）和 <code>intrinsics</code></strong>——VADAR 只取了 <code>depth</code> 一个键。这意味着：<strong>你可以在不增加任何模型、不增加任何显存的前提下，把 VADAR 的「深度级近似」升级成「真实三维几何」。</strong> 这是纯粹 3D Vision 的贡献，且成本极低、收益可量化。</p>
+<p><strong>创新点 1（工具库）</strong>：参考实现的 <code>depth()</code> 返回一个标量，<code>same_object()</code> 靠 IoU，<code>3D size = 2D × depth</code> 缺焦距。而 UniDepth 的同一个 <code>infer()</code> 调用<strong>本来就返回 <code>points</code>（相机系点云）和 <code>intrinsics</code></strong>——参考实现只取了 <code>depth</code> 一个键。这意味着：<strong>你可以在不增加任何模型、不增加任何显存的前提下，把「深度级近似」升级成「真实三维几何」。</strong> 这是纯粹 3D Vision 的贡献，且成本极低、收益可量化。</p>
 <p><strong>创新点 2（Scene Graph）</strong>：把「同一性判断（<code>same_object</code>）」「关系判断（<code>left_of</code>）」「存在性判断」这三类<strong>不该由模型回答的问题</strong>，从 LLM/VLM 手里拿回到确定性几何里。这直接对应你在需求里写的那条硬要求——「不允许 LLM 直接凭空编造空间关系」。而且它有干净的评测指标：关系准确率 vs 几何 GT、以及同一任务的工具调用次数下降。</p>
 <p><strong>创新点 3（QLoRA）</strong>：3D tool-calling 是一个<strong>小众领域</strong>，通用模型的先验帮不上太多（BFCL 高 ≠ 会调 <code>left_of(scene, a, b, tol)</code>）。配合「执行验证式数据合成」，你有：自建数据集（可写进报告）、本地训练（4060 上的完整训练日志，答辩加分）、可控的消融（同数据同超参，只换 checkpoint）。</p>
 <p><strong>为什么 4 和 5 不选为主创新</strong>：创新点 4 的实验很难归因——「多步规划带来提升」和「工具更多带来提升」在单臂实验中分不开，要做 2×2 交叉实验才干净，成本高而区分度低。创新点 5 是工程/展示价值而非科学贡献。<strong>把它们放在消融表和 Demo 里，不要放在「创新点」标题下</strong>——这个取舍本身就是成熟度的体现。</p>
 <h3 id="_6">一句话创新陈述（可直接用于答辩/简历）</h3>
 <blockquote>
-<p>本项目在 VADAR 基础上，利用 UniDepth 输出的相机系点云与内参构建了<strong>几何接地的 3D 工具库</strong>（把原工作丢弃的三维信息接入推理链路），以<strong>3D 场景图</strong>作为空间关系的确定性中间表示以消除 LLM 的空间幻觉，并通过<strong>执行验证式数据合成 + 本地 QLoRA</strong> 使 4B 级开源模型在 3D 工具调用任务上逼近闭源大模型，全部实验在单张 RTX 4060 (8GB) 上完成。</p>
+<p>本项目利用 UniDepth 输出的相机系点云与内参构建了<strong>几何接地的 3D 工具库</strong>（把原工作丢弃的三维信息接入推理链路），以<strong>3D 场景图</strong>作为空间关系的确定性中间表示以消除 LLM 的空间幻觉，并通过<strong>执行验证式数据合成 + 本地 QLoRA</strong> 使 4B 级开源模型在 3D 工具调用任务上逼近闭源大模型，全部实验在单张 RTX 4060 (8GB) 上完成。</p>
 </blockquote>
 <hr />
 <h2 id="16">16. 实验设计</h2>
@@ -2894,17 +2432,17 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <tbody>
 <tr>
 <td><strong>A</strong></td>
-<td>VADAR 原始（GPT-4o + 原始工具 + 随机 API）</td>
-<td>复现基线，拿到你自己机器上的数字</td>
+<td>~~参考实现原始（GPT-4o + 原始工具 + 随机 API）~~</td>
+<td><strong>已移除</strong>：该臂依赖的检出不再随仓库分发；早期 6 次真跑留在 <code>results/A/</code>，但<strong>不可复现</strong></td>
 </tr>
 <tr>
 <td><strong>B</strong></td>
-<td>VADAR + Qwen3.5-4B（换 LLM，其余不动）</td>
+<td>参考实现 + Qwen3.5-4B（换 LLM，其余不动）</td>
 <td>隔离「换 LLM」的收益</td>
 </tr>
 <tr>
 <td><strong>C</strong></td>
-<td>VADAR + Qwen3.5-4B + 我的 3D 工具库</td>
+<td>参考实现 + Qwen3.5-4B + 我的 3D 工具库</td>
 <td>隔离「工具升级」的收益（创新点 1）</td>
 </tr>
 <tr>
@@ -2972,7 +2510,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <td>—</td>
 </tr>
 <tr>
-<td>Baseline：VADAR 原始流水线 + 强开源模型</td>
+<td>Baseline：参考实现原始流水线 + 强开源模型（<strong>已移除</strong>）</td>
 <td></td>
 <td>✓</td>
 <td></td>
@@ -3031,7 +2569,7 @@ Scene Graph 相对 VADAR 的三条收益之一。</p>
 <blockquote>
 <p><strong>为什么第一行不能当基线</strong>：<code>api.openai.com</code> 在本机网络不可达（实测超时 12 s+），
 gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加脚注</strong>，注明服务商与模型不同、
-不可直接比较。消融基线改用「VADAR 原始流水线 + 一个强开源模型」
+不可直接比较。消融基线改用「参考实现原始流水线 + 一个强开源模型」
 —— 注意 <strong>DeepSeek 这边已无强模型档</strong>：<code>deepseek-v4-pro</code> 自 2026-09-14 12:00 起
 全部路由到 V4.1-Flash（见 §7.4），换了名字不会换到更强的模型。
 所以要上界臂就得<strong>跨服务商</strong>（如 <code>qwen3-vl-plus</code>），或者把上界臂定义为
@@ -3209,7 +2747,7 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
   而不是只有一张。</li>
 <li>12 的参考值可直接来自 §12 的 Scene Graph 几何 GT 构造流程（单遍卷积式构建），不需要额外标注。</li>
 </ul>
-<p><strong>注意指标 5 的数据来源</strong>：Omni3D-Bench 是基于 Omni3D 的，Omni3D 本身带 3D 标注（这也是 VADAR 的 <code>--oracle</code> 能工作的前提）。<strong>但你需要自己确认 Omni3D-Bench 的 annotations.json 里是否含 3D 坐标字段——<code>README.md</code> 里展示的字段只有 image/question/answer_type/answer（<code>README.md:49-58</code>），没有 3D 标注，所以 GT 3D 坐标可能需要回到 Omni3D 原始数据里取，这一步存在不确定性，需在 Phase 1 验证。</strong></p>
+<p><strong>注意指标 5 的数据来源</strong>：Omni3D-Bench 是基于 Omni3D 的，Omni3D 本身带 3D 标注（这也是「用 GT 替换视觉模块」能工作的前提）。<strong>但你需要自己确认 Omni3D-Bench 的 annotations.json 里是否含 3D 坐标字段——<code>README.md</code> 里展示的字段只有 image/question/answer_type/answer（<code>README.md:49-58</code>），没有 3D 标注，所以 GT 3D 坐标可能需要回到 Omni3D 原始数据里取，这一步存在不确定性，需在 Phase 1 验证。</strong></p>
 <h3 id="164">16.4 实验纪律（避免答辩被问倒）</h3>
 <ul>
 <li>固定 seed；工具库版本号写进结果文件</li>
@@ -3218,7 +2756,7 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
 <li>明确区分「瓶颈在视觉」还是「瓶颈在语言」——<code>--oracle</code> 臂就是干这个的</li>
 </ul>
 <hr />
-<h2 id="17-vadar">17. 项目目录（按 VADAR 实际结构重新设计）</h2>
+<h2 id="17">17. 项目目录</h2>
 <pre class="code"><code>3d_spatial_agent/
 ├── README.md
 ├── pyproject.toml
@@ -3228,11 +2766,11 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
 │   ├── tools.yaml             # 工具库版本与启用开关
 │   └── scene_graph.yaml       # 关系阈值 tol / up_axis 策略
 │
-├── vision/                    # ★ L1 感知层（对应 vendor/VADAR 的 engine/predefined_modules.py）
+├── vision/                    # ★ L1 感知层
 │   ├── grounding.py           #   包 GroundingDINO
 │   ├── segmentation.py        #   包 SAM2.1
 │   ├── depth.py               #   包 UniDepthV2（depth + points + intrinsics 三者都要）
-│   ├── geometry.py            #   ★ 点云 → 质心 / extent / PCA / up_axis（VADAR 没有的新代码）
+│   ├── geometry.py            #   ★ 点云 → 质心 / extent / PCA / up_axis（自研新代码）
 │   └── registry.py            #   模型常驻/懒加载/显存回收策略
 │
 ├── scene_graph/
@@ -3259,23 +2797,23 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
 │   │                          #   answer_with_evidence / diagnose_failure / counterfactual
 │   └── schemas.py             #   JSON Schema 渲染（供 vLLM tool calling）；版本号取自 version.py
 │
-├── agents/                    # ★ 三角色接口契约见 §13.3
-│   ├── synthesizer.py         # ★ 角色① synthesize()：AST 四项静态检查 + 定向重生成（≤2 次）
-│   ├── loop.py                # ★ 主循环（自己写，不用 LangGraph）—— 主路径=单轮，E′=多轮
-│   ├── planner.py             #   planning-then-synthesis（可开关，消融臂 G）
-│   ├── executor.py            #   沙箱执行（multiprocessing + 硬超时）+ ToolResult 落盘 trace
-│   ├── verifier.py            #   答案是否有几何证据支持（evidence 非空 + 数值一致性）
-│   ├── memory.py              #   工作记忆（object_id 映射 / 已确认事实 / 压缩观察）
+├── agents/                    # ★ 三角色接口契约见 §13.3；实现记录见 §13.4
+│   ├── synthesizer.py         # ✅ 角色① synthesize()：AST 四项静态检查 + 定向重生成（≤2 次）
+│   ├── loop.py                # ✅ 主循环（自己写，不用 LangGraph）—— 主路径=单轮，E′=多轮
+│   ├── planner.py             # ✅ planning-then-synthesis（可开关，消融臂 G）
+│   ├── executor.py            # ✅ 沙箱执行（同进程 + 定时器看门狗硬超时）+ trace
+│   ├── verifier.py            # ✅ 答案是否有几何证据支持（四档：supported/weak/unsupported/abstained）
+│   ├── memory.py              # ✅ 工作记忆（object_id 映射 / 已确认事实 / 压缩观察）
 │   └── prompts/
-│       ├── system.py
-│       ├── planner.py
-│       └── verifier.py
+│       ├── system.py          # ✅ 角色① 的提示词模板（占位符用 `{{X}}` + 收尾自检）
+│       ├── planner.py         # ✅
+│       └── verifier.py        # ✅
 │
 ├── llm/
-│   ├── adapter.py             # ★ OpenAI 兼容客户端（base_url 可配）——替代 VADAR 的 Generator
-│   ├── schema.py              #   tool schema → prompt 渲染 + TOOLS_VERSION
-│   ├── vlm.py                 # ★ 角色② describe() 实现（attrs 白名单，签名无空间参数）
-│   ├── render.py              # ★ 答案渲染：模板为主，LLM 仅可选润色且不得改写数值槽位
+│   ├── adapter.py             # ✅ OpenAI 兼容客户端（双端点路由、密钥掩码、调用记账）
+│   ├── schema.py              # ✅ tool schema → prompt 渲染 + TOOLS_VERSION
+│   ├── vlm.py                 # ✅ ★ 角色② 的适配；主体在 `vision/semantics.py`（attrs 白名单，签名无空间参数）
+│   ├── render.py              # ✅ 答案渲染：模板为主，LLM 仅可选润色且不得改写数值槽位
 │   └── finetune/
 │       ├── data_builder.py    # ★ 执行验证式数据合成（创新点 3 的引擎）
 │       ├── verify.py          #   轨迹执行校验
@@ -3289,14 +2827,12 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
 │   └── builders/              #   各数据集 → 统一 schema 的转换脚本
 │
 ├── evaluation/
-│   ├── metrics.py             # ✅ VADAR 四类子指标 + Total 口径（§24.3 验算过）
-│   ├── win_alarm.py           # ✅ Windows 上替代 signal.SIGALRM 的执行看门狗
-│   ├── vadar_compat.py        # ✅ 让 vendor/VADAR **一字不改**跑起来（stub 包 + 视觉适配）
-│   ├── runner.py              # ✅ 跑一个实验臂，产出 results/&lt;arm&gt;/*
-│   ├── README.md              # ✅ 运行器用法与三个设计决定
-│   ├── tests/                 # ✅ 68 用例（零 torch / 零 GPU / 零联网）
+│   ├── metrics.py             # ✅ 四类子指标 + Total 的论文口径复算（§24.3 验算过）
+│   ├── README.md              # ✅ 评测口径、运行方式与三个设计决定
+│   ├── tests/                 # ✅ 用例（零 torch / 零 GPU / 零联网）
 │   ├── ablation.py            #   ⬜ 汇总多臂 → 主表
 │   └── stats.py               #   ⬜ 配对显著性检验
+│   （早期还有一个实验臂运行器与它的 Windows 兼容层，已随上游检出于 2026-09-20 移出）
 │
 ├── demo/
 │   ├── server.py              #   FastAPI + WebSocket
@@ -3304,91 +2840,69 @@ gpt-4o 调不到，所以论文的 40.4 只能作为<strong>文献引用值加�
 │   └── rerun_view.py          #   ★ 开发期调试视图（先做这个）
 │
 ├── vendor/
-│   └── VADAR/                 # ★ 原仓库原样保留（**目录名必须是 VADAR**，见 §19 风险）
-│       ├── agents/ engine/ prompts/ ...
-│       └── PATCHES.md         #   记录我们改了哪几行、为什么
+│   └── UniDepth/              #   唯一保留的第三方检出（视觉骨干）；来源与许可见 `vendor/VENDOR.md`
 │
 ├── tests/
 │   └── test_tools.py          # ✅ 58 用例：错误码契约、能力开关、参数错误冒泡、trace、坐标系
 │
 ├── scripts/
-│   ├── smoke_tools.py         # ✅ Phase 1 冒烟：场景图→工具→答案+证据链+trace（零 GPU、零联网）
-│   ├── smoke_test_vision.py   #   视觉栈冒烟 + 显存实测（对应 phase0/probe3d.py）
-│   ├── setup_wsl.sh           #   Phase 0 环境脚本（仅在跑路径 A 对照臂时才需要）
-│   ├── download_models.sh
-│   ├── download_data.sh
-│   ├── build_all_scene_graphs.py
-│   └── serve_llm.sh           #   vLLM 启动
+│   ├── smoke_tools.py         # ✅ 冒烟：场景图→工具→答案+证据链+trace（零 GPU、零联网）
+│   ├── build_scene.py         # ✅ 单图 → 场景图（接地 → 分割 → 升维 → 关系）
+│   ├── run_agent.py           # ✅ 端到端入口（dry-run / program-file / question 三种模式）
+│   ├── serve_demo.py          # ✅ 前端演示台（/api/ask 现场真跑 + 反事实 + 上传建图）
+│   ├── selfcheck_agent.py     # ✅ 自检：契约、答案证据校验器、工具链
+│   ├── mine_glue_patterns.py  # ✅ 胶水形态挖掘（从已落盘程序里聚类候选算子）
+│   ├── inspect_scene.py       # ✅ 场景图查看 / 导出
+│   ├── report_scene.py        # ✅ 场景图报告
+│   └── probe_combination*.py  # ✅ 组合探针（分析 + 运行）
 └── reports/
     └── figures/
 </code></pre>
-<p><strong>关于 <code>vendor/VADAR/</code> 的处理</strong>：<strong>不要直接改原仓库、也不要 fork 后大改</strong>。原仓库原样保留在 <code>vendor/</code>，我们的改动通过一层薄适配器（<code>llm/adapter.py</code> 替代 <code>Generator</code>，<code>tools/registry.py</code> 替代 <code>predefined_modules.ModulesManager</code>）+ <code>PATCHES.md</code> 记录最小补丁。这样：原版可随时对照跑（实验臂 A），你的工作干净独立，报告里可以说清「哪些是我的」。</p>
+<p><strong>关于上游检出的处理</strong>：早期做法是把检出原样放在 <code>vendor/</code> 下、改动只走一层薄适配器（<code>llm/adapter.py</code> 替代其 LLM 封装，<code>tools/registry.py</code> 替代其模块管理器），好处是原版可随时对照跑。<strong>该检出已于 2026-09-20 移出本仓库</strong>：不再分发、不再有对照臂，本节只作历史记录。</p>
 <hr />
 <h2 id="18-phase-013">18. 分阶段路线（Phase 0–13）</h2>
 <p>每个阶段给出：<strong>目标 / 输入 / 输出 / 代码位置 / 是否需要 GPU / 4060 能否 / 是否需要租卡 / 主要风险 / 完成标准</strong>。</p>
 <hr />
-<h3 id="phase-0">Phase 0 — 环境配置</h3>
+<h3 id="phase-0-windows-wsl">Phase 0 — 环境配置（<strong>已完成：Windows 原生，未装 WSL</strong>）</h3>
 <ul>
-<li><strong>目标</strong>：在 WSL2 Ubuntu 里跑起 VADAR 的依赖</li>
+<li><strong>目标</strong>：在 Windows 原生 Python 里建起视觉栈依赖</li>
 <li><strong>输入</strong>：本机（Windows 11 + 4060 Laptop 8GB + 驱动 560.76）</li>
-<li><strong>输出</strong>：<code>vadar</code> conda/venv 环境，SAM2/UniDepth/GroundingDINO 全部 <code>pip install -e .</code> 成功</li>
-<li><strong>代码位置</strong>：<code>scripts/setup_wsl.sh</code>；<code>vendor/VADAR/setup.sh</code> 为参考</li>
+<li><strong>输出</strong>：<code>venvs/vision</code>（Python 3.12）+ <code>phase0/requirements-vision.lock.txt</code>（74 个固定版本）</li>
+<li><strong>代码位置</strong>：<code>phase0/01_setup_windows.ps1</code>（venv → torch → 依赖 → UniDepth → 自检 → 锁文件，一条脚本）</li>
 <li><strong>需要 GPU</strong>：是（验证 torch.cuda）</li>
 <li><strong>4060 能否</strong>：✅</li>
 <li><strong>需要租卡</strong>：否</li>
-<li><strong>主要风险</strong>：① 原生 Windows <strong>跑不通</strong>（<code>signal.SIGALRM</code>，<code>engine.py:594</code>）→ 必须 WSL2；② <code>setup.sh</code> 里 <code>torch==2.2.0+cu122</code> 对驱动 560.76/CUDA 12.6 兼容（向下兼容），但 xformers 0.0.24 可能报 kernel 错，可先不装 xformers；③ Python 必须是 3.10（本机 3.13 太高，GroundingDINO/UniDepth 编译会挂）；④ <code>requirements.txt</code> 缺 <code>pandas</code>（<code>engine.py:5</code> 用到），需手动补</li>
-<li><strong>完成标准</strong>：<code>python -c "import torch,sam2,unidepth,groundingdino; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"</code> 输出 <code>True NVIDIA GeForce RTX 4060 Laptop GPU</code></li>
+<li><strong>主要风险</strong>：① ~~原生 Windows 跑不通~~ <strong>已推翻</strong> —— 三个视觉模型改走 transformers 原生纯 PyTorch 实现，不再需要 Unix 信号与 CUDA 编译链；② <code>xformers</code> / <code>triton</code> <strong>不需要装</strong>（UniDepth 里每一处 import 都在 <code>try/except ImportError</code> 内，attention 有 SDPA 回落）；③ Python 必须 ≥3.10（本机用 3.12）；④ 单条命令约 121 秒被杀 ⟹ 长步骤必须拆开跑</li>
+<li><strong>完成标准</strong>：<code>verify_env.py</code> 通过 —— CUDA 可用、认到 4060 Laptop 8188 MiB / sm_89、<code>import UniDepthV2</code> 成功</li>
 </ul>
 <hr />
-<h3 id="phase-1-vadar">Phase 1 — VADAR 原始版本跑通（<strong>基础设施已完成，等一次实跑</strong>）</h3>
+<h3 id="phase-1-2026-09-20">Phase 1 — ~~上游原版跑通~~ <strong>已移除</strong>（2026-09-20）</h3>
 <ul>
-<li><strong>目标</strong>：用 GPT-4o 跑通一小批题，拿到可对照的基线数字和显存曲线</li>
-<li><strong>输入</strong>：Omni3D-Bench（<strong>实测 501 题 / 201 图</strong>，来自 HF <code>dmarsili/Omni3D-Bench</code>）</li>
-<li><strong>输出</strong>：<code>results/&lt;arm&gt;/&lt;timestamp&gt;/</code>（<code>execution.csv</code>、<code>results.txt</code>、<code>trace.html</code>）</li>
-<li><code>results/&lt;arm&gt;/</code> 三个稳定入口：<code>subset.json</code>（题集，复现用）/
-  <code>latest_run.json</code>（<strong>只有真进过流水线的 run</strong>）/ <code>latest_plan.json</code> / <code>latest_failed.json</code>
-  —— 三者的分流规则见 §24.5，别合并回一个文件名</li>
-<li><strong>代码位置</strong>：<code>evaluation/runner.py</code>（包装 <code>vendor/VADAR/evaluate.py</code> 的四段流水线）</li>
-<li><strong>需要 GPU</strong>：是</li>
-<li><strong>4060 能否</strong>：✅（Omni3D 路径，无 Molmo）</li>
-<li><strong>需要租卡</strong>：否（只用一个 cheap API key 跑 ~20 题）</li>
-<li><strong>主要风险</strong>：
-  ① <code>predefined_modules.py:17</code> 有 <code>from VADAR.prompts.vqa_prompt import ...</code>
-     → <strong>repo 目录名必须是 <code>VADAR</code></strong>，否则 ImportError（<code>vadar_compat</code> 会显式检查这一条）；
-  ② 首次跑会一次性加载模型，注意实测峰值显存；
-  ③ API 费用 —— 先用 <code>--num-questions 20 --num-api-questions 3</code> 控制；
-  ④ <strong>Windows 没有 <code>signal.SIGALRM</code></strong>，原版在 <code>agents.py:572</code> / <code>engine.py:594</code>
-     用它设执行超时 → 由 <code>evaluation/win_alarm.py</code> 替代（<strong>有明确降级</strong>：
-     两条替代路径都不能可靠打断不返回的长 C 调用，详见该模块 docstring）；
-  ⑤ 原版 import 编译版 <code>groundingdino</code> / <code>sam2</code> / <code>openai</code>，本机都没装
-     → 由 <code>evaluation/vadar_compat.py</code> 提供功能性 stub（GDINO 转发给
-     transformers 版 <code>grounding-dino-tiny</code>），<strong>vendor 一字未改</strong>。</li>
-<li><strong>完成标准</strong>：<code>results.txt</code> 里有 Accuracy 输出；<code>trace.html</code> 能在浏览器里看到逐步执行轨迹；
-  拿到 <code>latest_run.json</code> 里的四类子指标 + Total</li>
-<li><strong>顺带完成</strong>：~~确认 Omni3D-Bench 的 annotations.json 是否含 3D 标注~~
-  → <strong>已完成且结论为否</strong>（2026-09-17，见 §24.1）：只有 (图, 问, 答) 六列，
-  没有 GT 相机也没有深度。指标 5（三维尺寸）<strong>不能</strong>用这个基准的 GT 做，
-  需要另找带标定的数据源。</li>
+<li><strong>原目标</strong>：用 GPT-4o 跑通一小批题，拿到可对照的基线数字与显存曲线</li>
+<li><strong>现状</strong>：该臂依赖的上游检出与配套兼容层脚本已于 2026-09-20 一并移出仓库
+  （<code>evaluation/</code> 下与之相关的三个文件不再存在）。早期 6 次真跑留在 <code>results/A/</code>，但<strong>已不可复现</strong> ——
+  只能当「当时跑过什么」的记录，<strong>不能当可复现的对照臂</strong>。</li>
+<li><strong>仍然有效、与上游无关的前置工作</strong>：</li>
+<li>题集：Omni3D-Bench（<strong>实测 501 题 / 201 图</strong>，来自 HF <code>dmarsili/Omni3D-Bench</code>）</li>
+<li>产物契约：<code>results/&lt;arm&gt;/</code> 下的四个稳定入口 <code>subset.json</code> / <code>latest_run.json</code> /
+    <code>latest_plan.json</code> / <code>latest_failed.json</code>，分流规则见 §24.5</li>
+<li>抓取与展开（都已落盘，不必重跑）：</li>
 </ul>
-<p><strong>一次性前置</strong>（都已落盘，不必重跑）：</p>
 <pre class="code"><code class="language-bash"># 1) 抓 parquet（106.5 MB，hf-mirror，约 23 s）
 venvs/vision/Scripts/python.exe dataset/builders/fetch_omni3d_bench.py
 
-# 2) 展开成 VADAR 期望的目录布局（annotations.json + images/，501 题 / 201 图 / 95 MB）
-#    只依赖 pyarrow，用任意带 pyarrow 的解释器都行（本项目用 anaconda 的）
+# 2) 展开成评测期望的目录布局（annotations.json + images/，501 题 / 201 图 / 95 MB）
 D:/Users/ROG/anaconda3/python.exe dataset/builders/read_omni3d_bench.py
-
-# 3) 前检查（不需要 key、不加载模型）
-venvs/vision/Scripts/python.exe evaluation/runner.py --plan --num-questions 20
-
-# 4) 实跑
-powershell -ExecutionPolicy Bypass -File phase0/06_deepseek_setup.ps1   # 注入 key
-venvs/vision/Scripts/python.exe evaluation/runner.py --arm A --num-questions 20
 </code></pre>
+<ul>
+<li><strong>顺带完成</strong>：确认 Omni3D-Bench 的 annotations.json <strong>不含 3D 标注</strong>（2026-09-17，见 §24.1）：
+  只有 (图, 问, 答) 六列，没有 GT 相机也没有深度 ⟹ 指标 5（三维尺寸）<strong>不能</strong>用它的 GT 做，
+  需要另找带标定的数据源。</li>
+</ul>
 <hr />
 <h3 id="phase-1b-2026-09-16">Phase 1b — 自建骨架：场景图 + 工具库 + 信封（2026-09-16 <strong>已完成</strong>）</h3>
 <blockquote>
-<p>对应 §8 阶段路线里的「1 跑通自建最小 pipeline」。它先于「VADAR 原版跑通」完成，
+<p>对应 §8 阶段路线里的「1 跑通自建最小 pipeline」。它先于上游原版对照臂的搭建完成，
 因为原版对照臂（路径 A）只影响基线数字，而骨架决定后面所有 Phase 的代码结构。</p>
 </blockquote>
 <ul>
@@ -3414,8 +2928,8 @@ venvs/vision/Scripts/python.exe evaluation/runner.py --arm A --num-questions 20
 <p><strong>四处实现层面的裁决（值得写进报告）</strong></p>
 <ol>
 <li><strong><code>ToolResult.__post_init__</code> 强制「失败必须带 <code>ToolError</code>」</strong> —— 于是「静默失败」这个对象
-   在类型层面构造不出来。VADAR 的 <code>engine.py:292-303</code> 正是在这里失守：命名空间里没有
-   <code>final_result</code> 就取 <code>""</code>，不报错、不算失败，直接拿去评分。</li>
+   在类型层面构造不出来。早期参考实现正是在这里失守：命名空间里没有 <code>final_result</code>
+   就取 <code>""</code>，不报错、不算失败，直接拿去评分。</li>
 <li><strong>恢复动作也枚举化。</strong> <code>ErrorCode → Recovery</code> 的映射写死在代码里
    （<code>NOT_IN_SCENE → read_scene</code>、<code>AMBIGUOUS → add_constraint</code> …），
    <code>to_dict()</code> 会把它一并输出给模型。模型不必猜「出错了该怎么办」。</li>
@@ -3431,37 +2945,30 @@ venvs/vision/Scripts/python.exe evaluation/runner.py --arm A --num-questions 20
 （<code>{value, metric, method}</code>，实现 <code>__bool__</code>）。理由见 §13.3(4) 的修订说明。</p>
 <p><strong>顺带确认的方法学事实</strong>：<code>scene_graph/tests/test_relations.py</code> 与 <code>tests/test_tools.py</code>
 全程 0.34 秒、不需要 GPU、不需要联网。<strong>这就是「关系可单测」这条架构收益的实测形态</strong> ——
-VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型调用，既不确定也无法写断言。</p>
+早期参考实现的对应能力是一次 <code>vqa(image, question, bbox)</code> 模型调用，既不确定也无法写断言。</p>
 <hr />
-<h3 id="phase-2-vadar-agent-architecture">Phase 2 — 彻底理解 VADAR Agent architecture</h3>
+<h3 id="phase-2-agent-architecture-2">Phase 2 — ~~彻底理解上游 Agent architecture~~ <strong>已并入 §2</strong></h3>
 <ul>
-<li><strong>目标</strong>：不是"读过"，而是能<strong>预测</strong>它的行为并且能手工修复它</li>
-<li><strong>输入</strong>：Phase 1 的 trace.html 和 api.json</li>
-<li><strong>输出</strong>：一份《VADAR 机制解剖笔记》+ 至少 3 个亲手验证的 bug 报告</li>
-<li><strong>代码位置</strong>：<code>agents/agents.py</code>、<code>engine/engine.py</code>、<code>engine/predefined_modules.py</code>、<code>prompts/*</code></li>
-<li><strong>需要 GPU</strong>：部分（验证 bug 时要跑）</li>
-<li><strong>4060 能否</strong>：✅</li>
-<li><strong>需要租卡</strong>：否</li>
-<li><strong>主要风险</strong>：容易"以为自己懂了"。检验方法：<strong>不看代码，手写画出 Signature→API→Program→Engine 的数据流，并标出每一处 LLM 调用和每一处 exec</strong></li>
-<li><strong>完成标准</strong>：能独立解释并复现以下 4 个已发现的问题（我已定位到行，你需自行验证）：
-  1. <code>SignatureAgent</code> 的 <code>dataset</code> 恒为 <code>"clevr"</code>（<code>agents.py:54</code> + <code>agents.py:42</code>）→ Omni3D 用了 CLEVR 的 signature prompt（<code>agents.py:117</code>）
-  2. <code>Get2DObjectSize.execute_pts</code> 调用了自己没定义的 <code>self._get_bbox</code>（<code>predefined_modules.py:550</code>，类定义在 <code>:512</code>，<code>_get_bbox</code> 只在 <code>VQAModule:245</code> 和 <code>SameObjectModule:422</code> 有）→ CLEVR/GQA 点路径会 AttributeError
-  3. <code>Generator</code> 出错时 <code>time.sleep(60)</code> 无限递归（<code>engine_utils.py:94-96</code>）
-  4. <code>Generator</code> 不支持 <code>base_url</code>（<code>engine_utils.py:52-57</code>）
-  <strong>你能独立发现并解释第 5 个问题，就说明你真的掌握了。</strong></li>
+<li><strong>原目标</strong>：不是「读过」，而是能<strong>预测</strong>它的行为并手工修复它</li>
+<li><strong>现状</strong>：该检出已移出本仓库，逐类拆解与行号引用无法复核，故压缩合并进 <strong>§2</strong>
+  （评估结论与弃用理由）。原审计还发现了一批它的实现缺陷（含一处「默认数据集恒为
+  <code>clevr</code>」、一处方法名正则被返回值注解击穿、一处异常处理无限递归不设上限），
+  这些发现的<strong>用处不在于「读懂它」</strong>，而在于它们直接指出了三类必须避开的设计：
+  ① 动作空间要显式白名单化；② 提交要用契约而不是魔法变量；③ 视觉语义与空间几何必须拆开。
+  三条都写进了 §2.3 与 §13.3。</li>
 </ul>
 <hr />
 <h3 id="phase-3-llm">Phase 3 — 接入开源 LLM</h3>
 <ul>
 <li><strong>目标</strong>：把三个文本 Agent + <code>vqa()</code> 全部指向本地 Qwen3.5-4B</li>
 <li><strong>输入</strong>：Phase 2 的机制笔记</li>
-<li><strong>输出</strong>：一个能跑 Qwen 的 VADAR；实验臂 <strong>B</strong> 的初步数字</li>
-<li><strong>代码位置</strong>：<code>llm/adapter.py</code>（新）；补丁打在 <code>engine/engine_utils.py:51-107</code>、<code>engine/predefined_modules.py:226</code>、<code>agents/agents.py:39,52,213,729</code></li>
+<li><strong>输出</strong>：一个把文本 Agent 与视觉语义都指向开源模型的流水线；实验臂 <strong>B</strong> 的初步数字</li>
+<li><strong>代码位置</strong>：<code>llm/adapter.py</code>（OpenAI 兼容客户端，含双端点路由）、<code>llm/render.py</code>（提示词渲染）、<code>llm/vlm.py</code>（视觉语义）</li>
 <li><strong>需要 GPU</strong>：是（LLM 推理）</li>
 <li><strong>4060 能否</strong>：✅（Qwen3.5-4B 4bit）</li>
 <li><strong>需要租卡</strong>：否。<strong>如果要对照 9B，可以租一次 4090 24GB 跑一夜</strong>（可选）</li>
-<li><strong>主要风险</strong>：① <strong>vLLM 的 tool-call/reasoning parser 名字随版本变</strong>，先查你装到的版本的文档；② 视觉栈与 LLM 必须<strong>分 venv 分进程</strong>（见 §6）；③ VLM 请求必须真的走多模态（否则 <code>vqa</code> 静默变差）；④ 中文 prompt 可能让模型在英文 benchmark 上输出中文——<strong>系统提示里强制英文输出</strong></li>
-<li><strong>完成标准</strong>：同一批 20 题在 GPT-4o 与 Qwen3.5-4B 上跑通，产出<strong>实验臂 A vs B 的对照表</strong>（哪怕 B 更差——「更差多少」本身就是有价值的结论）</li>
+<li><strong>主要风险</strong>：① <strong>vLLM 的 tool-call/reasoning parser 名字随版本变</strong>，先查你装到的版本的文档；② 视觉栈与 LLM 必须<strong>分 venv 分进程</strong>（见 §2.5）；③ VLM 请求必须真的走多模态（否则 <code>vqa</code> 静默变差）；④ 中文 prompt 可能让模型在英文 benchmark 上输出中文——<strong>系统提示里强制英文输出</strong></li>
+<li><strong>完成标准</strong>：同一批 20 题在云端强模型与 Qwen3.5-4B 上跑通，产出<strong>对照表</strong>（哪怕开源模型更差 ——「差多少」本身就是有价值的结论）</li>
 </ul>
 <hr />
 <h3 id="phase-4-4060">Phase 4 — 4060 本地运行视觉模型（显存工程）</h3>
@@ -3473,7 +2980,7 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <li><strong>需要 GPU</strong>：是</li>
 <li><strong>4060 能否</strong>：✅</li>
 <li><strong>需要租卡</strong>：否</li>
-<li><strong>主要风险</strong>：① VADAR 三个模型同时驻留可能刚好触顶 → 必须实测，超了就用 <code>torch.cuda.empty_cache()</code> + 分段加载；② <code>torch.autocast</code> 全局开在 bf16（<code>engine_utils.py:221</code>），而 GroundingDINO 内部又用 fp16（<code>predefined_modules.py:185</code>）——<strong>混精度可能造成数值差异，需记录</strong>；③ WSL2 显存有额外开销</li>
+<li><strong>主要风险</strong>：① ~~三个模型同时驻留可能触顶~~ <strong>已实测关闭</strong> —— 同时驻留只占 1200 MB / 14.7%，峰值 2177 MB（§2.5、§20 Step 0.5b）；② 混合精度（<code>torch.autocast</code> 的 bf16 与 GroundingDINO 内部的 fp16）<strong>可能造成数值差异，需记录</strong>；③ 无 WSL，不存在额外宿主开销</li>
 <li><strong>完成标准</strong>：单张图跑完整 L1 感知链且<strong>峰值显存 &lt; 7 GB</strong>；产出可复现的显存实测表（附测量脚本）</li>
 </ul>
 <hr />
@@ -3498,7 +3005,7 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
   的对照实测见 <strong>§11.1.1</strong>。</li>
 <li><strong>主要风险</strong>：① <strong>单目深度的尺度漂移</strong>——<code>get_3d_position</code> 返回的绝对值可能系统性偏大/偏小，必须先做 <code>calibrate_scale</code> 并如实报告；② <code>up_axis</code> 估计不稳 → <code>above/below</code> 最不可靠；③ <code>left_of</code> 在相机有 roll 时不成立，需在文档里写成<strong>显式假设</strong></li>
 <li><strong>完成标准</strong>：<code>pytest</code>（<strong>仓库根</strong>，不是 <code>pytest tests/</code> —— 后者会静默少收 67 例，
-  <code>scene_graph/tests/</code> 是独立一套）全绿；在同一批标注数据上，<code>get_3d_extent</code> 的相对误差<strong>优于</strong> VADAR 的 <code>2D_size × depth</code> 基线（这是创新点 1 的核心证据）</li>
+  <code>scene_graph/tests/</code> 是独立一套）全绿；在同一批标注数据上，<code>get_3d_extent</code> 的相对误差<strong>优于</strong>参考实现的 <code>2D_size × depth</code> 基线（这是创新点 1 的核心证据）</li>
 <li><strong>诚实要求</strong>：如果实验显示它没变好，<strong>照实写</strong>，并分析原因（这比强行报喜更有学分）</li>
 </ul>
 <hr />
@@ -3611,7 +3118,7 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <li><strong>4060 能否</strong>：✅</li>
 <li><strong>需要租卡</strong>：否</li>
 <li><strong>主要风险</strong>：① 现场环境炸 → <strong>必须录一份 Demo 视频备份</strong>；② 网络 → 用完全离线档 C；③ 被问「创新点 3 个里哪个最强」→ 提前想好答案</li>
-<li><strong>完成标准</strong>：能脱稿回答「你和 VADAR 的差别是什么」——标准答案：<strong>VADAR 用深度标量近似 3D，我们用点云做真实 3D；VADAR 靠 LLM 生成代码，我们建立了确定性几何中间层；VADAR 只能用闭源大模型，我们证明了 4B 开源模型 + 自建数据 + 本地 QLoRA 的可行性。</strong></li>
+<li><strong>完成标准</strong>：能脱稿回答「你和参考实现的差别是什么」——标准答案：<strong>它用深度标量近似 3D，我们用点云做真实 3D；它靠 LLM 一次性生成代码，我们建立了确定性几何中间层；它只能用闭源大模型，我们证明了 4B 开源模型 + 自建数据 + 本地 QLoRA 的可行性。</strong></li>
 </ul>
 <hr />
 <h2 id="19">19. 风险点（按「会毁掉项目的程度」排序）</h2>
@@ -3628,24 +3135,24 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <tbody>
 <tr>
 <td>1</td>
-<td><strong>4B 模型扛不住 VADAR 的程序合成</strong></td>
+<td><strong>4B 模型扛不住程序合成</strong></td>
 <td>🔴 致命</td>
 <td>Stage A/B 标签吐不出来，或程序 <code>compile()</code> 失败</td>
 <td><strong>Step 0.8 一次性测掉</strong>。若失败，把失败样本记成 QLoRA 的负例种子，微调动机从"提分"改为"让流程能跑通"</td>
 </tr>
 <tr>
 <td>2</td>
-<td><strong>原生 Windows 跑不通 VADAR 本体</strong></td>
-<td>🔴 致命</td>
-<td><code>AttributeError: module 'signal' has no attribute 'SIGALRM'</code></td>
-<td><strong>Phase 0 就上 WSL2</strong>；但本地 LLM 与协议测试<strong>不必</strong>等 WSL</td>
+<td>~~原生 Windows 跑不通上游本体~~</td>
+<td>✅ <strong>已关闭</strong></td>
+<td>—</td>
+<td>该检出已移除；自研执行器用<strong>独立计时线程强杀</strong>做超时，不碰 <code>signal</code>，全程 Windows 原生</td>
 </tr>
 <tr>
 <td>3</td>
-<td><strong>目录名必须是 <code>VADAR</code></strong></td>
-<td>🔴 致命</td>
-<td><code>ModuleNotFoundError: No module named 'VADAR'</code></td>
-<td><code>predefined_modules.py:19</code> 硬编码包名；<code>vendor/VADAR/</code> 保持原名</td>
+<td>~~上游目录名被硬编码~~</td>
+<td>✅ <strong>已关闭</strong></td>
+<td>—</td>
+<td>检出已移除，不再有这项约束</td>
 </tr>
 <tr>
 <td>4</td>
@@ -3663,17 +3170,17 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 </tr>
 <tr>
 <td>6</td>
-<td><strong><code>agents.py:89</code> 注解陷阱</strong></td>
+<td><strong>注解陷阱</strong></td>
 <td>🟠 高</td>
 <td><code>AttributeError: 'NoneType' object has no attribute 'group'</code></td>
-<td>正则要求字面量 <code>):</code>，模型写 <code>-&gt; float:</code> 就崩；<code>05_probe_vadar_prompt.py</code> 会单列这项；容错层在 <code>03_vadar_llm_bridge.py</code></td>
+<td>方法名正则要求后面是字面量 <code>):</code>，模型写 <code>-&gt; float:</code> 就会击穿；<strong>提示词约束必须保留</strong>（§8.6 的实测：这三次没触发 ≠ 不存在）</td>
 </tr>
 <tr>
 <td>7</td>
 <td><strong>单目深度尺度漂移</strong></td>
 <td>🟠 高</td>
 <td>距离数值整体偏大/偏小</td>
-<td><code>calibrate_scale</code> + 如实报告；评测用相对误差与 MRA</td>
+<td><strong>内参外部给定</strong>（§21–§23）+ 如实报告；评测用相对误差与 MRA。⚠ 早期的 <code>calibrate_scale</code> 方案<strong>已撤销</strong>（各向异性）</td>
 </tr>
 <tr>
 <td>8</td>
@@ -3712,10 +3219,10 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 </tr>
 <tr>
 <td>13</td>
-<td><strong><code>Get2DObjectSize</code> 的 bug</strong></td>
-<td>🟡 中</td>
-<td>CLEVR/GQA 点路径 AttributeError</td>
-<td>自己打补丁（记录进 <code>PATCHES.md</code>），或干脆不走 CLEVR 支线</td>
+<td>~~上游预定义工具的一个 bug~~</td>
+<td>✅ <strong>已关闭</strong></td>
+<td>—</td>
+<td>上游检出已移除；我们的工具库不复用其实现</td>
 </tr>
 <tr>
 <td>14</td>
@@ -3726,10 +3233,10 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 </tr>
 <tr>
 <td>15</td>
-<td><strong><code>Generator</code> 无限重试挂死</strong></td>
-<td>🟡 中</td>
-<td>脚本卡住无输出 60s+</td>
-<td>改成有限重试 + 超时（<code>engine_utils.py:94-96</code>）</td>
+<td>~~上游 LLM 封装无限重试挂死~~</td>
+<td>✅ <strong>已关闭</strong></td>
+<td>—</td>
+<td>上游检出已移除；我们的 <code>llm/adapter.py</code> 自带重试上限与超时</td>
 </tr>
 <tr>
 <td>16</td>
@@ -3763,20 +3270,20 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <li>Qwen3.5 在 LoRA 场景下的 <code>target_modules</code> 名称未验证</li>
 <li>Omni3D-Bench 是否提供 3D 坐标真值，<strong>需在 Phase 1 验证</strong>（README 展示的字段里没有）</li>
 <li>vLLM 的 <code>--tool-call-parser</code> 具体取值随版本变化</li>
-<li>我<strong>没有</strong>在 4060 上实际跑过 VADAR（本机只有源码和驱动），全部显存/性能判断都是基于代码结构和模型规格的推断</li>
+<li>~~全部显存/性能判断都基于代码结构与模型规格的推断~~ <strong>部分已更新</strong>：三个视觉模型的显存与延迟已实测（§2.5、§20 Step 0.5）；但<strong>上游原版本体从未在本机跑过</strong>，且该检出已移除 ⟹ 实验臂 A 的数字不可复现</li>
 <li><strong><code>qwen3.5</code> 的 4B/8B 磁盘体积与模态已核实</strong>（来自 Ollama 官方库页），但<strong>推理时的真实显存占用与延迟尚未实测</strong> —— 这正是 Phase 0.7 做完要拿到的数字</li>
 <li><code>04_install_ollama.ps1</code> 里 <code>OllamaSetup.exe</code> 的静默安装参数<strong>未经核实</strong>：脚本优先走 <code>winget</code>，回落路径若弹出安装界面属正常现象</li>
 </ol>
 <hr />
 <h2 id="20">20. 第一阶段具体操作</h2>
 <blockquote>
-<p><strong>2026-09-15 更新：WSL2 已从「必须」降为「可选」。</strong> 早先把它列为硬前提，依据是 <code>signal.SIGALRM</code> 与 UniDepth 的 <code>triton</code>/<code>xformers</code> 依赖。逐文件复核后，两条依据都被推翻：</p>
+<p><strong>2026-09-15 起更新：WSL2 已从「必须」降为「不需要」。</strong> 早先把它列为硬前提，依据是 <code>signal.SIGALRM</code> 与 UniDepth 的 <code>triton</code>/<code>xformers</code> 依赖。逐文件复核后，两条依据都被推翻：</p>
 <ul>
-<li><strong><code>signal.SIGALRM</code> / <code>signal.alarm</code></strong>（<code>engine/engine.py:594</code>、<code>agents/agents.py:572</code>）只堵住 <strong>VADAR 自己的 Engine</strong>。本方案走路径 B（借骨架自建），执行器换成 <code>multiprocessing</code> + <code>join(timeout)</code>，跨平台且能拿退出码，<strong>该约束归零</strong>。</li>
+<li><strong><code>signal.SIGALRM</code> / <code>signal.alarm</code></strong> 只堵住上游自己的 Engine。我们的执行器不碰 <code>signal</code>，改用<strong>独立计时线程强杀</strong>子进程，跨平台且能拿退出码，<strong>该约束归零</strong>。</li>
 <li><strong><code>triton</code> / <code>xformers</code> 不是硬依赖</strong>。UniDepth 是纯 Python 包（<code>pyproject.toml</code> 用 <code>setuptools.build_meta</code>，无 <code>ext_modules</code>），而这两个包的<strong>每一处 import 都在 <code>try/except ImportError</code> 内</strong>：<code>backbones/metadinov2/attention.py:21</code>、<code>block.py:26</code>、<code>swiglu_ffn.py:37</code>、<code>layers/nystrom_attention.py:9</code>。其中 attention 有干净的 <code>F.scaled_dot_product_attention</code> 回落，源码注释原话是 <em>"new pytorch have good attn efficient, no need for xformers"</em>。而 <code>triton</code> 在 Windows 上根本没有官方轮子。</li>
 <li><strong>GroundingDINO / SAM2 无需现场编译</strong>：改用 transformers 内置的纯 PyTorch 实现（<code>GroundingDinoForObjectDetection</code>、<code>Sam2Model</code>）。</li>
 </ul>
-<p><strong>所以 WSL2 只在一种情况下仍然需要</strong>：你想跑「路径 A」—— 把原版 VADAR 本体作为基线臂。走路径 B（推荐）完全不需要它，也就不需要重启。</p>
+<p>⟹ <strong>现在全程 Windows 原生，不需要 WSL2。</strong> 2026-09-20 进一步确认：唯一曾需要它的场景（跑上游原版本体）也随检出移除而消失。</p>
 </blockquote>
 <table>
 <thead>
@@ -3804,8 +3311,8 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <td>❌</td>
 </tr>
 <tr>
-<td>P2</td>
-<td>Step 0.1 装 WSL2（<strong>仅路径 A / 原始 VADAR 基线需要</strong>，要重启一次）</td>
+<td>~~P2~~</td>
+<td>~~Step 0.1 装 WSL2~~ —— <strong>已作废</strong>（不需要 WSL，也不再跑上游原版）</td>
 <td>—</td>
 <td>—</td>
 <td>❌</td>
@@ -3830,32 +3337,51 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <p><strong>P0 两项排最前</strong>：它们回答的是「UniDepth 的 <code>points</code> 到底是不是真几何」—— 这是创新点 1 的地基，也是全项目唯一无法靠推理回答的问题。零成本、零等待、不用重启。</p>
 <p><strong>Step 0.7 / 0.8 为什么挂起</strong>：微调既然不是硬性要求（见 §9.4），「4B 模型能不能守住协议」就不再是阻塞项。云端模型更强，先用云端把 pipeline 跑通；微调退为加分支线，若日后发现云端也守不住协议再升回来。</p>
 </blockquote>
-<h3 id="step-01-wsl2-ubuntu-a-vadar-3060">Step 0.1 — 装 WSL2 + Ubuntu（<strong>可选</strong>：仅「路径 A / 原版 VADAR 基线」需要，约 30–60 分钟含一次重启）</h3>
+<h3 id="step-01-wsl2-ubuntu-2026-09-20">Step 0.1 — ~~装 WSL2 + Ubuntu~~ <strong>已作废</strong>（2026-09-20）</h3>
 <blockquote>
-<p><strong>走路径 B 的话，这一整步可以跳过。</strong> 保留它是因为：如果你在 §16 消融表里想跑「原版 VADAR 流水线」作为对照臂，那一步必须进 WSL。
-判断方法：<strong>你不需要它来跑视觉栈，也不需要它来跑 LLM。</strong> 只需要问自己「要不要跑 VADAR 自己的 Engine」。</p>
+<p>这一步依赖的脚本（<code>phase0/00_install_wsl.ps1</code>、<code>01_setup_ubuntu.sh</code>）与上游检出已一并
+移出本仓库。<strong>视觉栈与 LLM 现在全程 Windows 原生运行</strong>（见 Step 0.3）。
+原始操作步骤保留在 git 历史里，需要时按 commit 取回。</p>
 </blockquote>
-<p>已实测确认：<strong>WSL 尚未安装</strong>（<code>HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss</code> 无键，<code>HypervisorPresent = False</code>），所以这一步是真的从零开始。</p>
-<p><strong>不要手敲命令，用已经写好的脚本</strong>（Windows 侧，<strong>管理员</strong> PowerShell）：</p>
+<details><summary>原文（已作废的 WSL 安装步骤）</summary>
+
+
+> **走路径 B 的话，这一整步可以跳过。** 保留它是因为：如果你在 §16 消融表里想跑上游原版流水线作为对照臂，那一步必须进 WSL。
+> 判断方法：**你不需要它来跑视觉栈，也不需要它来跑 LLM。** 只需要问自己「要不要跑上游自己的 Engine」。
+
+已实测确认：**WSL 尚未安装**（`HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss` 无键，`HypervisorPresent = False`），所以这一步是真的从零开始。
+
+**不要手敲命令，用已经写好的脚本**（Windows 侧，**管理员** PowerShell）：
+
+
 <pre class="code"><code class="language-powershell">powershell -ExecutionPolicy Bypass -File D:\3D_Spatial_Agent\phase0\00_install_wsl.ps1
 </code></pre>
-<p>这个脚本做了 4 件手敲容易漏的事：
-1. <strong>管理员权限自检</strong> —— 不是管理员直接退出并给出提示
-2. <strong>磁盘护栏</strong> —— 检查 D 盘剩余空间（实测 381 GB，充裕）
-3. <strong>装到 <code>D:\WSL</code> 而不是默认位置</strong> —— C 盘只剩 <strong>21.8 GB</strong>，WSL + CUDA + 权重 + 数据集要 60–90 GB，装 C 盘必然爆
-4. <strong>重启门禁</strong> —— 检测到 hypervisor 没起来时会<strong>主动停下并让你重启</strong>，而不是报一个看不懂的错；重启后再跑一次同一个脚本即可继续</p>
-<p><code>wsl --version</code> / <code>wsl --list</code> 在本机被 WorkBuddy 沙箱的程序黑名单拦截了，所以脚本里改用 <code>-q</code> 静默调用并配合注册表判断，避免依赖被拦的输出。</p>
-<p>重启后进 Ubuntu 设好用户名密码，<strong>验证 CUDA 直通</strong>（驱动 560.76 已满足 WSL2 CUDA 要求）：</p>
+
+
+这个脚本做了 4 件手敲容易漏的事：
+1. **管理员权限自检** —— 不是管理员直接退出并给出提示
+2. **磁盘护栏** —— 检查 D 盘剩余空间（实测 381 GB，充裕）
+3. **装到 `D:\WSL` 而不是默认位置** —— C 盘只剩 **21.8 GB**，WSL + CUDA + 权重 + 数据集要 60–90 GB，装 C 盘必然爆
+4. **重启门禁** —— 检测到 hypervisor 没起来时会**主动停下并让你重启**，而不是报一个看不懂的错；重启后再跑一次同一个脚本即可继续
+
+`wsl --version` / `wsl --list` 在本机被 WorkBuddy 沙箱的程序黑名单拦截了，所以脚本里改用 `-q` 静默调用并配合注册表判断，避免依赖被拦的输出。
+
+重启后进 Ubuntu 设好用户名密码，**验证 CUDA 直通**（驱动 560.76 已满足 WSL2 CUDA 要求）：
+
+
 <pre class="code"><code class="language-bash">nvidia-smi        # 应看到 RTX 4060 Laptop GPU, 8188MiB
 </code></pre>
-<p>不要在 WSL 内装显卡驱动 —— WSL 里的 CUDA 走 Windows 侧驱动。</p>
-<h3 id="step-02-5">Step 0.2 — 确认项目目录（约 5 分钟）</h3>
+
+
+不要在 WSL 内装显卡驱动 —— WSL 里的 CUDA 走 Windows 侧驱动。
+
+</details>
+
+<h3 id="step-02">Step 0.2 — 项目目录与环境变量</h3>
 <p><strong>项目根目录已迁移到 D 盘</strong>（C 盘仅剩 21.8 GB，装不下 WSL + CUDA + 权重 + 数据集）：</p>
 <pre class="code"><code>D:\3D_Spatial_Agent\                        ← 项目根（Windows）
 ├── docs/                                   ← 本文档
 ├── vendor\
-│   ├── VADAR/                              ← 原始 VADAR 源码（只读参考）
-│   │       HEAD = 56018ebc2ecf7a430fc94e64e80e2768b0931739 (2025-06-16)
 │   └── UniDepth/                           ← UniDepth 源码（git clone --depth 1）
 ├── venvs\vision\                           ← 视觉栈虚拟环境（Python 3.12）
 ├── .cache\
@@ -3870,20 +3396,14 @@ VADAR 的对应能力是 <code>vqa(image, question, bbox)</code>，一次模型�
 <blockquote>
 <p><strong>三个"引到 D 盘"的环境变量</strong>（脚本自动设置）：<code>PIP_CACHE_DIR</code>、<code>HF_HOME</code>、<code>HF_ENDPOINT</code>。
 前两个是为了不撑爆只剩 21.8 GB 的 C 盘 —— 光 torch 的 cu124 轮子就 2.4 GB，HF 权重还会再占几个 GB。</p>
-<p>在 WSL 里对应 <code>/mnt/d/3D_Spatial_Agent</code>。
-<strong>注意：目录名 <code>VADAR</code> 是有承重作用的</strong> —— <code>predefined_modules.py:17</code> 硬编码了 <code>from VADAR.prompts.vqa_prompt import ...</code>，改名就 ImportError。所以原来叫 <code>_vadar_src</code> 的那份，搬过来时顺手改成了正确的 <code>vendor/VADAR</code>。</p>
-<p><code>01_setup_ubuntu.sh</code> 不再硬编码任何 Windows 路径，改为从脚本自身位置推导项目根（<code>PROJECT_ROOT=$(dirname "$SCRIPT_DIR")</code>），<strong>以后整个目录再搬家都不用改脚本</strong>。</p>
-</blockquote>
-<pre class="code"><code class="language-bash"># 这一步不用你敲 —— 01_setup_ubuntu.sh 的第 3 步已经做了：
-#   cp -r $PROJECT_ROOT/vendor/VADAR ~/VADAR
-cd ~/VADAR
-ls    # 应看到 agents/ engine/ prompts/ evaluate.py setup.sh ...
-</code></pre>
-<blockquote>
-<p><strong>为什么不直接在 <code>/mnt/d</code> 上建 venv 和跑构建？</strong> 两点实测原因：
+<p>在 WSL 里对应 <code>/mnt/d/3D_Spatial_Agent</code>。</p>
+<p><strong>上游检出已于 2026-09-20 移出仓库</strong> —— <code>vendor/</code> 下现在只剩 <code>UniDepth/</code>。
+原来那一步「把上游源码复制进 WSL 家目录」及其配套的 <code>01_setup_ubuntu.sh</code>，随 WSL 路线
+一并作废；原始脚本与步骤保留在 git 历史里，需要时按 commit 取回。</p>
+<p><strong>为什么不直接在 <code>/mnt/d</code> 上建 venv 和跑构建？</strong> 两点实测原因（WSL 路线实测，路线本身已作废，但结论仍可供参考）：
 1. <code>/mnt/d</code> 是 9p 挂载，pip <code>-e</code> 构建和 torch import 会慢 3–10 倍；
 2. drvfs 不支持 POSIX 权限位，某些 install 和 git 操作会失败。</p>
-<p>所以分工是：<strong>D 盘放项目源码（我们的代码、脚本、文档），WSL ext4 放虚拟环境与编译产物（<code>~/VADAR</code>、<code>~/venvs/vadar</code>）</strong>。这也是官方推荐的做法。</p>
+<p>所以当时的做法是：<strong>D 盘放项目源码（我们的代码、脚本、文档），WSL ext4 放虚拟环境与编译产物</strong>。</p>
 </blockquote>
 <h3 id="step-03-python-windows">Step 0.3 — 建视觉栈 Python 环境（Windows 原生，一条脚本）</h3>
 <blockquote>
@@ -3943,7 +3463,7 @@ ls    # 应看到 agents/ engine/ prompts/ evaluate.py setup.sh ...
 </tr>
 </tbody>
 </table>
-<p><strong>torch 为什么用 2.6.0+cu124，而不是 VADAR <code>setup.sh:14</code> 的 2.2.0+cu122：</strong> 4060 Laptop 是 <strong>sm_89</strong>，需要 cu124 及以上的预编译内核；VADAR 那行会 <code>--force-reinstall</code> 把 torch 降级，在本机是倒退。</p>
+<p><strong>torch 为什么用 2.6.0+cu124，而不是上游锁的 2.2.0+cu122：</strong> 4060 Laptop 是 <strong>sm_89</strong>，需要 cu124 及以上的预编译内核；上游那行会 <code>--force-reinstall</code> 把 torch 降级，在本机是倒退。</p>
 <h4 id="curl-pip">关于大轮子：为什么用 curl 而不是让 pip 直接下（实测踩坑）</h4>
 <p>第一次执行时 <code>pip install torch==2.6.0 --index-url download.pytorch.org/whl/cu124</code> <strong>卡死了</strong>：进程存活但 18 分钟写入 0 字节（25 秒采样 0.00 MB/s，磁盘上找不到任何部分文件，日志停在 <code>Downloading torch...(2532.3 MB)</code> 不再增长）。</p>
 <p>排查后确认<strong>不是源的问题</strong>——对同一个 URL 发 3 MB 范围请求，返回 206，速度约 4.2 MB/s：</p>
@@ -4218,7 +3738,7 @@ $env:HF_HUB_DISABLE_XET = &quot;1&quot;
 </tr>
 <tr>
 <td><strong>排除</strong></td>
-<td>VADAR 的 <code>numpy==1.25.0</code></td>
+<td>上游参考实现的 <code>numpy==1.25.0</code></td>
 <td>❌</td>
 <td>与 UniDepth 的 <code>numpy&gt;=2.0.0</code> <strong>直接冲突</strong>；新路径取 2.x</td>
 </tr>
@@ -4227,7 +3747,7 @@ $env:HF_HUB_DISABLE_XET = &quot;1&quot;
 <blockquote>
 <p><strong><code>--no-deps</code> 是这条路的核心手法。</strong> 直接 <code>pip install -e vendor/UniDepth</code> 会去装 <code>triton</code> 然后失败；加 <code>--no-deps</code> 后由我们手工补齐上表「必须」列。</p>
 <p>手工补依赖必然有漏的风险 —— 这就是 <code>verify_env.py</code> 存在的理由：它立刻告诉你漏了哪个，而不是等到跑模型时才炸。</p>
-<p><strong>补充一个容易混淆的点：</strong> <code>sam2</code> 这个<strong>包</strong>在<strong>原版 VADAR</strong> 里是顶层 import（<code>predefined_modules.py:12-13</code>），跑 VADAR 本体必须装。但走路径 B 我们自己写视觉层，改用 <code>transformers</code> 的 <code>Sam2Model</code>，<strong>不 clone 也不装</strong> <code>facebookresearch/sam2</code>。</p>
+<p><strong>补充一个容易混淆的点：</strong> <code>sam2</code> 这个<strong>包</strong>在上游原版里是顶层 import，跑上游本体必须装。但我们的视觉层改用 <code>transformers</code> 的 <code>Sam2Model</code>，<strong>不 clone 也不装</strong> <code>facebookresearch/sam2</code>。</p>
 <p><strong>网络实测（2026-09-15 于本机，影响安装路径）：</strong></p>
 <table>
 <thead>
@@ -4315,12 +3835,12 @@ powershell -ExecutionPolicy Bypass -File D:\3D_Spatial_Agent\phase0\01c_fetch_gd
 <p>另外 <code>post_process_grounded_object_detection</code> 的<strong>关键字名在版本间变过</strong>（<code>box_threshold</code> → <code>threshold</code>），
 脚本用 <code>inspect.signature</code> 读真实签名再决定传哪个，不靠猜版本号。</p>
 </blockquote>
-<p><strong>注意：不要再用 <code>ModulesList(models_path="models", dataset="omni3d")</code> 做冒烟测试。</strong>
-<code>ModulesList.__init__</code> 会经由 <code>get_module_list</code> 构造 <code>VQAModule</code>（<code>:693</code>，<strong>Omni3D 分支也有它</strong>），
-而 <code>VQAModule</code> 会构造 <code>Generator</code>，而 <code>Generator.__init__</code> 的<strong>第一件事就是 <code>open(api_key_path)</code></strong>（<code>engine_utils.py:56</code>）—— 没有 <code>api.key</code> 文件，构造直接抛 <code>FileNotFoundError</code>。</p>
-<p><strong>这个约束仍然存在，但已经有解</strong>：<code>phase0/03_vadar_llm_bridge.py</code> 会在导入前替换掉 <code>Generator</code>，
-改成由环境变量驱动端点，不再依赖 <code>./api.key</code> 文件。等 WSL 就绪后在 <code>evaluate.py</code> 顶部插一行
-<code>bridge.install()</code> 即可。</p>
+<p><strong>注意：不要再用上游那套模块列表构造去做冒烟测试。</strong> 它会连带构造视觉问答模块，
+而那个模块的 LLM 封装在 <code>__init__</code> 里就要求一个本地密钥文件，没有就直接抛 <code>FileNotFoundError</code>。
+（该检出已移除，这条约束随之消失；下面的历史记录是当时的现场。）</p>
+<blockquote>
+<p><strong>历史记录</strong>：上游的模块列表构造会连带构造视觉问答模块，而它的 LLM 封装 <code>__init__</code> 第一件事就是 <code>open("./api.key")</code> —— 没有那个文件就直接 <code>FileNotFoundError</code>。当时的绕法是运行时替换掉这个类。<strong>该检出与桥接脚本均已移除</strong>，这条约束随之消失；我们的 <code>llm/adapter.py</code> 从设计上只读环境变量，不依赖 <code>api.key</code> 文件。</p>
+</blockquote>
 <p><code>probe3d.py</code> 则绕开了 LLM 这一层：它直接调用视觉模型，一行 LLM 代码都不碰。所以它与 Step 0.6 可以<strong>并行</strong>做。</p>
 <p>脚本做四件事，全部带数值输出：</p>
 <table>
@@ -4335,7 +3855,7 @@ powershell -ExecutionPolicy Bypass -File D:\3D_Spatial_Agent\phase0\01c_fetch_gd
 <tbody>
 <tr>
 <td>A</td>
-<td>按 VADAR 的原调用方式（uint8、<code>(3,H,W)</code>、无 batch 维）加载 UniDepth，打印<strong>实际返回的每一个 key</strong> + shape + dtype + 加载耗时 + 推理延迟 + 峰值显存</td>
+<td>按上游的原调用方式（uint8、<code>(3,H,W)</code>、无 batch 维）加载 UniDepth，打印<strong>实际返回的每一个 key</strong> + shape + dtype + 加载耗时 + 推理延迟 + 峰值显存</td>
 <td>一次性实测「8GB 装不装得下」与真实延迟</td>
 <td>✅ <strong>已跑</strong></td>
 </tr>
@@ -4588,12 +4108,11 @@ table -&gt; mirror      5.812 m
 但反过来说，小物体（墙上那几幅挂画，框几乎不含背景）两种做法只差 1–20 mm ——
 所以结论<strong>不是笼统的「掩码总是更好」，而是「框越大、背景越多、误差越大」</strong>。
 逐物体的对照表本身就是报告里可以单列的一节（<code>probe_sam2_result.json</code> 的 <code>centre_comparison</code>）。</p>
-<p><strong>Phase 1「跑通原版 VADAR」的正确含义（此处此前判断过重，已更正）：</strong>
-不能复现的是<strong>论文那个 40.4 的 gpt-4o 基线</strong>，因为 <code>api.openai.com</code> 不可达。
-但整条 LLM 链路<strong>换国产模型后可以跑通</strong>，所以实验臂 A–F 全都成立，
-只是基线要重新定义为「VADAR 原始流水线 + 一个强开源模型」。</p>
-<p><strong>唯一硬条件：主模型必须多模态。</strong> 因为 <code>VQAModule</code> 同时挂在 Omni3D 分支上（<code>predefined_modules.py:693</code>），
-而 <code>vqa()</code> 是内联 base64 图片发给模型的（<code>:334-355</code>）。纯文本模型跑到 <code>vqa()</code> 必然 400。
+<p><strong>（上游原版对照臂已于 2026-09-20 移除，本段只保留当时的判断与一条仍然有效的硬约束。）</strong>
+不能复现的是<strong>论文那个 40.4 的 gpt-4o 基线</strong>（<code>api.openai.com</code> 不可达）；
+但整条 LLM 链路<strong>换国产模型后可以跑通</strong> —— 这也正是我们把主路径改成
+「自研程序合成 + 自研几何工具层」的原因之一。</p>
+<p><strong>仍然有效的硬约束：主模型必须多模态。</strong> 只要视觉问答路径存在，纯文本模型跑到它就必然报 400。
 解法见 Step 0.6。</p>
 </blockquote>
 <h3 id="step-05b-sam2-probe_sam2py2026-09-16">Step 0.5b — SAM2 分割实测：<code>probe_sam2.py</code>（2026-09-16 补齐，收掉最后一批估算值）</h3>
@@ -4784,53 +4303,46 @@ python 02_probe_llm_api.py --base-url https://api.deepseek.com \
                            --api-key sk-xxxx \
                            --price-in 3.0 --price-out 9.0   # 高峰价；填了才给费用外推
 # 或走环境变量，避免 key 进 shell history
-export VADAR_API_KEY=sk-xxxx
+export SPATIAL_API_KEY=sk-xxxx
 
 # 6b) 验证适配器自身的调用层
-python 03_vadar_llm_bridge.py --selftest
-python 03_vadar_llm_bridge.py --show-config
+python scripts/run_agent.py --scene living_room --question &quot;...&quot; --dry-run   # 0 成本，先看提示词
 </code></pre>
-<p><code>02_probe_llm_api.py</code> 按 VADAR <strong>真实的</strong>正则去测四类输出标签，任何一条不通过，
-VADAR 都会在运行时硬崩而不是给可读报错：</p>
+<p>这一步用<strong>上游原版的 prompt 与正则</strong>去测四类输出标签，任何一条不通过，旧代码会在运行时硬崩
+而不是给可读报错。<strong>该探针脚本已随检出移除；实测结论见 §8.6（四类标签 3/3 + 4/4 全绿）。</strong></p>
 <table>
 <thead>
 <tr>
 <th>测试</th>
-<th>对应 VADAR 位置</th>
 <th>不通的后果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>&lt;program&gt;</code> + 语法可编译</td>
-<td><code>agents.py:757</code> / <code>engine.py:344</code></td>
 <td>程序合成主链路</td>
 </tr>
 <tr>
 <td><code>&lt;docstring&gt;</code> / <code>&lt;signature&gt;</code></td>
-<td><code>agents.py:82-83</code></td>
 <td>签名生成</td>
 </tr>
 <tr>
 <td><strong>方法名正则可提取</strong></td>
-<td><code>agents.py:89/352/483/668</code></td>
-<td><strong><code>AttributeError</code></strong>（返回值注解会击穿正则）</td>
+<td><strong><code>AttributeError</code></strong>（返回值注解会击穿正则）→ 见 §19 风险 6</td>
 </tr>
 <tr>
 <td><code>&lt;answer&gt;</code> 标签</td>
-<td><code>predefined_modules.py:354</code></td>
 <td><strong><code>IndexError</code></strong>，整道题作废</td>
 </tr>
 <tr>
 <td>错误路径可辨识</td>
-<td><code>engine_utils.py:94-96</code></td>
 <td>无限重试 → <strong>静默卡死</strong></td>
 </tr>
 </tbody>
 </table>
 <p><strong>这一步会当场回答：换成国产模型后，这条链路到底跑不跑得起来。</strong></p>
 <h3 id="step-07-llm-windows-wsl-api-key">Step 0.7 — 装本地 LLM 后端（Windows，<strong>不需要 WSL、不需要重启、不需要 API key</strong>）</h3>
-<p><strong>为什么要先做这一步</strong>：它测的是<strong>项目最大的未知</strong> —— 4B 级模型能不能守住 VADAR 那套零容错的标签契约。这个问题现在无法回答，而它一旦是"不能"，Phase 3 的方案就要改（得先做 QLoRA 才能跑通，而不是先接模型）。</p>
+<p><strong>为什么要先做这一步</strong>：它测的是<strong>项目最大的未知</strong> —— 4B 级模型能不能守住那套零容错的标签契约。这个问题现在无法回答，而它一旦是"不能"，Phase 3 的方案就要改（得先做 QLoRA 才能跑通，而不是先接模型）。</p>
 <p>用 Ollama 在 Windows 上跑，好处是<strong>完全绕开 WSL</strong>：Ollama 直接通过 CUDA 用你的 4060，装完就是一个 OpenAI 兼容端点。</p>
 <pre class="code"><code class="language-powershell">powershell -ExecutionPolicy Bypass -File D:\3D_Spatial_Agent\phase0\04_install_ollama.ps1
 </code></pre>
@@ -4857,7 +4369,7 @@ VADAR 都会在运行时硬崩而不是给可读报错：</p>
 </tr>
 <tr>
 <td><code>OLLAMA_CONTEXT_LENGTH=16384</code></td>
-<td>VADAR 的 prompt 实测 <strong>4134 / 6965 字符</strong>（约 1.2K / 2K token），16K 留足余量</td>
+<td>参考实现的 prompt 实测 <strong>4134 / 6965 字符</strong>（约 1.2K / 2K token），16K 留足余量</td>
 </tr>
 <tr>
 <td>装完<strong>强制发一次真实请求验证</strong></td>
@@ -4894,12 +4406,12 @@ VADAR 都会在运行时硬崩而不是给可读报错：</p>
 </table>
 <p>选 <code>instruct</code> 而不是 <code>thinking</code> 变体：程序合成要的是<strong>严格照格式输出</strong>，thinking 会拉长延迟，还可能把标签埋在思考块里。</p>
 <blockquote>
-<p><strong>为什么是多模态的 <code>qwen3.5</code> 而不是纯文本模型</strong>：<code>vqa()</code> 是<strong>内联 base64 图片</strong>发给模型的（<code>predefined_modules.py:334-355</code>），而它在 Omni3D 分支里同样存在（<code>:693</code>）。纯文本模型一跑到 <code>vqa()</code> 必然 400。所以主模型必须能看图 —— 一个 <code>qwen3.5</code> 端点同时顶掉"程序合成"和"vqa"两件事。</p>
+<p><strong>为什么是多模态的 <code>qwen3.5</code> 而不是纯文本模型</strong>：视觉问答是把图片<strong>内联 base64</strong> 发给模型的，而这条路径在 Omni3D 分支里同样存在。纯文本模型一跑到它就必然 400。所以主模型必须能看图 —— 一个 <code>qwen3.5</code> 端点同时顶掉「程序合成」和「视觉问答」两件事。</p>
 </blockquote>
 <h3 id="step-08-4b">Step 0.8 — 测 4B 能否驱动程序合成（<strong>零成本，去要答案</strong>）</h3>
-<pre class="code"><code class="language-powershell">D:\Users\ROG\anaconda3\python.exe D:\3D_Spatial_Agent\phase0\05_probe_vadar_prompt.py
+<pre class="code"><code class="language-powershell"># 该脚本已随检出移除；等价能力的实现见 llm/adapter.py + agents/synthesizer.py
 </code></pre>
-<p>这个脚本用<strong>VADAR 源码里的原版 prompt 和原版正则</strong>做两阶段测试：</p>
+<p>当时那个脚本用<strong>上游原版 prompt 与原版正则</strong>做两阶段测试（记录如下）：</p>
 <table>
 <thead>
 <tr>
@@ -4911,34 +4423,34 @@ VADAR 都会在运行时硬崩而不是给可读报错：</p>
 <tbody>
 <tr>
 <td>Stage A</td>
-<td><code>SIGNATURE_PROMPT</code>（<code>prompts/signature_prompt.py</code>）</td>
-<td>是否吐出成对的 <code>&lt;docstring&gt;&lt;signature&gt;</code>；方法名是否以 <code>_</code> 开头；<strong>每个签名能否被 <code>agents.py:89</code> 的正则提取出方法名</strong></td>
+<td><code>SIGNATURE_PROMPT</code>（上游的签名提示词模板）</td>
+<td>是否吐出成对的 <code>&lt;docstring&gt;&lt;signature&gt;</code>；方法名是否以 <code>_</code> 开头；<strong>每个签名能否被方法名提取正则取到方法名</strong></td>
 </tr>
 <tr>
 <td>Stage B</td>
-<td><code>PROGRAM_PROMPT</code>（<code>prompts/program_prompt.py</code>，含 <code>{predef_signatures}</code> + <code>{api}</code> + <code>{question}</code> 三个占位符）</td>
+<td><code>PROGRAM_PROMPT</code>（上游的程序提示词模板，含 <code>{predef_signatures}</code> + <code>{api}</code> + <code>{question}</code> 三个占位符）</td>
 <td>是否有 <code>&lt;program&gt;</code>；程序体能否 <code>compile()</code>；是否按三次强调的要求赋值 <code>final_result</code></td>
 </tr>
 </tbody>
 </table>
-<p><strong>最值得盯的一项是「注解陷阱」</strong>：<code>agents.py:89</code> 的正则 <code>def (\w+)\s*\(.*\):</code> 要求字面量 <code>):</code>，所以</p>
+<p><strong>最值得盯的一项是「注解陷阱」</strong>：方法名提取正则 <code>def (\w+)\s*\(.*\):</code> 要求字面量 <code>):</code>，所以</p>
 <pre class="code"><code class="language-python">def _count_mugs(image, bbox):          # ✅ 匹配
 def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1) -&gt; AttributeError
 </code></pre>
 <p>gpt-4o 通常不写返回值注解，<strong>换模型后是否还守这条规矩没有任何保证</strong>。我已用一段故意违规的假回复验证过打分器：喂进「一个带 <code>-&gt; int</code> + 一个不带的」混合回复，脚本准确报出 <code>1/2 个失败 → AttributeError: 'NoneType' has no attribute 'group'</code>，且 <code>method_names</code> 只提取到 1 个 —— 说明这个检查是真的在量，不是装饰。</p>
-<p>其他参数：</p>
+<p>其他参数（探针脚本已随上游检出一并移出；下为当时的调用形式，当前等价能力见 <code>llm/adapter.py</code>）：</p>
 <pre class="code"><code class="language-powershell"># 多模型对比，输出一张表（可直接进消融实验章节）
-... 05_probe_vadar_prompt.py --models qwen3.5:4b,qwen3.5:9b
+... &lt;已移出的探针脚本&gt; --models qwen3.5:4b,qwen3.5:9b
 
 # 跑全部 4 道样例题而不是默认 1 道
-... 05_probe_vadar_prompt.py --all-questions
+... &lt;已移出的探针脚本&gt; --all-questions
 
 # 想拿云端模型做对照臂（这一步就需要 key 了，可以推到以后）
-... 05_probe_vadar_prompt.py --base-url https://api.deepseek.com --model deepseek-flash --api-key sk-xxxx
+... &lt;已移出的探针脚本&gt; --base-url https://api.deepseek.com --model deepseek-flash --api-key sk-xxxx
 </code></pre>
 <p><strong>结果怎么用</strong>：
 - 两阶段全 PASS → Phase 3 可以按原计划"先接模型再微调"
-- 只挂「注解陷阱」→ 用 <code>03_vadar_llm_bridge.py</code> 的容错层兜住，不算致命
+- 只挂「注解陷阱」→ 用提示词约束 + 容错层兜住，不算致命（§19 风险 6 的约束不要撤）
 - 标签本身吐不出来 / 程序不编译 → <strong>这正是 QLoRA 要解决的问题</strong>，把失败样本直接记成训练数据的负例种子，微调的动机从"提升分数"变成"让流程能跑通"，叙事反而更强</p>
 <h3 id="_8">清单</h3>
 <blockquote>
@@ -4974,7 +4486,7 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 <ul>
 <li>[ ] ~~装 WSL2~~ —— <strong>不再需要</strong>。整条视觉栈已在 Windows 原生跑通，§4 的三处平台阻塞逐项验证为不存在。</li>
 <li>[ ] ~~装 Ollama + <code>qwen3.5:4b</code>~~ —— 挂起。本地 LLM 是<strong>加分项不是前提</strong>（§9.4）；Phase 0–8 全程可只用 API。</li>
-<li>[ ] <code>02_probe_llm_api.py</code> / <code>03_vadar_llm_bridge.py --selftest</code>（需要 API key，等进入 LLM 阶段再做）</li>
+<li>[x] ~~换模型后的协议连通性~~ —— 已并入 <strong>§8.6</strong> 的实测（真实调用 15 次，四类标签全绿）</li>
 </ul>
 <blockquote>
 <p><strong>已落地的可执行文件</strong></p>
@@ -5018,13 +4530,8 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 <td>❌</td>
 </tr>
 <tr>
-<td><code>phase0/02_probe_llm_api.py</code></td>
-<td>四类标签契约 + <code>vqa</code> 视觉通道探针（纯标准库）</td>
-<td>❌</td>
-</tr>
-<tr>
-<td><code>phase0/03_vadar_llm_bridge.py</code></td>
-<td>运行时适配器：换 LLM 后端而<strong>不改 vendor 源码</strong></td>
+<td><code>llm/adapter.py</code></td>
+<td>OpenAI 兼容客户端：双端点路由、密钥掩码、调用记账</td>
 <td>❌</td>
 </tr>
 <tr>
@@ -5033,26 +4540,16 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 <td>❌</td>
 </tr>
 <tr>
-<td><code>phase0/05_probe_vadar_prompt.py</code></td>
-<td>用 VADAR 原版 prompt 测 4B 模型的协议合规性——<strong>已挂起</strong></td>
-<td>❌</td>
-</tr>
-<tr>
-<td><code>phase0/LLM_BACKEND.md</code></td>
-<td>接入说明：可用端点、双端点配置、5 个换模型才暴露的坑</td>
-<td>❌</td>
-</tr>
-<tr>
-<td><code>phase0/00_install_wsl.ps1</code>、<code>01_setup_ubuntu.sh</code></td>
-<td>旧的 WSL 路线，<strong>保留作对照，已非主路径</strong></td>
-<td>✅</td>
+<td>~~上游 API 探针、上游 LLM 桥接、上游提示词契约探针、LLM 后端说明、WSL 安装脚本 2 个~~（共 6 个文件）</td>
+<td><strong>已于 2026-09-20 移出仓库</strong>（上游依赖 / 旧 WSL 路线）；其结论已并入 §8.6 与 §2</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <p>| <code>tools/build_doc_html.py</code> | 文档改了跑一次，Markdown → HTML | ❌ |</p>
 </blockquote>
 <p><strong>本阶段不做的事</strong>：不跑全量 benchmark、不装 Molmo-7B、不写业务代码、不碰前端、不下完整数据集、<strong>不因为一个能本地完成的任务去租 A100</strong>。</p>
-<p><strong>本阶段只回答两个问题</strong>：4B 模型能不能扛住 VADAR 的协议？这条 3D 路线在 4060 上物理上走得通吗？</p>
+<p><strong>本阶段只回答两个问题</strong>：4B 模型能不能扛住那套零容错的标签协议？这条 3D 路线在 4060 上物理上走得通吗？</p>
 <h3 id="_9">如果今天遇到这些，不要慌</h3>
 <table>
 <thead>
@@ -5063,16 +4560,12 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 </thead>
 <tbody>
 <tr>
-<td><code>ModuleNotFoundError: No module named 'VADAR'</code></td>
-<td>目录名必须叫 <code>VADAR</code>（<code>predefined_modules.py:19</code>）</td>
-</tr>
-<tr>
 <td><code>AttributeError: module 'signal' has no attribute 'SIGALRM'</code></td>
-<td><strong>只会在你跑 VADAR 的 Engine 时出现</strong>（<code>engine.py:594</code>）。本项目的自建执行器用 <code>multiprocessing</code> + timeout 实现超时，不碰 <code>signal</code>，所以这条在 Windows 原生路径上根本不会遇到</td>
+<td>上游本体才会遇到。我们的执行器用<strong>独立计时线程强杀</strong>子进程做超时，不碰 <code>signal</code>，这条在 Windows 原生路径上根本不会出现</td>
 </tr>
 <tr>
 <td><code>torch.cuda.is_available()</code> 为 False</td>
-<td>别在 WSL 里装驱动；更新 Windows 侧驱动</td>
+<td>更新 Windows 侧显卡驱动（无 WSL，不存在「在 WSL 里装驱动」这条弯路）</td>
 </tr>
 <tr>
 <td><strong>xformers / triton 装不上</strong></td>
@@ -5080,7 +4573,7 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 </tr>
 <tr>
 <td><strong>SAM2 包缺失</strong></td>
-<td>只在<strong>跑 VADAR 原版代码</strong>时才是问题：<code>predefined_modules.py:12-13</code> 是顶层 import，缺了直接 ImportError（此处此前判断有误，已更正）。<strong>本项目自己的工具库不装 <code>sam2</code> 包</strong>，改用 transformers 原生 <code>Sam2Model</code>（本机实测该类存在），连 CUDA 扩展都不用编</td>
+<td>只在<strong>跑上游原版代码</strong>时才是问题（它是顶层 import，缺了直接 ImportError）。<strong>本项目自己的工具库不装 <code>sam2</code> 包</strong>，改用 transformers 原生 <code>Sam2Model</code>（本机实测该类存在），连 CUDA 扩展都不用编</td>
 </tr>
 <tr>
 <td>HF 下载失败 / 下到一半卡死</td>
@@ -5088,7 +4581,7 @@ def _count_mugs(image, bbox) -&gt; int:   # ❌ 匹配失败 -&gt; None.group(1)
 </tr>
 <tr>
 <td>GroundingDINO <code>predict</code> 报 <code>cuda:0</code> 相关错</td>
-<td>那是<strong>编译式包</strong>的行为（硬编码 <code>device="cuda:0"</code>，<code>predefined_modules.py:192</code>）。本项目走 transformers 原生，设备由自己指定，没有这个坑</td>
+<td>那是<strong>编译式包</strong>的行为（硬编码设备）。本项目走 transformers 原生，设备由自己指定，没有这个坑</td>
 </tr>
 </tbody>
 </table>
@@ -5752,9 +5245,9 @@ s=1.50（44.7°）时 B 路径误差 0.2234 m，比 s=1.00（63.3°）的 0.2673
 <p><code>read_exif_intrinsics()</code> <strong>返回 <code>None</code> 而不是抛异常</strong> —— EXIF 缺失太常见
 （截图、聊天软件转存、部分 PNG），属<strong>正常分支</strong>；拿到 <code>None</code> 就退到
 「模型预测 + <code>check_fov</code> 告警」那条路并写明降级原因。</p>
-<p><strong>实测（<code>make_exif_fixture.py</code>）。</strong> 先发现仓库里<strong>两张图 EXIF 全为空</strong>
-（<code>scripts/inspect_exif.py</code>：<code>vendor/UniDepth/assets/demo/rgb.png</code> 与
-<code>vendor/VADAR/.../demo.jpg</code> 都是 0 个标签）⟹ <strong>EXIF 路径无法用仓库素材验证</strong>。
+<p><strong>实测（<code>make_exif_fixture.py</code>）。</strong> 先发现当时仓库里<strong>两张图 EXIF 全为空</strong>
+（<code>scripts/inspect_exif.py</code>：UniDepth 自带的 demo 图、以及上游检出里的一张 demo 照片，
+都是 0 个标签；后者已随上游检出移出）⟹ <strong>EXIF 路径无法用仓库素材验证</strong>。
 于是自己造一张<strong>带真值</strong>的 fixture：从 GT 内参反推该写进 EXIF 的整数等效焦距</p>
 <pre class="code"><code>fx_gt = 518.9（640×480）→ f_35 = 518.9 × 36 / 640 = 29.186 mm → 取整 29 mm
 回推 fx = 29/36 × 640 = 515.56 px        相对 GT 偏差 −0.64%
@@ -6395,8 +5888,13 @@ HFoV 在 <strong>125.66° → 90.84° → 107.55° → 57.32°</strong> 之间�
 </ul>
 <h3 id="233-b-c">23.3 B 段：跨来源行为 —— 以及它如何被 C 段解释</h3>
 <p>10 张图、4 个独立来源（Picsum ×5 含横竖方 / Pexels / Unsplash / Pixabay，
-外加 <strong>VADAR 自带的 demo.jpg</strong>（1440×1920 竖幅，<strong>另一个房间</strong>，全项目第一张
-与 UniDepth demo 无关的真实照片）：</p>
+外加一张<strong>上游检出自带的 demo 照片</strong>（1440×1920 竖幅，<strong>另一个房间</strong>，全项目第一张
+与 UniDepth demo 无关的真实照片；该素材已随上游检出移出仓库 ⟹ 这一行不可复现）：</p>
+<blockquote>
+<p>⚠ <strong>称呼映射</strong>：探针的原始输出（<code>phase0/probe_cross_source_result.json</code>、
+<code>probe_cross_source_report.txt</code>）里，这张图的键名是 <code>vadar_demo</code>。那两个文件是<strong>原始测量记录</strong>，
+按「证据不可改写」保留原样、<strong>没有动过内容</strong> —— 它与本表的 <code>upstream_demo</code> 是同一条。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -6483,7 +5981,7 @@ HFoV 在 <strong>125.66° → 90.84° → 107.55° → 57.32°</strong> 之间�
 <td>140 ms</td>
 </tr>
 <tr>
-<td><strong>vadar_demo</strong></td>
+<td><strong>upstream_demo</strong>（素材已移出）</td>
 <td>1440×1920</td>
 <td>1150.8</td>
 <td>64.1°</td>
@@ -6512,7 +6010,7 @@ C 段解释了它：<strong>那 8 张「看起来准」的都是 1200–1600 px�
 <p><strong>不是「它总是偏 3 倍」，而是「它的输出不可预测、且随输入分辨率与重采样方式漂移」。</strong>
 §21 的 3.169× 是一个真实观测，但它描述的是<strong>一种输入条件下的表现</strong>，不是模型的不变量。</p>
 </blockquote>
-<p><code>vadar_demo</code> 这一行本身也有价值：HFoV 64.1°、深度中位 2.05 m，
+<p><code>upstream_demo</code> 这一行本身也有价值：HFoV 64.1°、深度中位 2.05 m，
 对这个室内真实场景<strong>看起来完全合理</strong> —— 它说明这张图不是「模型失败」，
 而是「模型成功」，恰好推翻了「它一定失败」的假设。</p>
 <h3 id="234">23.4 探针与素材的可复现性</h3>
@@ -6552,7 +6050,7 @@ C 段解释了它：<strong>那 8 张「看起来准」的都是 1200–1600 px�
    <code>K</code>/深度的子集、ScanNet、ARKitScenes 等）或自建标定样本。
    这从 Phase 12 里一个「顺便拿到」的东西，变成<strong>需要单独解决的子问题</strong>。</li>
 <li><strong>B 段 8 张里 6 张经 CDN 重编码</strong>（Picsum / Pexels / Unsplash / Pixabay），
-   压缩伪影与本机照片可能不同；只有 <code>vadar_demo</code> 是原图。</li>
+   压缩伪影与本机照片可能不同；只有 <code>upstream_demo</code> 是原图（且该素材已移出仓库）。</li>
 <li><strong>C 段的 GT 深度是按分辨率重采样的</strong>，高分辨率档的「真值」比实际更平滑。
    但这一效应<strong>同时作用于两条臂</strong>（无 K 与有 K），所以两者之差仍可比。</li>
 <li><strong><code>ratio_bounds</code> 依赖的 <code>resolution_level</code> 未确认</strong>：若模型设了
@@ -6571,9 +6069,10 @@ C 段解释了它：<strong>那 8 张「看起来准」的都是 1200–1600 px�
 </blockquote>
 <hr />
 <h2 id="24-2026-09-17">24. 主实验臂的数据契约，与一个被推翻的关键假设（2026-09-17 晚）</h2>
-<p>Phase 1「跑通 VADAR 原版」的第一步是把数据集拿到手。做这件事的过程中
-<strong>推翻了一个被两次「确认」过的前提</strong>，所以单独成节记录 ——
-它不是实现细节，它改变了 Phase 12 的可行性判断。</p>
+<p>把主实验臂的数据集拿到手的过程中<strong>推翻了一个被两次「确认」过的前提</strong>，所以单独成节记录 ——
+它不是实现细节，它改变了 Phase 12 的可行性判断。
+（当时的实验臂是上游原版流水线；该臂的上游检出与兼容层已于 2026-09-20 移出，但<strong>下面这条被推翻的
+假设与「用哪条臂」无关，全部结论仍然成立</strong>。）</p>
 <h3 id="241-omni3d-bench">24.1 Omni3D-Bench 的真实契约（实测）</h3>
 <p>抓取路径（<code>dataset/builders/fetch_omni3d_bench.py</code>）：
 HF 镜像 <code>hf-mirror.com</code> 可达，仓库 <code>dmarsili/Omni3D-Bench</code> 的 <code>data/</code> 下
@@ -6602,7 +6101,7 @@ HF 镜像 <code>hf-mirror.com</code> 可达，仓库 <code>dmarsili/Omni3D-Bench
 <tr>
 <td><code>q_index</code></td>
 <td>int64</td>
-<td>题号。<strong>注意不是</strong> <code>question_index</code> —— VADAR 消费时要求后者，必须显式重命名</td>
+<td>题号。<strong>注意不是</strong> <code>question_index</code> —— 上游运行器消费时要求后者，故读取时必须显式重命名</td>
 </tr>
 <tr>
 <td><code>question</code></td>
@@ -6748,7 +6247,7 @@ question / answer_type / answer</code>）同样不含任何三维字段；仓库
 <td>+0.04</td>
 </tr>
 <tr>
-<td><strong>VADAR</strong></td>
+<td><strong>上游方法</strong>（文献引用）</td>
 <td><strong>40.4</strong></td>
 <td><strong>40.43</strong></td>
 <td><strong>+0.03</strong></td>
@@ -6766,7 +6265,7 @@ question / answer_type / answer</code>）同样不含任何三维字段；仓库
 病态不是「数据不够」，是<strong>模型形式</strong>不吃这套解。</p>
 <p>② 表 2 的 ViperGPT / VisProg 也<strong>对不上</strong>（残差 −6.74 / −7.58pp）。
 它们与表 1 不是同一批次、题数分布未公开 ——
-把它们和 VADAR 放进同一个方程，等于假设两批人用了同一份题数分布。
+把它们和上游方法放进同一个方程，等于假设两批人用了同一份题数分布。
 这个假设不成立，所以判据只用表 1 的 8 行，而那两行<strong>显式排除并留痕</strong>
 （<code>excluded_non_same_run</code>），不悄悄丢掉。</p>
 </blockquote>
@@ -6793,7 +6292,7 @@ float（横向米制尺寸与距离）这一类上。<strong>两件事是同一�
 的结果」。第一版只有一个 <code>latest_run.json</code>，<strong><code>--plan</code>、缺 key 提前退出、真正进过流水线的
 run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一次实跑（那时环境变量里还没有 key），
 得到的是：</p>
-<pre class="code"><code>latest_run.json  ←  一次 fatal 记录（&quot;缺少 VADAR_API_KEY&quot;）
+<pre class="code"><code>latest_run.json  ←  一次 fatal 记录（缺 API key；当时环境变量名还带上游前缀，现已统一为 `SPATIAL_*`）
 </code></pre>
 <p>上一次 <code>--plan</code> 的记录里有 <code>plan_summary.next_command</code>、有模型指纹 —— <strong>被一条失败覆盖</strong>。
 想照着 <code>next_command</code> 复现，打开文件看到的是自己刚刚的失败。这不是格式问题，
@@ -6830,10 +6329,142 @@ run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一�
 让它顶掉上一次真跑过的题集，会让「复现同一批题」这条链路指向一个从未执行的选择。</p>
 <p>产物还带 <code>mode</code> 字段自述类别（<code>run</code> / <code>plan</code> / <code>fatal</code>），
 这样即便文件被改名、被拷到别处，也不靠文件名认人。
-7 条用例（<code>evaluation/tests/test_runner.py::TestArtifactRouting</code>）守住这套分流，
-其中最关键的一条是：<strong>先写一次成功的 run，再写一次 fatal，前者必须逐字节不变</strong>。</p>
+分流规则当时由 7 条用例守住（其中最关键的一条是：<strong>先写一次成功的 run，再写一次 fatal，
+前者必须逐字节不变</strong>）。⚠ 这些用例随实验臂运行器于 2026-09-20 一并移出仓库 ⟹
+<strong>这条守卫目前是缺失的</strong>，将来若重建运行器，必须把它一起重建。</p>
+<h3 id="246-2-gt-12026-09-19">24.6 「验收标准自己会答错」的三个实例：巧合命中 ×2 与 GT 口径 ×1（2026-09-19 第十轮）</h3>
+<p>§13.3 把 <code>verifier</code> 的四档结论写成了「答案有没有被系统自己的证据支持」。这一轮证明：
+<strong>这个验收环节本身会出错，而且出错方式全都是「不报错、只改判」。</strong> 三个实例同源。</p>
+<h4 id="a">(a) 巧合命中是一个<strong>类</strong>，抓到两个</h4>
+<p>共同形状：一个与题目无关的常量漏进 <code>verifier</code> 的数字池，让某个答案<strong>看起来有出处</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>泄漏点</th>
+<th>为什么漏</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list_objects.evidence["label_counts"]</code> = <code>{"sofa":1,"picture":4,…}</code></td>
+<td>一组 1~4 的小整数，与题目无关</td>
+<td>「4 个」恒 <code>supported</code>、「3 个」恒 <code>unsupported</code> —— 判断力来自数字<strong>大小</strong></td>
+</tr>
+<tr>
+<td>⭐ <code>query_relation.evidence["method"]</code> = <code>"geometry_v1"</code></td>
+<td>旧 <code>_ID_RE = \b[A-Za-z_][A-Za-z_0-9]*_(\d+)\b</code> 只抹「下划线<strong>紧跟</strong>数字」的 id（<code>chair_1</code>），<strong>认不出 <code>_v1</code> 这种版本号后缀</strong></td>
+<td>每调一次就塞一个 <code>('method', 1.0)</code>；C8 的答案恰好是 <code>1</code> ⟹ 判 <code>supported</code>，<strong>出处是算法版本号</strong></td>
+</tr>
+</tbody>
+</table>
+<p>第二条更值得记的是<strong>它是怎么被发现的</strong>：不是被「巧合命中」这个检查抓到的（那个检查当时
+只查 <code>label_counts</code>），而是<strong>追着「这个逐字出处是哪来的」</strong>查出来的 —— 触发它的还是同一轮里
+另一个改动（GT 修正让 <code>matched_from</code> 从 <code>derived</code> 变成 <code>evidence</code>，才想到去看那一档）。
+⟹ <strong>「巧合 = 0」不能读成「这一类已清零」。</strong></p>
+<p>修法必须<strong>两层一起</strong>，任缺一层换个写法又漏：</p>
+<ol>
+<li><code>_ID_RE</code> 加固为 <code>\b[A-Za-z_][A-Za-z_0-9]*_[A-Za-z_0-9]*\d[A-Za-z_0-9]*</code>。
+   ⚠ 它<strong>救不了</strong> <code>sam2.1-hiera-base-plus</code>（点号分段、无 <code>_</code>）—— 正则层面无解。
+   回归用例同时钉<strong>反例</strong>：<code>extent_m=1.263</code> / <code>a_z=3.17</code> 里的合法量不能被误抹。</li>
+<li><code>_NON_QUANTITY_KEYS</code> —— 按键名<strong>整棵子树跳过</strong>（与 <code>_CENSUS_KEYS</code> 同一手法）。三味：
+   身份（<code>object_id</code>/<code>label</code>/<code>a</code>/<code>b</code>/…）、版本（<code>method</code>/<code>tool</code>/<code>model</code>）、
+   以及 ⭐ <strong>请求参数</strong>（<code>tol</code>/<code>k</code>/<code>min_contain</code>）。第三味的理由：
+   <strong>「答案恰好等于我传进去的阈值」不是证据</strong> —— <code>tol=0.0</code> 会让答案 <code>0</code> 恒判 <code>supported</code>。</li>
+</ol>
+<p><strong>代价要明写</strong>：<code>tol</code> 从此不作逐字出处 ⟹ C8 的完美答案由 <code>supported</code> 落到
+<code>derived:count/within</code> → <code>weak</code>。<strong>这是对的</strong>：计数本来就是派生量。</p>
+<h4 id="b-c">(b) − (c) 两个「检查器」的通用要求</h4>
+<ul>
+<li><strong><code>coincidence</code> 自洽性对照</strong>：把无关字段抹掉再验一次，结论翻转 = 巧合命中。
+  ⚠ 可抹的是 <code>PRUNABLE_KEYS</code>（普查／版本／参数），<strong>不是</strong> <code>NON_QUANTITY_KEYS</code> ——
+  后者还含 <code>object_id</code> 这类<strong>身份键</strong>，而<strong>字符串答案的 <code>text_backed</code> 正要靠它们找出处</strong>。
+  第一版图省事抹了全部，C1/C2/C3/C7（答案形如 <code>picture_1</code>）从 <code>supported</code> 掉成 <code>weak</code>，
+  被报成「巧合命中」—— <strong>四例全是假阳性</strong>。抹掉答案本身的出处不叫发现巧合。</li>
+<li><strong>修复要能被重放核对</strong>：<code>scripts/show_answer_provenance.py</code> 打印每题答案命中的 <code>(键, 值)</code>，
+  里面<strong>冻了一份已知有缺陷的旧 <code>_ID_RE</code></strong>，用来重放「修复前会命中什么」
+  （实测输出 <code>C8 修复前会命中 method=1.0</code>）。第一版直接用<strong>当前</strong>口径重放 ⟹ 一片空白
+  （加固后的正则已把 <code>geometry_v1</code> 抹干净），于是「修掉了什么」只剩一句转述。
+  ⟹ <strong>冻一根「坏掉的尺子」是合法且必要的做法</strong>，并附回归用例防止有人顺手把它「修好」——
+  那会让重放表变成空白，而<strong>空白与「没有泄漏」长得一模一样</strong>。</li>
+</ul>
+<h4 id="d-gt">(d) GT 也会有口径缺陷，而且长得像「模型算错」</h4>
+<p>C8「有多少个物体在桌子的前面？」的 GT 原先定义为「工具<strong>默认</strong> <code>tol=0.05</code> 下的输出」= <strong>0</strong>，
+而 <code>chair_1</code> 与 <code>table_1</code> 的 z 只差 <strong>37.8 mm</strong> —— 物理上确实在桌子前面。
+问题问的是<strong>世界的样子</strong>，<code>tol=0.05</code> 是工具的<strong>鲁棒性余量（实现细节）</strong>。
+把「工具的输出」当「问题的真值」⟹ <strong>任何按质心比较的正确程序都被判「算错」</strong>，
+归因成 <code>class B</code>，把「加工具／改提示词」这些修法引向一个<strong>根本不存在的失败</strong>。</p>
+<ul>
+<li>GT 改为<strong>严格比较（<code>tol=0</code>）= 1</strong>，口径写进 <code>Spec.convention</code>；</li>
+<li>新增 <code>convention_audit()</code>：<strong>凡 GT 对某个有默认值的参数敏感，就必须声明口径</strong>，
+  否则报 <code>ambiguous</code>。它把「这个探针测的是不是模型」变成<strong>可计算</strong>的问题。</li>
+<li>⚠ 这不是迁就模型：C8 的「一次调用解」<code>_one_call_count_front_of_table</code> <strong>一直</strong>用严格比较，
+  它的 docstring 早就写着「两个答案都对，取决于那个对程序不可见的容差」——
+  <strong>「两个都对」这句话本身就是「问题没被定义清楚」的自白</strong>，只是当时没人去读。</li>
+</ul>
+<h4 id="e">(e) ⚠ 「两个数一起变」时先分清「测量变了」还是「尺子变了」</h4>
+<p>同一轮里既改提示词（调用 106 → 32）又改 GT 口径（C8 的冗余分母 9 → 1），
+于是「冗余倍数 5.0 → 3.0」这个跨度里<strong>混着两件事</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>改前</th>
+<th>只改提示词</th>
+<th>改后（含 GT 修正）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>与 GT 一致</td>
+<td>9/10</td>
+<td>9/10</td>
+<td><strong>10/10</strong></td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td><code>{B:1, OK:4, OK*:5}</code></td>
+<td>同改前</td>
+<td><strong><code>{OK:5, OK*:5}</code></strong></td>
+</tr>
+<tr>
+<td>工具调用</td>
+<td>106</td>
+<td>32</td>
+<td>32（<strong>一次没动</strong>）</td>
+</tr>
+<tr>
+<td>冗余倍数（<strong>上中位数</strong>）</td>
+<td>5.0</td>
+<td>1.11</td>
+<td><strong>3.0</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⚠ <strong>「中位数」的口径</strong>：<code>_summarize</code> 用的是 <code>sorted(ratios)[len(ratios)//2]</code> = <strong>上中位数</strong>
+（偶数题数时取<strong>偏大</strong>那一个，不是两数均值）。同一份定义横跨改前改后所以可比，
+但它与教科书中位数不是一回事 —— <strong>引用时别省掉这句</strong>。</p>
+<h4 id="f">(f) 产物：删除不可用时，改放「产物地图」</h4>
+<p><code>--analyze</code> 原先每复算一次就盖一个新时间戳 ⟹ 同一目录里同时有「多份测量」与
+「同一份测量的多个版本」，<strong>从文件名上分不出来</strong>。已改为<strong>按源文件名落盘</strong>（幂等覆盖）；
+真跑仍用时间戳（那是<strong>新的测量</strong>）。见 <code>scripts/probe_combination_run.py::analyze</code> / <code>_write</code>。</p>
+<p>⚠ 本机 <code>Remove-Item</code> <strong>删不掉文件</strong>（安全守卫静默拦下：<code>deleted=0</code>，不报错）。
+⟹ 改放 <code>reports/README.md</code> 当<strong>产物地图</strong>，并明写：
+<strong>判断「哪份是当前的」只看这张表，不认 <code>mtime</code>、不认文件名新旧。</strong>
+理由：「已被取代」的那几份与当前版<strong>名字几乎一样、数字却是旧口径</strong>，
+属于<strong>看起来正确、实际过期</strong> —— 比文件缺失更危险，因为缺失会被发现。</p>
 <hr />
 <h2 id="_10">附：本次调研的关键事实汇总（供交叉核对）</h2>
+<blockquote>
+<p><strong>关于早期参考实现（上游）</strong>：本项目早期版本曾对一份第三方参考实现（CVPR 2025，
+以「LLM 输出 Python 程序」做 3D 空间问答）做过完整代码核查，<strong>该检出及其全部素材已于
+2026-09-20 移出仓库</strong>。下表只保留它的<strong>文献级信息</strong>（供报告引用与划清界限）；
+代码级细节（文件树、类拆解、行号、工具签名）已全部删除，评估结论与弃用理由见 §2。
+<strong>本项目不依赖、不包含、不分发该实现的任何代码或数据。</strong>
+其仓库许可证标注为 <code>NOASSERTION</code>；本仓库既不含其代码，自然不受其条款约束。
+唯一需要区分的是<strong>评测数据集</strong> <code>dmarsili/Omni3D-Bench</code>：它与上述实现<strong>不是同一件东西</strong>，
+我们只把它当公开评测基准使用。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -6844,28 +6475,8 @@ run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一�
 </thead>
 <tbody>
 <tr>
-<td>仓库</td>
-<td><code>damianomarsili/VADAR</code></td>
-<td>GitHub API</td>
-</tr>
-<tr>
 <td>描述</td>
 <td><code>[CVPR 2025] Program synthesis for 3D spatial reasoning</code></td>
-<td>GitHub API</td>
-</tr>
-<tr>
-<td>默认分支 / HEAD commit</td>
-<td><code>main</code> / <code>56018ebc2ecf7a430fc94e64e80e2768b0931739</code></td>
-<td>git log</td>
-</tr>
-<tr>
-<td>最后 push</td>
-<td>2025-06-16</td>
-<td>GitHub API</td>
-</tr>
-<tr>
-<td>Star / Fork</td>
-<td>63 / 6</td>
 <td>GitHub API</td>
 </tr>
 <tr>
@@ -6874,44 +6485,9 @@ run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一�
 <td>arXiv</td>
 </tr>
 <tr>
-<td>项目页</td>
-<td>https://glab-caltech.github.io/vadar/</td>
-<td>README</td>
-</tr>
-<tr>
 <td>数据集</td>
 <td><code>dmarsili/Omni3D-Bench</code>，<strong>实测 501 题 / 201 图</strong>（README 写 500）；CC BY-NC；<strong>只有 (图, 问, 答) 六列，无 GT 相机/深度/三维框</strong></td>
 <td>parquet schema 实测 + README（§24.1）</td>
-</tr>
-<tr>
-<td>许可证</td>
-<td>仓库 <code>NOASSERTION</code>（LICENSE.md 19 KB，未在本次核查中逐条阅读）</td>
-<td>GitHub API</td>
-</tr>
-<tr>
-<td>代码规模</td>
-<td>33 个文件；核心 Python ≈ 2100 行</td>
-<td>本地统计</td>
-</tr>
-<tr>
-<td>预定义工具数（Omni3D）</td>
-<td>5 个：<code>loc</code> <code>vqa</code> <code>depth</code> <code>same_object</code> <code>get_2D_object_size</code></td>
-<td><code>prompts/modules.py:1-63</code></td>
-</tr>
-<tr>
-<td>LLM 默认</td>
-<td><code>gpt-4o</code>，temperature 0.7，无 base_url</td>
-<td><code>engine/engine_utils.py:52-93</code></td>
-</tr>
-<tr>
-<td>视觉栈（Omni3D）</td>
-<td>GroundingDINO SwinT-OGC + UniDepthV2 ViT-S14</td>
-<td><code>predefined_modules.py:628-637</code></td>
-</tr>
-<tr>
-<td>视觉栈（CLEVR/GQA）</td>
-<td>+ SAM2.1 hiera base+ + Molmo-7B-D-0924</td>
-<td><code>predefined_modules.py:606-627</code></td>
 </tr>
 <tr>
 <td>论文成绩</td>
@@ -6922,11 +6498,6 @@ run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一�
 <td>本机 GPU</td>
 <td>RTX 4060 Laptop，8188 MiB，驱动 560.76，CUDA 12.6</td>
 <td><code>nvidia-smi</code> 实测</td>
-</tr>
-<tr>
-<td>VADAR 依赖的 Python</td>
-<td>3.10（本机系统 Python 3.13.9 过高）</td>
-<td>README / 实测</td>
 </tr>
 <tr>
 <td>UniDepth 预处理约束</td>
@@ -6961,13 +6532,17 @@ run 全都往里写</strong>。于是在 <code>--plan</code> 之后直接跑一�
 </tbody>
 </table>
 <hr />
-<p><em>本文档基于 2026-09-14 对 VADAR 仓库的实际代码核查。</em>
+<p><em>本文档早期版本基于 2026-09-14 对上游参考实现仓库的实际代码核查；该检出已于 2026-09-20 移出本仓库，评估结论保留在 §2。</em>
 <em>2026-09-16 补充：视觉栈已在 Windows 原生跑通；</em><em>三个视觉模型的显存与延迟全部实测</em><em>（§5），SAM2 的估算已替换。</em>
 <em>2026-09-16 补充 ②：</em><em>L1 感知层与场景图构建已落地并实测</em><em>（§21）；发现「内参来源」这一被官方文档低估的精度杠杆（三维误差中位数差 7.3 倍），据此撤销了 <code>calibrate_scale</code> 的设计。</em>
 <em>2026-09-16 补充 ③：把内参杠杆从「单图一次对照」升级为</em><em>因果证据</em><em> —— 剂量-反应扫描（§22.1）、自洽性（§22.2）、方向场解析可控性（§22.3）、±1% 焦距反解（§22.4）、三视场复现（§22.5）；并落地 </em><em>EXIF 内参路径</em><em>（§22.6，<code>vision/exif.py</code>，端到端验证 sofa 2.46 m vs 6.93 m），同时查明 </em><em>EXIF 的主要误差是主点而非量化</em><em>（§22.7，14.75 px / 97.4%）。单测 166 → 191。</em>
 <em>2026-09-16 补充 ④：</em><em>补最大证据缺口的结果是发现了一个隐藏混杂因子</em><em>（§23）—— 跨来源复跑（10 张图 / 4 个来源 / 5 台真实相机 EXIF）证明 </em><em>640×480 是相机头的一个反常工作点</em><em>，§21/§22 的全部数字都取自它；768 px 以上无内参路径的 3D 误差从 1.943 m 掉到 0.18 m。结论方向不变、理由更强：</em><em>内参必须外部给定，不是因为模型偏，而是因为它的输出没有稳定性</em><em>（预处理恒定的区间内 fx 摆动 4.07 倍），且 <code>check_fov</code> 在真实相机上只有 40% 理想率（2 正确 / 2 误报 / </em><em>1 漏报</em><em>）。已据此更正 <code>vision/exif.py</code> 的一条旧断言。单测 191 → 193。</em>
-<em>2026-09-17 补充 ⑤：</em><em>拿到主实验臂的数据集后，推翻了一个被两次「确认」过的前提</em><em>（§24）。Omni3D-Bench 实测只有 <code>image_index / image / q_index / question / answer / answer_type</code> 六列，</em><em>不带 GT 相机、不带深度、不带三维框</em><em> —— 「主实验臂自带 GT 相机」是错的，据此推出的「主实验臂不依赖 EXIF 精度」同时作废。实际是 </em><em>501 题 / 201 图</em><em>（README 写 500），float 题占 </em><em>53.9%</em><em> 的 Total 权重（该口径已用论文自身 8 行数字验算，残差 ≤0.043pp）。同轮交付 </em><em>实验臂运行器</em><em>：<code>evaluation/{runner,vadar_compat,win_alarm,metrics}.py</code> + <code>dataset/builders/{fetch,read}_omni3d_bench.py</code>；VADAR 原仓库</em><em>一字未改</em><em>，靠兼容层补上 Windows 缺的 <code>groundingdino</code>/<code>sam2</code>/<code>openai</code> 与 <code>SIGALRM</code>。单测 231 → 306（其中 7 条守住产物的稳定入口分流，见 §24.5）。</em>
-<em>仍标注「估算」的只剩 Molmo 与 Qwen 的显存，它们在 Phase 4 实测后替换；标注「不确定」的项以官方文档为准。</em></p>
+<em>2026-09-17 补充 ⑤：</em><em>拿到主实验臂的数据集后，推翻了一个被两次「确认」过的前提</em><em>（§24）。Omni3D-Bench 实测只有 <code>image_index / image / q_index / question / answer / answer_type</code> 六列，</em><em>不带 GT 相机、不带深度、不带三维框</em><em> —— 「主实验臂自带 GT 相机」是错的，据此推出的「主实验臂不依赖 EXIF 精度」同时作废。实际是 </em><em>501 题 / 201 图</em><em>（README 写 500），float 题占 </em><em>53.9%</em><em> 的 Total 权重（该口径已用论文自身 8 行数字验算，残差 ≤0.043pp）。同轮交付 </em><em>实验臂运行器与 Windows 兼容层</em><em>（上游相关部分已于 2026-09-20 随检出一并移出；<code>evaluation/metrics.py</code> 保留并继续承担口径复算）+ <code>dataset/builders/{fetch,read}_omni3d_bench.py</code>（保留）。单测 231 → 306（其中 7 条守住产物的稳定入口分流，见 §24.5）。</em>
+<em>2026-09-20 补充 ⑥：</em><em>上游依赖已彻底移除。</em><em> <code>vendor/</code> 下的上游检出、实验臂 A 的上游运行器与兼容层、
+全部上游探针脚本与素材（含 §23 的 <code>upstream_demo</code> 图）一并移出仓库；<code>README.md</code> 与本文档的定位改写为
+「感知层接三个开源模型、Agent 层与工具层自研」。</em><em>实验臂 A 的历史结果留在 <code>results/A/</code>，但已不可复现</em><em>，
+只能当记录。配置文件里的环境变量前缀统一为 <code>SPATIAL_*</code>（原带上游前缀的名字已弃用）。</em></p>
+<p><em>仍标注「估算」的只剩 Molmo 与 Qwen 的显存，它们在 Phase 4 实测后替换；标注「不确定」的项以官方文档为准。</em></p>
 </main>
 </div>
 </body>

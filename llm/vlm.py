@@ -25,11 +25,10 @@
 三个刻意的设计决定
 ================
 
-1. **不硬编码模型名。** 端点走 `SPATIAL_VISION_*`（回退 `VADAR_VISION_*`）五个键，
+1. **不硬编码模型名。** 端点走 `SPATIAL_VISION_*` 四个键，
    与文本端点共用同一套 `LLMSettings`/`LLMClient`。本地 Qwen3.5 多模态与云端
    `qwen3-vl-flash` 都只是换环境变量 —— 换模型不需要改一行代码，也不需要改实验记录格式。
-   视觉端点完全没配时回落到文本端点（deepseek-flash 自带 Vision），
-   这与 `phase0/03_vadar_llm_bridge.py` 同口径，两个臂因此可比。
+   视觉端点完全没配时回落到文本端点（deepseek-flash 自带 Vision）。
 
 2. **闭集优先，而且违规要能被看见。** 给了 `candidates` 时，模型答的必须落在闭集内。
    落不进去**不是**悄悄取个近似值，而是把该条标记为 `in_closed_set=False`
@@ -449,8 +448,8 @@ def _build_prompt(attrs: Sequence[str], candidates: Mapping[str, Sequence[str]] 
 class VLM:
     """`describe()` 的实现，持有一个**视觉端点**的客户端。
 
-    `client` 可注入（单测零联网）；不注入时按 `SPATIAL_VISION_*` → `VADAR_VISION_*`
-    → 文本端点的顺序解析配置。**模型名从不硬编码**。
+    `client` 可注入（单测零联网）；不注入时按 `SPATIAL_VISION_*` → 文本端点
+    的顺序解析配置。**模型名从不硬编码**。
     """
 
     #: ★ 契约：形参只许是这四个。`check_signature()` 按它核对。

@@ -1,9 +1,9 @@
 """单遍构建：检测 → 分割 → 升维 → 关系。契约见方案文档 §12.3。
 
-对应 VADAR 的 `predefined_modules.py`，但有三处**结构性**差别，
+对应早期基线的感知模块，但有三处**结构性**差别，
 每一处都对应一条 Phase 0 的实测或裁决：
 
-| | VADAR | 本文件 |
+| | 早期基线 | 本文件 |
 |---|---|---|
 | 三维量 | 只取 `depth`，3D 尺寸 = `2D 像素 × depth`（**整个式子没有焦距**） | 取整片 `points`，质心/尺寸/包围盒全部由点云算出 |
 | 质心来源 | 检测框内像素的中位数 | **SAM2 掩码**内点云的中位数（实测差均值 83 mm / 最大 208 mm） |
@@ -234,7 +234,7 @@ def _assign_ids(detections: list[Detection]) -> list[tuple[str, Detection]]:
     """给检测结果分配稳定 id：`{slug}_{序号}`，序号按置信度降序、从 1 开始。
 
     「稳定」指的是：同一张图、同一套权重、同样的 prompt，必然得到同样的 id。
-    这是相对 VADAR 的关键改进 —— 它每次 `loc()` 都回裸 bbox，物体身份要靠
+    这是相对早期基线的关键改进 —— 它每次定位都回裸 bbox，物体身份要靠
     `same_object(iou>0.92)` 反推（`predefined_modules.py`），既不准又浪费一次工具调用。
     """
     counters: dict[str, int] = {}

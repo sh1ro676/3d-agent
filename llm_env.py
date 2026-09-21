@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""vadar_env.py —— 从 `configs/llm_backend.env` 读实验配置（零依赖，不 import torch）。
+"""llm_env.py —— 从 `configs/llm_backend.env` 读实验配置（零依赖，不 import torch）。
 
 为什么需要这个文件
 ==================
-VADAR 后端的全部入参都是环境变量（`phase0/03_vadar_llm_bridge.py::_env()`），
-而 `phase0/06_deepseek_setup.ps1` 设的是**会话级**变量：只在那一个 PowerShell
-窗口里有效、**不落盘**、也不会传进任何别的进程。2026-09-17 实跑 arm A 就卡在这里 ——
-运行器完整、`--plan` 全绿，真跑时读不到 `VADAR_API_KEY`，直接 `return 2`。
+本项目后端的全部入参都是环境变量（规范键名见 `llm/adapter.py::ENV_ALIASES`），
+而「在某个 PowerShell 窗口里 export 一下」设的是**会话级**变量：只在那一个窗口里
+有效、**不落盘**、也不会传进任何别的进程。2026-09-17 首次真跑实验就卡在这里 ——
+流程看起来完整、前检查全绿，真跑时读不到 API key，直接以非零码退出。
 
 解法不是「每次手输一次 key」，而是把配置**落到一个文件里**：
 
@@ -16,26 +16,26 @@ VADAR 后端的全部入参都是环境变量（`phase0/03_vadar_llm_bridge.py::
 于是「这次实验用的是哪套后端配置」变成一行可检查、可归档、可复现的事实，
 而不是「某个窗口现在还开着吗」。
 
-语义（这几条是刻意选的；动之前先读 `tests/test_vadar_env.py`）
+语义（这几条是刻意选的；动之前先读 `tests/test_llm_env.py`）
 ==============================================================
 * **文件里的值优先于进程环境。** 文件是用户**刚刚编辑过**的东西；进程环境可能
   是几天前设的、早已忘掉的残留。两者都有且**不同**时记一条可见的 `conflict`，
   绝不静默覆盖 —— 「失败要响」是本项目的地基之一。
-* **空值视同未设。** 模板里留 `VADAR_API_KEY=` 是常态，它不该把一个真实存在的
+* **空值视同未设。** 模板里留 `SPATIAL_API_KEY=` 是常态，它不该把一个真实存在的
   环境变量顶掉（那会让「我只填了一行，结果另一行把我顶了」变成静默事故）。
-  与 bridge 的 `_env()` 口径一致：空串按「没有」处理。
+  口径：空串一律按「没有」处理。
 * **`#` 只在行首（可前置空白）才是注释，不支持行尾注释。** 值里带 `#` 时行尾
   注释会**静默截断**配置 —— 宁可少一种语法，也不要多一类静默失败。
 * **重复键直接报错。** 同一个键出现两次多半是改配置时忘了注释旧行，
   静默取最后一个正是最难查的那类 bug。
 * **未知键只告警不报错**，但会写进报告的 `unknown_keys` —— 否则拼错一个
-  `VADAR_BASE_URLL` 是完全静默的（探针显示"默认值"，看起来一切正常）。
+  `SPATIAL_BASE_URLL` 是完全静默的（探针显示"默认值"，看起来一切正常）。
 * **密钥永不进报告。** 对外只有两种呈现：`mask()`（`***abcd`）与
   `fingerprint()`（sha256 前 8 位，不可逆但能回答"还是同一把 key 吗"）。
 
-本文件放在**仓库根**而不是某个子包里：它是所有入口（`evaluation/runner.py`、
-`phase0/*.py`、单测）共用的配置层，放子包里会造成 `evaluation ↔ phase0` 的
-包级循环依赖。
+本文件放在**仓库根**而不是某个子包里：它是所有入口（`llm/adapter.py`、
+`scripts/run_agent.py`、`phase0/*.py`、单测）共用的配置层，
+放子包之间会造成包级循环依赖。
 """
 
 from __future__ import annotations
@@ -50,13 +50,13 @@ __all__ = [
     "parse_env_text", "load_env_file", "locate", "describe",
 ]
 
-# 相对**仓库根**的默认位置。用 VADAR_ENV_FILE 或各入口的 --env-file 覆盖。
+# 相对**仓库根**的默认位置。用 SPATIAL_ENV_FILE 或各入口的 --env-file 覆盖。
 DEFAULT_RELATIVE_PATH = os.path.join("configs", "llm_backend.env")
 
 # 名字里带这些词的键一律按密钥处理（掩码 + 不进指纹明文）。
 SECRET_MARKERS = ("KEY", "TOKEN", "SECRET", "PASSWORD")
 
-# 但 `TOKEN` 太容易误伤：`VADAR_MAX_TOKENS` 是**数量上限**不是密钥。
+# 但 `TOKEN` 太容易误伤：`SPATIAL_MAX_TOKENS` 是**数量上限**不是密钥。
 # 2026-09-18 实测踩到过 —— 报告里把 max_tokens 显示成 `***8192`，
 # 而 `secrets.max_tokens.fingerprint` 还大摇大摆地写了一串哈希。
 # 白名单式例外比"更聪明的正则"可靠：误判成密钥只是难看，
@@ -64,21 +64,19 @@ SECRET_MARKERS = ("KEY", "TOKEN", "SECRET", "PASSWORD")
 NOT_SECRET = ("MAX_TOKENS", "MAX_OUTPUT_TOKENS", "TOKENIZER", "TOKENS_PER")
 
 # 已知的键 —— **仅用于「拼错告警」，不用于拒绝**。
-# 来源：`evaluation/runner.py::DEFAULTS` + `phase0/03_vadar_llm_bridge.py::_env()`
-# 调用点 + `evaluation/vadar_compat.py`。加了新的环境变量请同步这里，
+# 来源：`llm/adapter.py::ENV_ALIASES`（规范名表）+ `tools/make_env_template.py`
+# 的键集合断言。加了新的环境变量请同步这里，
 # 否则它自己会变成一条「未知键」告警（这正是这套机制想要的提醒）。
 KNOWN_KEYS = frozenset([
-    # 后端（bridge 全量读这些）
-    "VADAR_BASE_URL", "VADAR_API_KEY", "VADAR_MODEL",
-    "VADAR_TEMPERATURE", "VADAR_MAX_TOKENS", "VADAR_MAX_RETRIES", "VADAR_TIMEOUT",
-    "VADAR_EXTRA_BODY", "VADAR_PRICE_TABLE", "VADAR_STRICT_TAGS", "VADAR_LOG_PROMPTS",
-    "VADAR_VISION_BASE_URL", "VADAR_VISION_MODEL", "VADAR_VISION_API_KEY",
-    "VADAR_VISION_MAX_TOKENS",
-    # 记账与路径
-    "VADAR_CALL_LOG", "VADAR_REPO", "VADAR_REPO_ROOT", "VADAR_GDINO_DIR",
-    "VADAR_GDINO_CAPTION",
-    # 运行器自己的开关
-    "VADAR_ENV_FILE",
+    # 文本后端
+    "SPATIAL_BASE_URL", "SPATIAL_API_KEY", "SPATIAL_MODEL",
+    "SPATIAL_TEMPERATURE", "SPATIAL_MAX_TOKENS", "SPATIAL_MAX_RETRIES", "SPATIAL_TIMEOUT",
+    "SPATIAL_EXTRA_BODY", "SPATIAL_PRICE_TABLE", "SPATIAL_LOG_PROMPTS",
+    # 视觉后端（留空 = 复用文本后端）
+    "SPATIAL_VISION_BASE_URL", "SPATIAL_VISION_MODEL", "SPATIAL_VISION_API_KEY",
+    "SPATIAL_VISION_MAX_TOKENS",
+    # 记账与配置文件自身的开关
+    "SPATIAL_CALL_LOG", "SPATIAL_ENV_FILE",
     # HuggingFace（必须在 import torch 之前生效，故同样放进这个文件）
     "HF_HOME", "HF_ENDPOINT", "HF_HUB_OFFLINE", "HF_HUB_DISABLE_XET",
 ])
@@ -146,7 +144,7 @@ def _parse(text: str):
             continue
         val = val.strip()
         # 只剥「整个值被同一对引号包住」的那一层。
-        # 不能无脑 strip 引号：`VADAR_EXTRA_BODY={"thinking": {"type": "disabled"}}`
+        # 不能无脑 strip 引号：`SPATIAL_EXTRA_BODY={"thinking": {"type": "disabled"}}`
         # 是合法 JSON，首字符是 `{` 不是引号，必须原样保留。
         if len(val) >= 2 and val[0] == val[-1] and val[0] in ("'", '"'):
             val = val[1:-1]

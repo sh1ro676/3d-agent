@@ -1234,7 +1234,7 @@ def build_report(scene: Any, results: list[Result], census: dict[str, list[str]]
     L.append("  | `derived:count` | 整数答案 ≤ trace 里**显式的人口数** | `weak` |")
     L.append("  | —— | 都没有 | `unsupported` |")
     L.append("")
-    L.append("  既保住了原来的能力（VADAR 那种凭空出现的 `998.65` 仍被拒：它不在任何量值区间内、")
+    L.append("  既保住了原来的能力（凭空出现的 `998.65` 仍被拒：它不在任何量值区间内、")
     L.append("  也不是合法计数），又不再把「对的派生量」当垃圾扔掉。")
     L.append("- ⚠ 两条刻意的**收窄**，都是为了让口径不悄悄变宽：")
     L.append("  ① 派生量判 `weak` 而不判 `supported`（软检查 `numeric_backed_exact`）——")

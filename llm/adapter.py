@@ -2,21 +2,19 @@
 # -*- coding: utf-8 -*-
 """llm/adapter.py —— OpenAI 兼容后端客户端（自研 Agent 侧的唯一对外出口）。
 
-与 `phase0/03_vadar_llm_bridge.py` 的关系：**同一个后端，不同的消费方式**。
-    桥接层必须仿造 VADAR 的 `Generator`（`generate(prompt, messages) -> (text, messages)`），
-    因为它要插进 vendor 代码的既有调用点；本文件则可以用一个正常客户端的形状，
-    因为 `agents/` 是我们自己写的。
-两份代码都读同一套环境变量名，所以**「换了模型」这件事只改一处**
-（见下面 ENV_ALIASES 的说明），基线臂与自研臂因此可比。
+本文件是**自研 Agent 侧的唯一对外出口**：一个形状正常的 OpenAI 兼容客户端。
+它不需要迁就任何第三方代码的调用约定，因为 `agents/` 是我们自己写的。
+所有入口都读同一套环境变量名，所以**「换了模型」这件事只改一处**
+（见下面 ENV_ALIASES）。
 
 四个刻意的设计决定
 ==================
 
-1. **规范键名 `SPATIAL_*`，回退到 `VADAR_*`。**
-   两个臂共用一份 `configs/llm_backend.env`：自研臂要换模型时写 `SPATIAL_MODEL=...`，
-   基线臂继续读 `VADAR_MODEL=...`，互不影响。
-   如果只有一套键名，那么「让自研臂换个模型」这件事**必然**同时改掉基线臂的模型，
-   而两次实验的差异就再也归因不清了 —— 这是配置层面的混淆变量。
+1. **键名统一为 `SPATIAL_*`，不做隐式回退。**
+   只用一套键名：`configs/llm_backend.env` 里写的是哪套配置，跑出来的就是哪套。
+   曾经存在过「规范名 + 历史别名」的双轨（为的是同时兼容另一条实验路径），
+   已随那条路径一起删除 —— 双轨的风险是**同一个设置有两个来源**，
+   而先后顺序一旦不明确，它就是配置层面最典型的混淆变量。
 
 2. **配置写错就抛，不静默用默认值。**
    `SPATIAL_TEMPERATURE=0.2x` 这种笔误如果被"容错"成默认值 0.2，
@@ -26,12 +24,12 @@
    所以 `extra_body` / `price_table` 解析失败一律 `ValueError`。
 
 3. **缺 key 立刻抛 `LLMError`，不重试。**
-   基线臂运行器实测过这条：把配置错误当成网络抖动去重试，
+   本项目的早期运行器实测过这条：把配置错误当成网络抖动去重试，
    只会把一个 0.1 秒的失败拖成几分钟，然后给出同样失败的结论。
 
-4. **调用日志与基线臂分开写。**
-   默认 `logs/agent_llm_calls.jsonl`（不是 `VADAR_CALL_LOG` 那个文件）。
-   混在一个 JSONL 里，两臂的 token/成本就再也拆不开 —— 而那正是消融表要的数。
+4. **调用日志按臂分开写。**
+   默认 `logs/agent_llm_calls.jsonl`（可用 `SPATIAL_CALL_LOG` 指到别处）。
+   不同臂混进同一个 JSONL，token/成本就再也拆不开 —— 而那正是消融表要的数。
 
 用法
 ====
@@ -71,26 +69,24 @@ __all__ = [
     "mask_secret",
 ]
 
-#: 每个设置项接受的键名，**规范名在前、回退名在后**。顺序即优先级。
-#: 不在表里的键（如 `call_log`）只有规范名 —— 故意不继承基线臂的值，
-#: 见模块 docstring 第 4 条。
+#: 每个设置项对应的环境变量名。一律单名，**不做隐式回退** —— 见模块 docstring 第 1 条。
 ENV_ALIASES: Mapping[str, tuple[str, ...]] = {
-    "base_url": ("SPATIAL_BASE_URL", "VADAR_BASE_URL"),
-    "api_key": ("SPATIAL_API_KEY", "VADAR_API_KEY"),
-    "model": ("SPATIAL_MODEL", "VADAR_MODEL"),
-    "temperature": ("SPATIAL_TEMPERATURE", "VADAR_TEMPERATURE"),
-    "max_tokens": ("SPATIAL_MAX_TOKENS", "VADAR_MAX_TOKENS"),
-    "max_retries": ("SPATIAL_MAX_RETRIES", "VADAR_MAX_RETRIES"),
-    "timeout": ("SPATIAL_TIMEOUT", "VADAR_TIMEOUT"),
-    "extra_body": ("SPATIAL_EXTRA_BODY", "VADAR_EXTRA_BODY"),
-    "price_table": ("SPATIAL_PRICE_TABLE", "VADAR_PRICE_TABLE"),
+    "base_url": ("SPATIAL_BASE_URL",),
+    "api_key": ("SPATIAL_API_KEY",),
+    "model": ("SPATIAL_MODEL",),
+    "temperature": ("SPATIAL_TEMPERATURE",),
+    "max_tokens": ("SPATIAL_MAX_TOKENS",),
+    "max_retries": ("SPATIAL_MAX_RETRIES",),
+    "timeout": ("SPATIAL_TIMEOUT",),
+    "extra_body": ("SPATIAL_EXTRA_BODY",),
+    "price_table": ("SPATIAL_PRICE_TABLE",),
     "call_log": ("SPATIAL_CALL_LOG",),
     "log_prompts": ("SPATIAL_LOG_PROMPTS",),
-    "vision_base_url": ("SPATIAL_VISION_BASE_URL", "VADAR_VISION_BASE_URL"),
-    "vision_api_key": ("SPATIAL_VISION_API_KEY", "VADAR_VISION_API_KEY"),
-    "vision_model": ("SPATIAL_VISION_MODEL", "VADAR_VISION_MODEL"),
-    "vision_max_tokens": ("SPATIAL_VISION_MAX_TOKENS", "VADAR_VISION_MAX_TOKENS"),
-    "env_file": ("SPATIAL_ENV_FILE", "VADAR_ENV_FILE"),
+    "vision_base_url": ("SPATIAL_VISION_BASE_URL",),
+    "vision_api_key": ("SPATIAL_VISION_API_KEY",),
+    "vision_model": ("SPATIAL_VISION_MODEL",),
+    "vision_max_tokens": ("SPATIAL_VISION_MAX_TOKENS",),
+    "env_file": ("SPATIAL_ENV_FILE",),
 }
 
 DEFAULT_BASE_URL = "https://api.deepseek.com"
@@ -135,7 +131,7 @@ class _FatalError(Exception):
 
 
 def mask_secret(value: Any) -> str:
-    """密钥的对外呈现。与 `vadar_env.mask()` 同口径：只露后 4 位。"""
+    """密钥的对外呈现。与 `llm_env.mask()` 同口径：只露后 4 位。"""
     if not value:
         return "(empty)"
     v = str(value)
@@ -186,7 +182,7 @@ def _parse_json(names: Sequence[str], raw: str | None, default: Any) -> Any:
     except (TypeError, ValueError) as exc:
         raise ValueError(
             "环境变量 %s 不是合法 JSON（%s）。\n"
-            "  ⚠ 这个键**绝不能**静默忽略：最贵的例子是 VADAR_EXTRA_BODY 写坏 → "
+            "  ⚠ 这个键**绝不能**静默忽略：最贵的例子是 SPATIAL_EXTRA_BODY 写坏 → "
             "thinking 没关 → temperature 不生效 → 「低温可复现」不成立，而报告里没有痕迹。\n"
             "  收到的值：%r" % (names[0], exc, raw)
         ) from None
@@ -445,7 +441,7 @@ class LLMReply:
     def truncated(self) -> bool:
         """`finish_reason == "length"` —— **必须被当成失败处理**。
 
-        VADAR 的坑：调用处都不传 `max_tokens`，程序合成输出被静默截断，
+        `max_tokens` 不传是个经典坑：程序合成输出被静默截断，
         生成一个语法不完整的程序，然后表现为「模型不会写程序」。
         """
         return self.finish_reason == "length"
@@ -495,20 +491,20 @@ class LLMClient:
     def check_ready(self) -> None:
         """缺 key / 缺端点就**立刻**抛 —— 不重试。
 
-        基线臂运行器实测过：把配置错误当网络抖动重试，只会把一个 0.1 秒的
-        失败拖成几分钟，结论还是同一个失败。自研臂不要重犯。
+        本项目的早期运行器实测过：把配置错误当网络抖动重试，只会把一个 0.1 秒的
+        失败拖成几分钟，结论还是同一个失败。
         """
         s = self.settings
         if not s.api_key:
             raise LLMError(
                 "缺少 API key。请把 key 填进 configs/llm_backend.env 的 "
-                "SPATIAL_API_KEY=（或 VADAR_API_KEY=）后重跑；"
+                "SPATIAL_API_KEY= 后重跑；"
                 "当前端点 %s，模型 %s。" % (s.base_url, s.model)
             )
         if not s.base_url:
-            raise LLMError("缺少 base_url（SPATIAL_BASE_URL / VADAR_BASE_URL）")
+            raise LLMError("缺少 base_url（SPATIAL_BASE_URL）")
         if not s.model:
-            raise LLMError("缺少 model（SPATIAL_MODEL / VADAR_MODEL）")
+            raise LLMError("缺少 model（SPATIAL_MODEL）")
 
     # -- 主调用 --------------------------------------------------------------
 
@@ -677,21 +673,21 @@ def _digest(messages: Sequence[Mapping[str, Any]]) -> dict[str, int]:
 
 
 # ============================================================================
-# 6. 配置文件的加载（与基线臂共用同一个文件）
+# 6. 配置文件的加载
 # ============================================================================
 
 
 def load_backend_env(path: str | None = None, *, environ: dict[str, str] | None = None) -> dict[str, Any]:
     """把 `configs/llm_backend.env` 读进环境变量，返回**脱敏**报告。
 
-    刻意复用 `vadar_env.load_env_file` 而不是自己写一份解析器：
+    刻意复用 `llm_env.load_env_file` 而不是自己写一份解析器：
     那是本项目里唯一一处「键值文件 → 环境变量」的实现，已经带着 60+ 条单测
     （重复键报错、空值视同未设、密钥不进摘要）。写第二份 = 造第二个会漂移的真相。
     """
-    import vadar_env
+    import llm_env
 
     if path is None:
         env = os.environ if environ is None else environ
         configured = _lookup(ENV_ALIASES["env_file"], None, env)
-        path = configured or vadar_env.default_path()
-    return vadar_env.load_env_file(path, environ=environ)
+        path = configured or llm_env.default_path()
+    return llm_env.load_env_file(path, environ=environ)

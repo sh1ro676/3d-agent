@@ -123,7 +123,7 @@ class TestEnvelopeInvariants:
     def test_failure_without_error_is_unconstructible(self):
         """这是「堵死静默失败」的地方。
 
-        VADAR 的 `engine.py:292-303`：命名空间里没有 `final_result` 就取 `""`，
+        早期基线的做法：命名空间里没有 `final_result` 就取 `""`，
         不报错、不算失败，直接当答案拿去评分。同样的对象在这里构造不出来。
         """
         with pytest.raises(ValueError, match="静默失败"):

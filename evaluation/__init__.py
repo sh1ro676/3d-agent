@@ -1,16 +1,22 @@
-"""evaluation —— 实验臂运行与评估。
+"""evaluation —— 评估口径层。
+
+本目录只负责一件事：**把「一次问答算不算对」写成可复算的代码**。
+它不产生答案、也不持有真值 —— 真值属于数据集，答案由 `agents/` 产出。
 
 模块职责（与文档 §17 的目录约定一致）：
 
-    metrics.py        VADAR 的四个子指标 + Total 聚合（口径要能被论文数字反推）
-    win_alarm.py      Windows 上替代 signal.SIGALRM 的执行看门狗
-    vadar_compat.py   ★ 让 vendor/VADAR 一字不改跑起来（stub 包 + 视觉适配 + 桥接）
-    runner.py         跑一个实验臂，产出 results/<arm>/*
+    metrics.py    Omni3D-Bench 的四类子指标 + Total 聚合
+                  （口径要能被论文自身的数字反推，见 `verify_total_aggregation`）
+    tests/        口径的回归测试
 
 设计约束（写在这里，免得后来者以为可以随手改）：
-* **vendor/VADAR 不改一字节**，所有差异都在这层适配器里显式可见。
+* **`agents/` 不许 import `evaluation/`** —— 评估是**量 agent 的器械**，
+  器械不能长在被测方身上（依赖方向见 §13.3(6)；
+  `tests/test_agent_layering.py` 用 AST 守着这一条）。
+* **两个精度口径必须一起给**：解析失败记 0 分（真实能力）与逐行对齐上游
+  （和论文表格对话）。只给一个数，读者一定会误读。
 * 每个结果文件都必须自带模型指纹与环境指纹 —— §16.2 明说了
   「换模型后的对比无法归因」是这类实验最常见的失败方式。
 """
 
-__all__ = ["metrics", "win_alarm", "vadar_compat"]
+__all__ = ["metrics"]

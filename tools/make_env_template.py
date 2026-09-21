@@ -17,7 +17,7 @@
     venvs/vision/Scripts/python.exe tools/make_env_template.py
 
 改过 `llm_backend.env`（加/改选项）之后跑一次即可。模板与工作副本的
-**键集合**必须一致（`evaluation/tests` 里有断言守着），否则新用户会缺选项。
+**键集合**必须一致（`tests/test_llm_env.py` 里有断言守着），否则新用户会缺选项。
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
 
-import vadar_env  # noqa: E402
+import llm_env  # noqa: E402
 
 LIVE = os.path.join(ROOT, "configs", "llm_backend.env")
 TEMPLATE = os.path.join(ROOT, "configs", "llm_backend.env.template")
@@ -49,7 +49,7 @@ def blank_secrets(text: str):
     out, n = [], 0
     for line in text.splitlines(keepends=True):
         m = _LINE_RE.match(line.rstrip("\r\n"))
-        if m and vadar_env.is_secret(m.group("key")):
+        if m and llm_env.is_secret(m.group("key")):
             out.append("%s%s=\n" % (m.group("indent"), m.group("key")))
             n += 1
         else:
@@ -68,11 +68,11 @@ def main() -> int:
     with io.open(TEMPLATE, "w", encoding="utf-8", newline="") as f:
         f.write(tpl_text)
 
-    tpl_values = vadar_env.parse_env_text(tpl_text)
-    live_values = vadar_env.parse_env_text(live_text)
+    tpl_values = llm_env.parse_env_text(tpl_text)
+    live_values = llm_env.parse_env_text(live_text)
 
     # 自检三条 —— 生成器自己出错的话，后面所有依赖模板的测试都会失去意义
-    leaked = [k for k in tpl_values if vadar_env.is_secret(k) and tpl_values[k]]
+    leaked = [k for k in tpl_values if llm_env.is_secret(k) and tpl_values[k]]
     assert not leaked, "模板里仍有非空密钥: %s" % leaked
 
     # 只扫**非注释行**。文件里的文档注释本来就写着「形如 sk-xxxxxxxx...」，
@@ -86,7 +86,7 @@ def main() -> int:
     only_live, only_tpl = sorted(live_keys - tpl_keys), sorted(tpl_keys - live_keys)
 
     print("清空密钥键 %d 个: %s" % (n, ", ".join(sorted(k for k in tpl_keys
-                                                      if vadar_env.is_secret(k)))))
+                                                      if llm_env.is_secret(k)))))
     print("模板: %s (%d 字节)" % (TEMPLATE, os.path.getsize(TEMPLATE)))
     if only_live or only_tpl:
         print("⚠ 键集合不一致 —— 模板需要同步：")

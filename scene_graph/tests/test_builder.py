@@ -2,7 +2,7 @@
 
 **这个文件本身就是一条论据。** 它证明 builder 的全部分支 —— 去重、掩码降级、
 无点云剔除、关系生成、掩码存盘、确定性 —— 都可以在没有 GPU 的机器上秒级验证。
-VADAR 做不到这一点：它的对应能力是 `vqa(image, question, bbox)`，
+早期基线做不到这一点：它的对应能力是把区域裁出来交给 VLM，
 一次模型调用，既不确定也没法写断言。这就是「关系可单测」这条架构收益的实测形态。
 
 FakePerception 只有三个方法，正好是 `PerceptionLike` 协议的全部 ——
@@ -447,8 +447,8 @@ class TestReproducibility:
     def test_two_builds_are_identical(self):
         """同图 + 同权重 + 同 prompt ⟹ 同 id、同质心、同边集。
 
-        VADAR 做不到这一条：它每次运行从输入里 `random.sample` 抽 10 题来生成
-        API（`evaluate.py:42`），于是工具集每次不同、结果不可比。
+        早期基线做不到这一条：它每次运行都随机抽样生成工具集（且无种子），
+        于是工具集每次不同、结果不可比。
         """
         out = []
         for _ in range(2):

@@ -1,11 +1,10 @@
 # ============================================================
 #  Phase 0 / Step 4 -- local LLM backend on Windows (no API key)
 #
-#  Why on Windows and not in WSL:
-#    WSL2 is not installed yet and needs a reboot. This script
-#    gives us a working OpenAI-compatible endpoint NOW, so the
-#    VADAR prompt-protocol test (05_probe_vadar_prompt.py) can
-#    run today. Ollama uses the 4060 directly through CUDA.
+#  Why local at all:
+#    它给出一条完全离线、零 API key 的 OpenAI 兼容端点，用来做
+#    「换了模型、链路还通不通」这类对照，以及在没有网络时验证执行链路。
+#    Ollama 通过 CUDA 直接用 4060，不需要 WSL、不需要管理员权限。
 #
 #  What it does:
 #    1. detect / install Ollama
@@ -164,7 +163,7 @@ if ($cur -eq $ModelStore) {
 $tuning = @{
     "OLLAMA_KV_CACHE_TYPE"   = "q8_0"    # 8-bit KV cache: ~half the VRAM of f16
     "OLLAMA_FLASH_ATTENTION" = "1"
-    "OLLAMA_CONTEXT_LENGTH"  = "16384"   # VADAR's prompts are 3-5K tokens; 16K leaves headroom
+    "OLLAMA_CONTEXT_LENGTH"  = "16384"   # 本项目提示词约 3-5K token；16K 留足余量
     "OLLAMA_KEEP_ALIVE"      = "10m"     # keep the model resident while we iterate
 }
 foreach ($k in $tuning.Keys) {
@@ -237,7 +236,7 @@ if ($found) {
 
 $probe = @{
     model   = $Model
-    prompt  = "Reply with exactly this and nothing else: <docstring>test</docstring><signature>def _t(image, bbox):</signature>"
+    prompt  = "Reply with exactly this and nothing else: OK"
     stream  = $false
     options = @{ temperature = 0; num_predict = 96 }
 } | ConvertTo-Json -Depth 5
@@ -254,9 +253,8 @@ try {
     Write-Host ("  " + ($txt -replace "`n", "`n  ")) -ForegroundColor DarkGray
     Write-Host "  -------------------" -ForegroundColor DarkGray
 
-    $hasTags = ($resp.response -match "<signature>")
-    if ($hasTags) { Ok "  the model emitted <signature> tags -- the protocol is understood" }
-    else { Warn "  no <signature> tag in the reply -- run 05_probe_vadar_prompt.py for the full test" }
+    if ($resp.response -match "OK") { Ok "  the endpoint answered as instructed -- it is usable" }
+    else { Warn "  the reply did not follow the instruction -- check the model and the template" }
 } catch {
     Fail ("generate call failed: " + $_.Exception.Message)
     exit 1
@@ -273,11 +271,11 @@ Write-Host "  OpenAI-compatible base URL : $Endpoint/v1"
 Write-Host "  model    : $Model"
 Write-Host "  weights  : $ModelStore"
 Write-Host ""
-Write-Host "NEXT -- the actual question this was set up to answer:"
+Write-Host "NEXT -- point the project's backend at this endpoint:"
 Write-Host ""
-Write-Host "    D:\Users\ROG\anaconda3\python.exe D:\3D_Spatial_Agent\phase0\05_probe_vadar_prompt.py"
+Write-Host "  把下面两行填进 configs/llm_backend.env（其余键留空即可）："
+Write-Host "      SPATIAL_BASE_URL=$Endpoint/v1"
+Write-Host "      SPATIAL_MODEL=$Model"
 Write-Host ""
-Write-Host "That script feeds VADAR's real SIGNATURE_PROMPT (verbatim from"
-Write-Host "vendor/VADAR/prompts/) to this endpoint and scores whether the model"
-Write-Host "obeys VADAR's tag contract -- which VADAR parses with zero tolerance."
+Write-Host "  之后的用法见 README「快速开始」一节。"
 Write-Host ""

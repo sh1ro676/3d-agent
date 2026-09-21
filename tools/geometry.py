@@ -55,9 +55,9 @@ def get_3d_position(
 ) -> ToolResult:
     """物体的相机系三维坐标（米）。`res.value` 是 **`[x, y, z]`**（相机系米制；`anchor` 可切到 `'bbox_center'`）。
 
-    ★ 这是全项目最核心的一个工具 —— VADAR 拿到的点云里本来就有 x/y，
-    但它只把 z 当 depth 用（`predefined_modules.py:375`、`:395`），
-    于是「二维查询」这个限制是自找的。升级到真三维不需要新模型、不需要新显存。
+    ★ 这是全项目最核心的一个工具 —— 上游实现拿到的点云里本来就有 x/y，
+    但它只把 z 当 depth 用，于是「二维查询」这个限制是自找的。
+    升级到真三维不需要新模型、不需要新显存。
     """
     scene = need_scene(ctx, scene_id)
     node = need_node(scene, object_id, "get_3d_position")
@@ -80,7 +80,7 @@ def get_3d_position(
 def get_3d_extent(ctx, scene_id: str | None = None, object_id: str = "") -> ToolResult:
     """物体的真实三维尺寸 (w, h, l)，米。`res.value` 是 **`{w, h, l}`**（米，轴对齐包围盒的三边长，**不是 OBB 也不是体积**）。
 
-    ★ VADAR 的对应物是 `get_2D_object_size`，它算的是 `2D 像素 × depth` ——
+    ★ 早期基线的对应物算的是 `2D 像素 × depth` ——
     整个式子里**没有焦距**，量纲都不成立（§5 结论 2）。这里的尺寸来自点云，
     是真正的米制量，因此可以拿来和真实物体比对、也可以拿来做尺度校正的锚。
     """
@@ -109,7 +109,7 @@ def calculate_distance(
 ) -> ToolResult:
     """两个物体之间的三维欧氏距离（米）。`res.value` 是 **float**（米）。
 
-    ★ 与 VADAR 的差别很具体：VADAR 只有 `depth(image, bbox)` 这个单点深度，
+    ★ 与早期基线的差别很具体：它只有单点深度，
     问「A 离 B 多远」只能 `|depth_a - depth_b|`。两个横向错开但等深的物体
     会得到 **0** —— 见 `test_euclidean_not_depth_difference`。
     在同一张图里，这种「错开」恰恰是最常见的情况。

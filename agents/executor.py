@@ -5,10 +5,10 @@
 这个文件不认识 LLM。它只回答一个问题：
 「把这段源码跑起来，它有没有按 `submit()` 契约交出答案？」
 
-VADAR 的对应物是 `engine/engine.py:292-303`，那条路上有四个真实的坑，
+早期基线实现的执行入口就是这条路，上面有四个真实的坑，
 这里每一条都改成一个**结构上不可能发生**的东西：
 
-| VADAR 的做法 | 后果（本机实测） | 这里的做法 |
+| 早期基线的做法 | 后果（本机实测） | 这里的做法 |
 |---|---|---|
 | 取答案靠命名空间里有没有 `final_result` 这个变量 | 缺失时给 `""` 然后**静默算错** | 认 `submit()` 调用；不调用 = 明确的 `no_submit` 失败 |
 | `exec` 时给完整 `globals()`，`open` 可用 | 绝对路径被当转义字符（`\\3D`→`\\x03`）→ `EINVAL`，5 次重试全废 | 命名空间里**没有 `open`、没有 `__import__`（白名单）、没有 `ctx`** |
@@ -242,8 +242,8 @@ def _error_codes(trace: Sequence[Mapping[str, Any]]) -> dict[str, int]:
 def _inject_async_exception(exc_type: type, ident: int) -> int:
     """把 `exc_type` 注入指定线程。返回 1 表示成功注入恰好一个线程。
 
-    与 `evaluation/win_alarm.py` 里那份是**同一套机制的两处落地**，不是遗漏的重复：
-    `agents/` 不许 import `evaluation/` —— evaluation 是**测量** agent 的器械，
+    与早期实验臂运行器里那份（已随上游检出于 2026-09-20 移出）是**同一套机制的两处落地**，
+    不是遗漏的重复：`agents/` 不许 import `evaluation/` —— evaluation 是**测量** agent 的器械，
     让被测方依赖测量方会把依赖方向反过来（那一层楼塌了，循环和它的实验一起崩）。
     """
     import ctypes
@@ -267,8 +267,8 @@ def _inject_async_exception(exc_type: type, ident: int) -> int:
 class _Watchdog:
     """硬超时。**只走一条路径：后台定时器 + 异步异常注入。**
 
-    为什么不用 `sys.settrace` 那条路（`evaluation/win_alarm.py` 用了两条）：
-    那边是**为了兼容 VADAR 自己的调用方式** —— 它在装 tracer 之后才 `alarm()`，
+    为什么不用 `sys.settrace` 那条路（早期基线的看门狗用过两条）：
+    那边是**为了兼容它自己的调用方式** —— 它在装 tracer 之后才 `alarm()`，
     顺路搭车几乎零成本。而我们自己写执行器，没必要为此付出
     「逐行回调」的代价（对纯 Python 程序是几十倍减速，而这台机器上
     程序里每次工具调用都要做点云运算，tracer 会显著放大等待）。
@@ -612,7 +612,7 @@ def execute_program(
             lineno=file_line_of(exc, source_label),
         ), buf.getvalue())
 
-    # 跑到这里说明程序正常结束了但没有 submit —— 这正是 VADAR 静默给 0 分那条路。
+    # 跑到这里说明程序正常结束了但没有 submit —— 这正是「静默给 0 分」那条路。
     #
     # ⚠ 但"没走到 submit"有两种，必须分开：
     #   ① 程序**一次都没调用** `submit()` —— 真·没交答卷，判失败；
@@ -629,6 +629,6 @@ def execute_program(
     return finish(ExecOutcome(
         ok=False, stage="no_submit",
         message="程序执行完毕但没有调用 submit()。答案只能用 submit(answer, evidence=[...]) 交出 —— "
-                "VADAR 那种『命名空间里有 final_result 就算成功、没有就静默给空串』的做法是错的，"
+                "靠『命名空间里有 final_result 就算成功、没有就静默给空串』取答案是错的，"
                 "所以这里明确判失败。",
     ), buf.getvalue())

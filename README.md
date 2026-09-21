@@ -1,6 +1,7 @@
 # 3D Spatial Agent
 
-基于 **VADAR**（CVPR 2025, `damianomarsili/VADAR`）技术路线重写的三维空间智能体项目。
+自建的三维空间智能体项目：**感知层**接三个开源模型（GroundingDINO + SAM2 + UniDepth），
+**Agent 层与工具层全部自研**。
 课程：3D 视觉 / 三维视觉算法。用途：课程大作业 + 答辩。
 
 **一句话定位**：让 Agent 不再「看图猜空间关系」，而是「调工具算空间关系」。
@@ -29,10 +30,9 @@
 
 ## 文档阅读顺序
 
-1. **`docs/VADAR可借鉴性评估与路径选择.md`** ← **先读这份**，它取代主方案的部分结论（WSL 与「基于 VADAR 改造」两条）
-2. `docs/3D_Spatial_Agent_技术调研与实施方案.md`（20 章主方案，`.html` 为阅读版）
+1. `docs/3D_Spatial_Agent_技术调研与实施方案.md`（主方案，20 余章；`.html` 为阅读版）
 
-所有关于 VADAR 的陈述都标注了 `文件:行号`；凡是估算值都显式标注「估算」，实测值才算数。
+**凡是估算值都显式标注「估算」，实测值才算数。**
 
 ---
 
@@ -40,20 +40,21 @@
 
 | Phase | 状态 |
 |---|---|
-| **0 环境** | ✅ **已完成** —— 视觉栈 Windows 原生跑通，**未装 WSL** |
+| **0 环境** | ✅ 视觉栈 **Windows 原生**跑通，未装 WSL |
 | 0.x 核心验证 | ✅ `probe3d.py` A–D 四段全 PASS；`probe_sam2.py` 补完最后一批估算值；`probe_depth_gt.py` 量化内参杠杆 |
-| **1b 自建骨架** | ✅ **已完成（2026-09-16）** —— 信封 + 场景图 + 11 个工具 |
-| **1c 感知层 + builder** | ✅ **已完成（2026-09-16）** —— `vision/` 七个模块 + `builder.py` + `store.py`；**193 用例全绿（2.8 s、零 GPU）**，已产出真实照片的场景图 |
-| **1c.2 内参因果证据 + EXIF** | ✅ **已完成（2026-09-16 晚）** —— 剂量-反应扫描 + 数字变焦复现 + **EXIF 内参路径端到端跑通**；见下文「内参杠杆（二）」 |
-| **1c.3 跨来源复跑** | ✅ **已完成（2026-09-16 深夜）** —— 10 张图 / 4 个来源 / 5 台真实相机 EXIF。**结论是发现了一个隐藏混杂因子**：`640×480` 是相机头的一个反常工作点，§21/§22 的数字都取自它。见下文「内参杠杆（三）」 |
-| 1 VADAR 原版跑通 | ⬜ 对照臂 A，只需一个 cheap API key |
-| 2 吃透 VADAR 架构 | ✅ 已完成（产出是设计决策，见方案文档 §4、§6） |
-| 3–13 | ⬜ 见主方案文档 §18 |
+| **1b 自建骨架** | ✅（2026-09-16）信封 + 场景图 + 工具库 |
+| **1c 感知层 + builder** | ✅（2026-09-16）`vision/` 八个模块 + `builder.py` + `store.py`；**零 GPU 可单测**，已产出真实照片的场景图 |
+| **1c.2 内参因果证据 + EXIF** | ✅（2026-09-16 晚）剂量-反应扫描 + 数字变焦复现 + **EXIF 内参路径端到端跑通**；见下文「内参杠杆（二）」 |
+| **1c.3 跨来源复跑** | ✅（2026-09-16 深夜）10 张图 / 4 个来源 / 5 台真实相机 EXIF。**发现了一个隐藏混杂因子**：`640×480` 是相机头的一个反常工作点，§21/§22 的数字都取自它。见下文「内参杠杆（三）」 |
+| **L5 场景级报告层** | ✅ `describe_scene` / `summarize_scene` / `diagnose_failure` / `counterfactual`（分析工具，不在问答动作空间内） |
+| **自研 Agent** | ✅ `agents/`：程序合成 + 执行 + 记忆 + 前置规划 + **答案证据校验** |
+| **前端演示台** | ✅ `demo/` 四区界面 + 四种布局 + 现场真跑 `/api/ask` + 反事实 + 上传建图 |
+| 4 显存工程 / 8 数据集合成 / 9 QLoRA / 10 评估 / 12 完整实验 / 13 答辩 Demo | ⬜ |
 
-**下一步**：把 `scene.json` 交给 L5 报告层（`describe_scene` / `diagnose_failure`）。
+**下一步**：接外部给定的对照方法、补 `ablation.py` / `stats.py`、进入完整实验（路线全图见方案文档 §18）。
 **手机 EXIF 仍是缺口**（5 台真机画幅覆盖 **1.0–2.0×**：35 mm ×1、APS-C ×2、4/3 与 MFT ×2；
 最小的那台 MFT **仍然逃得掉 `check_fov`**，所以不是「传感器太大才漏」的巧合），
-以及「跨来源 + GT 内参」的配对 —— 正解是 Omni3D-Bench，落在 Phase 12（方案文档 §23.5）。
+以及「跨来源 + GT 内参」的配对 —— 原以为 Omni3D-Bench 能补上，**实测它没有 GT 相机/深度/三维框**，该基准上无法验证内参杠杆，需另找带标定的数据源（方案文档 §23.5）。
 
 > 已写进代码的两条硬约束：① `get_3d_position` **必须用 SAM2 掩码质心**，不能用检测框内中位数 ——
 > 两者相差**均值 83 mm / 最大 208 mm**，而关系判断的容差是 50 mm。
@@ -62,16 +63,8 @@
 
 ---
 
-## 三条硬约束（2026-09-16 修订）
-
-| 约束 | 说明 | 何时相关 |
-|---|---|---|
-| `vendor/VADAR/` 目录名**必须**叫 `VADAR` | `predefined_modules.py:17` 硬编码 `from VADAR.prompts...` | 只在跑**实验臂 A**（原版基线）时 |
-| VADAR 本体需 Unix（`signal.alarm`） | `engine.py:594`、`agents.py:572` | 同上；**我们自己的实现完全不需要** |
-| 主模型必须多模态 | `vqa()` 内联 base64 图片发给模型 | 只在复用 VADAR 的 `vqa()` 时；自建架构已把视觉语义拆给独立小 VLM |
-
-> **WSL2 已降为可选**：过去认为"必须 WSL2"的三处阻塞（`signal.SIGALRM` / GroundingDINO 编译 / SAM2 编译）
-> 中，前两处随「不基于 VADAR 代码实现」而消失。**已实测整条视觉栈在 Windows 原生跑通。**
+> **全程 Windows 原生，不需要 WSL2。** 整条视觉栈（GroundingDINO + SAM2 + UniDepth）已在 Windows 上
+> 实测跑通；延迟与峰值显存见下。
 
 ---
 
@@ -100,7 +93,7 @@
 
 **`points` 是真几何（创新点 1 的地基）**：`infer()` 返回 7 个键，`points[2]` 与 `depth` **完全相同**
 （差 0.000e+00），真实照片深度落在 **[1.376, 3.974] m**（单位就是米）。
-→ **VADAR 拿到完整 XYZ 却只取 z 列**；升级到真三维不需要任何新模型、任何新显存。
+→ **完整 XYZ 已经在手里，`depth` 只是它的 z 列** —— 升级到真三维不需要任何新模型、任何新显存。
 
 ---
 
@@ -268,8 +261,9 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
   Sigma DP3 Merrill / Sony DSC-RX1R，画幅 1.0–2.0×）—— fx 独立重算与模块输出差 **0.000 px**，
   `FocalLength × 已知裁切系数` 与 EXIF 值一致到 0.00–1.96%。
   ⟹ 解析链路可靠，但**手机仍缺席**（而手机恰好是唯一会被 `check_fov` 兜住的一档）。
-- **全项目第一张与 UniDepth demo 无关的真实照片**：`vendor/VADAR/demo-notebook/resources/demo.jpg`
-  （1440×1920 竖幅、**另一个房间**），预测 HFoV 64.1°、深度中位 2.05 m —— 看起来完全合理。
+- **全项目第一张与 UniDepth demo 无关的真实照片**（1440×1920 竖幅、**另一个房间**）：
+  预测 HFoV 64.1°、深度中位 2.05 m —— 看起来完全合理。
+  ⚠ 该素材随早期基线检出一起移出本仓库，**结论保留但当前不可复现**。
 
 > 完整表格、预处理轨迹、素材来源与可复现命令见方案文档 **§23**。
 > 探针：`phase0/fetch_cross_source.py` + `phase0/probe_cross_source.py --part a|b|c`。
@@ -282,35 +276,35 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
 3d-agent\
 ├── README.md                  ← 你在这里
 ├── docs\
-│   ├── VADAR可借鉴性评估与路径选择.md        ★ 先读
-│   └── 3D_Spatial_Agent_技术调研与实施方案.md / .html
+│   └── 3D_Spatial_Agent_技术调研与实施方案.md / .html       ★ 主方案
+├── configs\
+│   └── llm_backend.env.template   LLM 后端配置模板（含真 key 的 llm_backend.env 不入库）
+├── llm_env.py                 .env 加载器：解析 / 冲突检测 / 密钥掩码
 ├── vendor\
-│   ├── VADAR\                 原始源码（HEAD 56018ebc），**一行不改**，只作参考
-│   └── UniDepth\              git clone，editable 安装
+│   └── UniDepth\              git clone，editable 安装（VENDOR.md 记固定 HEAD 与获取命令）
 ├── venvs\vision\              本地虚拟环境（不入库，按文档自建）
 ├── .cache\                    模型权重与 pip 缓存（不入库）
 ├── phase0\                    Phase 0 可执行脚本与探针
 │   ├── 01_setup_windows.ps1      建 venv + 装依赖 + 自检 + 出锁文件
-│   ├── 01b_fetch_torch.ps1       curl 预下 torch 轮子（断点续传）
-│   ├── 01c_fetch_gdino.ps1       curl 分段续传 GroundingDINO 权重
+│   ├── 01b/01c/01d_fetch_*.ps1   curl 预下 torch 轮子 / GroundingDINO / SAM2 权重
+│   ├── 04_install_ollama.ps1     可选的本地 LLM 后端
 │   ├── verify_env.py             环境自检（CUDA / 缺件 / import UniDepthV2）
 │   ├── probe3d.py                ★ 核心探针：A–D 四段端到端
 │   ├── probe3d_result.json       机器可读实测结果
+│   ├── probe_sam2.py             批量 vs 逐个的调用形态对照（7.57×）
 │   ├── requirements-vision.lock.txt  74 个固定版本
-│   ├── 02_probe_llm_api.py       LLM 端点探针
-│   ├── 03_vadar_llm_bridge.py    不改 VADAR 源码换 LLM 后端
-│   ├── LLM_BACKEND.md            后端切换说明与 5 个坑
 │   ├── probe_depth_gt.py         ★ 内参杠杆探针（GT 深度逐像素对照，见上文）
 │   ├── probe_k_sweep.py          ★ 内参剂量-反应 + 数字变焦三视场复现（见「内参杠杆（二）」）
 │   ├── probe_principal_point.py  ★ 主点 vs 量化的误差分解（发现主点才是 EXIF 的主要误差）
 │   ├── make_exif_fixture.py      ★ 造带真值的 EXIF fixture（同时写 probe_exif_pipeline_report.txt）
 │   ├── fetch_cross_source.py     ★ 跨来源素材抓取（真实相机 EXIF + 真实场景，见「内参杠杆（三）」）
 │   ├── probe_cross_source.py     ★ 跨来源复跑：A=真实 EXIF / B=相机头行为 / C=分辨率剂量-反应
-│   └── 00_install_wsl.ps1 / 01_setup_ubuntu.sh   旧 WSL 路线，保留作对照
+│   └── probe_intrinsics.py       内参口径对照（各探针的 *_report.txt / *_result.json 同目录）
 ├── vision\                    ★ L1 感知层（三模型的原生包装）
 │   ├── types.py               Detection / DepthField / PerceptionLike 协议  ← 零 torch
 │   ├── geometry.py            掩码质心 / 稳健尺寸 / 重力方向 / 视场检查      ← 零 torch
 │   ├── exif.py                ★ EXIF → 内参（长边约定 + 量化误差随 K 一起记录）← 零 torch
+│   ├── semantics.py           颜色 / 材质判定（VLM 侧语义的落点）            ← 零 torch
 │   ├── grounding.py           GroundingDINO（transformers 原生）
 │   ├── segmentation.py        SAM2（transformers 原生，强制批量）
 │   ├── depth.py               UniDepth V2 → points / depth / K（含内参覆盖规则）
@@ -322,6 +316,8 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
 │   ├── guards.py              NOT_IN_SCENE（幻觉捕获点）/ NOT_FOUND
 │   ├── geometry.py            get_3d_position / get_3d_extent / calculate_distance / calculate_angle
 │   ├── spatial.py             list_objects / find_object / find_nearest / query_relation …
+│   ├── attributes.py          get_attributes（关掉 VLM 时返回 CAPABILITY_DISABLED）
+│   ├── scene_report.py        describe_scene / summarize_scene / diagnose_failure / counterfactual
 │   └── build_doc_html.py      Markdown → HTML（构建脚本，不属于工具库）
 ├── scene_graph\               ★ 3D 场景图中间表示
 │   ├── schema.py              Node / Edge / SceneGraph（坐标系约定写在文件头）
@@ -329,16 +325,38 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
 │   ├── builder.py             ★ 单遍构建：升维→检测→去重→分割→节点→重力→关系
 │   ├── store.py               落盘（格式版本信封）+ 掩码 1-bit PNG 往返
 │   └── tests\                 test_relations.py / test_builder.py / test_store.py
-├── tests\                     test_tools.py / test_vision_geometry.py / test_vision_depth.py / test_vision_exif.py
+├── llm\                       LLM 后端适配层
+│   ├── adapter.py             OpenAI 兼容客户端（环境变量键名表 `ENV_ALIASES`）
+│   ├── render.py              工具文档 → 提示词（只取 docstring 第一段）
+│   ├── schema.py              程序与提交的结构化输出约束
+│   └── vlm.py                 视觉语义的小模型封装
+├── agents\                    ★ 自研 Agent
+│   ├── synthesizer.py         单轮程序合成（主路径，1 次 LLM 调用）
+│   ├── executor.py            12 个问答工具的显式白名单 + 静态检查 + 子进程执行 + 超时强杀
+│   ├── verifier.py            答案证据校验器（supported / weak / unsupported / abstained）
+│   ├── planner.py             前置规划臂（只改上下文，不改控制流）
+│   ├── memory.py              多轮轨迹记忆
+│   ├── loop.py                多轮 tool-calling（消融臂 E′）
+│   └── prompts\
+├── evaluation\                评估口径层（阈值与分母口径写在 `metrics.py` 里）
+├── tests\                     跨模块单测（零 GPU、不需要联网）
 ├── scripts\
-│   ├── smoke_tools.py         端到端冒烟（不需要 GPU、不需要联网）
 │   ├── build_scene.py         ★ 真实跑通入口（加载三模型 → scene.json + masks + build_log）
+│   ├── run_agent.py           ★ Agent 端到端入口（程序合成 → 执行 → 证据校验）
+│   ├── serve_demo.py          起前端演示台
+│   ├── smoke_tools.py         端到端冒烟（不需要 GPU、不需要联网）
 │   ├── inspect_scene.py       场景图体检：内参/视场 → 掩码泄漏 → 点云离散 → 尺寸越界
-│   └── inspect_exif.py        ★ 批量体检图片 EXIF 可用性（不加载模型、不需要 GPU）
-├── dataset\scenes\            场景图 JSON 缓存
-│                              living_room_gt / living_room_pred 是同图内参 A/B；
-│                              exif_fixture_exif / exif_fixture_pred 是 EXIF 路径同图 A/B
-└── logs\
+│   ├── inspect_exif.py        ★ 批量体检图片 EXIF 可用性（不加载模型、不需要 GPU）
+│   ├── mine_glue_patterns.py  ★ 从已落盘的真跑程序里挖重复形态（轨迹驱动的算子挖掘）
+│   └── …                      report_scene / export_demo / verify_points / probe_combination …
+├── dataset\                   数据集与场景图缓存
+│   ├── scenes\                场景图 JSON（living_room_gt / _pred 是同图内参 A/B；
+│   │                          exif_fixture_exif / _pred 是 EXIF 路径同图 A/B）
+│   └── builders\              Omni3D-Bench 等数据集的抓取与读取
+├── demo\                      前端演示台（`?layout=` 四种布局，静态页 + 现场真跑）
+├── reports\                   实验产物与分析报告 ← **判断「当前是哪一版」只看 `reports/README.md`，不认 mtime**
+├── results\                   实验臂真跑产物
+└── logs\                      LLM 调用日志
 ```
 
 ---
@@ -347,7 +365,7 @@ EXIF 不记录主点，只能取图像中心。把误差拆开：
 
 **首次使用三步**：
 
-1. 按 **`vendor/VENDOR.md`** 拉回两个第三方检出（`vendor/VADAR`、`vendor/UniDepth` 本身是 git clone，
+1. 按 **`vendor/VENDOR.md`** 拉回第三方检出（`vendor/UniDepth` 本身是 git clone，
    不入库，该文件记录了固定 HEAD 与重新获取命令）；
 2. 跑 **`phase0/01_setup_windows.ps1`** —— 建 venv + 装依赖 + 自检 + 出锁文件；
 3. 依赖版本固定在 `phase0/requirements-vision.lock.txt`，环境须为 Python 3.12。
@@ -364,6 +382,14 @@ $PY = "venvs\vision\Scripts\python.exe"
 
 # 端到端冒烟：场景图 → 工具 → 答案 + 证据链 + trace（不需要 GPU 与联网）
 & $PY scripts\smoke_tools.py
+
+# ★ 自研 Agent 端到端（按成本从低到高，先看提示词再花钱）
+& $PY scripts\run_agent.py --scene living_room --question "哪把椅子离门最近？" --dry-run
+& $PY scripts\run_agent.py --scene living_room --program-file my_prog.py
+& $PY scripts\run_agent.py --scene living_room --question "哪把椅子离门最近？"
+
+# ★ 前端演示台（默认 http://127.0.0.1:8770）
+& $PY scripts\serve_demo.py
 
 # 先看看手上的照片有没有可用的 EXIF（不加载任何模型、不需要 GPU）
 & $PY scripts\inspect_exif.py `
@@ -416,8 +442,9 @@ python tools\build_doc_html.py `
 
 1. **空间关系必须由几何计算得出**，不由 LLM/VLM 判断。VLM 只用于颜色/材质等语义属性。
 2. **一切数字必须实测**。方案文档里每个估算值都标了「需实测替换」，实测值才算数。
-3. **不编造 VADAR 中不存在的函数**。所有代码引用都带真实文件行号。
-4. **`vendor/VADAR/` 一行不改**，所有改动通过适配器 + 补丁记录，保证实验臂 A 随时可跑。
+3. **不编造第三方库里不存在的函数**。引用外部代码一律带真实文件行号；若该检出已移出仓库，
+   改用行为描述而不是行号指针。
+4. **`vendor/` 下的第三方检出一行不改**，自研侧只通过适配层调用它。
 5. **创新点必须能出定量实验**。「换了个 LLM」不算创新点。
 
 > **许可提示**：UniDepth 与 Omni3D-Bench 均为 **CC BY-NC 4.0**，本项目**不可商用**；报告与答辩中须注明。

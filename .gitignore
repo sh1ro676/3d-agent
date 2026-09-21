@@ -21,17 +21,22 @@ env/
 *.safetensors
 
 # ---------- 3. 密钥（本仓库唯一真实凭据所在）----------
-# configs/llm_backend.env 内含真实 VADAR_API_KEY，**绝不提交**。
+# configs/llm_backend.env 内含真实 SPATIAL_API_KEY，**绝不提交**。
 # 保留同名 .template（空值占位），需要时 cp 一份再填。
-configs/llm_backend.env
+#
+# ⚠ 忽略规则必须**连备份一起覆盖**。改配置前顺手 cp 一份副本
+# （如 llm_backend.env.pre_spatial_bak）时，那个副本同样含真 key，
+# 而它既不匹配精确路径、也不匹配 `*.env`（后缀不同）—— 2026-09-20 实测：
+# 备份会静默作为一个新文件进入暂存区。所以这里用前缀通配全收，再显式放行模板。
+configs/llm_backend.env*
+!configs/llm_backend.env.template
 *.env
 !*.env.template
 
 # ---------- 4. 第三方只读检出 ----------
-# vendor/UniDepth、vendor/VADAR 本身是 git clone（均已确认无本地改动）。
+# vendor/UniDepth 本身是 git clone（已确认无本地改动）。
 # 固定版本记在 vendor/VENDOR.md，需要时按该文件重新 clone。
 vendor/UniDepth/
-vendor/VADAR/
 !vendor/VENDOR.md
 
 # ---------- 5. 大数据集（可重新下载）----------

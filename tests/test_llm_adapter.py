@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
 
 from llm.adapter import (  # noqa: E402
     DEFAULT_PRICE_TABLE,
+    ENV_ALIASES,
     LLMClient,
     LLMError,
     LLMSettings,
@@ -96,19 +97,24 @@ class TestSettingsFromEnv:
         assert s.api_key == ""
         assert s.ready() is False
 
-    def test_canonical_key_wins_over_legacy(self):
-        env = {"SPATIAL_MODEL": "new-model", "VADAR_MODEL": "old-model"}
-        assert LLMSettings.from_env("text", environ=env).model == "new-model"
+    def test_every_entry_has_exactly_one_key_name(self):
+        """**结构上禁止隐式回退**：每个设置项只许有一个键名。
 
-    def test_falls_back_to_legacy_key(self):
-        """自研臂没写 SPATIAL_* 时，必须沿用基线臂那一套（一份配置文件驱动两臂）。"""
-        env = {"VADAR_MODEL": "deepseek-flash", "VADAR_API_KEY": "sk-a"}
-        s = LLMSettings.from_env("text", environ=env)
-        assert s.model == "deepseek-flash" and s.api_key == "sk-a"
+        双轨（规范名 + 历史别名）的风险是同一个设置两个来源、优先级靠约定而不是
+        靠事实 —— 那是配置层面最典型的混淆变量。曾经存在过这样一条双轨，已随
+        它服务的那条实验路径一起删除。这里从结构上钉死：任何人往 ENV_ALIASES 里
+        加第二个键名，这条断言立刻变红。
+        """
+        multi = {k: v for k, v in ENV_ALIASES.items() if len(v) != 1}
+        assert not multi, "这些设置项有多个键名（等于隐式回退）：%s" % multi
+        assert ENV_ALIASES, "ENV_ALIASES 不该为空"
 
     def test_empty_value_counts_as_unset(self):
-        env = {"SPATIAL_API_KEY": "", "VADAR_API_KEY": "sk-legacy"}
-        assert LLMSettings.from_env("text", environ=env).api_key == "sk-legacy"
+        """空串视同未设（与 `llm_env` 同口径）—— 不把空值当成一份有效配置。"""
+        env = {"SPATIAL_API_KEY": "", "SPATIAL_MODEL": "deepseek-flash"}
+        s = LLMSettings.from_env("text", environ=env)
+        assert s.api_key == "" and s.ready() is False
+        assert s.model == "deepseek-flash"
 
     # 反面：静默回退成默认值会让报告里出现一份"不是你写的"配置
     def test_bad_temperature_raises_instead_of_falling_back(self):

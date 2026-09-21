@@ -13,7 +13,7 @@
 | `phase1_probe_*.json` | LLM 探针报告。`first_run` = 首轮（含**已验证有误的派生字段**）、`raw` = 打补丁前的原始记录；**两者都是证据，别删** |
 | `phase1d_k_sweep.txt` | 内参剂量-反应原始输出，方案文档 §21 的数字**由它背书** |
 | `phase1e_principal_point.txt` | 主点偏移探针原始输出，方案文档 §22 的数字**由它背书** |
-| `vadar_llm_calls.jsonl` | VADAR LLM 桥接调用的真实 trace（`phase0/03_vadar_llm_bridge.py` 产物） |
+| `legacy_arm_a_llm_calls.jsonl` | 早期实验臂（上游原版流水线）LLM 调用的真实 trace。**2026-09-20 上游相关代码全部移出仓库**，这个文件是那批调用的唯一凭证，故连同内容一起保留（只改了文件名） |
 | `_ls_reports.txt`、`_ls2.txt`、`_collect*.txt`、`_mem_sync.txt`、`_cleanup.txt` | 一次性命令输出（`_` 前缀）。留着的价值：`_cleanup.txt` 是「本机删不掉文件」的**证据** |
 | `glue_programs.txt` | ⛔ **已被取代** —— 同一份转储的正本现在在 `reports/glue_programs.txt`（它被 `reports/glue_mining.md` 引用，按目录约定该放 reports/）。本机删不掉，所以留个标记：**别引用这一份** |
 | `probe_combination.log`、`mine_glue.log`、`probe_analyze.log`、`_pytest_final.txt` | 最近一次运行的输出。可覆盖，但别当历史证据引用 |
@@ -30,18 +30,20 @@ D:/3D_Spatial_Agent/venvs/vision/Scripts/python.exe -m pytest -q
 
 | 套件 | 数量 | 覆盖 |
 |---|---|---|
-| `tests/` | 556 | vision 层（geometry/exif/depth）+ 工具层（tools/、L5 报告层）+ 自研 Agent 层（契约 / 校验器 / 提示词预算 / 静态检查） |
+| `tests/` | 555 | vision 层（geometry/exif/depth）+ 工具层（tools/、L5 报告层）+ 自研 Agent 层（契约 / 校验器 / 提示词预算 / 静态检查） |
 | `scene_graph/tests/` | 85 | 场景图构建（builder）、关系计算（relations）、存储（store） |
-| `evaluation/tests/` | 114 | 实验臂运行器（题集选择/指标口径/兼容层/alarm 替代/产物分流） |
-| **合计** | **755** | — |
+| `evaluation/tests/` | 19 | 指标口径（metrics）—— 运行器 / 兼容层 / 告警替代三组用例随上游检出于 2026-09-20 一并移出 |
+| **合计** | **660** | — |
 
-⚠ 上面这张表是 **2026-09-19** 的数（原表 306 是 09-17 的，已过期）。
+⚠ 上面这张表是 **2026-09-21 实测**（前值 755 是 09-19 的，原表 306 是 09-17 的）。
+`evaluation/tests/` 从 114 → 19 **不是「测试被删掉了」**，而是**那批用例守卫的代码移出了仓库** ——
+两个数一起变时，先分清是「测量变了」还是「尺子变了」（方案文档 §14 教训 6）。
 **别把「上次记的数」当成「现在的数」**：验证一句
 `python -m pytest --collect-only -q -p no:cacheprovider | find /c "::"` 就够
 （本机没有 `find`/`grep`，用 PowerShell 数含 `::` 的行，见下方 Windows 坑 2）。
-只跑其中一层不会有任何提示 —— `pytest tests/` 会安静地少收 199 个用例。
+只跑其中一层不会有任何提示 —— `pytest tests/` 会安静地少收 105 个用例。
 
-只跑 `pytest tests/` 会**少收 199 个用例**且不会报错，看起来"绿色"却漏了两整层——这是本项目最容易踩的假绿陷阱。
+只跑 `pytest tests/` 会**少收 105 个用例**且不会报错，看起来"绿色"却漏了两整层——这是本项目最容易踩的假绿陷阱。
 （2026-09-20 勘误：此处原写「142」，与上一段的 199 自相矛盾。**同一份文件里两个数互相打架，
 比两个数都错更容易蒙混过去** —— 因为读的人会挑一个相信。）
 
@@ -49,10 +51,11 @@ D:/3D_Spatial_Agent/venvs/vision/Scripts/python.exe -m pytest -q
 
 2026-09-20 曾想再跑一次全量来复验，命令**在约 121 秒处被宿主 shell 杀掉**
 （`Set-Location … | Out-File` 这条链没跑完），而 `Out-File` 是**覆盖**写 ⟹
-那份「**755 passed, 0 skipped**」的权威记录**被 28% 的半截输出覆盖掉了**。
+那份「**755 passed, 0 skipped**」（**当时的用例口径**）的权威记录**被 28% 的半截输出覆盖掉了**。
 现在这个文件里只有三行进度点和一段失败标记，**没有 `EXIT=` 行**。
 
-- **755 这个数字仍然成立**（来源是 2026-09-19 那次完整运行，见上表），只是**不在这个文件里了**。
+- **755 是 2026-09-19 那次完整运行的真实数字**，它证明的是**当时的**用例集合全绿；
+  当前集合已是 **660**（见上表，2026-09-21 复核实测）⟹ **不能拿 755 当现在的基线**。
 - 想恢复这份权威记录，**必须再跑一次完整全量**（后台跑，避开 121 秒上限）。
   按用户口径（「先不用测试，只要功能框架」）**没有自动重跑**。
 - ⭐ **教训**：把「权威记录」交给一个**会被覆盖**的文件时，那个文件必须
@@ -68,8 +71,10 @@ D:/3D_Spatial_Agent/venvs/vision/Scripts/python.exe -m pytest -q
 而汇总行只会从「306 passed」变成「305 passed, 1 skipped」。
 
 所以：**看到 `skipped` 要当成失败处理**，先 `-rs` 查是哪一条、为什么。
-`evaluation/tests/test_runner.py::TestEvaluationModulesStayTorchFreeAtImport`
-用 AST 静态检查守住同一件事（不依赖进程状态、不依赖测试顺序）。
+⚠ 曾经还有一条 `evaluation/tests/test_runner.py::TestEvaluationModulesStayTorchFreeAtImport`，
+用 AST 静态检查守住同一件事（不依赖进程状态、不依赖测试顺序）——**它随实验臂运行器于
+2026-09-20 移出仓库**。也就是说：现在这条「不靠进程状态」的守卫**是缺的**，
+只剩上面那条**会 SKIP 的哨兵**。（要补，就得在新的评测入口旁边重建一条。）
 
 ### Windows 上的两个坑
 

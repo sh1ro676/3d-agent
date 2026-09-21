@@ -8,7 +8,7 @@
 
 分工的铁律（§13.3(4)）：`relations.py` 只吃 `Node`、返回数学结论；
 「校验 object_id 是否存在」「组装 evidence」「套上 ToolResult」全在 `tools/spatial.py`。
-混成一层，关系函数就再也测不了了 —— 而「关系可单测」正是 Scene Graph 相对 VADAR 的
+混成一层，关系函数就再也测不了了 —— 而「关系可单测」正是 Scene Graph 相对早期基线的
 三条收益之一（§12.1）。
 """
 

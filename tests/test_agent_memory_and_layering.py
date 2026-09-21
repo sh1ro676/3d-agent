@@ -181,7 +181,7 @@ class TestToolsetAgreement:
         assert set(QA_TOOLSET) | set(META_TOOLS) == set(tool_names())
 
     def test_docs_are_compact(self):
-        """prompt 长度 = 成本。VADAR 的 program prompt 是 6965 字符，这里必须显著更短。"""
+        """prompt 长度 = 成本。早期基线的 program prompt 是 6965 字符，这里必须显著更短。"""
         assert len(docs_text(tools=QA_TOOLSET)) < 2500
 
     def test_every_tool_documents_its_return_shape(self):

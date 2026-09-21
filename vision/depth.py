@@ -2,9 +2,8 @@
 
 本文件是全项目**最重要的一段包装**，因为 Phase 0 的核心发现就发生在这里：
 
-    VADAR 读 `depth`：
+    早期基线只读 `depth` 这一路：
         preds = self.unidepth_model.infer(rgb)["depth"].squeeze().cpu().numpy()
-        （engine/predefined_modules.py:375、:395）
 
     而 UniDepth 同一个 `infer()` 还返回 `points`（相机系 XYZ 点云，单位米）。
     源码里 `depth` 就是 `points` 的 z 列：
@@ -12,7 +11,7 @@
         unidepthv2.py:335  out["depth"]  = points[:, -1:]
     实测 `points[2] - depth` 的最大差是 **0.000e+00**（逐位相同）。
 
-    ⟹ VADAR 手里一直握着完整的三维点云，却只留了 z 列、丢掉了 x/y。
+    ⟹ 只读 `depth` 等于手里握着完整的三维点云，却只留 z 列、丢掉 x/y。
        升级到真三维**不需要任何新模型、不需要任何额外显存**。
 
 三条写进代码的结论：
@@ -26,7 +25,7 @@
    是正常量级，不是 bug。用 `points` 就不必付这道二次误差。
    判定用的也是相对误差：480p、2–4 m 场景里要求 2 cm（0.5%）对单目模型不现实。
 
-③ 输入约定照抄 VADAR：`uint8`、`(3,H,W)`、**无 batch 维、无归一化**
+③ 输入约定沿用实测通过的那一套：`uint8`、`(3,H,W)`、**无 batch 维、无归一化**
    （`torch.from_numpy(np.array(image)).permute(2,0,1)`）。这是 Phase 0 实测通过的
    调用方式，换成「标准」的 float/归一化反而没有验证过。
 

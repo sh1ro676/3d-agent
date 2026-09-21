@@ -133,7 +133,7 @@ class RelationVerdict:
 
     为什么不直接返回 `bool`：§11 设计原则 2 要求「返回值必须是几何证据」。
     如果只回 bool，外层就没法在 `Edge.metric` 里留下依据，
-    「为什么判定为左」这件事就丢了 —— 而这正是相对 VADAR 的卖点之一。
+    「为什么判定为左」这件事就丢了 —— 而这正是相对早期基线的卖点之一。
 
     `__bool__` 让它能直接写 `if left_of(a, b):`，只是要小心：
     `distance_m()` 的 value 是 float，此时 `bool()` 是「非零即真」。
@@ -209,7 +209,7 @@ def _up_range(bbox: BBox3D, up: UpAxis) -> tuple[float, float]:
 def distance_m(a: Node, b: Node) -> RelationVerdict:
     """三维欧氏距离（米）。
 
-    **不是 depth 相减** —— VADAR 的 `depth(image, bbox)` 返回单点深度，
+    **不是 depth 相减** —— 早期基线只回单点深度，
     两个物体的「距离」只能是 `|depth_a - depth_b|`，这在两者有横向错位时
     完全错（正对相机的 A 与斜前方的 B 可能同深度）。
     """
