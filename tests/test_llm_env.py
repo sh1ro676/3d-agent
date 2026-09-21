@@ -230,20 +230,37 @@ class TestLoad:
 
         用 `ast` 静态取键，**不 import adapter** —— 静态检查足够，
         而且不会在测试进程里留下任何副作用（环境变量、日志句柄）。
+
+        ⚠ 2026-09-21 修复：这里原先只认 `ast.Assign`，而 `ENV_ALIASES` 是
+        **带注解的赋值**（`AnnAssign`）⟹ 循环一次都没进过，`keys` 恒为空集，
+        于是「每个键都在 KNOWN_KEYS 里」这句断言在**空集上永远成立**之前，
+        先被最后那行 `assert keys` 挡住 —— 该守卫**从未真正生效**，
+        而它失败时的表现是「测试挂了」，很容易被当成环境问题绕过。
+        **教训同 §14：看不到，不是没有。** 所以下面补一条数量下限：
+        只守护「找到了」不够，还要守护「找到的是全部 16 个」。
         """
         import ast
         tree = ast.parse((ROOT / "llm" / "adapter.py").read_text(encoding="utf-8"))
         keys = set()
         for node in ast.walk(tree):
-            targets = getattr(node, "targets", None)
-            if (isinstance(node, ast.Assign) and targets
-                    and any(getattr(t, "id", None) == "ENV_ALIASES" for t in targets)):
-                assert isinstance(node.value, ast.Dict), "ENV_ALIASES 应是字面量 dict"
-                for val in node.value.values:
-                    for elt in getattr(val, "elts", []):
-                        if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
-                            keys.add(elt.value)
+            if isinstance(node, ast.AnnAssign):
+                targets: list = [node.target]           # `X: T = {...}`
+            elif isinstance(node, ast.Assign):
+                targets = list(node.targets)            # `X = {...}`
+            else:
+                continue
+            if not any(getattr(t, "id", None) == "ENV_ALIASES" for t in targets):
+                continue
+            value = node.value
+            assert isinstance(value, ast.Dict), "ENV_ALIASES 应是字面量 dict"
+            for entry in value.values:
+                for elt in getattr(entry, "elts", []):
+                    if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
+                        keys.add(elt.value)
         assert keys, "没在 llm/adapter.py 里静态找到 ENV_ALIASES"
+        #: 下限而非等值 —— 加键不该让这条守卫变红，但「只剩两三个」必须是红的。
+        assert len(keys) >= 16, "只解析出 %d 个键，解析逻辑疑似又变瞎了：%s" % (
+            len(keys), sorted(keys))
         assert not (keys - llm_env.KNOWN_KEYS), sorted(keys - llm_env.KNOWN_KEYS)
 
 

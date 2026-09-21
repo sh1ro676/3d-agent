@@ -59,12 +59,14 @@ __all__ = [
     "DEFAULT_CALL_LOG",
     "DEFAULT_TEXT_MODEL",
     "DEFAULT_BASE_URL",
+    "CACHE_FIELDS",
     "LLMError",
     "LLMSettings",
     "LLMReply",
     "UsageLedger",
     "LLMClient",
     "load_backend_env",
+    "cache_tokens",
     "usage_delta",
     "mask_secret",
 ]
@@ -278,6 +280,13 @@ class LLMSettings:
         return None
 
     def cost_cny(self, usage: Mapping[str, Any]) -> float | None:
+        """按「输入 token × 输入价 + 输出 token × 输出价」估算人民币。
+
+        ⚠ **刻意不套用缓存折扣**：价格表只有两个数，缓存价必须由服务商定义，
+        猜一个系数等于把「估计」伪装成「测量」。当前口径**系统性偏高**
+        （命中缓存的输入照全价算），对预算而言这是安全方向；
+        真实成本以服务商账单为准。
+        """
         p = self.price()
         if p is None:
             return None
@@ -307,6 +316,41 @@ class LLMSettings:
 # ============================================================================
 
 
+#: 「命中前缀缓存的输入 token」在不同服务商那里叫不同名字。
+#: **不猜、不归一、全试一遍并把来源记下来** —— 猜错字段的后果不是报错，
+#: 而是**永远读到 0**，然后被当成「缓存没生效」，据此做错架构决策。
+#: 顺序即优先级，按「OpenAI 兼容面最广」排在最前。
+CACHE_FIELDS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("prompt_tokens_details.cached_tokens", ("prompt_tokens_details", "cached_tokens")),
+    ("prompt_cache_hit_tokens", ("prompt_cache_hit_tokens",)),
+    ("cache_read_input_tokens", ("cache_read_input_tokens",)),
+)
+
+
+def cache_tokens(usage: Mapping[str, Any]) -> tuple[int | None, str | None]:
+    """取「命中前缀缓存的输入 token」，返回 `(值, 字段名)`。
+
+    **没找到时返回 `(None, None)`，不返回 0** —— 这个区分是刻意的：
+    「服务商报了 0」和「服务商根本没报这个字段」是两件不同的事。
+    合并成 0 的后果是「缓存到底生不生效」这个问题**永远无法回答**，
+    而它恰好是判断多轮方案真实成本的关键（本项目已踩过一次同类坑：
+    把「没实现」当成「实现了但数字是 0」）。
+    """
+    for label, path in CACHE_FIELDS:
+        cur: Any = usage
+        for part in path:
+            cur = cur.get(part) if isinstance(cur, Mapping) else None
+            if cur is None:
+                break
+        if cur is None:
+            continue
+        try:
+            return int(cur), label
+        except (TypeError, ValueError):
+            continue
+    return None, None
+
+
 @dataclass
 class UsageLedger:
     """累计用量。跑批时把「一个题集花掉多少」直接读出来，不必事后解析日志。"""
@@ -317,9 +361,17 @@ class UsageLedger:
     truncated: int = 0
     prompt_tokens: int = 0
     completion_tokens: int = 0
+    #: 命中前缀缓存的输入 token 合计。**只有服务商报了才累加**（见下一字段）。
+    cached_tokens: int = 0
+    #: 回报过缓存字段的调用次数。判断缓存率时**必须**以它为分母：
+    #: `cache_reported_calls == 0` 表示服务商没报，不是「缓存没命中」。
+    cache_reported_calls: int = 0
     cost_cny: float = 0.0
     unpriced_calls: int = 0
     latency_s: float = 0.0
+    #: 失败调用耗掉的时间。**失败也要算进墙钟** —— 否则「花了 24 秒却记 calls=0」
+    #: 这种记录会让总耗时被系统性算少，而它正是全量跑批的预算依据。
+    failed_latency_s: float = 0.0
     by_purpose: dict[str, dict[str, float]] = field(default_factory=dict)
 
     def add(self, reply: "LLMReply", cost: float | None) -> None:
@@ -330,8 +382,12 @@ class UsageLedger:
             self.truncated += 1
         pt = int(reply.usage.get("prompt_tokens") or 0)
         ct = int(reply.usage.get("completion_tokens") or 0)
+        hit, _src = cache_tokens(reply.usage)
         self.prompt_tokens += pt
         self.completion_tokens += ct
+        if hit is not None:
+            self.cached_tokens += hit
+            self.cache_reported_calls += 1
         self.latency_s += reply.elapsed_s
         if cost is None:
             self.unpriced_calls += 1
@@ -339,16 +395,19 @@ class UsageLedger:
             self.cost_cny += cost
         slot = self.by_purpose.setdefault(
             reply.purpose, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0,
-                            "cost_cny": 0.0, "latency_s": 0.0}
+                            "cached_tokens": 0, "cost_cny": 0.0, "latency_s": 0.0}
         )
         slot["calls"] += 1
         slot["prompt_tokens"] += pt
         slot["completion_tokens"] += ct
+        if hit is not None:
+            slot["cached_tokens"] += hit
         slot["cost_cny"] += cost or 0.0
         slot["latency_s"] += reply.elapsed_s
 
-    def add_failure(self) -> None:
+    def add_failure(self, elapsed_s: float = 0.0) -> None:
         self.failed_calls += 1
+        self.failed_latency_s += max(0.0, float(elapsed_s or 0.0))
 
     def snapshot(self) -> dict[str, Any]:
         """深拷贝 —— 单题成本靠 `usage_delta(before, after)` 算。"""
@@ -360,12 +419,28 @@ class UsageLedger:
                 "truncated": self.truncated,
                 "prompt_tokens": self.prompt_tokens,
                 "completion_tokens": self.completion_tokens,
+                "cached_tokens": self.cached_tokens,
+                "cache_reported_calls": self.cache_reported_calls,
                 "cost_cny": round(self.cost_cny, 6),
                 "unpriced_calls": self.unpriced_calls,
                 "latency_s": round(self.latency_s, 3),
+                "failed_latency_s": round(self.failed_latency_s, 3),
                 "by_purpose": self.by_purpose,
             }
         )
+
+    def cache_hit_rate(self) -> float | None:
+        """缓存命中率 = 命中 token / **账本里全部调用的 prompt token 合计**。
+
+        **没报过就返回 None，不返回 0.0。** 返回 0 会让调用方以为
+        「测过了，没命中」，而真相是「压根没测到」——两者该做的决策完全相反。
+
+        口径说明：同一个端点要么全报、要么全不报，那种情况下这个比值是精确的；
+        若只有部分调用回报（异常配置），分母偏大 ⟹ **结果偏小（保守）**。
+        """
+        if not self.cache_reported_calls:
+            return None
+        return self.cached_tokens / max(1, self.prompt_tokens)
 
 
 def usage_delta(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[str, Any]:
@@ -376,8 +451,9 @@ def usage_delta(before: Mapping[str, Any], after: Mapping[str, Any]) -> dict[str
     """
     out: dict[str, Any] = {}
     for k in ("calls", "failed_calls", "retried_calls", "truncated",
-              "prompt_tokens", "completion_tokens", "unpriced_calls",
-              "cost_cny", "latency_s"):
+              "prompt_tokens", "completion_tokens",
+              "cached_tokens", "cache_reported_calls",
+              "unpriced_calls", "cost_cny", "latency_s", "failed_latency_s"):
         out[k] = round(float(after.get(k, 0) or 0) - float(before.get(k, 0) or 0), 6)
     bp: dict[str, dict[str, float]] = {}
     for name, slot in (after.get("by_purpose") or {}).items():
@@ -517,7 +593,7 @@ class LLMClient:
             # 预检失败也要记账 + 落日志。
             # 「一个请求都没发出去」和「发了但失败」是两种成本结构完全不同的失败，
             # 但都必须是**失败**：不计数的话，报告里的失败率会凭空偏低。
-            self.usage.add_failure()
+            self.usage.add_failure(time.perf_counter() - t_pre)
             self._log_failure(purpose, 1, str(exc), t_pre, retryable=False)
             raise
         s = self.settings
@@ -544,7 +620,7 @@ class LLMClient:
                 body = self._transport(s.endpoint, payload, headers, s.timeout)
             except _FatalError as exc:
                 last_error, last_status = str(exc), _status_of(exc)
-                self.usage.add_failure()
+                self.usage.add_failure(time.perf_counter() - t0)
                 self._log_failure(purpose, attempt, last_error, t0, retryable=False)
                 raise LLMError("不可重试的调用失败：%s" % last_error,
                                status=last_status, body=last_error) from None
@@ -568,7 +644,7 @@ class LLMClient:
                 text = message.get("content") or ""
             except (KeyError, IndexError, TypeError, AttributeError) as exc:
                 last_error = "响应结构异常：%s（body 前 200 字：%r）" % (exc, str(body)[:200])
-                self.usage.add_failure()
+                self.usage.add_failure(time.perf_counter() - t0)
                 self._log_failure(purpose, attempt, last_error, t0, retryable=False)
                 raise LLMError(last_error) from None
 
@@ -587,7 +663,7 @@ class LLMClient:
             self._log_success(reply, cost, messages)
             return reply
 
-        self.usage.add_failure()
+        self.usage.add_failure(time.perf_counter() - t_pre)
         raise LLMError(
             "重试 %d 次仍失败（status=%s）：%s" % (s.max_retries, last_status, last_error[:400]),
             status=last_status, body=last_error,
@@ -623,6 +699,7 @@ class LLMClient:
     def _log_success(self, reply: LLMReply, cost: float | None,
                      messages: Sequence[Mapping[str, Any]]) -> None:
         rec = self._base_rec(reply.purpose, reply.attempts, reply.elapsed_s)
+        hit, hit_src = cache_tokens(reply.usage)
         rec.update({
             "ok": True,
             "finish_reason": reply.finish_reason,
@@ -631,6 +708,16 @@ class LLMClient:
             "has_reasoning": reply.has_reasoning,
             "prompt_tokens": reply.usage.get("prompt_tokens"),
             "completion_tokens": reply.usage.get("completion_tokens"),
+            #: 命中前缀缓存的输入 token；`None` = **服务商没报这个字段**
+            #: （不是「报了 0」）。两者含义相反，日志里必须能分开。
+            "cached_tokens": hit,
+            #: 命中的值是从哪个字段名读到的。**服务商换了字段名时，
+            #: 这一列会从有值变成 None** —— 那才是「缓存悄悄失效」的告警信号。
+            "cache_source": hit_src,
+            #: 服务商回传的 usage 顶层键。不解析、不过滤、原样留档：
+            #: 「它到底报不报缓存」这个问题，靠这一列一次真跑就能回答，
+            #: 不必再去猜字段名或翻文档。
+            "usage_keys": sorted(str(k) for k in reply.usage.keys()),
             "est_cost_cny": None if cost is None else round(cost, 6),
             "msg_digest": _digest(messages),
         })

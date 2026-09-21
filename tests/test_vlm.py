@@ -16,6 +16,7 @@ from __future__ import annotations
 import inspect
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -43,6 +44,14 @@ from llm.vlm import (  # noqa: E402
 # 夹具
 # ---------------------------------------------------------------------------
 
+#: 单元测试的调用日志落在**系统临时目录**，不落仓库。
+#: ⚠ 2026-09-21 修复：这里原先默认写 `ROOT/logs/_unit_vlm_calls.jsonl`，
+#: 而那个路径是**被 git 跟踪的** ⟹ 每跑一次测试就往仓库里追加 60 行
+#: （入库时已积累 417 行 / 161 KB），于是 `git status` 永远不干净。
+#: 后果不只是脏：**一个每次都脏的工作树会训练人忽略 `git status`**，
+#: 而「改动有没有生效」正是靠它判断的（本项目的排查常态）。
+_UNIT_LOG_DIR = Path(tempfile.mkdtemp(prefix="spatial-unit-vlm-"))
+
 
 def fake_client(text: str, *, finish_reason: str = "stop", model: str = "fake-vision",
                 log_path: Path | None = None):
@@ -62,7 +71,7 @@ def fake_client(text: str, *, finish_reason: str = "stop", model: str = "fake-vi
     st = LLMSettings(base_url="https://vision.invalid/v1", api_key="sk-unit-test",
                      model=model, label="vision")
     client = LLMClient(st, transport=transport,
-                       log_path=str(log_path or (ROOT / "logs" / "_unit_vlm_calls.jsonl")))
+                       log_path=str(log_path or (_UNIT_LOG_DIR / "vlm_calls.jsonl")))
     return client, seen
 
 

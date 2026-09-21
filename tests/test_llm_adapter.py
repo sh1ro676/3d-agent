@@ -29,6 +29,7 @@ from llm.adapter import (  # noqa: E402
     LLMError,
     LLMSettings,
     UsageLedger,
+    cache_tokens,
     mask_secret,
     usage_delta,
 )
@@ -41,12 +42,24 @@ from llm.adapter import _FatalError, _RetryableError  # noqa: E402
 
 
 def reply_body(text="ok", *, model="deepseek-flash", finish="stop",
-               prompt_tokens=100, completion_tokens=20):
+               prompt_tokens=100, completion_tokens=20, usage_extra=None,
+               reasoning=None):
+    """一个成功响应体。`usage_extra` 用来模拟不同服务商的用量字段。
+
+    ⚠ **刻意不默认塞入缓存字段**：默认的假服务商就是「什么都不报」那种，
+    这样「没报」这条路径才是被默认覆盖的路径（它比「报了 0」更容易被漏掉）。
+    """
+    usage = {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens,
+             "total_tokens": prompt_tokens + completion_tokens}
+    if usage_extra:
+        usage.update(usage_extra)
+    message = {"content": text}
+    if reasoning:
+        message["reasoning_content"] = reasoning
     return {
         "model": model,
-        "choices": [{"message": {"content": text}, "finish_reason": finish}],
-        "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens,
-                  "total_tokens": prompt_tokens + completion_tokens},
+        "choices": [{"message": message, "finish_reason": finish}],
+        "usage": usage,
     }
 
 
@@ -297,3 +310,187 @@ class TestUsage:
         snap = led.snapshot()
         led.calls = 9
         assert snap["calls"] == 3
+
+
+# ---------------------------------------------------------------------------
+# 缓存计量：**「报了 0」和「没报」必须分得开**
+#
+# 背景：`synthesizer` 把逐字节稳定的工具文档放进 system，注释声称「能吃服务端
+# 前缀缓存」。但账本原先只取 prompt_tokens / completion_tokens ⟹ **这个承诺
+# 无法被证实**，于是「多轮方案到底多花多少钱」这个问题也答不了。
+#
+# 这组测试守的就是那条区分线：把「没报」误当成「报了 0」，会让一个**没测量的
+# 问题**看起来像一个**已测量的负面结论**。
+# ---------------------------------------------------------------------------
+
+
+class TestCacheTokensParsing:
+    """纯函数，逐字段名验证。**不归一成一种叫法** —— 记下来源才能发现改名。"""
+
+    def test_openai_style_prompt_tokens_details(self):
+        v, src = cache_tokens({"prompt_tokens": 900,
+                               "prompt_tokens_details": {"cached_tokens": 640}})
+        assert v == 640 and src == "prompt_tokens_details.cached_tokens"
+
+    def test_deepseek_native_prompt_cache_hit_tokens(self):
+        v, src = cache_tokens({"prompt_tokens": 900, "prompt_cache_hit_tokens": 512})
+        assert v == 512 and src == "prompt_cache_hit_tokens"
+
+    def test_anthropic_style_cache_read_input_tokens(self):
+        v, src = cache_tokens({"cache_read_input_tokens": 256})
+        assert v == 256 and src == "cache_read_input_tokens"
+
+    def test_provider_silent_returns_none_not_zero(self):
+        """★ 这条是本组的核心：**没报 ≠ 没命中**。"""
+        v, src = cache_tokens({"prompt_tokens": 900, "completion_tokens": 20})
+        assert v is None and src is None
+
+    def test_explicit_zero_is_reported_as_zero(self):
+        """服务商**明确报 0** 与「压根没报」结果不同：前者是「测过了，没命中」。"""
+        v, src = cache_tokens({"prompt_tokens_details": {"cached_tokens": 0}})
+        assert v == 0 and src == "prompt_tokens_details.cached_tokens"
+
+    def test_nested_field_of_wrong_type_does_not_crash(self):
+        v, src = cache_tokens({"prompt_tokens_details": "not-a-mapping"})
+        assert v is None and src is None
+
+    def test_garbage_value_falls_through_to_absent(self):
+        v, src = cache_tokens({"prompt_cache_hit_tokens": "abc", "prompt_tokens": 900})
+        assert v is None and src is None
+
+    def test_empty_usage_is_absent(self):
+        assert cache_tokens({}) == (None, None)
+
+
+class TestCacheAccounting:
+    def test_reported_hit_is_accumulated(self, tmp_path):
+        body = reply_body(prompt_tokens=1000,
+                          usage_extra={"prompt_tokens_details": {"cached_tokens": 768}})
+        c = LLMClient(settings(), transport=FakeTransport(body),
+                      log_path=str(tmp_path / "c.jsonl"))
+        c.chat([{"role": "user", "content": "hi"}])
+        snap = c.usage.snapshot()
+        assert snap["cached_tokens"] == 768
+        assert snap["cache_reported_calls"] == 1
+
+    def test_silent_provider_leaves_hit_rate_unknown(self, tmp_path):
+        """没报 ⟹ 命中率是 `None`。**绝不能是 0.0**，否则等于谎报「测过且没命中」。"""
+        c = LLMClient(settings(), transport=FakeTransport(reply_body()),
+                      log_path=str(tmp_path / "c.jsonl"))
+        c.chat([{"role": "user", "content": "hi"}])
+        assert c.usage.cache_reported_calls == 0
+        assert c.usage.cached_tokens == 0
+        assert c.usage.cache_hit_rate() is None
+
+    def test_hit_rate_uses_cached_over_prompt(self, tmp_path):
+        body = reply_body(prompt_tokens=1000,
+                          usage_extra={"prompt_tokens_details": {"cached_tokens": 750}})
+        c = LLMClient(settings(), transport=FakeTransport(body),
+                      log_path=str(tmp_path / "c.jsonl"))
+        c.chat([{"role": "user", "content": "hi"}])
+        assert c.usage.cache_hit_rate() == pytest.approx(0.75)
+
+    def test_cache_is_split_by_purpose(self, tmp_path):
+        body = reply_body(prompt_tokens=800,
+                          usage_extra={"prompt_cache_hit_tokens": 600})
+        c = LLMClient(settings(), transport=FakeTransport(body),
+                      log_path=str(tmp_path / "c.jsonl"))
+        c.chat([{"role": "user", "content": "hi"}], purpose="synthesize")
+        bp = c.usage.snapshot()["by_purpose"]
+        assert bp["synthesize"]["cached_tokens"] == 600
+
+    def test_delta_carries_cache_fields(self, tmp_path):
+        """单题缓存率靠 `usage_delta` 算 ⟹ 增量里必须有这两个键。"""
+        body = reply_body(usage_extra={"prompt_tokens_details": {"cached_tokens": 64}})
+        c = LLMClient(settings(), transport=FakeTransport(body),
+                      log_path=str(tmp_path / "c.jsonl"))
+        before = c.usage.snapshot()
+        c.chat([{"role": "user", "content": "hi"}])
+        d = usage_delta(before, c.usage.snapshot())
+        assert d["cached_tokens"] == 64 and d["cache_reported_calls"] == 1
+
+
+class TestCallLogDiagnostics:
+    """调用日志是**唯一能回答「服务商到底报了什么」**的地方。"""
+
+    def test_log_records_usage_keys_and_cache_source(self, tmp_path):
+        log = tmp_path / "c.jsonl"
+        body = reply_body(usage_extra={"prompt_tokens_details": {"cached_tokens": 32},
+                                       "prompt_cache_miss_tokens": 68})
+        c = LLMClient(settings(), transport=FakeTransport(body), log_path=str(log))
+        c.chat([{"role": "user", "content": "hi"}])
+        rec = json.loads(log.read_text(encoding="utf-8").splitlines()[0])
+        assert rec["cached_tokens"] == 32
+        assert rec["cache_source"] == "prompt_tokens_details.cached_tokens"
+        assert rec["usage_keys"] == ["completion_tokens", "prompt_cache_miss_tokens",
+                                     "prompt_tokens", "prompt_tokens_details",
+                                     "total_tokens"]
+
+    def test_log_cache_source_none_when_provider_silent(self, tmp_path):
+        """`cache_source` 从有值变 `None` ＝ 服务商改了字段名。
+        这是「缓存悄悄失效」的唯一告警信号，必须留在日志里。"""
+        log = tmp_path / "c.jsonl"
+        c = LLMClient(settings(), transport=FakeTransport(reply_body()), log_path=str(log))
+        c.chat([{"role": "user", "content": "hi"}])
+        rec = json.loads(log.read_text(encoding="utf-8").splitlines()[0])
+        assert rec["cached_tokens"] is None and rec["cache_source"] is None
+        assert rec["usage_keys"] == ["completion_tokens", "prompt_tokens", "total_tokens"]
+
+
+class TestFailedCallWallClock:
+    """失败的时间**也是成本**。原先 `add_failure()` 不带参数 ⟹
+    真实记录里出现过「花了 24.27 s，usage.calls=0」，总预算据此算会偏小。"""
+
+    def test_add_failure_accumulates_elapsed(self):
+        led = UsageLedger()
+        led.add_failure(2.5)
+        led.add_failure(1.25)
+        assert led.failed_calls == 2
+        assert led.failed_latency_s == pytest.approx(3.75)
+
+    def test_add_failure_clamps_negative_and_defaults_to_zero(self):
+        led = UsageLedger()
+        led.add_failure()
+        led.add_failure(-1.0)
+        assert led.failed_latency_s == 0.0
+
+    def test_failed_chat_leaves_positive_wall_clock(self, tmp_path, monkeypatch):
+        """失败路径真的把耗时交上去了（假时钟，不依赖真实耗时）。"""
+        import llm.adapter as adapter
+
+        class _Clock:                       # 每次读表前进 0.5 s，永不见底
+            def __init__(self):
+                self.t = 0.0
+
+            def __call__(self):
+                self.t += 0.5
+                return self.t
+
+        monkeypatch.setattr(adapter.time, "perf_counter", _Clock())
+        t = FakeTransport(_RetryableError("boom"))
+        c = LLMClient(settings(max_retries=0), transport=t, log_path=str(tmp_path / "c.jsonl"))
+        before = c.usage.snapshot()
+        with pytest.raises(LLMError, match="重试 0 次仍失败"):
+            c.chat([{"role": "user", "content": "hi"}])
+        d = usage_delta(before, c.usage.snapshot())
+        assert d["calls"] == 0 and d["failed_calls"] == 1
+        assert d["failed_latency_s"] > 0        # 曾经这一项恒为 0
+
+    def test_missing_key_failure_also_records_wall_clock(self, tmp_path, monkeypatch):
+        """预检失败（一个请求都没发）同样记账 —— 它是「配置错」而不是「免费」。"""
+        import llm.adapter as adapter
+
+        class _Clock:
+            def __init__(self):
+                self.t = 0.0
+
+            def __call__(self):
+                self.t += 0.25
+                return self.t
+
+        monkeypatch.setattr(adapter.time, "perf_counter", _Clock())
+        c = LLMClient(settings(api_key=""), transport=FakeTransport(),
+                      log_path=str(tmp_path / "c.jsonl"))
+        with pytest.raises(LLMError, match="缺少 API key"):
+            c.chat([{"role": "user", "content": "hi"}])
+        assert c.usage.failed_latency_s > 0
