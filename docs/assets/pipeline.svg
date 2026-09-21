@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" width="960" height="700" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect width="960" height="700" fill="#ffffff"/>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a9199"/>
+    </marker>
+  </defs>
+
+  <!-- 输入 -->
+  <rect x="40" y="22" width="880" height="56" rx="8" fill="#f7f8f9" stroke="#c9ced4" stroke-width="1.5"/>
+  <text x="64" y="47" font-size="14" font-weight="700" fill="#2b3038">输入</text>
+  <text x="64" y="66" font-size="13" fill="#5b636c">1 张 RGB 照片（任意分辨率） ＋ 1 句自然语言空间问题</text>
+  <text x="700" y="55" font-size="12" fill="#868e96">批量评测：annotations.json</text>
+
+  <line x1="480" y1="78" x2="480" y2="106" stroke="#8a9199" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- ① 感知层 -->
+  <rect x="40" y="110" width="880" height="112" rx="8" fill="#eaf2fe" stroke="#9dc1f0" stroke-width="1.5"/>
+  <circle cx="68" cy="136" r="13" fill="#1c6fd0"/>
+  <text x="68" y="141" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+  <text x="90" y="141" font-size="15" font-weight="700" fill="#153a63">感知层 —— 三个开源模型的原生包装（包装层自研，上游一行不改）</text>
+  <text x="64" y="168" font-size="13" fill="#3d5166">GroundingDINO · 开放词汇检测</text>
+  <text x="330" y="168" font-size="13" fill="#3d5166">SAM2 · 掩码分割（强制批量，7.57×）</text>
+  <text x="672" y="168" font-size="13" fill="#3d5166">UniDepth V2 · 度量深度</text>
+  <text x="64" y="196" font-size="13" fill="#5b636c">产出：检测框 → 逐物体掩码 → 一张与像素对齐的<tspan font-weight="700">米制点云</tspan>（每个像素一个三维点）</text>
+  <text x="64" y="213" font-size="12" fill="#7b848d">关键：物体的三维质心取自<tspan font-weight="700">掩码内点云</tspan>的中位数，而不是检测框内 —— 两者实测差均值 83 mm</text>
+
+  <line x1="480" y1="222" x2="480" y2="250" stroke="#8a9199" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- ② 场景图 -->
+  <rect x="40" y="254" width="880" height="100" rx="8" fill="#f2ecff" stroke="#c4b2f0" stroke-width="1.5"/>
+  <circle cx="68" cy="280" r="13" fill="#6f42c1"/>
+  <text x="68" y="285" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+  <text x="90" y="285" font-size="15" font-weight="700" fill="#3b2a63">三维场景图 —— 项目的中间表示（自研）</text>
+  <text x="64" y="312" font-size="13" fill="#4a3d6b">节点 = 物体：三维质心 ＋ 米制尺寸 ＋ 类别 ＋ 掩码　｜　边 = 两两几何关系：左右 / 上下 / 前后 / 远近</text>
+  <text x="64" y="338" font-size="12" fill="#7b6f8d">一次建图即导出 <tspan font-family="Consolas, monospace">scene_graph.json</tspan>，不依赖任何提问 —— 这是「场景理解系统」而不是「问答工具」的那一半</text>
+
+  <line x1="480" y1="354" x2="480" y2="382" stroke="#8a9199" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- ③ 工具层 -->
+  <rect x="40" y="386" width="880" height="100" rx="8" fill="#e9f7ef" stroke="#a8d5ba" stroke-width="1.5"/>
+  <circle cx="68" cy="412" r="13" fill="#2f9e5f"/>
+  <text x="68" y="417" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+  <text x="90" y="417" font-size="15" font-weight="700" fill="#1f5c3c">工具层 —— 几何只在这里算（自研，显式白名单 12 个）</text>
+  <text x="64" y="444" font-size="13" fill="#35503f">找物体 / 查关系 / 取三维位置 / 量尺寸 / 算距离 / 算夹角 / 看颜色材质 …</text>
+  <text x="64" y="470" font-size="12" fill="#6b7d72">每次调用都返回一个信封：成功与否、值、<tspan font-weight="700">证据</tspan>、错误码。幻觉物体在 <tspan font-family="Consolas, monospace">NOT_IN_SCENE</tspan> 这一步就被拦下</text>
+
+  <line x1="480" y1="486" x2="480" y2="514" stroke="#8a9199" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- ④ Agent -->
+  <rect x="40" y="518" width="880" height="100" rx="8" fill="#fff3e2" stroke="#f2c48d" stroke-width="1.5"/>
+  <circle cx="68" cy="544" r="13" fill="#d9822b"/>
+  <text x="68" y="549" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
+  <text x="90" y="549" font-size="15" font-weight="700" fill="#7a4a12">Agent —— 把自然语言翻译成一串工具调用（自研）</text>
+  <text x="64" y="576" font-size="13" fill="#6b4a1d">一句话 → 一段程序 → 沙箱子进程执行 → <tspan font-weight="700">答案证据校验</tspan>（supported / weak / unsupported / 弃答）</text>
+  <text x="64" y="602" font-size="12" fill="#8b6a3d">答不出就说答不出：校验器发现答案没有工具输出支撑时会拒收，而不是糊一个看起来合理的数字</text>
+
+  <line x1="480" y1="618" x2="480" y2="646" stroke="#8a9199" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- 输出 -->
+  <rect x="40" y="650" width="880" height="40" rx="8" fill="#f7f8f9" stroke="#c9ced4" stroke-width="1.5"/>
+  <text x="64" y="675" font-size="14" font-weight="700" fill="#2b3038">输出</text>
+  <text x="112" y="675" font-size="13" fill="#5b636c">米制答案 ＋ 每一句结论对应的工具输出（证据链） ＋ 三维高亮　｜　场景级：物体清单 ＋ 米制尺寸 ＋ 两两关系（JSON）</text>
+</svg>
