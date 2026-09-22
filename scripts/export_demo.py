@@ -43,6 +43,10 @@ _META_KEYS = (
     "mask_box_coverage_mean", "mask_box_coverage_min", "label_counts",
     "up_axis", "up_axis_tilt_deg", "up_axis_reliable", "up_axis_reason",
     "scale_calibrated", "depth_range_m", "image_hw", "timings_ms", "perception",
+    # 2026-09-22 追加：加载/构建/落盘三项聚合 + 口径（`scope`）。
+    # ⚠ 少了它会怎样：单场景文件里有 `timings_ms`（只有六段热态细分），
+    #   而 index 的场景条目连那六段都拿不到 —— 前端无法回答「建图要多久」。
+    "timing",
 )
 
 #: `build_meta["config"]` 里进前端的键（这几个解释「数字是怎么算出来的」）。
@@ -115,6 +119,40 @@ def _meta_payload(meta: dict[str, Any]) -> dict[str, Any]:
     cfg = meta.get("config") or {}
     out["config"] = {k: cfg[k] for k in _CONFIG_KEYS if k in cfg}
     return out
+
+
+#: 旧场景（2026-09-22 之前建的）没有 `build_meta["timing"]` 时的 `scope` 文案。
+#: ⚠ 它**不是**占位符：它如实说明「哪几项是真的缺测」，而不是把它们读成 0。
+_LEGACY_TIMING_SCOPE = (
+    "旧场景：本次改动之前建的。只有 builder 六段（热态细分）；"
+    "model_load_ms / save_ms / total_wall_ms 当时未测，故为 null —— 是「没测到」，不是「测到 0」。"
+)
+
+
+def _timing_payload(meta: dict[str, Any]) -> dict[str, Any] | None:
+    """把「建图要多久」投影进 `index.json` —— **纯函数，零 GPU 可单测**。
+
+    ⚠ **`scope` 必须跟着数字一起出去**。这几个数不是同一个东西：
+    `stages_ms` 是**热态**的 builder 内部六段（不含模型加载、不含落盘），
+    `model_load_ms` 只在**进程内第一张图**上非零，`save_ms` 不含 scene.json 自身。
+    只把数字摆给前端、不带口径，读者一定会拿 `stages_ms` 当"建图耗时" ——
+    实测 `living_room` 那会**低报约 5 倍**（3.4 s vs 16 s 级）。
+
+    旧场景返回 `stages_ms` + 三个 null + 一句说明；完全没有计时信息的场景返回 `None`
+    （让它整个缺席，而不是编一个全 0 的块 —— 后者会被读成"建图不花时间"）。
+    """
+    stages = meta.get("timings_ms")
+    block = meta.get("timing") or {}
+    if not stages and not block:
+        return None
+    return {
+        "stages_ms": stages,
+        "model_load_ms": block.get("model_load_ms"),
+        "build_wall_ms": block.get("build_wall_ms"),
+        "save_ms": block.get("save_ms"),
+        "total_wall_ms": block.get("total_wall_ms"),
+        "scope": block.get("scope") or _LEGACY_TIMING_SCOPE,
+    }
 
 
 def export_scene(scene_id: str, scenes_root: Path) -> dict[str, Any]:
@@ -311,6 +349,7 @@ def main(argv: list[str] | None = None) -> int:
             "up_axis_reliable": meta.get("up_axis_reliable"),
             "up_axis_tilt_deg": meta.get("up_axis_tilt_deg"),
             "scale_calibrated": meta.get("scale_calibrated"),
+            "timing": _timing_payload(meta),
             "assets": counts,
         })
         print(f"场景 {scene_id}: {len(payload['nodes'])} 节点 / {len(payload['edges'])} 边 / "

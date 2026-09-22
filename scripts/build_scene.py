@@ -48,6 +48,51 @@ if str(ROOT) not in sys.path:
 #: `--intrinsics auto` 会在图片同目录按这个顺序找文件。
 _AUTO_INTRINSIC_NAMES = ("intrinsics.npy", "camera.npy", "K.npy")
 
+#: 「建图要多久」这个问题的**口径声明**。进 `build_meta["timing"]["scope"]`。
+#:
+#: ⚠ 为什么口径必须**落盘**而不是只写在文档里：这几个数字**不是同一个东西**，
+#: 但它们看上去都叫「建图耗时」。实测 `living_room`：builder 六段合计 ≈3.41 s、
+#: 三个模型加载 ≈12.58 s、总数 16 s 级 —— 拿 3.41 s 去回答「建图要多久」会**低报约 5 倍**，
+#: 而报告读者从数字本身看不出这一点。（2026-09-22 补。）
+TIMING_SCOPE = (
+    "stages_ms = build_scene_graph 内部六段细分（热态：模型已在显存；不含落盘）。"
+    " model_load_ms = 本进程首次加载三个模型的墙钟。"
+    " build_wall_ms = build_scene_graph 这一次调用的整段墙钟（**含**上面那六段）。"
+    " save_ms = masks 与 points 落盘的墙钟（**不含 scene.json 自身的写入** ——"
+    " 那段耗时记在 build_log.txt，因为它要塞进 scene.json、逻辑上不可能闭包）。"
+    " total_wall_ms = model_load_ms + build_wall_ms + save_ms。"
+    " ⚠ 同一进程内建第 N 张图时 model_load_ms 从第 2 张起为 0 ⟹ total_wall_ms"
+    " 对不同张数不能直接平均，必须先说明「第几张、进程冷热」。"
+)
+
+
+def timing_block(
+    *,
+    model_load_ms: float,
+    build_wall_ms: float,
+    save_ms: float | None,
+) -> dict[str, object]:
+    """组装 `build_meta["timing"]` —— **纯函数，零 GPU 可单测**。
+
+    ⚠ `save_ms=None`（`--no-save`）时 `total_wall_ms` 也必须是 `None`，**不能是 0**：
+    总量缺了一块就是不知道，把「不知道」写成 0 会让「这一轮特别快」变成一个**假结论**
+    （与 `MEMORY-DETAIL` 的 `absent ≠ zero` 同一条口径：`None`＝没测到，`0`＝测到 0）。
+
+    ⚠ builder 的六段细分**不在这里复制**：它们仍住在 `build_meta["timings_ms"]`。
+    同一个事实两个副本一定会漂移，所以这里只放三项聚合数 + 口径。
+    """
+    load = round(float(model_load_ms), 1)
+    build = round(float(build_wall_ms), 1)
+    save = None if save_ms is None else round(float(save_ms), 1)
+    total = None if save is None else round(load + build + save, 1)
+    return {
+        "scope": TIMING_SCOPE,
+        "model_load_ms": load,
+        "build_wall_ms": build,
+        "save_ms": save,
+        "total_wall_ms": total,
+    }
+
 
 def _intrinsics_from_exif(
     image_path: Path, image_size: tuple[int, int] | None
@@ -382,7 +427,10 @@ def main() -> int:
         return 0
 
     out_dir = scene_dir(scene_id, args.out_root)
-    p = save_scene(scene, out_dir)
+    # ⚠ 顺序有讲究：先写 masks/points（受时），把它们量到的 `save_ms` 注入 build_meta，
+    #   最后才写 scene.json。反过来写的话，scene.json 里就永远没有 save_ms。
+    #   `save_masks` / `save_points` 各自 mkdir(parents=True)，所以不必先建目录。
+    t_save = time.perf_counter()
     written = save_masks(res.masks, masks_dir(scene_id, args.out_root))
     pts_p: Path | None = None
     if args.no_points:
@@ -397,6 +445,28 @@ def main() -> int:
             # `keep` → None：保持原 dtype。默认路径上不做任何有损转换。
             dtype=None if args.points_dtype == "keep" else args.points_dtype,
         )
+    save_ms = (time.perf_counter() - t_save) * 1000.0
+
+    # ★ 把「建图要多久」的另外两块写进 `build_meta` —— 而不只是 `build_log.txt`。
+    #   与上面 `image_path` 同一条理由（那段注释就是本项目的判据）：
+    #   `build_log.txt` 是给人看的过程记录、**不是契约**，程序去解析它等于把日志当接口。
+    #   在本次改动之前，`build_wall_s` / `model_load_wall_s` **只**打印进了日志，
+    #   于是 `demo/data/index.json`（它读 scene.json）根本拿不到这两项。
+    timing = timing_block(
+        model_load_ms=load_wall_s * 1000.0,
+        build_wall_ms=wall_s * 1000.0,
+        save_ms=save_ms,
+    )
+    scene = scene.model_copy(update={
+        "build_meta": {**scene.build_meta, "timing": timing},
+    })
+
+    # ⚠ scene.json **自己**的写入耗时不进 `timing`：要把它写进 scene.json 就得先知道它，
+    #   那需要写两次文件。它只进 `build_log.txt`，且**不参与任何指标**。
+    t_json = time.perf_counter()
+    p = save_scene(scene, out_dir)
+    scene_json_ms = (time.perf_counter() - t_json) * 1000.0
+
     print()
     print(f"  已写入 {p}")
     print(f"  掩码 {len(written)} 个 → {masks_dir(scene_id, args.out_root)}")
@@ -412,6 +482,10 @@ def main() -> int:
     elif args.no_points:
         print("  点云 --no-points：未写盘（该场景不支持点云级工具）")
 
+    print(f"  耗时  加载 {timing['model_load_ms']:.0f} + 构建 {timing['build_wall_ms']:.0f}"
+          f" + 落盘 {timing['save_ms']:.0f} = {timing['total_wall_ms']:.0f} ms"
+          f"   （scene.json 自身 {scene_json_ms:.0f} ms 未计入）")
+
     log = [
         f"# 场景图构建记录  scene_id={scene_id}",
         f"image={image_path}",
@@ -421,6 +495,12 @@ def main() -> int:
         json.dumps(tim, ensure_ascii=False),
         f"build_wall_s={wall_s:.2f}",
         f"model_load_wall_s={load_wall_s:.2f}",
+        # ↓ 2026-09-22 追加。上面三行**原样保留**：它们已经存在于 9 份旧 build_log.txt 里，
+        #   删掉只会让"新旧日志字段不一致"这件事凭空多出来，而没有任何收益。
+        f"model_load_ms={timing['model_load_ms']}  build_wall_ms={timing['build_wall_ms']}"
+        f"  save_ms={timing['save_ms']}  total_wall_ms={timing['total_wall_ms']}",
+        f"scene_json_write_ms={scene_json_ms:.1f}  （**不计入** total，见 build_meta.timing.scope）",
+        f"口径: {TIMING_SCOPE}",
         "",
         # 内参来源必须进记录：它是横向尺度的总开关，两个 scene.json 之间
         # 只有几个数字的差别时，没有这一段就事后无法判断哪个更可信。
