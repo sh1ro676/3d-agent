@@ -1,0 +1,2159 @@
+{
+  "config": {
+    "image_hw": [
+      240,
+      320
+    ],
+    "intrinsics": [
+      [
+        240.0,
+        0.0,
+        160.0
+      ],
+      [
+        0.0,
+        240.0,
+        120.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "default_prompt": "sofa. chair. table. picture. mirror.",
+    "full_prompt": "sofa. chair. table. plant. lamp. monitor. shelf. cabinet. painting.",
+    "n_boxes": 11,
+    "n_foreground": 9,
+    "zero_api": true,
+    "path": [
+      "detect(prompt)",
+      "segment(IoU 匹配)",
+      "lift(夹具点云)",
+      "build_scene_graph ①②③④⑤⑥"
+    ]
+  },
+  "baseline": {
+    "prompt": "sofa. chair. table. plant. lamp. monitor. shelf. cabinet. painting.",
+    "n_nodes": 9,
+    "n_edges": 145,
+    "n_fallbacks": 0,
+    "n_dropped": 0,
+    "n_detections_raw": 9,
+    "intrinsics_source": "provided",
+    "fov": {
+      "hfov_deg": 67.38,
+      "vfov_deg": 53.13,
+      "plausible": true,
+      "reason": "ok"
+    },
+    "up_axis": "-y",
+    "up_axis_reliable": true,
+    "up_axis_tilt_deg": 15.91,
+    "mask_box_coverage_mean": 0.9142,
+    "mask_box_coverage_min": 0.7328,
+    "warnings": [],
+    "perception_kind": "SyntheticPerception",
+    "nodes": {
+      "cabinet_1": {
+        "label": "cabinet",
+        "centroid_3d": [
+          2.5208333333333335,
+          1.2008333333333334,
+          4.4
+        ],
+        "extent_3d": [
+          0.6390053763440857,
+          0.7058333333333335,
+          0.34606741573033695
+        ],
+        "n_points": 1481,
+        "centroid_source": "mask"
+      },
+      "chair_1": {
+        "label": "chair",
+        "centroid_3d": [
+          -1.1839234449760765,
+          0.6119791666666667,
+          2.35
+        ],
+        "extent_3d": [
+          0.5000000000000001,
+          0.6497487437185929,
+          0.3928571428571428
+        ],
+        "n_points": 4528,
+        "centroid_source": "mask"
+      },
+      "lamp_1": {
+        "label": "lamp",
+        "centroid_3d": [
+          0.776875,
+          0.226875,
+          3.3
+        ],
+        "extent_3d": [
+          0.4881249999999999,
+          1.4443037974683546,
+          0.22000000000000064
+        ],
+        "n_points": 4085,
+        "centroid_source": "mask"
+      },
+      "monitor_1": {
+        "label": "monitor",
+        "centroid_3d": [
+          0.12,
+          -0.3975,
+          3.6
+        ],
+        "extent_3d": [
+          0.43500000000000005,
+          0.39,
+          0.0
+        ],
+        "n_points": 810,
+        "centroid_source": "mask"
+      },
+      "painting_1": {
+        "label": "painting",
+        "centroid_3d": [
+          -0.9881249999999999,
+          -0.605625,
+          5.1
+        ],
+        "extent_3d": [
+          0.46750000000000014,
+          0.7862499999999999,
+          0.0
+        ],
+        "n_points": 742,
+        "centroid_source": "mask"
+      },
+      "plant_1": {
+        "label": "plant",
+        "centroid_3d": [
+          0.9535416666666666,
+          0.27674218089602703,
+          2.3
+        ],
+        "extent_3d": [
+          0.2952083333333333,
+          1.1497109826589595,
+          0.2987261146496816
+        ],
+        "n_points": 4968,
+        "centroid_source": "mask"
+      },
+      "shelf_1": {
+        "label": "shelf",
+        "centroid_3d": [
+          -0.31625,
+          -0.009583333333333333,
+          4.6
+        ],
+        "extent_3d": [
+          0.8816666666666666,
+          1.38,
+          0.0
+        ],
+        "n_points": 2972,
+        "centroid_source": "mask"
+      },
+      "sofa_1": {
+        "label": "sofa",
+        "centroid_3d": [
+          -1.1197916666666667,
+          0.7435416666666667,
+          4.3
+        ],
+        "extent_3d": [
+          0.993125,
+          0.7479999999999998,
+          0.6230769230769235
+        ],
+        "n_points": 2331,
+        "centroid_source": "mask"
+      },
+      "table_1": {
+        "label": "table",
+        "centroid_3d": [
+          0.0,
+          0.68125,
+          3.0
+        ],
+        "extent_3d": [
+          0.9,
+          0.34375,
+          0.6164383561643842
+        ],
+        "n_points": 2542,
+        "centroid_source": "mask"
+      }
+    },
+    "edges": [
+      [
+        "cabinet_1",
+        "chair_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "chair_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "chair_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "chair_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "lamp_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "lamp_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "lamp_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "lamp_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "monitor_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "monitor_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "monitor_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "monitor_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "painting_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "painting_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "painting_1",
+        "front_of"
+      ],
+      [
+        "cabinet_1",
+        "painting_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "plant_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "plant_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "plant_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "plant_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "shelf_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "shelf_1",
+        "front_of"
+      ],
+      [
+        "cabinet_1",
+        "shelf_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "sofa_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "sofa_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "cabinet_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "cabinet_1",
+        "table_1",
+        "below"
+      ],
+      [
+        "cabinet_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "cabinet_1",
+        "table_1",
+        "right_of"
+      ],
+      [
+        "chair_1",
+        "lamp_1",
+        "below"
+      ],
+      [
+        "chair_1",
+        "lamp_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "lamp_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "lamp_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "monitor_1",
+        "below"
+      ],
+      [
+        "chair_1",
+        "monitor_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "monitor_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "monitor_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "painting_1",
+        "below"
+      ],
+      [
+        "chair_1",
+        "painting_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "painting_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "painting_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "plant_1",
+        "behind"
+      ],
+      [
+        "chair_1",
+        "plant_1",
+        "below"
+      ],
+      [
+        "chair_1",
+        "plant_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "plant_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "shelf_1",
+        "below"
+      ],
+      [
+        "chair_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "shelf_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "shelf_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "chair_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "sofa_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "sofa_1",
+        "left_of"
+      ],
+      [
+        "chair_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "chair_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "chair_1",
+        "table_1",
+        "front_of"
+      ],
+      [
+        "chair_1",
+        "table_1",
+        "left_of"
+      ],
+      [
+        "lamp_1",
+        "monitor_1",
+        "below"
+      ],
+      [
+        "lamp_1",
+        "monitor_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "monitor_1",
+        "front_of"
+      ],
+      [
+        "lamp_1",
+        "monitor_1",
+        "near"
+      ],
+      [
+        "lamp_1",
+        "monitor_1",
+        "right_of"
+      ],
+      [
+        "lamp_1",
+        "painting_1",
+        "below"
+      ],
+      [
+        "lamp_1",
+        "painting_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "painting_1",
+        "front_of"
+      ],
+      [
+        "lamp_1",
+        "painting_1",
+        "right_of"
+      ],
+      [
+        "lamp_1",
+        "plant_1",
+        "behind"
+      ],
+      [
+        "lamp_1",
+        "plant_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "plant_1",
+        "left_of"
+      ],
+      [
+        "lamp_1",
+        "shelf_1",
+        "below"
+      ],
+      [
+        "lamp_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "shelf_1",
+        "front_of"
+      ],
+      [
+        "lamp_1",
+        "shelf_1",
+        "right_of"
+      ],
+      [
+        "lamp_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "lamp_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "sofa_1",
+        "front_of"
+      ],
+      [
+        "lamp_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "lamp_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "lamp_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "lamp_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "lamp_1",
+        "table_1",
+        "near"
+      ],
+      [
+        "lamp_1",
+        "table_1",
+        "right_of"
+      ],
+      [
+        "monitor_1",
+        "painting_1",
+        "below"
+      ],
+      [
+        "monitor_1",
+        "painting_1",
+        "distance"
+      ],
+      [
+        "monitor_1",
+        "painting_1",
+        "front_of"
+      ],
+      [
+        "monitor_1",
+        "painting_1",
+        "right_of"
+      ],
+      [
+        "monitor_1",
+        "plant_1",
+        "above"
+      ],
+      [
+        "monitor_1",
+        "plant_1",
+        "behind"
+      ],
+      [
+        "monitor_1",
+        "plant_1",
+        "distance"
+      ],
+      [
+        "monitor_1",
+        "plant_1",
+        "left_of"
+      ],
+      [
+        "monitor_1",
+        "shelf_1",
+        "above"
+      ],
+      [
+        "monitor_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "monitor_1",
+        "shelf_1",
+        "front_of"
+      ],
+      [
+        "monitor_1",
+        "shelf_1",
+        "right_of"
+      ],
+      [
+        "monitor_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "monitor_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "monitor_1",
+        "sofa_1",
+        "front_of"
+      ],
+      [
+        "monitor_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "monitor_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "monitor_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "monitor_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "monitor_1",
+        "table_1",
+        "right_of"
+      ],
+      [
+        "painting_1",
+        "plant_1",
+        "above"
+      ],
+      [
+        "painting_1",
+        "plant_1",
+        "behind"
+      ],
+      [
+        "painting_1",
+        "plant_1",
+        "distance"
+      ],
+      [
+        "painting_1",
+        "plant_1",
+        "left_of"
+      ],
+      [
+        "painting_1",
+        "shelf_1",
+        "above"
+      ],
+      [
+        "painting_1",
+        "shelf_1",
+        "behind"
+      ],
+      [
+        "painting_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "painting_1",
+        "shelf_1",
+        "left_of"
+      ],
+      [
+        "painting_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "painting_1",
+        "sofa_1",
+        "behind"
+      ],
+      [
+        "painting_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "painting_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "painting_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "painting_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "painting_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "painting_1",
+        "table_1",
+        "left_of"
+      ],
+      [
+        "plant_1",
+        "shelf_1",
+        "below"
+      ],
+      [
+        "plant_1",
+        "shelf_1",
+        "distance"
+      ],
+      [
+        "plant_1",
+        "shelf_1",
+        "front_of"
+      ],
+      [
+        "plant_1",
+        "shelf_1",
+        "right_of"
+      ],
+      [
+        "plant_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "plant_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "plant_1",
+        "sofa_1",
+        "front_of"
+      ],
+      [
+        "plant_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "plant_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "plant_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "plant_1",
+        "table_1",
+        "front_of"
+      ],
+      [
+        "plant_1",
+        "table_1",
+        "right_of"
+      ],
+      [
+        "shelf_1",
+        "sofa_1",
+        "above"
+      ],
+      [
+        "shelf_1",
+        "sofa_1",
+        "behind"
+      ],
+      [
+        "shelf_1",
+        "sofa_1",
+        "distance"
+      ],
+      [
+        "shelf_1",
+        "sofa_1",
+        "right_of"
+      ],
+      [
+        "shelf_1",
+        "table_1",
+        "above"
+      ],
+      [
+        "shelf_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "shelf_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "shelf_1",
+        "table_1",
+        "left_of"
+      ],
+      [
+        "sofa_1",
+        "table_1",
+        "behind"
+      ],
+      [
+        "sofa_1",
+        "table_1",
+        "below"
+      ],
+      [
+        "sofa_1",
+        "table_1",
+        "distance"
+      ],
+      [
+        "sofa_1",
+        "table_1",
+        "left_of"
+      ]
+    ]
+  },
+  "bbox_fallback": {
+    "scope": "delta_* = 降级组的几何量 − 基线**同物体**走 mask 路径的几何量，单位米。这是降级的**净代价**：可见性固有偏差（gt_visible vs gt_box）在两组里都存在，相减即消掉。 err_vs_gt_* 是另一回事：它相对**盒中心**，**含**可见性偏差，不能当降级代价读 —— 两者都报，名字不同。",
+    "n_objects_injected": 9,
+    "n_applied": 9,
+    "missed": [],
+    "summary": {
+      "n_expected": 9,
+      "n_measured": 9,
+      "n_missing": 0,
+      "total_m": {
+        "n": 9.0,
+        "median": 0.032031188566427574,
+        "mean": 0.05152421738385003,
+        "p90": 0.1180455111992856,
+        "max": 0.14318791072495501
+      },
+      "lateral_m": {
+        "n": 9.0,
+        "median": 0.032031188566427574,
+        "mean": 0.05152421738385003,
+        "p90": 0.1180455111992856,
+        "max": 0.14318791072495501
+      },
+      "depth_m": {
+        "n": 9.0,
+        "median": 0.0,
+        "mean": 0.0,
+        "p90": 0.0,
+        "max": 0.0
+      }
+    },
+    "extent_l1_m": {
+      "median": 0.0,
+      "p90": 5.308589111687623,
+      "max": 7.088677207925577,
+      "n_changed": 4,
+      "scope": "extent_3d 的 L1 净代价（相对基线同物体），单位米。⚠ 中位数 0.0 与最大值 7.09 同时成立是**预期**的：半数物体的框内背景占比还不够高，`robust_extent` 的分位数没被拉动；而一旦拉动，拉的是**墙与地板**的跨度（x 方向可达十几米）。"
+    },
+    "box_coverage": {
+      "median": 0.9662825437473325,
+      "min": 0.7328055418109847,
+      "max": 1.0,
+      "note": "框里有多少是**物体**（1 − 背景占比）。它是解读本档的关键自变量：背景点占比过半才拉得动逐轴中位数与分位数。真实链路 Phase 0 实测 sofa 的对应值是 46.2%，而本档中位数 0.97 ⟹ **本档落在最乐观的一头**，不能直接当真实照片上的预期。 ⚠ 分母用的是未裁剪的框面积，框超出画面时读数**偏低**。"
+    },
+    "depth_direction": {
+      "n_farther": 0,
+      "n_nearer": 9,
+      "note": "推论与实测**相反**，这条要留着：我原本预期「框内背景点的 z 更大 ⟹ 降级把物体系统性推向远处」。实测是 9/9 个物体的**纵深中位数恰好不变**（差为精确 0）。原因是结构性的 —— 正对相机的盒子其可见面是一个平面，掩码内点的 z 分布集中在单点；框内多出来的背景像素虽然更远，但占比不到一半，**逐轴中位数取不到它们**。 ⟹ 这条结论的适用边界是「覆盖率足够高」，**不是**「bbox_fallback 不影响纵深」。边界由 [②b 覆盖率扫描] 量出。"
+    },
+    "rows": [
+      {
+        "object_id": "cabinet_1",
+        "label": "cabinet",
+        "n_mask_points": 0,
+        "n_box_points": 2156,
+        "n_points_base": 1481,
+        "box_coverage": 0.7328055418109847,
+        "delta_m": {
+          "total_m": 0.14318791072495501,
+          "lateral_m": 0.14318791072495501,
+          "depth_m": 0.0,
+          "dx_m": -0.09166666666666634,
+          "dy_m": -0.10999999999999988,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          -0.09166666666666634,
+          -0.10999999999999988,
+          0.0
+        ],
+        "delta_extent_l1_m": 7.088677207925577,
+        "err_vs_gt_m": {
+          "total_m": 0.25936085972165335,
+          "lateral_m": 0.16513041983703494,
+          "depth_m": 0.1999999999999993,
+          "dx_m": -0.07083333333333286,
+          "dy_m": -0.14916666666666645,
+          "dz_m": -0.1999999999999993,
+          "signed_dz_m": -0.1999999999999993
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.20486106403012572,
+          "lateral_m": 0.0443627721806872,
+          "depth_m": 0.1999999999999993,
+          "dx_m": 0.02083333333333348,
+          "dy_m": -0.03916666666666657,
+          "dz_m": -0.1999999999999993,
+          "signed_dz_m": -0.1999999999999993
+        }
+      },
+      {
+        "object_id": "chair_1",
+        "label": "chair",
+        "n_mask_points": 0,
+        "n_box_points": 4824,
+        "n_points_base": 4528,
+        "box_coverage": 0.9662825437473325,
+        "delta_m": {
+          "total_m": 0.032031188566427574,
+          "lateral_m": 0.032031188566427574,
+          "depth_m": 0.0,
+          "dx_m": -0.025347388357256806,
+          "dy_m": 0.019583333333333286,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          -0.025347388357256806,
+          0.019583333333333286,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.0,
+        "err_vs_gt_m": {
+          "total_m": 0.20421050762292084,
+          "lateral_m": 0.04125447155898515,
+          "depth_m": 0.19999999999999973,
+          "dx_m": 0.040729166666666705,
+          "dy_m": 0.006562500000000027,
+          "dz_m": -0.19999999999999973,
+          "signed_dz_m": -0.19999999999999973
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.2110347204242087,
+          "lateral_m": 0.06734725847815955,
+          "depth_m": 0.19999999999999973,
+          "dx_m": 0.06607655502392351,
+          "dy_m": -0.01302083333333326,
+          "dz_m": -0.19999999999999973,
+          "signed_dz_m": -0.19999999999999973
+        }
+      },
+      {
+        "object_id": "lamp_1",
+        "label": "lamp",
+        "n_mask_points": 0,
+        "n_box_points": 4387,
+        "n_points_base": 4085,
+        "box_coverage": 0.9975579975579976,
+        "delta_m": {
+          "total_m": 0.01404670562131529,
+          "lateral_m": 0.01404670562131529,
+          "depth_m": 0.0,
+          "dx_m": 0.01375000000000004,
+          "dy_m": 0.00287183544303804,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.01375000000000004,
+          0.00287183544303804,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.0,
+        "err_vs_gt_m": {
+          "total_m": 0.15036762640849055,
+          "lateral_m": 0.010508238278764081,
+          "depth_m": 0.15000000000000036,
+          "dx_m": -0.009375000000000022,
+          "dy_m": 0.0047468354430380555,
+          "dz_m": -0.15000000000000036,
+          "signed_dz_m": -0.15000000000000036
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.15178366595256587,
+          "lateral_m": 0.023200888991588297,
+          "depth_m": 0.15000000000000036,
+          "dx_m": -0.023125000000000062,
+          "dy_m": 0.0018750000000000155,
+          "dz_m": -0.15000000000000036,
+          "signed_dz_m": -0.15000000000000036
+        }
+      },
+      {
+        "object_id": "monitor_1",
+        "label": "monitor",
+        "n_mask_points": 0,
+        "n_box_points": 837,
+        "n_points_base": 810,
+        "box_coverage": 1.0,
+        "delta_m": {
+          "total_m": 0.007500000000000007,
+          "lateral_m": 0.007500000000000007,
+          "depth_m": 0.0,
+          "dx_m": 0.007500000000000007,
+          "dy_m": 0.0,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.007500000000000007,
+          0.0,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.0,
+        "err_vs_gt_m": {
+          "total_m": 0.02031009601158992,
+          "lateral_m": 0.0035355339059327507,
+          "depth_m": 0.020000000000000018,
+          "dx_m": 0.002500000000000016,
+          "dy_m": 0.0025000000000000022,
+          "dz_m": -0.020000000000000018,
+          "signed_dz_m": -0.020000000000000018
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.0207665596572952,
+          "lateral_m": 0.005590169943749467,
+          "depth_m": 0.020000000000000018,
+          "dx_m": -0.0049999999999999906,
+          "dy_m": 0.0025000000000000022,
+          "dz_m": -0.020000000000000018,
+          "signed_dz_m": -0.020000000000000018
+        }
+      },
+      {
+        "object_id": "painting_1",
+        "label": "painting",
+        "n_mask_points": 0,
+        "n_box_points": 975,
+        "n_points_base": 742,
+        "box_coverage": 0.8489702517162472,
+        "delta_m": {
+          "total_m": 0.04254134018810407,
+          "lateral_m": 0.04254134018810407,
+          "depth_m": 0.0,
+          "dx_m": 0.04249999999999998,
+          "dy_m": 0.00187499999999996,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.04249999999999998,
+          0.00187499999999996,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.60875,
+        "err_vs_gt_m": {
+          "total_m": 0.02081353225668299,
+          "lateral_m": 0.005762215285808088,
+          "depth_m": 0.019999999999999574,
+          "dx_m": 0.004375000000000018,
+          "dy_m": -0.003750000000000031,
+          "dz_m": -0.019999999999999574,
+          "signed_dz_m": -0.019999999999999574
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.04341838608239579,
+          "lateral_m": 0.03853772502366996,
+          "depth_m": 0.019999999999999574,
+          "dx_m": -0.038124999999999964,
+          "dy_m": -0.005624999999999991,
+          "dz_m": -0.019999999999999574,
+          "signed_dz_m": -0.019999999999999574
+        }
+      },
+      {
+        "object_id": "plant_1",
+        "label": "plant",
+        "n_mask_points": 0,
+        "n_box_points": 5082,
+        "n_points_base": 4968,
+        "box_coverage": 0.9857142857142858,
+        "delta_m": {
+          "total_m": 0.0004946720061829724,
+          "lateral_m": 0.0004946720061829724,
+          "depth_m": 0.0,
+          "dx_m": 0.0,
+          "dy_m": -0.0004946720061829724,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.0,
+          -0.0004946720061829724,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.0,
+        "err_vs_gt_m": {
+          "total_m": 0.15703481465758307,
+          "lateral_m": 0.046475079500107964,
+          "depth_m": 0.15000000000000036,
+          "dx_m": -0.04645833333333338,
+          "dy_m": 0.00124750888984404,
+          "dz_m": -0.15000000000000036,
+          "signed_dz_m": -0.15000000000000036
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.15703952346586417,
+          "lateral_m": 0.046490987625405385,
+          "depth_m": 0.15000000000000036,
+          "dx_m": -0.04645833333333338,
+          "dy_m": 0.0017421808960270124,
+          "dz_m": -0.15000000000000036,
+          "signed_dz_m": -0.15000000000000036
+        }
+      },
+      {
+        "object_id": "shelf_1",
+        "label": "shelf",
+        "n_mask_points": 0,
+        "n_box_points": 3552,
+        "n_points_base": 2972,
+        "box_coverage": 0.8662197610026231,
+        "delta_m": {
+          "total_m": 0.11175991131786824,
+          "lateral_m": 0.11175991131786824,
+          "depth_m": 0.0,
+          "dx_m": 0.057499999999999996,
+          "dy_m": -0.09583333333333331,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.057499999999999996,
+          -0.09583333333333331,
+          0.0
+        ],
+        "delta_extent_l1_m": 1.3245289855072468,
+        "err_vs_gt_m": {
+          "total_m": 0.20026458193544322,
+          "lateral_m": 0.010290907529357036,
+          "depth_m": 0.20000000000000018,
+          "dx_m": -0.008750000000000008,
+          "dy_m": -0.005416666666666611,
+          "dz_m": -0.20000000000000018,
+          "signed_dz_m": -0.20000000000000018
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.22926891658293147,
+          "lateral_m": 0.11209030337683594,
+          "depth_m": 0.20000000000000018,
+          "dx_m": -0.06625,
+          "dy_m": 0.0904166666666667,
+          "dz_m": -0.20000000000000018,
+          "signed_dz_m": -0.20000000000000018
+        }
+      },
+      {
+        "object_id": "sofa_1",
+        "label": "sofa",
+        "n_mask_points": 0,
+        "n_box_points": 2852,
+        "n_points_base": 2331,
+        "box_coverage": 0.8491803278688524,
+        "delta_m": {
+          "total_m": 0.09965622802979707,
+          "lateral_m": 0.09965622802979707,
+          "depth_m": 0.0,
+          "dx_m": 0.0839184204160619,
+          "dy_m": -0.053749999999999964,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.0839184204160619,
+          -0.053749999999999964,
+          0.0
+        ],
+        "delta_extent_l1_m": 4.863567087628134,
+        "err_vs_gt_m": {
+          "total_m": 0.3958510469428613,
+          "lateral_m": 0.18492715151042316,
+          "depth_m": 0.35000000000000053,
+          "dx_m": 0.16412675374939512,
+          "dy_m": -0.08520833333333322,
+          "dz_m": -0.35000000000000053,
+          "signed_dz_m": -0.35000000000000053
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.36044833675885174,
+          "lateral_m": 0.08615685388999647,
+          "depth_m": 0.35000000000000053,
+          "dx_m": 0.08020833333333321,
+          "dy_m": -0.031458333333333255,
+          "dz_m": -0.35000000000000053,
+          "signed_dz_m": -0.35000000000000053
+        }
+      },
+      {
+        "object_id": "table_1",
+        "label": "table",
+        "n_mask_points": 0,
+        "n_box_points": 2664,
+        "n_points_base": 2542,
+        "box_coverage": 0.9807098765432098,
+        "delta_m": {
+          "total_m": 0.012500000000000067,
+          "lateral_m": 0.012500000000000067,
+          "depth_m": 0.0,
+          "dx_m": 0.0,
+          "dy_m": 0.012500000000000067,
+          "dz_m": 0.0,
+          "signed_dz_m": 0.0
+        },
+        "delta_centroid_3d": [
+          0.0,
+          0.012500000000000067,
+          0.0
+        ],
+        "delta_extent_l1_m": 0.0,
+        "err_vs_gt_m": {
+          "total_m": 0.351392319921765,
+          "lateral_m": 0.03125,
+          "depth_m": 0.3500000000000001,
+          "dx_m": 0.0,
+          "dy_m": -0.03125,
+          "dz_m": -0.3500000000000001,
+          "signed_dz_m": -0.3500000000000001
+        },
+        "err_vs_gt_base_m": {
+          "total_m": 0.35272377648806164,
+          "lateral_m": 0.04375000000000007,
+          "depth_m": 0.3500000000000001,
+          "dx_m": 0.0,
+          "dy_m": -0.04375000000000007,
+          "dz_m": -0.3500000000000001,
+          "signed_dz_m": -0.3500000000000001
+        }
+      }
+    ]
+  },
+  "coverage_boundary": {
+    "scope": "所有数字都是相对**基线同物体**的净代价（与 [②] 同口径），单位米；`box_pad_px` 只作用于被注入的那一个物体的投影框。 `coverage_median` 是同一批物体在该 pad 下「框里有多少是物体」的中位数。 ⚠ 分母用的是**未裁剪**的框面积（`box_coverage(box_area)` 不 clip），而 pad ≥ 16 时部分框已超出 320×240 画面 ⟹ 那两行的覆盖率读数**偏低**，即真实的背景占比比表里更小。这是本档唯一的已知偏差，写在这里而不是让读者自己发现。",
+    "pads": [
+      0.0,
+      2.0,
+      4.0,
+      8.0,
+      12.0,
+      16.0,
+      24.0
+    ],
+    "first_pad_with_depth_change": 8.0,
+    "rows": [
+      {
+        "box_pad_px": 0.0,
+        "n_applied": 9,
+        "coverage_median": 0.9662825437473325,
+        "coverage_min": 0.7328055418109847,
+        "median_total_m": 0.032031188566427574,
+        "median_lateral_m": 0.032031188566427574,
+        "median_depth_m": 0.0,
+        "median_extent_l1_m": 0.0,
+        "max_extent_l1_m": 7.088677207925577,
+        "n_depth_changed": 0,
+        "n_depth_increased": 0,
+        "n_depth_decreased": 0,
+        "max_depth_m": 0.0
+      },
+      {
+        "box_pad_px": 2.0,
+        "n_applied": 9,
+        "coverage_median": 0.7685009487666035,
+        "coverage_min": 0.6178556528994577,
+        "median_total_m": 0.056692702352242774,
+        "median_lateral_m": 0.056692702352242774,
+        "median_depth_m": 0.0,
+        "median_extent_l1_m": 5.05504154049325,
+        "max_extent_l1_m": 7.182010541258911,
+        "n_depth_changed": 0,
+        "n_depth_increased": 0,
+        "n_depth_decreased": 0,
+        "max_depth_m": 0.0
+      },
+      {
+        "box_pad_px": 4.0,
+        "n_applied": 9,
+        "coverage_median": 0.6671156004489338,
+        "coverage_min": 0.520336605890603,
+        "median_total_m": 0.07499999999999996,
+        "median_lateral_m": 0.07499999999999996,
+        "median_depth_m": 0.0,
+        "median_extent_l1_m": 5.502166520239489,
+        "max_extent_l1_m": 7.7388545693580255,
+        "n_depth_changed": 0,
+        "n_depth_increased": 0,
+        "n_depth_decreased": 0,
+        "max_depth_m": 0.0
+      },
+      {
+        "box_pad_px": 8.0,
+        "n_applied": 9,
+        "coverage_median": 0.5300517210629571,
+        "coverage_min": 0.352326685660019,
+        "median_total_m": 0.13410276040120217,
+        "median_lateral_m": 0.08854502932023287,
+        "median_depth_m": 0.0,
+        "median_extent_l1_m": 5.825381410256409,
+        "max_extent_l1_m": 7.958854569358026,
+        "n_depth_changed": 4,
+        "n_depth_increased": 4,
+        "n_depth_decreased": 0,
+        "max_depth_m": 0.9999999999999996
+      },
+      {
+        "box_pad_px": 12.0,
+        "n_applied": 9,
+        "coverage_median": 0.43153767968636564,
+        "coverage_min": 0.2546328071379547,
+        "median_total_m": 0.2898069308671993,
+        "median_lateral_m": 0.11175991131786824,
+        "median_depth_m": 0.2168449197860962,
+        "median_extent_l1_m": 6.062048076923077,
+        "max_extent_l1_m": 8.178854569358027,
+        "n_depth_changed": 5,
+        "n_depth_increased": 5,
+        "n_depth_decreased": 0,
+        "max_depth_m": 1.5
+      },
+      {
+        "box_pad_px": 16.0,
+        "n_applied": 9,
+        "coverage_median": 0.358288125376733,
+        "coverage_min": 0.19272727272727272,
+        "median_total_m": 1.0035094668213147,
+        "median_lateral_m": 0.11175991131786824,
+        "median_depth_m": 0.9999999999999996,
+        "median_extent_l1_m": 6.298714743589743,
+        "max_extent_l1_m": 8.398854569358026,
+        "n_depth_changed": 6,
+        "n_depth_increased": 5,
+        "n_depth_decreased": 1,
+        "max_depth_m": 1.5
+      },
+      {
+        "box_pad_px": 24.0,
+        "n_applied": 9,
+        "coverage_median": 0.2521825396825397,
+        "coverage_min": 0.12151981657386178,
+        "median_total_m": 1.0027172284735997,
+        "median_lateral_m": 0.13524155344337688,
+        "median_depth_m": 0.9999999999999996,
+        "median_extent_l1_m": 6.893333333333333,
+        "max_extent_l1_m": 8.939479569358026,
+        "n_depth_changed": 7,
+        "n_depth_increased": 6,
+        "n_depth_decreased": 1,
+        "max_depth_m": 1.5
+      }
+    ]
+  },
+  "extent_failure_mechanism": {
+    "k_p90": 1.5,
+    "n_rows": 9,
+    "box_n_rejected": {
+      "min": 0,
+      "max": 302,
+      "n_zero": 1
+    },
+    "z_span_growth": {
+      "min": 5.839999999999993,
+      "max": 14.999999999999956,
+      "n_undefined": 3,
+      "note": "`z_span_growth` = box 路径的 z 跨度 ÷ mask 路径的 z 跨度。⚠ 对**可见面是一个平面**的物体（挂画、显示器，mask 侧 z 跨度恰为 0）它无定义，记为 null —— 这类物体任何 z 方向的读数都是纯误差，没有可比的基线。"
+    },
+    "note": "★ **机制**：`robust_extent` 的剔除判据 `r <= k_p90 × r_p90` 是按「离群点占少数、且半径远大于主体」设计的（见它自己的 docstring）。`bbox_fallback` 的框内点云打破了这个前提 —— 混进来的不是「少数远处点」，而是**与主体在 x/y 上重叠、只在 z 上分开的第二团**（前排物体的可见面）。第二团会**一起**把 `r_p90` 抬大，于是阈值落到第二团**之外**：被判为离群、剔掉的是更远的**墙**，而第二团本身被当成了主体的一部分。 ⟹ **它剔了，但没剔到该剔的东西**（实测 box 路径 `n_rejected` 在 0–302 之间，而 z 跨度照样从 0.22–0.62 m 涨到 2.0–4.3 m）。 ⟹ 「`bbox_fallback` 只是质心精度下降」这个说法**不完整**：它对质心的破坏是毫米~百毫米级（逐轴中位数抗双峰），对**尺寸**的破坏是**米级**（min/max 对双峰零抗性）——而 `extent_3d` 直接进 L5 场景报告，也是 `on` / `inside` 的判据。 修法方向（本轮不实现）：需要一条不依赖 `r_p90` 的双峰判据，例如按半径做 1D 聚类、或在 z 上用主峰宽度定阈值。",
+    "rows": [
+      {
+        "object_id": "cabinet_1",
+        "mask": {
+          "n_points": 1481,
+          "extent_3d_m": [
+            0.6390053763440857,
+            0.7058333333333335,
+            0.34606741573033695
+          ],
+          "z_span_m": 0.34606741573033695,
+          "centroid_z": 4.4,
+          "n_inliers": 1481,
+          "n_rejected": 0,
+          "radius_p90_m": 0.40389188169839024,
+          "reject_threshold_m": 0.6058378225475853
+        },
+        "box": {
+          "n_points": 2156,
+          "extent_3d_m": [
+            3.2460416666666667,
+            1.2335416666666668,
+            4.3
+          ],
+          "z_span_m": 4.3,
+          "centroid_z": 4.4,
+          "n_inliers": 2156,
+          "n_rejected": 0,
+          "radius_p90_m": 2.5519516795850334,
+          "reject_threshold_m": 3.82792751937755
+        },
+        "z_span_growth": 12.42532467532468
+      },
+      {
+        "object_id": "chair_1",
+        "mask": {
+          "n_points": 4528,
+          "extent_3d_m": [
+            0.5000000000000001,
+            0.6497487437185929,
+            0.3928571428571428
+          ],
+          "z_span_m": 0.3928571428571428,
+          "centroid_z": 2.35,
+          "n_inliers": 4528,
+          "n_rejected": 0,
+          "radius_p90_m": 0.391827219648311,
+          "reject_threshold_m": 0.5877408294724665
+        },
+        "box": {
+          "n_points": 4824,
+          "extent_3d_m": [
+            0.5000000000000001,
+            0.6497487437185929,
+            0.3928571428571428
+          ],
+          "z_span_m": 4.25,
+          "centroid_z": 2.35,
+          "n_inliers": 4528,
+          "n_rejected": 296,
+          "radius_p90_m": 0.44868020984960905,
+          "reject_threshold_m": 0.6730203147744136
+        },
+        "z_span_growth": 10.81818181818182
+      },
+      {
+        "object_id": "lamp_1",
+        "mask": {
+          "n_points": 4085,
+          "extent_3d_m": [
+            0.4881249999999999,
+            1.4443037974683546,
+            0.22000000000000064
+          ],
+          "z_span_m": 0.22000000000000064,
+          "centroid_z": 3.3,
+          "n_inliers": 4085,
+          "n_rejected": 0,
+          "radius_p90_m": 0.669103878332804,
+          "reject_threshold_m": 1.003655817499206
+        },
+        "box": {
+          "n_points": 4387,
+          "extent_3d_m": [
+            0.4881249999999999,
+            1.4443037974683546,
+            0.22000000000000064
+          ],
+          "z_span_m": 3.3,
+          "centroid_z": 3.3,
+          "n_inliers": 4085,
+          "n_rejected": 302,
+          "radius_p90_m": 0.7156076277002932,
+          "reject_threshold_m": 1.0734114415504399
+        },
+        "z_span_growth": 14.999999999999956
+      },
+      {
+        "object_id": "monitor_1",
+        "mask": {
+          "n_points": 810,
+          "extent_3d_m": [
+            0.43500000000000005,
+            0.39,
+            0.0
+          ],
+          "z_span_m": 0.0,
+          "centroid_z": 3.6,
+          "n_inliers": 810,
+          "n_rejected": 0,
+          "radius_p90_m": 0.23917828078652964,
+          "reject_threshold_m": 0.35876742117979443
+        },
+        "box": {
+          "n_points": 837,
+          "extent_3d_m": [
+            0.43500000000000005,
+            0.39,
+            0.0
+          ],
+          "z_span_m": 2.9999999999999996,
+          "centroid_z": 3.6,
+          "n_inliers": 810,
+          "n_rejected": 27,
+          "radius_p90_m": 0.2482941803587027,
+          "reject_threshold_m": 0.3724412705380541
+        },
+        "z_span_growth": null
+      },
+      {
+        "object_id": "painting_1",
+        "mask": {
+          "n_points": 742,
+          "extent_3d_m": [
+            0.46750000000000014,
+            0.7862499999999999,
+            0.0
+          ],
+          "z_span_m": 0.0,
+          "centroid_z": 5.1,
+          "n_inliers": 742,
+          "n_rejected": 0,
+          "radius_p90_m": 0.3900981447020736,
+          "reject_threshold_m": 0.5851472170531105
+        },
+        "box": {
+          "n_points": 975,
+          "extent_3d_m": [
+            0.5564583333333335,
+            0.8060416666666665,
+            0.5
+          ],
+          "z_span_m": 2.0,
+          "centroid_z": 5.1,
+          "n_inliers": 907,
+          "n_rejected": 68,
+          "radius_p90_m": 0.6584282177712512,
+          "reject_threshold_m": 0.9876423266568768
+        },
+        "z_span_growth": null
+      },
+      {
+        "object_id": "plant_1",
+        "mask": {
+          "n_points": 4968,
+          "extent_3d_m": [
+            0.2952083333333333,
+            1.1497109826589595,
+            0.2987261146496816
+          ],
+          "z_span_m": 0.2987261146496816,
+          "centroid_z": 2.3,
+          "n_inliers": 4968,
+          "n_rejected": 0,
+          "radius_p90_m": 0.534923554738823,
+          "reject_threshold_m": 0.8023853321082346
+        },
+        "box": {
+          "n_points": 5082,
+          "extent_3d_m": [
+            0.2952083333333333,
+            1.1497109826589595,
+            0.2987261146496816
+          ],
+          "z_span_m": 4.3,
+          "centroid_z": 2.3,
+          "n_inliers": 4968,
+          "n_rejected": 114,
+          "radius_p90_m": 0.5457992963419097,
+          "reject_threshold_m": 0.8186989445128645
+        },
+        "z_span_growth": 14.394456289978676
+      },
+      {
+        "object_id": "shelf_1",
+        "mask": {
+          "n_points": 2972,
+          "extent_3d_m": [
+            0.8816666666666666,
+            1.38,
+            0.0
+          ],
+          "z_span_m": 0.0,
+          "centroid_z": 4.6,
+          "n_inliers": 2972,
+          "n_rejected": 0,
+          "radius_p90_m": 0.6806191013416469,
+          "reject_threshold_m": 1.0209286520124703
+        },
+        "box": {
+          "n_points": 3552,
+          "extent_3d_m": [
+            0.8820833333333333,
+            1.4345471014492754,
+            1.2695652173913046
+          ],
+          "z_span_m": 2.9999999999999996,
+          "centroid_z": 4.6,
+          "n_inliers": 3461,
+          "n_rejected": 91,
+          "radius_p90_m": 1.083007611221747,
+          "reject_threshold_m": 1.6245114168326205
+        },
+        "z_span_growth": null
+      },
+      {
+        "object_id": "sofa_1",
+        "mask": {
+          "n_points": 2331,
+          "extent_3d_m": [
+            0.993125,
+            0.7479999999999998,
+            0.6230769230769235
+          ],
+          "z_span_m": 0.6230769230769235,
+          "centroid_z": 4.3,
+          "n_inliers": 2318,
+          "n_rejected": 13,
+          "radius_p90_m": 0.5231766518373864,
+          "reject_threshold_m": 0.7847649777560796
+        },
+        "box": {
+          "n_points": 2852,
+          "extent_3d_m": [
+            1.807451550387597,
+            1.3599999999999999,
+            4.06031746031746
+          ],
+          "z_span_m": 4.06031746031746,
+          "centroid_z": 4.3,
+          "n_inliers": 2827,
+          "n_rejected": 25,
+          "radius_p90_m": 1.6485845979013996,
+          "reject_threshold_m": 2.4728768968520995
+        },
+        "z_span_growth": 6.516558886929253
+      },
+      {
+        "object_id": "table_1",
+        "mask": {
+          "n_points": 2542,
+          "extent_3d_m": [
+            0.9,
+            0.34375,
+            0.6164383561643842
+          ],
+          "z_span_m": 0.6164383561643842,
+          "centroid_z": 3.0,
+          "n_inliers": 2518,
+          "n_rejected": 24,
+          "radius_p90_m": 0.4608466379659177,
+          "reject_threshold_m": 0.6912699569488765
+        },
+        "box": {
+          "n_points": 2664,
+          "extent_3d_m": [
+            0.9,
+            0.34375,
+            0.6164383561643842
+          ],
+          "z_span_m": 3.5999999999999996,
+          "centroid_z": 3.0,
+          "n_inliers": 2542,
+          "n_rejected": 122,
+          "radius_p90_m": 0.5419401937586025,
+          "reject_threshold_m": 0.8129102906379038
+        },
+        "z_span_growth": 5.839999999999993
+      }
+    ]
+  },
+  "no_valid_points": {
+    "scope": "本组量的是「物体从场景图里消失」的后果：节点数、边数、以及**副作用**（其他物体是否被连带扰动、up_axis 是否变化）。 副作用必须单独报：nan 注入的区域是投影框（含外扩），它可能盖住别的物体的可见像素 —— 那会让「丢了一个物体」与「其他物体的数字也变了」混成一条无法归因的结论。",
+    "n_objects_injected": 9,
+    "n_applied": 9,
+    "missed": [],
+    "side_effects": {
+      "n_rows_with_side_effects": 4,
+      "n_applied": 9,
+      "n_disturbed_others_total": 6,
+      "max_other_delta_m": 0.135,
+      "n_above_relation_tol": 2,
+      "relation_tol_m": 0.05,
+      "n_up_axis_changed": 0,
+      "note": "★ **连带扰动是这条降级路径的内禀属性，不是本注入方式的缺陷。**触发 `no_valid_points` 要求「投影框内**所有**像素都没有有效深度」，而一个物体的投影框内必然包含其他物体的像素（覆盖率越高越必然） ⟹ 真实链路里这个降级不会只影响一个物体：它发生时，那一整块图像区域的深度都失效了（大面积反光、过曝、镜头沾污）。 实测 9 次注入里有 4 次出现连带扰动，共扰动 6 个物体，最大 135.0 mm；其中**超过关系容差 50 mm 的有 2 次** ⟹ 足以把 near/far 这类布尔关系翻转，而场景图里不会留下任何痕迹。 这也是为什么 builder 对这种情况的选择是「剔除物体」而不是「补一个坐标」：补坐标会把一次**区域性**失效伪装成一个定位结论。"
+    },
+    "rows": [
+      {
+        "object_id": "cabinet_1",
+        "label": "cabinet",
+        "dropped_labels": [
+          "cabinet"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 113,
+        "n_edges_lost": 32,
+        "n_edges_lost_touching_target": 32,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 1,
+        "others_shifted": [
+          {
+            "object_id": "plant_1",
+            "delta_m": {
+              "total_m": 0.06922179482403944,
+              "lateral_m": 0.06922179482403944,
+              "depth_m": 0.0,
+              "dx_m": -0.028749999999999942,
+              "dy_m": -0.06296899537598974,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          }
+        ],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "chair_1",
+        "label": "chair",
+        "dropped_labels": [
+          "chair"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 113,
+        "n_edges_lost": 32,
+        "n_edges_lost_touching_target": 32,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 0,
+        "others_shifted": [],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "lamp_1",
+        "label": "lamp",
+        "dropped_labels": [
+          "lamp"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 112,
+        "n_edges_lost": 33,
+        "n_edges_lost_touching_target": 33,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 0,
+        "others_shifted": [],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "monitor_1",
+        "label": "monitor",
+        "dropped_labels": [
+          "monitor"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 112,
+        "n_edges_lost": 33,
+        "n_edges_lost_touching_target": 33,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 0,
+        "others_shifted": [],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "painting_1",
+        "label": "painting",
+        "dropped_labels": [
+          "painting"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 113,
+        "n_edges_lost": 32,
+        "n_edges_lost_touching_target": 32,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 1,
+        "others_shifted": [
+          {
+            "object_id": "shelf_1",
+            "delta_m": {
+              "total_m": 0.04285796956874594,
+              "lateral_m": 0.04285796956874594,
+              "depth_m": 0.0,
+              "dx_m": 0.01916666666666661,
+              "dy_m": 0.03833333333333333,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          }
+        ],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "plant_1",
+        "label": "plant",
+        "dropped_labels": [
+          "plant"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 114,
+        "n_edges_lost": 31,
+        "n_edges_lost_touching_target": 31,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 0,
+        "others_shifted": [],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "shelf_1",
+        "label": "shelf",
+        "dropped_labels": [
+          "shelf"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 113,
+        "n_edges_lost": 32,
+        "n_edges_lost_touching_target": 32,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 1,
+        "others_shifted": [
+          {
+            "object_id": "monitor_1",
+            "delta_m": {
+              "total_m": 0.135,
+              "lateral_m": 0.135,
+              "depth_m": 0.0,
+              "dx_m": 0.135,
+              "dy_m": 0.0,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          }
+        ],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "sofa_1",
+        "label": "sofa",
+        "dropped_labels": [
+          "sofa"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 113,
+        "n_edges_lost": 32,
+        "n_edges_lost_touching_target": 32,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 3,
+        "others_shifted": [
+          {
+            "object_id": "chair_1",
+            "delta_m": {
+              "total_m": 0.027172906223749946,
+              "lateral_m": 0.027172906223749946,
+              "depth_m": 0.0,
+              "dx_m": -0.025347388357256806,
+              "dy_m": 0.009791666666666643,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          },
+          {
+            "object_id": "shelf_1",
+            "delta_m": {
+              "total_m": 0.019166666666666665,
+              "lateral_m": 0.019166666666666665,
+              "depth_m": 0.0,
+              "dx_m": 0.0,
+              "dy_m": -0.019166666666666665,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          },
+          {
+            "object_id": "table_1",
+            "delta_m": {
+              "total_m": 0.007333333333333334,
+              "lateral_m": 0.007333333333333334,
+              "depth_m": 0.0,
+              "dx_m": 0.007333333333333334,
+              "dy_m": 0.0,
+              "dz_m": 0.0,
+              "signed_dz_m": 0.0
+            }
+          }
+        ],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      },
+      {
+        "object_id": "table_1",
+        "label": "table",
+        "dropped_labels": [
+          "table"
+        ],
+        "n_mask_points": 0,
+        "n_box_points": 0,
+        "n_nodes_base": 9,
+        "n_nodes_now": 8,
+        "n_edges_base": 145,
+        "n_edges_now": 112,
+        "n_edges_lost": 33,
+        "n_edges_lost_touching_target": 33,
+        "n_edges_lost_unrelated": 0,
+        "lost_edges_unrelated_sample": [],
+        "n_others_shifted": 0,
+        "others_shifted": [],
+        "up_axis_base": "-y",
+        "up_axis_now": "-y",
+        "up_axis_changed": false
+      }
+    ]
+  },
+  "dual_path": {
+    "n_checked": 9,
+    "n_mismatch": 0,
+    "criterion": "centroid_3d / extent_3d / n_points 三者全用 == 比较",
+    "mismatches": []
+  },
+  "prompt_recall": {
+    "labels_in_fixture": [
+      "cabinet",
+      "chair",
+      "lamp",
+      "monitor",
+      "painting",
+      "plant",
+      "shelf",
+      "sofa",
+      "table"
+    ],
+    "variants": {
+      "default": {
+        "prompt": "sofa. chair. table. picture. mirror.",
+        "n_nodes": 3,
+        "n_edges": 12,
+        "labels_found": [
+          "chair",
+          "sofa",
+          "table"
+        ],
+        "labels_missing": [
+          "cabinet",
+          "lamp",
+          "monitor",
+          "painting",
+          "plant",
+          "shelf"
+        ]
+      },
+      "full": {
+        "prompt": "sofa. chair. table. plant. lamp. monitor. shelf. cabinet. painting.",
+        "n_nodes": 9,
+        "n_edges": 145,
+        "labels_found": [
+          "cabinet",
+          "chair",
+          "lamp",
+          "monitor",
+          "painting",
+          "plant",
+          "shelf",
+          "sofa",
+          "table"
+        ],
+        "labels_missing": []
+      }
+    }
+  },
+  "intrinsics_guards": {
+    "scope": "合成桥里 `DepthField.intrinsics_source` **恒为 provided**，因为点云就是用 scene.intrinsics 逐像素反投影生成的，没有「模型相机头」这一环。 ⟹ 在合成数据上 **不能用 intrinsics_source 判断内参有没有真的传进来**；那要靠本节的 6a/6b 两条守卫（不一致 / 缺失都抛）。 换句话说：`intrinsics_source == 'provided'` 在这里是结构性事实，不是一次需要被信任的声明 —— 拿它论证「内参条件生效」是循环论证。",
+    "6a_wrong_known_intrinsics": {
+      "raised": "SyntheticIntrinsicsError",
+      "ok": true,
+      "message": "传进来的 camera_K 与合成点云赖以生成的内参不是同一份：\n  传入 [[264.0, 0.0, 176.0], [0.0, 264.0, 132.0], [0.0, 0.0, 1.0]]\n  真值 [[240.0, 0.0, 160.0], [0.0, 240.0, 120.0], [0.0, 0.0, 1.0]]\n合成场景里真值已知，所以这条不一致**必须响** ——真实链路拿不到这个校验，但也不该因此在本桥上放行。",
+      "given": [
+        264.0,
+        264.0,
+        176.0,
+        132.0
+      ],
+      "truth": [
+        240.0,
+        240.0,
+        160.0,
+        120.0
+      ]
+    },
+    "6b_require_camera_K_but_none_given": {
+      "raised": "SyntheticIntrinsicsError",
+      "ok": true,
+      "message": "lift() 没有收到 camera_K，但本桥被要求校验它（require_camera_K=True）—— 说明 BuildConfig.known_intrinsics 没有到达感知层。内参是**输入**而不是后处理；这条链断了会让所有横向米制尺寸整体错约 3.17 倍（§20.3），而且是静默的。"
+    },
+    "6c_no_known_intrinsics": {
+      "raised": null,
+      "ok": true,
+      "intrinsics_source": "provided",
+      "n_nodes": 9,
+      "lift_received_camera_K": false,
+      "note": "没传内参、lift 收到 None，而 intrinsics_source 依然写着 provided ⟹ 该字段在合成桥里是**结构性事实**，不能用来判断「内参条件是否生效」。"
+    },
+    "6d_implausible_fov_but_provided": {
+      "hfov_deg": 138.89,
+      "plausible": false,
+      "intrinsics_source": "provided",
+      "n_fov_warnings": 1,
+      "warning": "传入的已知内参视场不可信（HFoV 138.9°，reason=hfov_out_of_range）—— 请确认它对应的是当前图像分辨率 320×240，以及 (fx, fy, cx, cy) 的顺序。",
+      "n_nodes": 7
+    }
+  },
+  "problems": []
+}
