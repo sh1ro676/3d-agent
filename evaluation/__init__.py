@@ -5,18 +5,24 @@
 
 模块职责（与文档 §17 的目录约定一致）：
 
-    metrics.py    Omni3D-Bench 的四类子指标 + Total 聚合
-                  （口径要能被论文自身的数字反推，见 `verify_total_aggregation`）
-    tests/        口径的回归测试
+    metrics.py            Omni3D-Bench 的四类子指标 + Total 聚合
+                          （口径要能被论文自身的数字反推，见 `verify_total_aggregation`）
+    geometry_metrics.py   单目 3D 的几何专项指标 + 误差分解（横向 vs 纵深）
+                          —— `metrics.py` 只给「QA 答对没有」一个数，无法归因；
+                          本模块把 3D 从「中间表示」变成「被测对象」
+    tests/                口径的回归测试
 
 设计约束（写在这里，免得后来者以为可以随手改）：
 * **`agents/` 不许 import `evaluation/`** —— 评估是**量 agent 的器械**，
   器械不能长在被测方身上（依赖方向见 §13.3(6)；
-  `tests/test_agent_layering.py` 用 AST 守着这一条）。
+  `tests/test_agent_memory_and_layering.py` 用 AST 守着这一条）。
 * **两个精度口径必须一起给**：解析失败记 0 分（真实能力）与逐行对齐上游
   （和论文表格对话）。只给一个数，读者一定会误读。
+* **「缺几何」不进静默排除**：`geometry_metrics` 的聚合必须显式传 `n_expected`，
+  分母恒用它。这条与上一条同源 —— 都是「不能把没测到的伪装成测过了」。
 * 每个结果文件都必须自带模型指纹与环境指纹 —— §16.2 明说了
   「换模型后的对比无法归因」是这类实验最常见的失败方式。
 """
 
-__all__ = ["metrics"]
+__all__ = ["metrics", "geometry_metrics"]
+
