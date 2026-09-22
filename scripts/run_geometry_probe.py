@@ -22,6 +22,9 @@
     ③ 估计误差    pred vs gt_visible
                   真正要量的东西
 
+外加一层 **②b 朝向**：轴对齐口径对斜放物体的**系统性高估**。
+它不是误差，但会被误读成误差（「尺寸偏大」），所以单独报出来。
+
 只报 ③ 不报 ②，读者会把「只看得见三个面」当成「算法不准」。
 `--json-out` 里三层都在，人读表把 ①② 印在最前面。
 
@@ -53,8 +56,10 @@ if str(ROOT) not in sys.path:
 
 from dataset.builders.synthesize_geometry_probe import (  # noqa: E402
     PERTURBATIONS,
+    Box3D,
     SyntheticScene,
     apply_perturbation,
+    default_background_boxes,
     default_intrinsics,
     default_probe_boxes,
     default_scene_boxes,
@@ -308,6 +313,98 @@ def run_relation_cases(scene: SyntheticScene, labels: dict[str, str]) -> list[di
 
 
 # ----------------------------------------------------------------------------
+# 朝向层
+# ----------------------------------------------------------------------------
+
+
+#: 朝向层扫描的 yaw（度）。0 是参照 —— 等于「不加朝向」，此时全部轴对齐。
+YAW_DEGREES: tuple[float, ...] = (0.0, 15.0, 30.0, 45.0, 60.0, 75.0, 90.0)
+
+#: 朝向层的盒子：`Lx = 1.00 / Ly = 0.75 / Lz = 0.70 m`。
+#: **`Lx ≠ Lz` 是刻意的** —— 若相等，45° 处 x/z 的互换在数字上看不出来。
+#: **偏轴**（x ≈ 0.9，不跨光轴）也是刻意的：轴上盒子的可见面只有正对那一个，
+#: 它的轴对齐 x 跨度恰好等于 `Lx`，口径高估在它身上不显形。
+ORIENTATION_BOX_MIN: tuple[float, float, float] = (0.40, -0.075, 2.65)
+ORIENTATION_BOX_MAX: tuple[float, float, float] = (1.40, 0.675, 3.35)
+
+
+def orientation_boxes(yaw_rad: float) -> list[Box3D]:
+    """朝向层的场景：**一个盒子 + 背景（只为提供深度）**。
+
+    为什么不用那 9 个物体的主场景：旋转一个物体会**改变遮挡关系**，
+    于是「测得尺寸」的变化里同时含口径效应与可见性变化 —— 两条线缠在一起，
+    曲线就不可归因了。宁可牺牲场景真实性换一条能解释的曲线：
+    真实性由主场景负责，这一层只负责把口径量干净。
+    """
+    return [
+        Box3D("probe_box", "box", ORIENTATION_BOX_MIN, ORIENTATION_BOX_MAX,
+              yaw_rad=float(yaw_rad)),
+        *default_background_boxes(),
+    ]
+
+
+def run_orientation_layer(
+    *,
+    intrinsics: np.ndarray,
+    image_hw: tuple[int, int],
+    degrees: Sequence[float] = YAW_DEGREES,
+) -> list[dict[str, Any]]:
+    """第 ②b 层：把盒子从 0° 转到 90°，看**实测尺寸**怎么变。
+
+    三个量必须同时报，少一个就会读错：
+
+        body      盒**自身轴**向边长 —— 物体真实尺寸，与朝向无关
+        aabb      旋转后**轴对齐**跨度（解析）—— 口径上界
+        measured  真实下游在**可见表面**上算出的轴对齐跨度
+
+    于是 `measured − body` **不是**算法误差，而是
+    「口径高估（≤ `aabb − body`，由朝向决定）＋ 可见性偏差」。
+    这正是加朝向新增的可测量：没有朝向自由度时它 ≤ 0，一旦斜放就变正 ——
+    而它以前只能被记在算法头上。
+
+    每行都带 `self_consistency_max_m`：朝向打开后尺子自检**仍须为 0**，
+    那是「本层数字可信」的前提。
+    """
+    rows: list[dict[str, Any]] = []
+    for deg in degrees:
+        yaw = float(np.radians(deg))
+        scene = render_scene(orientation_boxes(yaw), intrinsics=intrinsics,
+                             image_hw=image_hw)
+        pred = _pred_geometry(scene, scene.points_chw, scene.masks)
+        crows, erows, missing = _per_object_errors(pred, scene.gt_visible)
+        worst_self = max([r["total_m"] for r in crows]
+                         + [r["l1_m"] for r in erows], default=0.0)
+
+        tgt = orientation_boxes(yaw)[0]
+        oid = tgt.object_id
+        body = np.asarray(tgt.extent, dtype=np.float64)
+        aabb = np.asarray(tgt.aabb_extent, dtype=np.float64)
+        meas = np.asarray(scene.gt_visible[oid]["extent_3d"], dtype=np.float64)
+        shift = (np.asarray(scene.gt_visible[oid]["centroid_3d"], dtype=np.float64)
+                 - np.asarray(scene.gt_box[oid]["centroid_3d"], dtype=np.float64))
+        rows.append({
+            "yaw_deg": float(deg),
+            "object_id": oid,
+            "n_visible_px": int(scene.meta["boxes"][0]["n_visible_px"]),
+            "body_extent_m": [float(v) for v in body],
+            "aabb_extent_m": [float(v) for v in aabb],
+            "measured_extent_m": [float(v) for v in meas],
+            #: 口径倍数 = 轴对齐跨度 ÷ 物体**自身** x 边长。
+            #: =1.00 表示口径没引入偏差；>1 是膨胀，<1 是「转过去了，x 方向本来就短了」。
+            #: ⚠ 它随朝向从 1.00 摆到 1.22 又摆到 0.70 —— **同一刚体**，读数变了 74%，
+            #: 而物体一寸没动。这就是「轴对齐口径 ≠ 尺寸」的量化形式。
+            "caliber_ratio_vs_body_x": float(aabb[0] / body[0]),
+            #: 可见性捕获率 = 实测 ÷ 口径上界。**恒 ≤ 1**：只看得见一部分表面，
+            #: 测得值不可能超过整个盒子的轴对齐跨度。
+            "capture_ratio_x": float(meas[0] / aabb[0]),
+            "centroid_shift_m": [float(v) for v in shift],
+            "self_consistency_max_m": float(worst_self),
+            "missing_objects": missing,
+        })
+    return rows
+
+
+# ----------------------------------------------------------------------------
 # 打印
 # ----------------------------------------------------------------------------
 
@@ -413,6 +510,39 @@ def print_report(result: dict[str, Any]) -> None:
     print("  读法：若几何误差涨了十倍而 F1 基本不动 ⟹ 关系准确率**看不见**这类错误，")
     print("        它不能单独当护栏（§22 的 128/133 = 96% 是同一现象）。")
     print()
+
+    # ---- 第 ②b 层：朝向 ----
+    orient = result.get("orientation")
+    if orient:
+        print("-" * 96)
+        print("[②b 朝向层] 轴对齐口径对斜放物体的**系统性高估**（只转一个盒子）")
+        print("-" * 96)
+        hdr2 = ("%-5s %9s %9s %9s %11s %9s %9s %8s"
+                % ("yaw", "body_x", "body_z", "aabb_x", "aabb/body", "meas_x", "capture", "px"))
+        print(hdr2)
+        print("-" * len(hdr2))
+        for r in orient:
+            b = r["body_extent_m"]
+            a = r["aabb_extent_m"]
+            m = r["measured_extent_m"]
+            print("%-5s %9s %9s %9s %11.3f %9s %9.3f %8d"
+                  % ("%.0f°" % r["yaw_deg"],
+                     _mm(b[0]), _mm(b[2]), _mm(a[0]), r["caliber_ratio_vs_body_x"],
+                     _mm(m[0]), r["capture_ratio_x"], r["n_visible_px"]))
+        lo_a = min(r["aabb_extent_m"][0] for r in orient)
+        hi_a = max(r["aabb_extent_m"][0] for r in orient)
+        print("  单位 mm。`body_*` = 物体**自轴**边长（刚体，各朝向全同 —— 这才是尺寸）；")
+        print("         `aabb_x` = 轴对齐跨度（下游 `robust_extent` 的口径）；`capture` = meas_x ÷ aabb_x。")
+        print("  读法：**同一刚体**，口径上界从 %s 摆到 %s（%.2f×），而物体一寸没动 ⟹"
+              % (_mm(lo_a), _mm(hi_a), hi_a / lo_a))
+        print("         「轴对齐尺寸」这个读数**同时携带尺寸与朝向、两者不可分辨**。")
+        print("         口径上界本身最高比自轴 x 边长膨胀 %+.0f%%（峰值 = √(Lx²+Lz²)，θ≈35°）；"
+              % (100.0 * (max(r["caliber_ratio_vs_body_x"] for r in orient) - 1.0)))
+        print("         实测读数还会被可见性再压一层（`capture` 恒 ≤ 1），最终落在两者之间。")
+        print("         加朝向之前，这个「读数随朝向而变」的量在夹具里**根本不存在**。")
+        worst = max((r["self_consistency_max_m"] for r in orient), default=0.0)
+        print("  本层尺子自检：所有 yaw 下最大误差 %.3e m（必须为 0）" % worst)
+        print()
     print("=" * 96)
     print("JSON 详情（含逐物体数字）见 --json-out 指定的文件。")
     print("=" * 96)
@@ -483,6 +613,16 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         print("第 ③b：关系层 ...", flush=True)
         result["relation_cases"] = run_relation_cases(scene, labels)
+
+        print("第 ②b：朝向层 ...", flush=True)
+        result["orientation"] = run_orientation_layer(intrinsics=intr, image_hw=image_hw)
+        result["orientation_scene"] = {
+            "box_min": list(ORIENTATION_BOX_MIN),
+            "box_max": list(ORIENTATION_BOX_MAX),
+            "yaw_degrees": list(YAW_DEGREES),
+            "note": ("单物体 + 背景：旋转会改变遮挡 ⟹ 多物体场景会把可见性变化"
+                     "混进口径效应，曲线就不可归因"),
+        }
 
     out = Path(args.json_out)
     if not out.is_absolute():

@@ -337,3 +337,102 @@ class TestMain:
             elif isinstance(o, float):
                 assert math.isfinite(o)
         walk(data)
+
+
+# ---------------------------------------------------------------------------
+# 朝向层（②b）：同一刚体，轴对齐口径的读数随朝向摆动
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def orient_rows():
+    """整套 yaw 只算一次 —— 要渲染 7 个场景，没必要每个用例重算。"""
+    intr = default_intrinsics(fx=FX, cx=HW[1] / 2.0, cy=HW[0] / 2.0)
+    return probe.run_orientation_layer(intrinsics=intr, image_hw=HW)
+
+
+class TestOrientationLayer:
+    def test_every_documented_yaw_is_reported(self, orient_rows):
+        """扫描网格是契约：`YAW_DEGREES` 里每一个都必须出一行，且顺序一致。
+
+        少一行不会报错，只会让曲线缺一个点 —— 而缺点的曲线看起来
+        与「那一段本来就没有效应」**一模一样**。
+        """
+        assert [r["yaw_deg"] for r in orient_rows] == [float(v) for v in probe.YAW_DEGREES]
+        required = {
+            "yaw_deg", "object_id", "n_visible_px", "body_extent_m", "aabb_extent_m",
+            "measured_extent_m", "caliber_ratio_vs_body_x", "capture_ratio_x",
+            "centroid_shift_m", "self_consistency_max_m", "missing_objects",
+        }
+        for r in orient_rows:
+            assert required <= set(r)
+            assert r["missing_objects"] == []
+
+    def test_body_extent_is_invariant_across_yaw(self, orient_rows):
+        """刚体的**自轴**边长不随朝向变 —— 它才是「尺寸」。"""
+        ref = orient_rows[0]["body_extent_m"]
+        for r in orient_rows:
+            assert r["body_extent_m"] == ref
+
+    def test_caliber_ceiling_follows_the_closed_form(self, orient_rows):
+        """轴对齐跨度 = `Lx|cosθ| + Lz|sinθ|`（绕 y 旋转）。
+
+        有了闭式解，「读数变大」里属于**口径**的那部分不必再靠估计去解释。
+        """
+        Lx = probe.ORIENTATION_BOX_MAX[0] - probe.ORIENTATION_BOX_MIN[0]
+        Lz = probe.ORIENTATION_BOX_MAX[2] - probe.ORIENTATION_BOX_MIN[2]
+        for r in orient_rows:
+            th = math.radians(r["yaw_deg"])
+            want = Lx * abs(math.cos(th)) + Lz * abs(math.sin(th))
+            assert r["aabb_extent_m"][0] == pytest.approx(want, rel=1e-12)
+
+    def test_caliber_ceiling_swings_by_174_percent(self, orient_rows):
+        """**本层的核心结论**：同一个刚体，轴对齐口径的读数摆动 1.74×。
+
+        实测（小图 160×120）：`aabb_x` 从 **700.0 mm**（yaw=90°）摆到
+        **1216.0 mm**（yaw≈30°，闭式峰值 `√(Lx²+Lz²) = 1220.7`），
+        而 `body_x` 恒为 **1000.0 mm**。
+        ⟹「轴对齐尺寸」这个读数**同时携带尺寸与朝向，两者不可分辨**；
+        把它当尺寸读，斜放物体就出现最高 **+22%** 的假膨胀。
+        """
+        Lx = probe.ORIENTATION_BOX_MAX[0] - probe.ORIENTATION_BOX_MIN[0]
+        Lz = probe.ORIENTATION_BOX_MAX[2] - probe.ORIENTATION_BOX_MIN[2]
+        ratios = [r["caliber_ratio_vs_body_x"] for r in orient_rows]
+        assert max(ratios) == pytest.approx(math.hypot(Lx, Lz) / Lx, rel=1e-2)
+        assert max(ratios) > 1.20, "必须显出膨胀 —— 否则这条曲线没有信息量"
+        assert min(ratios) == pytest.approx(Lz / Lx, rel=1e-9)
+        aabb_x = [r["aabb_extent_m"][0] for r in orient_rows]
+        assert max(aabb_x) / min(aabb_x) > 1.7
+
+    def test_axis_aligned_case_has_no_caliber_inflation(self, orient_rows):
+        """`yaw = 0` 时口径不引入任何膨胀 —— 它是本层的零点。"""
+        first = orient_rows[0]
+        assert first["yaw_deg"] == 0.0
+        assert first["caliber_ratio_vs_body_x"] == pytest.approx(1.0, rel=1e-9)
+
+    def test_measurement_never_exceeds_the_caliber_ceiling(self, orient_rows):
+        """`capture ≤ 1` **在每一个 yaw 上都成立**。
+
+        只看得见一部分表面，测得值不可能超过整个盒子的轴对齐跨度。
+        这条不成立就意味着「可见表面」与「盒体」两套口径串了。
+        """
+        for r in orient_rows:
+            assert r["capture_ratio_x"] <= 1.0 + 1e-9, r["yaw_deg"]
+
+    def test_ruler_check_stays_zero_at_every_yaw(self, orient_rows):
+        """朝向打开后，尺子自检仍必须**恰好**为 0。
+
+        它是「这一层的数字可信」的前提：`gt_visible` 与「预测」
+        仍然走 `vision.geometry` 的同一份实现。
+        """
+        for r in orient_rows:
+            assert r["self_consistency_max_m"] == 0.0
+
+    def test_layer_is_registered_in_the_json(self, tmp_path):
+        """`main()` 必须把这一层写进 JSON —— 只在终端打印等于没留下证据。"""
+        out = tmp_path / "geo_orient.json"
+        probe.main(["--width", "160", "--height", "120", "--json-out", str(out)])
+        data = json.loads(out.read_text(encoding="utf-8"))
+        assert len(data["orientation"]) == len(probe.YAW_DEGREES)
+        assert data["orientation_scene"]["yaw_degrees"] == [float(v) for v in probe.YAW_DEGREES]
+        assert "note" in data["orientation_scene"]

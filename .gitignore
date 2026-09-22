@@ -54,6 +54,9 @@ _tmp_*
 .bt_*/
 .pytest_bt*/
 .pytest_cache/
+# --basetemp 的另一种叫法，同样下沉在仓库根。忘了忽略它会让 `git status`
+# 长期挂着一条 ?? 噪声 —— 而"长期存在的已知噪声"正是让人不再读 git status 的东西。
+.tmp_pytest/
 # logs/pt*_NNNNNN 是同样东西的归档版（内含 0.7 MB npy 与假密钥夹具）
 logs/pt[0-9]*/
 # 单元测试的调用日志：纯测试排泄物，无人消费。原先夹具默认写进这里，

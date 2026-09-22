@@ -356,3 +356,160 @@ class TestSelfConsistency:
             assert got["n_points"] == gt["n_points"]
             assert np.allclose(got["centroid_3d"], gt["centroid_3d"])
             assert np.allclose(got["extent_3d"], gt["extent_3d"])
+
+
+# ---------------------------------------------------------------------------
+# 朝向：把「轴对齐口径」从背景噪声变成一个可测的量
+# ---------------------------------------------------------------------------
+
+
+def _offaxis_box(yaw_deg: float) -> Box3D:
+    """偏轴的立方盒。**偏轴很关键**：它让侧面也可见，量级才接近真实照片。
+
+    刻意不用轴上盒子（`_front_box`）：轴上盒子的可见面只有正对那一个，
+    轴对齐跨度这件事在它身上几乎不显形（它的 z 跨度恰好是 0）。
+    """
+    return Box3D("box_1", "box", (0.35, 0.0, 2.05), (0.85, 0.5, 2.55),
+                 yaw_rad=float(np.radians(yaw_deg)))
+
+
+class TestOrientation:
+    def test_zero_yaw_is_the_identity_rotation(self):
+        """`yaw_rad = 0` 必须是严格的单位旋转 —— 它是「朝向可关闭」的凭证。"""
+        box = _offaxis_box(0.0)
+        assert np.array_equal(box.rotation, np.eye(3))
+        assert box.aabb_extent == pytest.approx(box.extent, abs=1e-12)
+
+    def test_zero_yaw_render_is_bit_identical(self):
+        """`yaw_rad = 0` 的渲染必须与「不给朝向」**逐位一致**。
+
+        加朝向是一个新自由度，不该顺手改掉旧结果 —— 否则此前所有数字
+        都要重跑，而重跑后的差异无法归因到朝向。
+        """
+        with_yaw = render_scene([_offaxis_box(0.0)], intrinsics=INTR, image_hw=HW)
+        without = render_scene(
+            [Box3D("box_1", "box", (0.35, 0.0, 2.05), (0.85, 0.5, 2.55))],
+            intrinsics=INTR, image_hw=HW,
+        )
+        assert np.array_equal(np.nan_to_num(with_yaw.points_chw),
+                              np.nan_to_num(without.points_chw))
+        assert bool((with_yaw.masks["box_1"] == without.masks["box_1"]).all())
+        assert with_yaw.meta["n_rotated"] == 0
+        assert without.meta["renderer"] == "analytic-obb-raycast"
+
+    def test_centre_and_body_extent_are_invariant_under_yaw(self):
+        """绕自身中心旋转 ⟹ 中心与自身边长都不动。
+
+        中心动了 = 旋转参照点用错；边长动了 = 「尺寸」会随朝向漂移，
+        而那种漂移看起来与真实的尺度误差一模一样。
+        """
+        ref = _offaxis_box(0.0)
+        for deg in (0.0, 17.0, 45.0, 90.0, 123.0):
+            box = _offaxis_box(deg)
+            assert box.centre == pytest.approx(ref.centre, abs=0.0)
+            assert np.array_equal(box.extent, ref.extent)
+
+    def test_rotation_is_a_rigid_transform(self):
+        """旋转必须保距保角：`RᵀR = I`、`det R = 1`。"""
+        R = _offaxis_box(37.0).rotation
+        assert R.T @ R == pytest.approx(np.eye(3))
+        assert float(np.linalg.det(R)) == pytest.approx(1.0)
+
+    def test_aabb_extent_matches_the_analytic_formula(self):
+        """斜放的轴对齐跨度有闭式解：`x = Lx|cosθ| + Lz|sinθ|`、`y = Ly`、
+        `z = Lx|sinθ| + Lz|cosθ|`。
+
+        有了它，「测得尺寸偏大」里**属于口径的那一部分**可以解析算出来，
+        不必再靠估计误差去解释。
+        """
+        Lx, Ly, Lz = 0.5, 0.5, 0.5
+        for deg in (0.0, 15.0, 30.0, 45.0, 60.0, 90.0):
+            th = float(np.radians(deg))
+            want = np.array([Lx * abs(np.cos(th)) + Lz * abs(np.sin(th)),
+                             Ly,
+                             Lx * abs(np.sin(th)) + Lz * abs(np.cos(th))])
+            assert _offaxis_box(deg).aabb_extent == pytest.approx(want)
+
+    def test_yaw_90_swaps_x_and_z_in_the_aabb(self):
+        """转 90° ⟹ 轴对齐跨度里的 x / z 互换，y 不动。"""
+        flat = Box3D("b", "box", (-0.2, 0.0, 2.0), (0.3, 0.5, 2.8))       # Lx=.5 Ly=.5 Lz=.8
+        turned = Box3D("b", "box", (-0.2, 0.0, 2.0), (0.3, 0.5, 2.8),
+                       yaw_rad=float(np.radians(90.0)))
+        a, b = flat.aabb_extent, turned.aabb_extent
+        assert b == pytest.approx([a[2], a[1], a[0]])
+        assert b[1] == pytest.approx(a[1])
+
+    def test_aabb_is_never_smaller_than_the_body_extent(self):
+        """轴对齐跨度 ⊇ 自身边长，等号只在 yaw = 0 / 90 / 180 / 270 成立。
+
+        这是「斜放必然高估」的一般形式：拿轴对齐口径的数字去比物体真实尺寸，
+        **必然**得到偏大 —— 与算法好坏无关。
+        """
+        for deg in (0.0, 5.0, 30.0, 45.0, 75.0, 89.0, 90.0):
+            box = _offaxis_box(deg)
+            assert (box.aabb_extent >= box.extent - 1e-12).all()
+            if deg in (0.0, 90.0):
+                assert box.aabb_extent == pytest.approx(box.extent)
+
+    def test_all_corners_lie_inside_the_aabb(self):
+        box = _offaxis_box(37.0)
+        lo, hi = box.aabb()
+        cs = box.corners()
+        assert cs.shape == (8, 3)
+        assert (cs >= lo - 1e-12).all()
+        assert (cs <= hi + 1e-12).all()
+
+    def test_axis_aligned_extent_overestimates_when_tilted(self):
+        """**这条是加朝向的全部理由**：斜放 ⟹ 测得的轴对齐尺寸大于物体真实尺寸。
+
+        实测（Lx = Lz = 0.5 的偏轴盒，fx = 120 / 160 px）：
+        yaw=0 时测得 **0.496 ≤ 0.5**；yaw=45° 时测得 **0.688 > 0.5**，
+        且不超过解析上界 **0.707**。
+        没有朝向这一个自由度时，「尺寸偏大」只能被记在算法头上。
+        """
+        def measured_x(deg: float) -> float:
+            sc = render_scene([_offaxis_box(deg)], intrinsics=INTR, image_hw=HW)
+            return float(np.asarray(sc.gt_visible["box_1"]["extent_3d"])[0])
+
+        body_x = float(_offaxis_box(0.0).extent[0])
+        flat, tilted = measured_x(0.0), measured_x(45.0)
+        upper = float(_offaxis_box(45.0).aabb_extent[0])
+
+        assert flat <= body_x + 1e-9, "轴对齐时不该出现口径高估"
+        assert tilted > body_x + 0.1, "斜放必须显出轴对齐口径的高估"
+        assert tilted <= upper + 1e-9, "测得值不可能超过整个盒子的轴对齐跨度"
+
+    def test_gt_box_exposes_both_extent_conventions(self):
+        """两层口径都要拿得到 —— 只给一个，写报告的人就只能猜。
+
+        `extent_3d`（自身轴）与 `aabb_extent`（轴对齐）在斜放时不同，
+        而下游 `robust_extent` 用的是后者。
+        """
+        sc = render_scene([_offaxis_box(30.0)], intrinsics=INTR, image_hw=HW)
+        gb = sc.gt_box["box_1"]
+        th = np.radians(30.0)
+        assert gb["extent_3d"] == pytest.approx([0.5, 0.5, 0.5])
+        assert gb["aabb_extent"][0] == pytest.approx(0.5 * (np.cos(th) + np.sin(th)))
+        assert gb["aabb_extent"][0] > gb["extent_3d"][0]
+        assert gb["yaw_rad"] == pytest.approx(th)
+        assert sc.meta["n_rotated"] == 1
+
+    def test_self_consistency_holds_with_rotation(self):
+        """朝向打开时，尺子自检仍必须为零。
+
+        这是「加朝向没有破坏口径同源」的证据：`gt_visible` 与「预测」
+        都走 `vision.geometry` 的同一份实现。
+        """
+        boxes = [
+            Box3D(b.object_id, b.label, b.min_xyz, b.max_xyz, b.is_background,
+                  yaw_rad=float(np.radians(23.0)))
+            for b in default_scene_boxes()
+        ]
+        scene = render_scene(boxes, intrinsics=default_intrinsics(), image_hw=(240, 320))
+        assert scene.meta["n_rotated"] > 0
+        pts, masks = apply_perturbation(scene, "none")
+        for oid, gt in scene.gt_visible.items():
+            got = visible_geometry(pts, masks[oid], scene.grid_hw)
+            assert got["n_points"] == gt["n_points"]
+            assert np.allclose(got["centroid_3d"], gt["centroid_3d"])
+            assert np.allclose(got["extent_3d"], gt["extent_3d"])

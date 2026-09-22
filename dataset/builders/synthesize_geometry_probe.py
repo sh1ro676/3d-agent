@@ -48,10 +48,19 @@
 
 渲染
 ----
-针孔相机 + **射线与轴对齐盒求交**（slab 法）+ z-buffer 取最近命中。
-轴对齐是有意的：下游 `extent_3d` 本身就是**轴对齐包围盒**的跨度，
-用轴对齐盒子当 GT 可以让「口径」与「物体朝向」这两个误差源不再纠缠。
-（代价：斜放物体的「尺寸高估」这条口径特性测不出来 —— 那属于另一条线。）
+针孔相机 + **射线与盒求交**（slab 法）+ z-buffer 取最近命中。
+盒子可绕相机 y 轴旋转（`Box3D.yaw_rad`）：**把射线变换到盒的局部系**，
+在那里它又是轴对齐盒，slab 法一行不用改（旋转是刚体变换，`t` 沿射线不变）。
+`yaw_rad = 0` 走轴对齐分支、与未加朝向时**逐位一致** ⟹ 「朝向」是一个
+**可开关的单一变量**，不是把整条链路换掉。
+
+默认场景刻意保持**轴对齐**：下游 `extent_3d` 本身就是轴对齐包围盒的跨度，
+轴对齐 GT 让「口径」与「物体朝向」两个误差源不纠缠 —— 这是**默认值的理由**，
+不是**能力边界**。要看朝向本身的影响，就显式给 yaw（见
+`scripts/run_geometry_probe.py` 的「朝向层」）。那时「测得尺寸 vs 盒自身尺寸」
+的差值里同时含**轴对齐口径高估**（可解析算出，斜放必然高估）与估计误差；
+本模块把前者单独暴露成 `gt_box[...]["aabb_extent"]`，
+这样「尺寸偏大」才不会被又一次读成算法不准。
 
 零依赖：只用 numpy + 标准库 + `vision.geometry`（后者也已确认零 torch）。
 """
@@ -88,7 +97,23 @@ _T_EPS = 1e-9
 
 @dataclass(frozen=True)
 class Box3D:
-    """一个相机系下的轴对齐盒子。`min_xyz` / `max_xyz` 是角点，单位米。
+    """一个相机系下的盒子。`min_xyz` / `max_xyz` 是**盒自身轴**（未旋转）的对角角点，单位米。
+
+    `yaw_rad` 绕**相机 y 轴**旋转（本相机系 x 右 / y 下 / z 前 ⟹ y 就是竖直轴，
+    所以 yaw 正是「家具朝哪边」这个自由度）。
+    `min_xyz` / `max_xyz` 定义的是**旋转之前**的盒子，绕自身中心旋转；
+    因此 `centre` 与 `extent`（盒自身轴向的三个边长）**不随 yaw 改变**。
+
+    ⚠ **两种「尺寸」不是一回事，别混用**（这是加朝向带出来的最要紧的口径）
+    -------------------------------------------------------------------
+        box.extent        盒**自身轴**向的边长   → 与物体的"真实尺寸"对应
+        box.aabb_extent   旋转之后**轴对齐**包围盒的跨度 → 与下游 `extent_3d` 同口径
+
+    `yaw_rad = 0` 时二者相等（轴对齐盒子）。一旦斜放，`aabb_extent` **必然大于**
+    `box.extent` —— 这是**轴对齐口径**的特性，不是误差。
+    下游 `robust_extent` 返回的是**轴对齐**跨度，所以斜放物体的
+    「测得尺寸 vs 真实尺寸」这个比较里，差值 = **口径高估**（可解析算出的确定量）
+    ＋ 估计误差。把口径那部分单独报出来，「尺寸偏大」才不会又被读成算法不准。
 
     `is_background=True` 的盒子**只参与 z-buffer**（提供墙面/地板的深度），
     不进 `masks`、不进两层真值。为什么要它见 `default_background_boxes()`。
@@ -100,6 +125,8 @@ class Box3D:
     max_xyz: tuple[float, float, float]
     #: `True` = 背景表面（墙/地板）：只提供深度，不算物体。
     is_background: bool = False
+    #: 绕相机 y 轴的旋转角（弧度）。0 = 轴对齐（与加朝向之前的行为逐位一致）。
+    yaw_rad: float = 0.0
 
     def __post_init__(self) -> None:
         lo = np.asarray(self.min_xyz, dtype=np.float64)
@@ -111,15 +138,57 @@ class Box3D:
                 f"{self.object_id}: max 必须逐轴大于 min，收到 min={lo.tolist()} max={hi.tolist()}"
                 "（其中一个轴退化成 0 会让该轴不可测，而不是得到一个「很薄的物体」）"
             )
+        if not np.isfinite(self.yaw_rad):
+            raise ValueError(f"{self.object_id}: yaw_rad 必须是有限实数，收到 {self.yaw_rad!r}")
 
     @property
     def centre(self) -> np.ndarray:
+        """盒中心。绕自身中心旋转 ⟹ **与 yaw 无关**。"""
         return (np.asarray(self.min_xyz, dtype=np.float64)
                 + np.asarray(self.max_xyz, dtype=np.float64)) / 2.0
 
     @property
     def extent(self) -> np.ndarray:
+        """盒**自身轴**向的三个边长（不是轴对齐跨度；斜放时二者不同，见类 docstring）。"""
         return np.asarray(self.max_xyz, dtype=np.float64) - np.asarray(self.min_xyz, dtype=np.float64)
+
+    @property
+    def rotation(self) -> np.ndarray:
+        """`(3,3)` 旋转矩阵，**列 = 盒自身轴在相机系里的方向**。
+
+        绕 +y 的右手旋转。`yaw_rad = 0` 时严格等于单位阵，于是所有既有路径
+        逐位退化（渲染、`aabb`、真值都不变）。
+        """
+        c, s = float(np.cos(self.yaw_rad)), float(np.sin(self.yaw_rad))
+        eye = np.eye(3, dtype=np.float64)
+        if self.yaw_rad == 0.0:
+            return eye
+        return np.array([[c, 0.0, s], [0.0, 1.0, 0.0], [-s, 0.0, c]], dtype=np.float64)
+
+    def corners(self) -> np.ndarray:
+        """旋转后的 8 个角点，`(8,3)`，相机系。"""
+        lo = np.asarray(self.min_xyz, dtype=np.float64)
+        hi = np.asarray(self.max_xyz, dtype=np.float64)
+        signs = np.array([[i, j, k] for i in (0, 1) for j in (0, 1) for k in (0, 1)],
+                         dtype=np.float64)
+        local = np.where(signs > 0, hi - self.centre, lo - self.centre)   # (8,3) 盒局部系
+        return local @ self.rotation.T + self.centre
+
+    def aabb(self) -> tuple[np.ndarray, np.ndarray]:
+        """旋转后角点的**轴对齐**包围盒 `(min, max)`。"""
+        cs = self.corners()
+        return cs.min(axis=0), cs.max(axis=0)
+
+    @property
+    def aabb_extent(self) -> np.ndarray:
+        """旋转后**轴对齐**跨度 —— 与下游 `robust_extent` 同口径。
+
+        解析形式（绕 y 旋转 θ）：`x = Lx·|cosθ| + Lz·|sinθ|`、`y = Ly`、
+        `z = Lx·|sinθ| + Lz·|cosθ|`。斜放物体「测得尺寸偏大」的那部分就是这个量，
+        **与估计误差无关**，必须分开报。
+        """
+        lo, hi = self.aabb()
+        return hi - lo
 
 
 @dataclass
@@ -170,8 +239,8 @@ def _pixel_rays(intrinsics: np.ndarray, image_hw: tuple[int, int]) -> np.ndarray
     return dirs
 
 
-def _intersect_aabb(dirs: np.ndarray, box: Box3D) -> tuple[np.ndarray, np.ndarray]:
-    """射线（起点在原点）与轴对齐盒求交。
+def _intersect_box(dirs: np.ndarray, box: Box3D) -> tuple[np.ndarray, np.ndarray]:
+    """射线（起点在原点）与**可绕 y 旋转的盒**求交。
 
     返回 `(t_hit, hit)`：`t_hit` 为 `(H,W)`（未命中为 inf），`hit` 为 bool `(H,W)`。
 
@@ -180,13 +249,35 @@ def _intersect_aabb(dirs: np.ndarray, box: Box3D) -> tuple[np.ndarray, np.ndarra
 
     ⚠ 相机原点在盒内时 `t_enter < 0`，此时「第一个可见点」是**出射点** `t_exit`
     而不是 `t_enter` —— 少写这一个分支，盒子套住相机的那一帧会整片消失。
+
+    朝向怎么处理：把**射线**变换到盒的局部系，在那里它又是一个轴对齐盒，
+    slab 法一行不用改。旋转是刚体变换，`t` 沿射线不变 ⟹ `t` 的单位仍是「米」，
+    `points = t × dirs` 照旧成立。
+
+    ⚠ **轴对齐分支必须留着，不能统一成一个公式。** 直觉上可以写成
+    「`lo ← min−c`、原点偏移 `o ← −c`」，那样 `yaw_rad = 0` 时也算得对 ——
+    但浮点上 `(min − c) + c ≠ min`（一般情形），会把原本精确的数字
+    （例如正对相机的近面 `z = 2.0000000000000000`）改成差几个 ulp 的值，
+    于是「正对盒子可见质心恰好落在近面」这类**精确**断言会变成 `approx`。
+    精确断言是尺子的自检，不能被一个"更优雅"的公式换掉 ⟹ 两条分支并存，
+    `yaw_rad = 0` 走原路，**逐位一致**。
     """
-    lo = np.asarray(box.min_xyz, dtype=np.float64)[:, None, None]
-    hi = np.asarray(box.max_xyz, dtype=np.float64)[:, None, None]
+    if box.yaw_rad == 0.0:
+        lo = np.asarray(box.min_xyz, dtype=np.float64)[:, None, None]
+        hi = np.asarray(box.max_xyz, dtype=np.float64)[:, None, None]
+        origin = np.zeros((3, 1, 1), dtype=np.float64)
+        dirs_local = dirs
+    else:
+        c = box.centre
+        R = box.rotation
+        lo = (np.asarray(box.min_xyz, dtype=np.float64) - c)[:, None, None]
+        hi = (np.asarray(box.max_xyz, dtype=np.float64) - c)[:, None, None]
+        origin = -(R.T @ c)[:, None, None]
+        dirs_local = np.tensordot(R.T, dirs, axes=([1], [0]))
 
     with np.errstate(divide="ignore", invalid="ignore"):
-        t1 = (lo - 0.0) / dirs
-        t2 = (hi - 0.0) / dirs
+        t1 = (lo - origin) / dirs_local
+        t2 = (hi - origin) / dirs_local
     t_lo = np.minimum(t1, t2)
     t_hi = np.maximum(t1, t2)
     t_enter = t_lo.max(axis=0)
@@ -226,7 +317,7 @@ def render_scene(
     winner = np.full((h, w), -1, dtype=np.int32)
 
     for i, box in enumerate(boxes):
-        t_hit, hit = _intersect_aabb(dirs, box)
+        t_hit, hit = _intersect_box(dirs, box)
         closer = hit & (t_hit < best_t)
         best_t = np.where(closer, t_hit, best_t)
         winner = np.where(closer, np.int32(i), winner)
@@ -250,17 +341,25 @@ def render_scene(
         if box.is_background:
             continue
         masks[box.object_id] = winner == i
+        aabb_lo, aabb_hi = box.aabb()
         gt_box[box.object_id] = {
             "centroid_3d": box.centre,
+            #: 盒**自身轴**向边长 —— 斜放时**不要**拿它去比下游的轴对齐跨度（见 Box3D）。
             "extent_3d": box.extent,
+            #: 旋转后**轴对齐**跨度 —— 与下游 `robust_extent` 同口径，斜放时用它比。
+            "aabb_extent": box.aabb_extent,
             "bbox_min": np.asarray(box.min_xyz, dtype=np.float64),
             "bbox_max": np.asarray(box.max_xyz, dtype=np.float64),
+            "aabb_min": aabb_lo,
+            "aabb_max": aabb_hi,
+            "yaw_rad": float(box.yaw_rad),
         }
         box_meta.append({
             "object_id": box.object_id,
             "label": box.label,
             "min_xyz": [float(v) for v in box.min_xyz],
             "max_xyz": [float(v) for v in box.max_xyz],
+            "yaw_deg": float(np.degrees(box.yaw_rad)),
             "n_visible_px": int(masks[box.object_id].sum()),
         })
 
@@ -281,7 +380,9 @@ def render_scene(
             #: 而「空洞」与「背景」对掩码外溢类扰动的影响完全不同。
             "no_hit_px": int((~valid).sum()),
             "background_ids": [b.object_id for b in boxes if b.is_background],
-            "renderer": "analytic-aabb-raycast",
+            #: 带朝向的盒子数。`0` ⟹ 走的是轴对齐分支（与加朝向之前逐位一致）。
+            "n_rotated": int(sum(1 for b in boxes if b.yaw_rad != 0.0)),
+            "renderer": "analytic-obb-raycast",
         },
     )
     # ---- 第二层真值：可见表面（必须与下游同口径）----
