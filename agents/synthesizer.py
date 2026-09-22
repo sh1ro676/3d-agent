@@ -31,7 +31,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence
 
-from agents.executor import ALLOWED_MODULES, QA_TOOLSET
+from agents.executor import ALLOWED_MODULES, QA_TOOLSET, SAFE_BUILTIN_NAMES
 from agents.prompts import system as prompt_system
 
 __all__ = [
@@ -261,19 +261,25 @@ def static_check(
     )
 
 
-#: 静态检查放行的内置名。**故意比 executor 的 `SAFE_BUILTIN_NAMES` 宽一点**：
-#: 这里多放行几个（`open` 之类仍不在内），是为了让"能写但运行会失败"的情况
-#: 尽量少 —— 静态检查的价值在于准确，不在这里争严格。
-#: 真正的边界在 `executor.build_namespace()`，那是唯一有安全含义的地方。
-_BUILTIN_OK: frozenset[str] = frozenset(
-    ("abs", "all", "any", "bool", "dict", "divmod", "enumerate", "filter", "float",
-     "format", "frozenset", "int", "isinstance", "issubclass", "len", "list", "map",
-     "max", "min", "pow", "print", "range", "repr", "reversed", "round", "set",
-     "slice", "sorted", "str", "sum", "tuple", "zip",
-     "Exception", "ValueError", "KeyError", "IndexError", "TypeError",
-     "ZeroDivisionError", "ArithmeticError", "AssertionError", "RuntimeError",
-     "getattr", "setattr", "type", "sorted")
-)
+#: 静态检查放行的内置名。★ **由 `executor.SAFE_BUILTIN_NAMES` 直接派生，不再是一份手抄本。**
+#:
+#: ⚠⚠ 这里原本是**手写**的一份名单，且注释写着"故意比 executor 宽一点"。
+#: 那个"宽一点"在 2026-09-22 被抓到真实后果：本名单含 `getattr` / `setattr` / `type`，
+#: 而运行期命名空间**没有**它们 ⟹ `getattr(...)` **静态检查放行 → 运行期 `NameError`**，
+#: 而这失败被归因成"模型不会写程序"。实测（`_tmp_sandbox_probe.py`，零 API）：
+#:
+#:     P1  r = list_objects(); getattr(r, 'ok')   -> runtime  NameError: name 'getattr' is not defined
+#:     P2  r.__class__.__mro__                    -> ok       属性访问不需要任何内置
+#:
+#: ⭐ **同型缺陷的通用形式**：两份名单"故意不一致"，却没写清**不一致的后果由谁承担**。
+#: 这里的后果全落在被测方身上（它写的东西静态过了、运行挂了），于是**harness 缺陷
+#: 变成了模型的分数**。所以修法不是把那 4 个名字补进副本，而是**取消副本**：
+#: 派生 + 一条 `==` 断言（`tests/test_agent_executor.py::TestBuiltinWhitelistAgreement`）。
+#:
+#: ⚠ 顺带更正一条旧口径：静态检查曾经"宽一点"的理由是"让能写但运行会失败的情况尽量少"，
+#: 但"宽"恰恰**增加**了这类情况。真正的边界在 `executor.build_namespace()`，
+#: 而那张名单**也不是逃逸边界**——理由与实测见 `executor.SAFE_BUILTIN_NAMES` 上方的长注释。
+_BUILTIN_OK: frozenset[str] = frozenset(SAFE_BUILTIN_NAMES)
 
 
 # ============================================================================

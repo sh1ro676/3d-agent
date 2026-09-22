@@ -54,18 +54,50 @@ __all__ = [
 #: 否则「提示词说了能用、运行时却 ImportError」这种不一致一定会出现。
 ALLOWED_MODULES: tuple[str, ...] = ("math", "statistics", "itertools", "functools", "collections", "re")
 
-#: 暴露给程序的内置函数。判据只有一条：**不能碰到进程与文件系统**。
-#: 特别排除：open / input / eval / exec / compile / __import__(真身) / globals / locals /
-#: vars / dir / getattr / setattr / delattr / type / object / breakpoint / help。
-#: 这些不是"不常用"，而是**每一条都能绕出沙箱**（`type` + `__subclasses__` 是经典逃逸路径）。
+#: 暴露给程序的内置函数。★ **这是唯一的一份名单** —— `agents/synthesizer.py` 的静态检查
+#: 直接 import 它。此前那边另有一份 `_BUILTIN_OK`、比这里宽 4 个名字，后果不是理论的：
+#: `getattr(...)` **静态检查放行、运行期 `NameError`**，而失败被归因成"模型不会写程序"。
+#: 这正是本文件 `QA_TOOLSET` 那段注释警告过的"三处不一致、后果静默"——只是发生在内置名单上。
+#:
+#: ## ⚠⚠ 这张白名单**不是逃逸边界**（2026-09-22 实测，零 API 零 GPU）
+#:
+#: 探针 `_tmp_sandbox_probe.py` 把程序真的交给 `execute_program` 跑，实测：
+#:
+#:     r = list_objects()
+#:     r.__class__.__mro__                                  # ok
+#:     (1).__class__.__mro__[1].__subclasses__()            # ok —— 484 个类可达
+#:     s[i].__init__.__globals__["__builtins__"]["open"]    # ok —— 拿到真正的 open
+#:
+#: ⟹ **属性访问是语法，不受名字白名单约束**（`__class__` / `__mro__` / `__subclasses__` /
+#: `__init__.__globals__` 全是属性）。所以"排除 `type` / `getattr` 就能绕不出去"这个判断是
+#: **错的**：绕路根本不需要它们。本文件早先那句"每一条都能绕出沙箱"**结论对、归因错**。
+#:
+#: 那这份名单管什么？**管直路，不管逃逸**：
+#:   ① 让 `open` / `eval` / `exec` / `compile` / `__import__`(真身) / `globals` / `locals` /
+#:      `vars` / `dir` / `object` / `breakpoint` / `help` 这些**一眼可见的名字**不在命名空间里，
+#:      于是"程序顺手读了个文件"这种事故不会**偶然**发生。成本为零，仍然值得。
+#:   ② **真正的信息约束不在这里**，而在 `build_namespace()` **不放 `ctx`** ——
+#:      「一切空间数值只能来自工具返回值」全靠那一条，与内置名单毫无关系。
+#:   ③ 本项目的威胁模型 = **本机 + 自己的照片 + 非对抗输入**。整套沙箱是
+#:      **测量完整性装置**（防误用、防偶然、防把 harness 缺陷记到模型账上），
+#:      **不是对恶意程序的隔离边界**。要真隔离得换进程级方案（受限子进程 / 独立解释器）。
+#:      **不要因为它叫"沙箱"就把它写成安全边界。**
+#:
+#: ⚠ `getattr` / `setattr` / `type` / `issubclass` **在**名单里（2026-09-22 加回）：
+#: 它们被排除的原始理由是"能绕出沙箱"，而实测表明**绕路不需要它们** ⟹
+#: 排除它们**没换来任何安全性**，却制造了一次**真实失败**
+#: （`NameError: name 'getattr' is not defined`，本机实测复现），且**静态检查还放行**它。
+#: 它们是普通 Python 惯用法；留着，harness 噪声更少。
 SAFE_BUILTIN_NAMES: tuple[str, ...] = (
     "abs", "all", "any", "bool", "dict", "divmod", "enumerate", "filter", "float",
-    "format", "frozenset", "int", "isinstance", "len", "list", "map", "max", "min",
-    "pow", "print", "range", "repr", "reversed", "round", "set", "slice", "sorted",
-    "str", "sum", "tuple", "zip",
+    "format", "frozenset", "int", "isinstance", "issubclass", "len", "list", "map",
+    "max", "min", "pow", "print", "range", "repr", "reversed", "round", "set",
+    "slice", "sorted", "str", "sum", "tuple", "zip",
     # 允许写 try/except —— 「错误恢复」是本项目的观测点，不给异常类型就写不出来。
     "Exception", "ValueError", "KeyError", "IndexError", "TypeError",
     "ZeroDivisionError", "ArithmeticError", "AssertionError", "RuntimeError",
+    # 反射/惯用法。见上方实测说明：它们**不增加**逃逸能力。
+    "getattr", "setattr", "type",
 )
 
 #: 弃答的答案标记。程序写 `submit("unknown", ...)` 即判定为「如实说我答不了」。

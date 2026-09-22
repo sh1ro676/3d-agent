@@ -260,17 +260,99 @@ class TestPromptContract:
         assert "{{TOOL_DOCS}}" not in text and "{{MODULES}}" not in text
 
     def test_system_prompt_names_the_object_id_field(self):
-        """★ 这条是**实跑发现**的：模型写 `obj["id"]` → None → NOT_IN_SCENE。
+        """★ 这条是**实跑发现**的：模型按 `id` 取字段 → 报错 → 弃答。
 
         实测记录见 `logs/agent_runs/20260918_172113_living_room.json`（第 2 题）：
         模型用 `single_object` 拿到 dict，却按 `id` 取字段，于是 `a=None` 一路传到
         `calculate_distance`，最后如实弃答。提示词里必须点明字段名。
+
+        ⚠ **2026-09-22 更正**：原文把两种写错混成了一句「写 `obj["id"]` / `obj.get("id")`
+        会得到 `None`」。真跑里的报错其实是 **`KeyError: 'id'`**，`None` 只有 `.get()` 才有。
+        不改判定，但错描述会把模型引向错误的调试方向。下面
+        `test_keyerror_claim_matches_measured_behaviour` 专门盯住旧串归零。
         """
         from agents.prompts.system import build_system_prompt
 
         text = build_system_prompt(self._docs(), ALLOWED_MODULES)
         assert "object_id" in text
         assert "不是 `id`" in text
+
+    def test_keyerror_claim_matches_measured_behaviour(self):
+        """提示词关于 `obj["id"]` 的说法必须与运行期**实测**一致。
+
+        「文档写了、实现没做」是本项目反复吃的形态；这条是它的**镜像**：
+        **文档写错了，实现没问题**。所以断言必须成对出现 —— 一边测量，一边查文本。
+        """
+        import agents.prompts.system as ps
+
+        obj = {"object_id": "chair_1"}
+        with pytest.raises(KeyError):
+            obj["id"]                                   # noqa: B018 —— 故意触发
+        assert obj.get("id") is None                    # 只有 .get() 才是 None
+
+        text = ps.build_system_prompt(self._docs(), ALLOWED_MODULES)
+        assert "KeyError" in text, "提示词必须写明下标访问抛的是 KeyError"
+        flat = " ".join(text.split())
+        assert '`obj.get("id")` 会得到' not in flat, "旧串「会得到 None」必须归零"
+
+    def test_system_prompt_says_tools_need_no_import(self):
+        """★ 真跑 12 题里有 **2 题**因为写 `from tools import ...` 多跑了一轮。
+
+        根因不是模型乱来：旧规则 5 的措辞是「只能 `import`：math, ...」，
+        它在**暗示「功能要靠 import 拿到」**。所以修法是改提示词，不是怪模型 ——
+        这一条与「写了→看到了→没照做」不同型，它属于**提示词诱发**。
+        """
+        import agents.prompts.system as ps
+
+        text = ps.build_system_prompt(self._docs(), ALLOWED_MODULES)
+        assert "不要 import" in text
+        assert "已经在你的命名空间里" in text
+
+    def test_importing_tools_really_fails_with_a_readable_message(self):
+        """提示词说「`from tools import ...` 一定会失败」—— **这句话本身要被验证**。
+
+        只断言提示词里有这句话，就是又一次「文档写了」。所以这里真跑一遍：
+        失败要真的发生，且报错要**可读**（点名白名单），否则模型看不懂该怎么改。
+        """
+        from agents.executor import QA_TOOLSET, execute_program
+        from scene_graph.schema import SceneGraph
+        from tools.registry import ToolContext
+
+        scene = SceneGraph(scene_id="s", image_id="i", nodes=())
+        out = execute_program(
+            "from tools import list_objects\nsubmit(1, evidence=['x'])\n",
+            ToolContext(scene=scene, record_trace=True), toolset=QA_TOOLSET,
+        )
+        assert out.ok is False and out.stage == "runtime"
+        assert "白名单" in out.message, out.message
+
+    def test_prompt_fingerprint_covers_the_templates(self):
+        """版本号会忘升，**指纹不会** —— 所以指纹必须真的覆盖模板内容。
+
+        只断言「长度 16、全是十六进制」不够：把函数实现成返回常量也能过。
+        这里改一个字符再要求它变，才证明它盯着模板。
+        """
+        import agents.prompts.system as ps
+
+        before = ps.prompt_fingerprint()
+        assert len(before) == 16
+        assert all(c in "0123456789abcdef" for c in before)
+        assert ps.prompt_fingerprint() == before            # 确定性
+
+        original = ps.SYSTEM_TEMPLATE
+        try:
+            ps.SYSTEM_TEMPLATE = original + "\n第七行：多余的改动"
+            assert ps.prompt_fingerprint() != before, "指纹没有覆盖 SYSTEM_TEMPLATE"
+        finally:
+            ps.SYSTEM_TEMPLATE = original
+        assert ps.prompt_fingerprint() == before            # 可复原，不污染后续用例
+
+    def test_prompt_version_is_a_semver_string(self):
+        """版本号要能被机械核对 —— 只靠人眼看「1.2.0 之后是 1.1.0 吗」一定会出错。"""
+        from agents.prompts.system import PROMPT_VERSION
+
+        parts = PROMPT_VERSION.split(".")
+        assert len(parts) == 3 and all(p.isdigit() for p in parts), PROMPT_VERSION
 
     def test_system_prompt_requires_evidence_and_keyword_args(self):
         from agents.prompts.system import build_system_prompt

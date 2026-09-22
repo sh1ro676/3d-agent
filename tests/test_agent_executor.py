@@ -385,3 +385,74 @@ class TestTraceAndTiming:
             raise ValueError("x")
         except ValueError as exc:
             assert file_line_of(exc, "<unit_program>") is None
+
+
+# ---------------------------------------------------------------------------
+# 内置白名单：静态检查与运行期必须**同一份**
+# ---------------------------------------------------------------------------
+
+
+class TestBuiltinWhitelistAgreement:
+    """三处一致性的第四处：内置函数名单。
+
+    `executor` 的 `QA_TOOLSET` 注释早就写明「三者不一致的后果是**静默的**」——
+    而内置名单当时**正是**不一致的：`synthesizer._BUILTIN_OK` 手抄了一份、
+    比运行期宽 4 个名字，于是 `getattr(...)` **静态检查放行 → 运行期 NameError**，
+    失败被归因成「模型不会写程序」。2026-09-22 实测复现，这组守卫就是那次修复的钉子。
+    """
+
+    def test_static_whitelist_is_derived_from_the_runtime_one(self):
+        """★ 结构性修法：取消副本，不是把副本补齐。
+
+        把 4 个名字补进手抄本也能让当下变绿，但下一处漂移还会回来
+        ——真正的修法是让「两份名单」这件事不存在。
+        """
+        from agents.executor import SAFE_BUILTIN_NAMES
+        from agents.synthesizer import _BUILTIN_OK
+
+        assert _BUILTIN_OK == set(SAFE_BUILTIN_NAMES), (
+            "静态检查放行的内置名与运行期命名空间必须完全一致；"
+            "不一致会让「静态过了、运行挂了」的 harness 缺陷变成模型的分数"
+        )
+
+    def test_getattr_is_available_at_runtime(self, ctx):
+        """★ 这条曾经红：静态检查放行 `getattr`，运行期却是 `NameError`。
+
+        `getattr` 是普通 Python 惯用法；排除它**没有换来任何安全性**
+        （见下一条：逃逸路径根本不需要它），只换来一个 harness 噪声。
+        """
+        out = execute_program(
+            "r = list_objects()\n"
+            "submit(bool(getattr(r, 'ok')), evidence=['getattr 可用'])\n",
+            ctx,
+        )
+        assert out.ok, "getattr 应当可用，实际：%s" % out.message
+        assert out.submission.answer is True
+
+    def test_direct_route_to_open_is_still_blocked(self, ctx):
+        """名单**管得住直路**：`__builtins__` 是白名单字典，里面没有 `open`。"""
+        out = execute_program(
+            "submit('open' in __builtins__, evidence=['白名单字典'])\n", ctx)
+        assert out.ok
+        assert out.submission.answer is False
+
+    def test_attribute_access_is_not_blocked_by_the_whitelist(self, ctx):
+        """⚠ **诚实性守卫** —— 它断言的是沙箱**做不到**的事。
+
+        有人看到「沙箱」两个字就会假设它是隔离边界。它不是：属性访问是**语法**，
+        不受名字白名单约束，所以 `__class__ → __mro__ → __subclasses__ → __init__.__globals__`
+        这条链不需要任何被排除的内置就能走通（2026-09-22 实测：`open` 可达，
+        经 `_WeakValueDictionary`）。
+
+        这条用例故意**钉住这个事实**：将来谁把 `SAFE_BUILTIN_NAMES` 说成安全边界、
+        或者真做了进程级隔离把它关掉，都会在这里红一次，逼人回去改注释与结论。
+        """
+        out = execute_program(
+            "s = (1).__class__.__mro__[1].__subclasses__()\n"
+            "submit(len(s) > 0, evidence=['属性访问不受名字白名单约束'])\n",
+            ctx,
+        )
+        assert out.ok and out.submission.answer is True, (
+            "属性访问若被挡住了，说明沙箱换成了真正的隔离方案 —— "
+            "那是好事，但必须同时更新 executor.SAFE_BUILTIN_NAMES 上方的注释口径"
+        )

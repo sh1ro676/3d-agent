@@ -41,7 +41,12 @@ if str(ROOT) not in sys.path:
 
 from agents.executor import ALLOWED_MODULES, QA_TOOLSET, execute_program  # noqa: E402
 from agents.loop import AgentLoop  # noqa: E402
-from agents.prompts.system import build_system_prompt, scene_hint_for  # noqa: E402
+from agents.prompts.system import (  # noqa: E402
+    PROMPT_VERSION,
+    build_system_prompt,
+    prompt_fingerprint,
+    scene_hint_for,
+)
 from agents.synthesizer import static_check  # noqa: E402
 from llm.adapter import LLMClient, LLMSettings, load_backend_env  # noqa: E402
 from llm.schema import docs_text  # noqa: E402
@@ -228,6 +233,8 @@ def main(argv: list[str] | None = None) -> int:
             "scene": scene.summary_line(),
             "scene_hint": hint,
             "tools_version": TOOLS_VERSION,
+            "prompt_version": PROMPT_VERSION,
+            "prompt_fingerprint": prompt_fingerprint(),
             "toolset": list(toolset),
             "tool_docs_chars": len(docs),
             "system_prompt_chars": len(build_system_prompt(docs, ALLOWED_MODULES)),
@@ -303,6 +310,11 @@ def main(argv: list[str] | None = None) -> int:
         "scene_id": scene.scene_id,
         "scene_hint": hint,
         "tools_version": TOOLS_VERSION,
+        # ⚠ 真跑记录里此前**一个提示词字段都没有**（连长度都没有）——
+        # 于是"这一轮发的是哪版提示词"只能靠人记。补上（2026-09-22）：
+        # 版本号给人读，指纹给机器比；两者缺一，"两次实验的提示词是不是同一份"就答不了。
+        "prompt_version": PROMPT_VERSION,
+        "prompt_fingerprint": prompt_fingerprint(),
         "toolset": list(toolset),
         # 开关组合进了产物 —— 消融表按它分组，而不是靠人记住跑的是哪一版。
         "switches": loop.switches(),

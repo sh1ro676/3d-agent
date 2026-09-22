@@ -20,6 +20,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from typing import Any, Mapping, Sequence
@@ -29,6 +30,33 @@ from vision.semantics import image_size_from_meta
 #: 未替换的占位符（收尾自检用）。只认大写字母与下划线，免得误伤代码块里的 `{{ }}`。
 _PLACEHOLDER_RE = re.compile(r"\{\{([A-Z_]+)\}\}")
 
+#: 提示词版本 —— 单一来源。**改任何一处模板都必须升这里。**
+#:
+#: 为什么必须有它（与 `tools/version.py::TOOLS_VERSION` 同一条理由，§11 设计原则 5）：
+#: 「两次实验用的是不是同一套提示词」和「是不是同一套工具」一样，是**结论可比性的前提**。
+#: 而在此之前，真跑产物里**一个提示词字段都没有**（干跑那边也只有 `system_prompt_chars`，
+#: 也就是一个**长度**）—— 两个不同的提示词只要长度相同就无法区分，指纹太弱。
+#:
+#: 分工：版本号管「人读的变更叙事」，`prompt_fingerprint()` 管「字节级是不是同一份」。
+#: 两个一起落盘，"这一轮到底发了什么配置"才答得了（SOUL 的硬规矩 4）。
+#:
+#: ⚠ **1.0.0 是追溯赋的**，表示「引入版本号之前的全部历史运行」。那些产物里没有这个字段，
+#: **不要回填** —— 回填等于伪造记录，只能靠 `system_prompt_chars` 粗分。
+#:
+#: 1.0.0 → 1.1.0（2026-09-22）：三处改动，全部来自真跑失败的归因，
+#: 且都属于**提示词纪律而非模型能力**（与 §20.1 的「写了→看到了→没照做」同源）：
+#:   ① 新增「工具已在命名空间里、**不要 import**」。真跑 12 题里有 **2 题**因
+#:      `from tools import ...` 多跑一轮；而旧规则 5「只能 `import`：math, ...」的措辞
+#:      本身在暗示「功能要靠 import 拿到」⟹ 这是**提示词诱发的错误**，不是模型不听话。
+#:   ② 修正一处**描述性错误**：原文称 `obj["id"]` 会得到 `None`，
+#:      实测（`_tmp_prompt_dump.py`）是抛 **`KeyError: 'id'`**，只有 `obj.get("id")` 返回 None。
+#:      不改判定，但错误描述会把模型引向错误的调试方向。
+#:   ③ 规则 5 改写为「工具不需要 import；`import` 只对这几个模块有意义，且不是必需的」。
+#:
+#: （同批还改了**运行期内置白名单**与静态检查的一致性 —— 那属于代码而非提示词，
+#:   见 `agents/executor.py::SAFE_BUILTIN_NAMES` 与 `agents.synthesizer._BUILTIN_OK`。）
+PROMPT_VERSION = "1.1.0"
+
 __all__ = [
     "SYSTEM_TEMPLATE",
     "USER_TEMPLATE",
@@ -36,6 +64,8 @@ __all__ = [
     "PLAN_SYSTEM_TEMPLATE",
     "PLAN_USER_TEMPLATE",
     "PLAN_BLOCK_TEMPLATE",
+    "PROMPT_VERSION",
+    "prompt_fingerprint",
     "render_template",
     "build_system_prompt",
     "build_user_prompt",
@@ -65,6 +95,9 @@ SYSTEM_TEMPLATE = """\
 你**不能**看图、不能读点云、不能猜坐标 —— **一切空间数值只能来自工具返回值**。
 
 ## 可用工具（只能用这些；所有返回值都是 ToolResult 信封）
+**这些工具已经在你的命名空间里，直接按名字调用 —— 不要 import 它们。**
+`import tools` / `from tools import list_objects` 一定会失败（`tools` 不是可用的模块）：
+工具是**已经绑好场景的现成函数**，不是模块成员。
 {{TOOL_DOCS}}
 
 ## 硬性规则（违反任一条会被零成本静态检查直接拒绝）
@@ -72,8 +105,9 @@ SYSTEM_TEMPLATE = """\
    写 `list_objects("chair")` 会把 "chair" 静默绑到 scene_id 上，得到一个看起来很正常的错答案。
 2. `object_id` 只能来自 `list_objects` / `find_object` / `single_object` /
    `find_nearest` / `find_farthest` 的返回值。凭印象编一个 id 会拿到 `NOT_IN_SCENE`。
-   **返回值的字段名是 `object_id`，不是 `id`**（写 `obj["id"]` / `obj.get("id")` 会得到
-   `None`，然后 `a=None` 一路传到几何工具，报一个看起来莫名其妙的 `NOT_IN_SCENE`）。
+   **返回值的字段名是 `object_id`，不是 `id`** —— 两种写错的后果不一样，都不是你要的：
+   下标访问 `obj["id"]` 直接抛 `KeyError: 'id'`；而 `obj.get("id")` **静默返回 `None`**。
+   后者更坏：`a=None` 会一路传到几何工具，报一个看起来莫名其妙的 `NOT_IN_SCENE`。
    **每个工具的 `res.value` 形状写在上面对应那一行里** —— 照它读，不要猜。
    ⚠ **先看清返回值里已经有什么，再决定要不要再调一次工具**：`list_objects` 一次就给全
    每个物体的 `centroid_m` 与 `extent_m`，「最高的 / 最近的 / 有几个 / 平均多少」这类问题
@@ -85,7 +119,9 @@ SYSTEM_TEMPLATE = """\
        submit(answer, target_ids=["<物体 id>"], evidence=["<这个数是怎么算出来的>"])
    `evidence` **至少 1 条**，写清来源（工具名 / 公式）。没有 `submit` 的程序等于没有答案。
    `answer` 的类型必须符合题目要求。
-5. 只能 `import`：{{MODULES}}。没有 `open`、没有文件系统、没有网络、没有 `eval`。
+5. 工具**不需要 import** —— 它们已经在命名空间里，直接调用。`import` 只对这几个模块有意义：
+   {{MODULES}}；而且它们**也不是必需的**（`max` / `sum` / `sorted` 这类内置可以直接用）。
+   没有 `open`、没有文件系统、没有网络、没有 `eval`。
 6. 只输出**一个** ```python 代码块。不要解释，不要贴运行结果，不要写多个方案。
 
 ## 算不出来时怎么办
@@ -172,6 +208,30 @@ RETRY_TEMPLATE = """\
 {{PROGRAM}}
 ```
 """
+
+
+def prompt_fingerprint() -> str:
+    """全部模板 + `SCENE_HINT_KEYS` 的**内容指纹**（sha256 前 16 位）。
+
+    与 `PROMPT_VERSION` 分工不同、缺一不可：
+    * 版本号是**人写的**，会忘记升 —— 而"忘了升版本"的表现就是历史结果被静默混进同一张表；
+    * 指纹是**算出来的**，改一个字符就变，忘不了。
+
+    覆盖范围为什么是这七项：前六份模板决定模型看到的全部文字；
+    `SCENE_HINT_KEYS` 不产生文字，但它决定 `build_user_prompt` 里那份 JSON **有哪些键**
+    —— 2026-09-22 那次 `intrinsics_source` 泄露就是靠"改了键集却没改模板"发生的，
+    所以键集属于提示词的一部分，必须进指纹。
+
+    ⚠ 它**不覆盖**工具文档。那一层由 `TOOLS_VERSION` 管（工具 docstring 的第一段逐字节进
+    prompt）。两份指纹一起记，"提示词 + 工具文档"这个完整模型输入才被钉住。
+    """
+    parts = (
+        SYSTEM_TEMPLATE, USER_TEMPLATE, RETRY_TEMPLATE,
+        PLAN_SYSTEM_TEMPLATE, PLAN_USER_TEMPLATE, PLAN_BLOCK_TEMPLATE,
+        "|".join(sorted(SCENE_HINT_KEYS)),
+    )
+    blob = "\n\x00\n".join(parts).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()[:16]
 
 
 def render_template(template: str, values: Mapping[str, str]) -> str:
