@@ -1,0 +1,360 @@
+{
+ "_caveat": "真值 = 参照档（内参外部给定）几何，**不是标定真值**；本结果是相对偏离，不是准确率。",
+ "pred_scene": "probe_instr_pred",
+ "gt_scene": "probe_instr_gt",
+ "questions_file": "D:\\3D_Spatial_Agent\\dataset\\probes\\intrinsics_sensitivity_20q.json",
+ "hint_aligned": true,
+ "gauge": {
+  "桌子到相机(m)": {
+   "pred": 3.0689799681552703,
+   "gt": 2.0531602624133822
+  },
+  "椅子到相机(m)": {
+   "pred": 3.1476592008204936,
+   "gt": 2.0823488529904317
+  },
+  "镜子到相机(m)": {
+   "pred": 4.754769940246562,
+   "gt": 4.093484129337826
+  },
+  "沙发x跨度(m)": {
+   "pred": 6.7049707770347595,
+   "gt": 2.341547429561615
+  },
+  "沙发↔桌子(m)": {
+   "pred": 1.5221854777889445,
+   "gt": 1.3503606497079217
+  },
+  "桌子↔椅子(m)": {
+   "pred": 3.793397064644352,
+   "gt": 1.3298223871186623
+  },
+  "镜子↔沙发(m)": {
+   "pred": 5.151497685381493,
+   "gt": 1.908066697693814
+  }
+ },
+ "tally": {
+  "abs": {
+   "n": 8,
+   "ok": 0
+  },
+  "rel": {
+   "n": 8,
+   "ok": 8
+  },
+  "cnt": {
+   "n": 4,
+   "ok": 4
+  }
+ },
+ "rel_err": {
+  "abs": {
+   "median": 0.5127148342489922,
+   "max": 1.8634910040046944,
+   "n": 8
+  },
+  "rel": {
+   "median": null,
+   "max": null,
+   "n": 0
+  },
+  "cnt": {
+   "median": 0.0,
+   "max": 0.0,
+   "n": 2
+  }
+ },
+ "tolerances": {
+  "0.050": {
+   "abs": 0.0,
+   "rel": null,
+   "cnt": 1.0
+  },
+  "0.005": {
+   "abs": 0.0,
+   "rel": null,
+   "cnt": 1.0
+  },
+  "0.020": {
+   "abs": 0.0,
+   "rel": null,
+   "cnt": 1.0
+  },
+  "0.100": {
+   "abs": 0.0,
+   "rel": null,
+   "cnt": 1.0
+  },
+  "0.200": {
+   "abs": 0.25,
+   "rel": null,
+   "cnt": 1.0
+  }
+ },
+ "rows": [
+  {
+   "n": 1,
+   "question": "桌子离相机多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 2.0531602624133822,
+   "pred_answer": "3.07 m",
+   "gt_answer": "2.05",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 0.4952559019388851
+  },
+  {
+   "n": 2,
+   "question": "椅子离相机多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 2.0823488529904317,
+   "pred_answer": "3.15",
+   "gt_answer": "2.08",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 0.5127148342489922
+  },
+  {
+   "n": 3,
+   "question": "镜子离相机多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 4.093484129337826,
+   "pred_answer": "4.75",
+   "gt_answer": "4.09",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 0.16038070502263657
+  },
+  {
+   "n": 4,
+   "question": "沙发沿左右方向（相机坐标系的 x 轴）的跨度是多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 2.341547429561615,
+   "pred_answer": "6.705",
+   "gt_answer": "2.342",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 1.8634910040046944
+  },
+  {
+   "n": 5,
+   "question": "沙发和桌子之间的质心距离是多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 1.3503606497079217,
+   "pred_answer": "1.522",
+   "gt_answer": "1.35",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 0.12710630328957181
+  },
+  {
+   "n": 6,
+   "question": "桌子和椅子之间的质心距离是多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 1.3298223871186623,
+   "pred_answer": "3.793",
+   "gt_answer": "1.33",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 1.8522606001680615
+  },
+  {
+   "n": 7,
+   "question": "场景里离相机最远的那个物体，离相机多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 4.584726238879756,
+   "pred_answer": "6.83",
+   "gt_answer": "4.58",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 0.48972907958597334
+  },
+  {
+   "n": 8,
+   "question": "镜子和沙发之间的距离是多少米？",
+   "category": "abs",
+   "kind": "num",
+   "truth": 1.908066697693814,
+   "pred_answer": "5.15",
+   "gt_answer": "1.908",
+   "pred_ok": false,
+   "gt_ok": true,
+   "rel_err": 1.6990670746596808
+  },
+  {
+   "n": 9,
+   "question": "哪个物体离相机最近？",
+   "category": "rel",
+   "kind": "obj",
+   "truth": "table",
+   "pred_answer": "table",
+   "gt_answer": "table",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 10,
+   "question": "哪个物体离相机最远？",
+   "category": "rel",
+   "kind": "obj",
+   "truth": "picture",
+   "pred_answer": "picture",
+   "gt_answer": "picture",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 11,
+   "question": "离相机第二近的是哪个物体？",
+   "category": "rel",
+   "kind": "obj",
+   "truth": "chair",
+   "pred_answer": "chair",
+   "gt_answer": "chair",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 12,
+   "question": "椅子在桌子的左边还是右边？",
+   "category": "rel",
+   "kind": "side",
+   "truth": "左",
+   "pred_answer": "left",
+   "gt_answer": "left",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 13,
+   "question": "沙发在桌子的前面还是后面？",
+   "category": "rel",
+   "kind": "side",
+   "truth": "后",
+   "pred_answer": "back",
+   "gt_answer": "behind",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 14,
+   "question": "镜子在沙发的左边还是右边？",
+   "category": "rel",
+   "kind": "side",
+   "truth": "左",
+   "pred_answer": "left",
+   "gt_answer": "left",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 15,
+   "question": "桌子和椅子哪个离相机更近？",
+   "category": "rel",
+   "kind": "obj",
+   "truth": "table",
+   "pred_answer": "table",
+   "gt_answer": "table",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 16,
+   "question": "沙发和镜子哪个离相机更远？",
+   "category": "rel",
+   "kind": "obj",
+   "truth": "mirror",
+   "pred_answer": "mirror",
+   "gt_answer": "mirror",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 17,
+   "question": "场景里一共有多少个物体？",
+   "category": "cnt",
+   "kind": "num",
+   "truth": 9.0,
+   "pred_answer": "9",
+   "gt_answer": "9",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": 0.0
+  },
+  {
+   "n": 18,
+   "question": "场景里有几幅画？",
+   "category": "cnt",
+   "kind": "num",
+   "truth": 4.0,
+   "pred_answer": "4",
+   "gt_answer": "4",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": 0.0
+  },
+  {
+   "n": 19,
+   "question": "场景里有哪些不同类别？",
+   "category": "cnt",
+   "kind": "set",
+   "truth": [
+    "chair",
+    "mirror",
+    "picture",
+    "sofa",
+    "sofa chair",
+    "table"
+   ],
+   "pred_answer": "chair, mirror, picture, sofa, sofa chair, table",
+   "gt_answer": "chair, mirror, picture, sofa, sofa chair, table",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  },
+  {
+   "n": 20,
+   "question": "场景里有床吗？",
+   "category": "cnt",
+   "kind": "yesno",
+   "truth": "no",
+   "pred_answer": "no",
+   "gt_answer": "no",
+   "pred_ok": true,
+   "gt_ok": true,
+   "rel_err": null
+  }
+ ],
+ "usage": {
+  "pred": {
+   "calls": 26,
+   "prompt_tokens": 55124,
+   "completion_tokens": 7834,
+   "cached_tokens": 44800,
+   "cost_cny": 0.235878
+  },
+  "gt": {
+   "calls": 25,
+   "prompt_tokens": 52589,
+   "completion_tokens": 8051,
+   "cached_tokens": 45440,
+   "cost_cny": 0.230226
+  }
+ }
+}

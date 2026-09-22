@@ -1,0 +1,35 @@
+{
+  "_about": [
+    "内参敏感度探针题集：同一张图、同一批掩码、同一套题目，只在两档内参下各跑一遍。",
+    "用途：测「端到端 QA 对内参错误有多敏感」。",
+    "对照资产：dataset/scenes/living_room_pred（内参=模型自预测 fx=163.74）",
+    "          dataset/scenes/living_room_gt （内参=外部给定  fx=518.86）",
+    "  —— ⚠ _gt 不是标定真值，只是「外部给定的内参」，它是参照档、不是 truth 档。",
+    "分组：abs=绝对米制（预期敏感） / rel=相对序（预期免疫） / cnt=计数类别（对照，与尺度无关）",
+    "真值不写在本文件里：真值由图上的几何实时算，避免「尺子写死」后被复制传播。"
+  ],
+  "questions": [
+    {"question": "桌子离相机多少米？", "category": "abs"},
+    {"question": "椅子离相机多少米？", "category": "abs"},
+    {"question": "镜子离相机多少米？", "category": "abs"},
+    {"question": "沙发沿左右方向（相机坐标系的 x 轴）的跨度是多少米？", "category": "abs"},
+    {"question": "沙发和桌子之间的质心距离是多少米？", "category": "abs"},
+    {"question": "桌子和椅子之间的质心距离是多少米？", "category": "abs"},
+    {"question": "场景里离相机最远的那个物体，离相机多少米？", "category": "abs"},
+    {"question": "镜子和沙发之间的距离是多少米？", "category": "abs"},
+
+    {"question": "哪个物体离相机最近？", "category": "rel"},
+    {"question": "哪个物体离相机最远？", "category": "rel"},
+    {"question": "离相机第二近的是哪个物体？", "category": "rel"},
+    {"question": "椅子在桌子的左边还是右边？", "category": "rel"},
+    {"question": "沙发在桌子的前面还是后面？", "category": "rel"},
+    {"question": "镜子在沙发的左边还是右边？", "category": "rel"},
+    {"question": "桌子和椅子哪个离相机更近？", "category": "rel"},
+    {"question": "沙发和镜子哪个离相机更远？", "category": "rel"},
+
+    {"question": "场景里一共有多少个物体？", "category": "cnt"},
+    {"question": "场景里有几幅画？", "category": "cnt"},
+    {"question": "场景里有哪些不同类别？", "category": "cnt"},
+    {"question": "场景里有床吗？", "category": "cnt"}
+  ]
+}

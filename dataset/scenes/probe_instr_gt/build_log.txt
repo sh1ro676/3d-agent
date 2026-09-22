@@ -1,0 +1,244 @@
+# 场景图构建记录  scene_id=living_room_gt
+image=D:\3D_Spatial_Agent\vendor\UniDepth\assets\demo\rgb.png
+built_at='sofa. chair. table. picture. mirror.'
+
+## 耗时 (ms)
+{"depth_ms": 1178.3, "detect_ms": 743.6, "segment_ms": 260.8, "nodes_ms": 28.2, "up_axis_ms": 8.3, "relations_ms": 2.4}
+build_wall_s=2.22
+model_load_wall_s=15.59
+
+## 内参与视场
+intrinsics_arg=auto → D:\3D_Spatial_Agent\vendor\UniDepth\assets\demo\intrinsics.npy
+{
+  "intrinsics_source": "provided",
+  "intrinsics": [
+    [
+      518.85791,
+      0.0,
+      325.582458
+    ],
+    [
+      0.0,
+      519.469604,
+      253.73616
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "fov": {
+    "hfov_deg": 63.33,
+    "vfov_deg": 49.59,
+    "plausible": true,
+    "reason": "ok"
+  },
+  "scale_calibrated": false
+}
+
+## 感知栈
+{
+  "device": "cuda",
+  "device_total_mib": 8188.0,
+  "resident_mb": 1146.7,
+  "resident_pct": 14.0,
+  "peak_mb": 2177.2,
+  "models": {
+    "grounding": {
+      "role": "grounding",
+      "hub_id": "IDEA-Research/grounding-dino-tiny",
+      "loaded": true,
+      "source": "local",
+      "load_s": 7.42,
+      "resident_mb": 660.0,
+      "n_params_m": 172.3,
+      "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+      "role": "segmentation",
+      "hub_id": "facebook/sam2.1-hiera-base-plus",
+      "loaded": true,
+      "source": "local",
+      "load_s": 0.5,
+      "resident_mb": 282.2,
+      "n_params_m": 73.3,
+      "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+      "role": "depth",
+      "hub_id": "lpiccinelli/unidepth-v2-vits14",
+      "loaded": true,
+      "source": "hub",
+      "load_s": 7.66,
+      "resident_mb": 132.3,
+      "n_params_m": 34.2,
+      "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+  }
+}
+
+## 警告
+
+## 物体
+[
+  {
+    "id": "sofa_1",
+    "label": "sofa",
+    "score": 0.8359013199806213,
+    "centroid_m": [
+      0.796708881855011,
+      0.3191649615764618,
+      3.1745691299438477
+    ],
+    "extent_m": [
+      2.341547429561615,
+      0.8170193731784821,
+      1.2648906707763672
+    ],
+    "n_points": 23841,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_1",
+    "label": "picture",
+    "score": 0.7949785590171814,
+    "centroid_m": [
+      1.3370074033737183,
+      -1.109473705291748,
+      4.058226108551025
+    ],
+    "extent_m": [
+      1.1182400584220886,
+      0.9845227599143982,
+      0.2434101104736328
+    ],
+    "n_points": 16137,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "mirror_1",
+    "label": "mirror",
+    "score": 0.6762795448303223,
+    "centroid_m": [
+      -0.2999061048030853,
+      -1.0369457006454468,
+      3.948596239089966
+    ],
+    "extent_m": [
+      0.877047136425972,
+      1.2759487926959991,
+      0.2726726531982422
+    ],
+    "n_points": 18015,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "chair_1",
+    "label": "chair",
+    "score": 0.5280802845954895,
+    "centroid_m": [
+      -0.739599883556366,
+      0.6535243391990662,
+      1.833596110343933
+    ],
+    "extent_m": [
+      0.9769061505794525,
+      0.30279356241226196,
+      0.8273890018463135
+    ],
+    "n_points": 18785,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_2",
+    "label": "picture",
+    "score": 0.5012606978416443,
+    "centroid_m": [
+      -1.1661392450332642,
+      -1.0597940683364868,
+      4.014665126800537
+    ],
+    "extent_m": [
+      0.26073920726776123,
+      0.23024237155914307,
+      0.042525291442871094
+    ],
+    "n_points": 965,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_3",
+    "label": "picture",
+    "score": 0.4885120689868927,
+    "centroid_m": [
+      -1.154987096786499,
+      -0.8365779519081116,
+      4.054024696350098
+    ],
+    "extent_m": [
+      0.25223827362060547,
+      0.21417713165283203,
+      0.05726289749145508
+    ],
+    "n_points": 893,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "sofa_chair_1",
+    "label": "sofa chair",
+    "score": 0.439514696598053,
+    "centroid_m": [
+      -1.0662211179733276,
+      0.32752998173236847,
+      2.7393510341644287
+    ],
+    "extent_m": [
+      1.331837683916092,
+      0.8101650699973106,
+      1.4802091121673584
+    ],
+    "n_points": 29108,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "table_1",
+    "label": "table",
+    "score": 0.39941057562828064,
+    "centroid_m": [
+      0.5888177156448364,
+      0.6055087745189667,
+      1.8713951706886292
+    ],
+    "extent_m": [
+      1.0592691600322723,
+      0.5367443263530731,
+      1.0292019844055176
+    ],
+    "n_points": 30660,
+    "centroid_source": "mask"
+  },
+  {
+    "id": "picture_4",
+    "label": "picture",
+    "score": 0.3324681222438812,
+    "centroid_m": [
+      -1.9192354679107666,
+      -0.8223316073417664,
+      4.081668853759766
+    ],
+    "extent_m": [
+      0.14639580249786377,
+      0.28728359937667847,
+      0.14869070053100586
+    ],
+    "n_points": 809,
+    "centroid_source": "mask"
+  }
+]
+
+## 被丢弃的检测
+[]
+
+## 降级记录
+[]

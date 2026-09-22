@@ -43,7 +43,20 @@ __all__ = [
     "build_plan_system_prompt",
     "build_plan_user_prompt",
     "scene_hint_for",
+    "SCENE_HINT_KEYS",
 ]
+
+#: `scene_hint` 的**全部**合法键。白名单，不是黑名单 ——
+#:
+#: ★ 为什么必须是白名单：`build_meta` 是 builder 的「什么都能塞」字典（模型名、阈值、
+#: 时间戳、内参来源、视场……）。只要允许从它里面**挑字段**透传，就总有人会再挑一个，
+#: 而每一个被挑中的字段都会**逐字节改变提示词** ⟹ 改掉一个字段就是改掉实验条件。
+#: 用白名单，新增键就必然要动这一处常量，也就必然会被
+#: `tests/test_agent_static_check.py` 那条守卫看见。
+#:
+#: ⚠ 它对外是**可变长度**的：`image_size` 只在 `build_meta` 里读得出来时才出现
+#: （`image_size_from_meta` 返回 None 就整键缺席），所以断言写的是"子集"而非"相等"。
+SCENE_HINT_KEYS = frozenset({"objects", "n_objects", "image_id", "scene_id", "image_size"})
 
 SYSTEM_TEMPLATE = """\
 你是「3D 空间推理 Agent」的程序合成器。你的唯一输出是**一个完整的 Python 程序**。
@@ -187,11 +200,30 @@ def scene_hint_for(scene: Any) -> dict[str, Any]:
     破坏可比性。尺度问题由**场景图的构建方**（`vision/depth.py` 的
     `resolve_intrinsics`）负责，不是提示词的工作。
 
+    ⚠⚠ **本函数曾经违反过上面这段话，而守卫没抓到。**
+    实现里有过一行 `if "intrinsics_source" in meta: hint[...] = meta[...]`，
+    于是 `build_meta.intrinsics_source`（`"predicted"` / `"provided"`）**直接进了提示词**。
+    后果不是理论上的：拿 `living_room_pred` 与 `living_room_gt` 做「只改内参」的对照实验时，
+    两档的提示词其实**不一样** —— 等于同时改了「几何」和「暗示」两个自变量，
+    实验结论直接不可归因。是我在跑探针前逐字段比对 `scene_hint` 才发现的。
+
+    当时那条守卫（`test_scene_hint_does_not_leak_intrinsics`）**早已存在、命名也对、注释也对**，
+    但它只查 `camera_intrinsics`，而测试夹具又**没有构造 `build_meta`**
+    ⟹ 那条分支**从来没被执行过**。这是「守卫从未生效」而不是「守卫失败」——
+    后者会红，前者只是安静地什么都不查。
+
+    所以修法不是删掉那一行（那只是修了一个字段），而是**改契约**：
+    hint 的键只许来自 `SCENE_HINT_KEYS`，`build_meta` **一律不透传**，
+    并让守卫断言**白名单**而不是断言某个具体字段缺席 ——
+    这样下一个想透传 `fov` / `scale_calibrated` / `up_axis_reliable` 的人也会被拦下。
+
     ⚠ **图像尺寸的键名**：builder 落盘的 `build_meta` 用的是 `image_hw`（**高, 宽**），
     本函数对外统一输出 `image_size`（**宽, 高**，与 PIL 一致）。
     这里曾经只认 `image_width` / `image_height` —— 而真实场景的 build_meta 里
     **没有这两个键**，于是「图像尺寸」这个本文档承诺过的字段在真实数据上
     **从来就没出现过**，且没有任何测试或告警发现它。口径统一在 `_image_size_of()` 一处。
+
+    （上面这条与 `intrinsics_source` 那条是**同一个模式**：文档写了、实现没做、守卫看不见。）
     """
     hint: dict[str, Any] = {
         "objects": dict(scene.label_counts()),
@@ -201,12 +233,11 @@ def scene_hint_for(scene: Any) -> dict[str, Any]:
     }
     # 尺寸的归一化与角色② 共用 `vision.semantics.image_size_from_meta` —— 只有一份实现。
     # ⚠ 它住中性层而不是 `llm/vlm.py`：工具层也要用它，而分层禁令不许 `tools/` import `llm/`。
+    # ★ 这是**唯一**允许从 `build_meta` 取值的地方，且取出来的值不直接进 hint，
+    #   要先经 `image_size_from_meta` 归一化。其余 `build_meta` 字段一律不透传。
     size = image_size_from_meta(getattr(scene, "build_meta", None) or {})
     if size is not None:
         hint["image_size"] = list(size)          # (宽, 高)，与 PIL 一致
-    meta = getattr(scene, "build_meta", None) or {}
-    if "intrinsics_source" in meta:
-        hint["intrinsics_source"] = meta["intrinsics_source"]
     return hint
 
 

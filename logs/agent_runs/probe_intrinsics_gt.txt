@@ -1,0 +1,1035 @@
+==============================================================================
+自研 3D Spatial Agent —— llm
+==============================================================================
+场景：probe_scene: 9 objects / 137 edges (up_axis=-y, scale=1.000)
+场景清单（scene_hint，无坐标）：{"sofa": 1, "picture": 4, "mirror": 1, "chair": 1, "sofa chair": 1, "table": 1}
+动作空间（12 个）：list_objects, get_object, find_object, single_object, find_nearest, find_farthest, query_relation, get_3d_position, get_3d_extent, calculate_distance, calculate_angle, get_attributes
+开关：action_space=program  planner=off  render=template  vlm=True(deepseek-flash)
+角色②（视觉语义）：启用   deepseek-flash
+
+==============================================================================
+问题：桌子离相机多少米？
+状态：ok   答案：'2.05'   渲染：2.05（指认：table_1）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 2 次工具（另有 0 次失败）
+   !!  text_backed — 答案 '2.05' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：2   耗时：2.4 s   成本：¥0.0086
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from math import sqrt
+
+scene_id = "probe_scene"
+
+# 1) 找到桌子
+res = single_object(scene_id=scene_id, label="table")
+if not res.ok:
+    # 退一步：用 find_object
+    res2 = find_object(scene_id=scene_id, label="table")
+    if not res2.ok or not res2.value:
+        submit("unknown", evidence=["场景中查不到 table 物体，无法给出距离"])
+    else:
+        table = res2.value[0]
+else:
+    table = res.value
+
+table_id = table["object_id"]
+
+# 2) 取桌子的相机系质心坐标
+pos = get_3d_position(scene_id=scene_id, object_id=table_id)
+if not pos.ok:
+    submit("unknown", evidence=["无法获取 table 的三维坐标: " + str(pos.error.code)])
+
+x, y, z = pos.value
+dist = sqrt(x * x + y * y + z * z)
+
+submit(
+    f"{dist:.2f}",
+    target_ids=[table_id],
+    evidence=[
+        f"single_object(label='table') -> object_id={table_id}",
+        f"get_3d_position -> [{x}, {y}, {z}] (相机系米制)",
+        f"距离 = sqrt(x^2+y^2+z^2) = {dist:.3f} m",
+    ],
+)
+
+==============================================================================
+问题：椅子离相机多少米？
+状态：ok   答案：'2.08'   渲染：2.08（指认：chair_1）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   !!  text_backed — 答案 '2.08' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.4 s   成本：¥0.0073
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from math import sqrt
+
+res = single_object(scene_id="probe_scene", label="chair")
+if not res.ok:
+    submit("unknown", evidence=["single_object(chair) failed: " + str(res.error.code)])
+
+obj = res.value
+c = obj["centroid_m"]
+dist = sqrt(c[0] ** 2 + c[1] ** 2 + c[2] ** 2)
+
+submit(
+    f"{dist:.2f}",
+    target_ids=[obj["object_id"]],
+    evidence=[
+        "single_object(label='chair') -> centroid_m=" + str(c),
+        "distance to camera = ||centroid_m|| = sqrt(x^2+y^2+z^2) = %.3f m" % dist,
+    ],
+)
+
+==============================================================================
+问题：镜子离相机多少米？
+状态：ok   答案：'4.09'   渲染：4.09（指认：mirror_1）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 2 次工具（另有 0 次失败）
+   !!  text_backed — 答案 '4.09' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：2   耗时：1.8 s   成本：¥0.0085
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from math import sqrt
+
+scene_id = "probe_scene"
+
+# 找到镜子
+res = find_object(scene_id=scene_id, label="mirror")
+if not res.ok:
+    submit("unknown", evidence=["find_object(mirror) 失败: " + str(res.error.code)])
+
+mirrors = res.value
+if not mirrors:
+    submit("unknown", evidence=["场景中没有 mirror 类物体"])
+
+mirror = mirrors[0]
+mid = mirror["object_id"]
+
+# 取相机系三维坐标（相机在原点，距离即质心的欧氏范数）
+res_pos = get_3d_position(scene_id=scene_id, object_id=mid, anchor="centroid")
+if not res_pos.ok:
+    submit("unknown", evidence=["get_3d_position 失败: " + str(res_pos.error.code)])
+
+x, y, z = res_pos.value
+dist = sqrt(x * x + y * y + z * z)
+
+submit(
+    f"{dist:.2f}",
+    target_ids=[mid],
+    evidence=[
+        f"find_object(mirror) -> object_id={mid}",
+        f"get_3d_position -> [{x}, {y}, {z}] (相机系米制)",
+        f"距离 = sqrt(x^2+y^2+z^2) = {dist:.3f} m",
+    ],
+)
+
+==============================================================================
+问题：沙发沿左右方向（相机坐标系的 x 轴）的跨度是多少米？
+状态：ok   答案：'2.342'   渲染：2.342（指认：sofa_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 '2.342' 出现在 trace 里
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.7 s   成本：¥0.0087
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import chain
+
+scene_id = "probe_scene"
+
+res = list_objects(scene_id=scene_id)
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+else:
+    objs = res.value
+    sofa = None
+    for o in objs:
+        if o.get("label") == "sofa":
+            sofa = o
+            break
+    if sofa is None:
+        submit("unknown", evidence=["no object with label 'sofa' in scene"])
+    else:
+        ext = sofa.get("extent_m") or {}
+        w = ext.get("w")
+        if w is None:
+            r2 = get_3d_extent(scene_id=scene_id, object_id=sofa["object_id"])
+            if not r2.ok:
+                submit("unknown", evidence=["get_3d_extent failed: " + str(r2.error.code)])
+            else:
+                w = r2.value.get("w")
+        if w is None:
+            submit("unknown", evidence=["sofa extent unavailable"])
+        else:
+            submit(
+                str(round(float(w), 3)),
+                target_ids=[sofa["object_id"]],
+                evidence=[
+                    "list_objects(probe_scene) -> sofa extent_m.w = {} m (x-axis span)".format(w),
+                    "extent_m is the axis-aligned bbox side lengths in camera-frame meters",
+                ],
+            )
+
+==============================================================================
+问题：沙发和桌子之间的质心距离是多少米？
+状态：ok   答案：'1.35'   渲染：1.35（指认：sofa_1、table_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   OK  text_backed — 答案 '1.35' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：3   耗时：1.6 s   成本：¥0.0091
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import combinations
+
+scene_id = "probe_scene"
+
+# 1) 找到沙发（sofa）与桌子（table）的唯一实例
+sofa_res = single_object(scene_id=scene_id, label="sofa")
+if not sofa_res.ok:
+    submit("unknown", evidence=["single_object(sofa) 失败: " + str(sofa_res.error.code)])
+    raise SystemExit
+
+table_res = single_object(scene_id=scene_id, label="table")
+if not table_res.ok:
+    submit("unknown", evidence=["single_object(table) 失败: " + str(table_res.error.code)])
+    raise SystemExit
+
+sofa = sofa_res.value
+table = table_res.value
+
+sofa_id = sofa["object_id"]
+table_id = table["object_id"]
+
+# 2) 用工具计算两质心之间的三维欧氏距离
+dist_res = calculate_distance(scene_id=scene_id, a=sofa_id, b=table_id)
+if not dist_res.ok:
+    submit("unknown", evidence=["calculate_distance 失败: " + str(dist_res.error.code)])
+    raise SystemExit
+
+dist_m = dist_res.value
+
+submit(
+    str(round(dist_m, 3)),
+    target_ids=[sofa_id, table_id],
+    evidence=[
+        "single_object(sofa) -> object_id=%s, centroid_m=%s" % (sofa_id, sofa["centroid_m"]),
+        "single_object(table) -> object_id=%s, centroid_m=%s" % (table_id, table["centroid_m"]),
+        "calculate_distance(a=%s, b=%s) = %.4f m" % (sofa_id, table_id, dist_m),
+    ],
+)
+
+==============================================================================
+问题：桌子和椅子之间的质心距离是多少米？
+状态：ok   答案：'1.33'   渲染：1.33（指认：table_1、chair_1）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 1 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   !!  text_backed — 答案 '1.33' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：3   耗时：1.7 s   成本：¥0.0094
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from itertools import combinations
+
+# 1) 找到桌子和椅子
+res_t = single_object(scene_id="probe_scene", label="table")
+if not res_t.ok:
+    submit("unknown", evidence=["single_object(table) 失败: " + str(res_t.error.code)])
+else:
+    table = res_t.value
+
+    res_c = find_object(scene_id="probe_scene", label="chair")
+    if not res_c.ok:
+        submit("unknown", evidence=["find_object(chair) 失败: " + str(res_c.error.code)])
+    else:
+        chairs = res_c.value
+        if not chairs:
+            submit("unknown", evidence=["场景中没有 chair"])
+        else:
+            # 若有多个椅子，取离桌子最近的那个
+            if len(chairs) == 1:
+                chair = chairs[0]
+            else:
+                res_n = find_nearest(scene_id="probe_scene", anchor=table["object_id"], label="chair", k=1)
+                if not res_n.ok:
+                    submit("unknown", evidence=["find_nearest(chair) 失败: " + str(res_n.error.code)])
+                else:
+                    chair = res_n.value[0]
+
+            res_d = calculate_distance(
+                scene_id="probe_scene",
+                a=table["object_id"],
+                b=chair["object_id"],
+            )
+            if not res_d.ok:
+                submit("unknown", evidence=["calculate_distance 失败: " + str(res_d.error.code)])
+            else:
+                d = res_d.value
+                submit(
+                    str(round(d, 3)),
+                    target_ids=[table["object_id"], chair["object_id"]],
+                    evidence=[
+                        "calculate_distance(table=%s, chair=%s) = %.4f m" % (
+                            table["object_id"], chair["object_id"], d
+                        )
+                    ],
+                )
+
+==============================================================================
+问题：场景里离相机最远的那个物体，离相机多少米？
+状态：ok   答案：'4.58'   渲染：4.58（指认：picture_4）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   !!  text_backed — 答案 '4.58' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.5 s   成本：¥0.0082
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from math import sqrt
+
+scene_id = "probe_scene"
+
+res = list_objects(scene_id=scene_id)
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: %s" % res.error.code])
+else:
+    objs = res.value
+    best = None
+    best_d = None
+    for o in objs:
+        c = o.get("centroid_m")
+        if c is None:
+            continue
+        d = sqrt(c[0] * c[0] + c[1] * c[1] + c[2] * c[2])
+        if best_d is None or d > best_d:
+            best_d = d
+            best = o
+    if best is None:
+        submit("unknown", evidence=["no object with centroid_m available"])
+    else:
+        submit(
+            "%.2f" % best_d,
+            target_ids=[best["object_id"]],
+            evidence=[
+                "list_objects returned centroid_m for all objects; distance to camera = euclidean norm of centroid_m",
+                "farthest object: %s (%s) at %.3f m" % (best["object_id"], best["label"], best_d),
+            ],
+        )
+
+==============================================================================
+问题：镜子和沙发之间的距离是多少米？
+状态：ok   答案：'1.908'   渲染：1.908（指认：mirror_1、sofa_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   OK  text_backed — 答案 '1.908' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：3   耗时：1.4 s   成本：¥0.0085
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import combinations
+
+scene_id = "probe_scene"
+
+# 1) 找到镜子和沙发
+mirror_res = single_object(scene_id=scene_id, label="mirror")
+sofa_res = single_object(scene_id=scene_id, label="sofa")
+
+if not mirror_res.ok or not sofa_res.ok:
+    submit("unknown", evidence=["mirror 或 sofa 查询失败: mirror.ok=%s sofa.ok=%s" % (mirror_res.ok, sofa_res.ok)])
+
+mirror = mirror_res.value
+sofa = sofa_res.value
+
+mirror_id = mirror["object_id"]
+sofa_id = sofa["object_id"]
+
+# 2) 计算三维欧氏距离
+dist_res = calculate_distance(scene_id=scene_id, a=mirror_id, b=sofa_id)
+
+if not dist_res.ok:
+    submit("unknown", evidence=["calculate_distance 失败: %s" % dist_res.error.code])
+
+dist = dist_res.value
+
+submit(
+    str(round(dist, 3)),
+    target_ids=[mirror_id, sofa_id],
+    evidence=[
+        "single_object(mirror) -> %s, single_object(sofa) -> %s" % (mirror_id, sofa_id),
+        "calculate_distance(a=%s, b=%s) = %.4f m" % (mirror_id, sofa_id, dist),
+    ],
+)
+
+==============================================================================
+问题：哪个物体离相机最近？
+状态：ok   答案：'table'   渲染：table（指认：table_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'table' 出现在 trace 里
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：3   工具调用：1   耗时：4.6 s   成本：¥0.0316
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=False runtime
+  [synthesize] attempt=3 ok=True 
+  [static_check] attempt=3 ok=True 
+  [execute] attempt=3 ok=True ok
+  [render] attempt=8 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=9 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+def main():
+    scene_id = "probe_scene"
+
+    res = list_objects(scene_id=scene_id)
+    if not res.ok:
+        submit("unknown", evidence=["list_objects failed: %s" % res.error])
+        return
+
+    objs = res.value or []
+    if not objs:
+        submit("unknown", evidence=["scene has no objects"])
+        return
+
+    best = None
+    best_d = None
+    for o in objs:
+        c = o["centroid_m"]
+        if not c or len(c) < 3:
+            continue
+        d = (c[0] ** 2 + c[1] ** 2 + c[2] ** 2) ** 0.5
+        if best_d is None or d < best_d:
+            best_d = d
+            best = o
+
+    if best is None:
+        submit("unknown", evidence=["no object had a usable centroid_m"])
+        return
+
+    label = best["label"]
+    oid = best["object_id"]
+    submit(
+        label,
+        target_ids=[oid],
+        evidence=[
+            "list_objects(scene_id=%r) returned %d objects with centroid_m" % (scene_id, len(objs)),
+            "distance to camera = ||centroid_m||; min over objects = %.4f m for %s (%s)"
+            % (best_d, label, oid),
+        ],
+    )
+
+main()
+
+==============================================================================
+问题：哪个物体离相机最远？
+状态：ok   答案：'picture'   渲染：picture（指认：picture_4）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'picture' 出现在 trace 里
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.6 s   成本：¥0.0085
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from collections import defaultdict
+
+scene_id = "probe_scene"
+
+res = list_objects(scene_id=scene_id)
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+else:
+    objs = res.value
+    # 相机系原点即相机位置，距离 = 质心到原点的欧氏距离
+    best = None
+    best_d = -1.0
+    for o in objs:
+        c = o.get("centroid_m")
+        if c is None:
+            continue
+        d = (c[0] ** 2 + c[1] ** 2 + c[2] ** 2) ** 0.5
+        if d > best_d:
+            best_d = d
+            best = o
+    if best is None:
+        submit("unknown", evidence=["no object with centroid_m returned"])
+    else:
+        submit(
+            best["label"],
+            target_ids=[best["object_id"]],
+            evidence=[
+                "list_objects(probe_scene) 返回 %d 个物体，逐个用 centroid_m 计算到相机原点距离 sqrt(x^2+y^2+z^2)" % len(objs),
+                "最远者 %s (id=%s) 距离 %.3f m" % (best["label"], best["object_id"], best_d),
+            ],
+        )
+
+==============================================================================
+问题：离相机第二近的是哪个物体？
+状态：ok   答案：'chair'   渲染：chair（指认：chair_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'chair' 出现在 trace 里
+   OK  targets_in_scene — 1 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.7 s   成本：¥0.0083
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+import math
+
+res = list_objects(scene_id="probe_scene")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+
+objs = res.value
+# 相机系原点即相机位置，按质心到原点的距离排序
+def dist(o):
+    c = o["centroid_m"]
+    return math.sqrt(c[0]**2 + c[1]**2 + c[2]**2)
+
+ranked = sorted(objs, key=dist)
+if len(ranked) < 2:
+    submit("unknown", evidence=["场景中物体不足两个，无法取第二近"])
+
+second = ranked[1]
+submit(
+    second["label"],
+    target_ids=[second["object_id"]],
+    evidence=[
+        "list_objects 返回 %d 个物体的 centroid_m；按 |centroid| 升序排序" % len(ranked),
+        "最近: %s(%s) d=%.3f m" % (ranked[0]["label"], ranked[0]["object_id"], dist(ranked[0])),
+        "第二近: %s(%s) d=%.3f m" % (second["label"], second["object_id"], dist(second)),
+    ],
+)
+
+==============================================================================
+问题：椅子在桌子的左边还是右边？
+状态：ok   答案：'left'   渲染：left（指认：chair_1、table_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'left' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：3   耗时：2.2 s   成本：¥0.0094
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import chain
+
+scene_id = "probe_scene"
+
+# 1) 找到唯一的 chair 和唯一的 table
+res_chair = single_object(scene_id=scene_id, label="chair")
+if not res_chair.ok:
+    submit("unknown", evidence=["single_object(chair) failed: " + str(res_chair.error.code)])
+    raise SystemExit
+
+res_table = single_object(scene_id=scene_id, label="table")
+if not res_table.ok:
+    submit("unknown", evidence=["single_object(table) failed: " + str(res_table.error.code)])
+    raise SystemExit
+
+chair = res_chair.value
+table = res_table.value
+
+chair_id = chair["object_id"]
+table_id = table["object_id"]
+
+# 2) 用相机系米制质心判断左右：x 越小越靠左
+cx = chair["centroid_m"][0]
+tx = table["centroid_m"][0]
+
+# 3) 用 query_relation 交叉验证（left_of: a 在 b 左边）
+res_rel = query_relation(scene_id=scene_id, relation="left_of", a=chair_id, b=table_id, tol=0.0)
+rel_left = res_rel.value if res_rel.ok else None
+
+if cx < tx:
+    answer = "left"
+elif cx > tx:
+    answer = "right"
+else:
+    answer = "unknown"
+
+evidence = [
+    "chair centroid_m x = {:.4f}, table centroid_m x = {:.4f} (from single_object)".format(cx, tx),
+    "query_relation(left_of, chair, table, tol=0) = {}".format(rel_left),
+    "camera-frame x axis: smaller x = left of image",
+]
+
+submit(answer, target_ids=[chair_id, table_id], evidence=evidence)
+
+==============================================================================
+问题：沙发在桌子的前面还是后面？
+状态：ok   答案：'behind'   渲染：behind（指认：sofa_1、table_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 6 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'behind' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：6   耗时：2.2 s   成本：¥0.0100
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import product
+
+scene_id = "probe_scene"
+
+# 1) 找到沙发和桌子
+sofa_res = single_object(scene_id=scene_id, label="sofa")
+table_res = single_object(scene_id=scene_id, label="table")
+
+if not sofa_res.ok or not table_res.ok:
+    submit("unknown", evidence=["sofa 或 table 查询失败: %s / %s" % (
+        sofa_res.error.code if not sofa_res.ok else "ok",
+        table_res.error.code if not table_res.ok else "ok")])
+
+sofa = sofa_res.value
+table = table_res.value
+
+sofa_id = sofa["object_id"]
+table_id = table["object_id"]
+
+# 2) 用相机系坐标判断前后：相机系 z 轴指向场景深处（z 越大越远）
+sofa_pos = get_3d_position(scene_id=scene_id, object_id=sofa_id)
+table_pos = get_3d_position(scene_id=scene_id, object_id=table_id)
+
+if not sofa_pos.ok or not table_pos.ok:
+    submit("unknown", evidence=["无法获取三维坐标"])
+
+sz = sofa_pos.value[2]
+tz = table_pos.value[2]
+
+# 3) 用 query_relation 交叉验证（front_of / behind 若可用）
+rel_front = query_relation(scene_id=scene_id, relation="front_of", a=sofa_id, b=table_id)
+rel_behind = query_relation(scene_id=scene_id, relation="behind", a=sofa_id, b=table_id)
+
+evidence = [
+    "sofa centroid z=%.3f m, table centroid z=%.3f m (get_3d_position)" % (sz, tz),
+    "query_relation front_of=%s, behind=%s" % (
+        rel_front.value if rel_front.ok else rel_front.error.code,
+        rel_behind.value if rel_behind.ok else rel_behind.error.code),
+]
+
+if sz < tz:
+    answer = "front"
+else:
+    answer = "behind"
+
+submit(answer, target_ids=[sofa_id, table_id], evidence=evidence)
+
+==============================================================================
+问题：镜子在沙发的左边还是右边？
+状态：ok   答案：'left'   渲染：left（指认：mirror_1、sofa_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 4 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'left' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：4   耗时：2.0 s   成本：¥0.0099
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from itertools import chain
+
+scene_id = "probe_scene"
+
+# 1) 找到镜子和沙发
+mirror_res = single_object(scene_id=scene_id, label="mirror")
+sofa_res = single_object(scene_id=scene_id, label="sofa")
+
+if not mirror_res.ok or not sofa_res.ok:
+    submit("unknown", evidence=["mirror 或 sofa 查询失败: %s / %s" % (
+        mirror_res.error.code if not mirror_res.ok else "ok",
+        sofa_res.error.code if not sofa_res.ok else "ok")])
+
+mirror = mirror_res.value
+sofa = sofa_res.value
+
+mirror_id = mirror["object_id"]
+sofa_id = sofa["object_id"]
+
+# 2) 用相机系质心的 x 坐标判断左右（相机系 x 向右为正）
+mx = mirror["centroid_m"][0]
+sx = sofa["centroid_m"][0]
+
+# 3) 用 query_relation 交叉验证（tol=0 严格比较）
+rel_left = query_relation(scene_id=scene_id, relation="left_of", a=mirror_id, b=sofa_id, tol=0.0)
+rel_right = query_relation(scene_id=scene_id, relation="right_of", a=mirror_id, b=sofa_id, tol=0.0)
+
+left_ok = rel_left.ok and rel_left.value
+right_ok = rel_right.ok and rel_right.value
+
+if left_ok:
+    answer = "left"
+elif right_ok:
+    answer = "right"
+elif mx < sx:
+    answer = "left"
+elif mx > sx:
+    answer = "right"
+else:
+    answer = "unknown"
+
+submit(
+    answer,
+    target_ids=[mirror_id, sofa_id],
+    evidence=[
+        "mirror centroid_m x=%.3f, sofa centroid_m x=%.3f (相机系 x 向右为正)" % (mx, sx),
+        "query_relation left_of=%s, right_of=%s (tol=0)" % (left_ok, right_ok),
+    ],
+)
+
+==============================================================================
+问题：桌子和椅子哪个离相机更近？
+状态：ok   答案：'table'   渲染：table（指认：table_1、chair_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 4 条
+   OK  tool_was_used — 成功调用 3 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'table' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：2   工具调用：3   耗时：4.8 s   成本：¥0.0267
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=True ok
+  [render] attempt=5 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=6 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 4 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+def _val(res):
+    if not res.ok:
+        return None
+    return res.value
+
+def _dist_to_cam(obj):
+    c = obj.get("centroid_m")
+    if c is None:
+        return None
+    return (c[0] ** 2 + c[1] ** 2 + c[2] ** 2) ** 0.5
+
+# 1) 取桌子（唯一）
+table_res = single_object(scene_id="probe_scene", label="table")
+table = _val(table_res)
+
+# 2) 取椅子：场景里有 chair 与 sofa chair 两类，优先 chair
+chair = None
+chair_label = None
+c_res = single_object(scene_id="probe_scene", label="chair")
+if c_res.ok:
+    chair = c_res.value
+    chair_label = "chair"
+else:
+    # 退而求其次：用 find_object 拿所有候选，取离相机最近的
+    f_res = find_object(scene_id="probe_scene", label="chair")
+    cands = _val(f_res) or []
+    if not cands:
+        f_res2 = find_object(scene_id="probe_scene", label="sofa chair")
+        cands = _val(f_res2) or []
+    best = None
+    for o in cands:
+        d = _dist_to_cam(o)
+        if d is None:
+            continue
+        if best is None or d < best[0]:
+            best = (d, o)
+    if best is not None:
+        chair = best[1]
+        chair_label = chair.get("label")
+
+if table is None or chair is None:
+    submit("unknown", evidence=["single_object/find_object 未能同时取到 table 与 chair，无法比较距离"])
+
+dt = _dist_to_cam(table)
+dc = _dist_to_cam(chair)
+
+if dt is None or dc is None:
+    submit("unknown", evidence=["质心坐标缺失，无法计算到相机的距离"])
+
+# 用工具再核验一次（相机原点距离 = 质心模长）
+cd = _val(calculate_distance(scene_id="probe_scene", a=table["object_id"], b=chair["object_id"]))
+
+if dt < dc:
+    ans = "table"
+else:
+    ans = "chair"
+
+submit(
+    ans,
+    target_ids=[table["object_id"], chair["object_id"]],
+    evidence=[
+        f"table centroid_m={table.get('centroid_m')} -> |c|={dt:.4f} m",
+        f"{chair_label} centroid_m={chair.get('centroid_m')} -> |c|={dc:.4f} m",
+        f"table-chair distance={cd}",
+        "相机在原点，比较质心模长即为离相机远近",
+    ],
+)
+
+==============================================================================
+问题：沙发和镜子哪个离相机更远？
+状态：ok   答案：'mirror'   渲染：mirror（指认：sofa_1、mirror_1）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 3 条
+   OK  tool_was_used — 成功调用 2 次工具（另有 0 次失败）
+   OK  text_backed — 答案 'mirror' 出现在 trace 里
+   OK  targets_in_scene — 2 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：2   工具调用：2   耗时：3.0 s   成本：¥0.0199
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=True ok
+  [render] attempt=5 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=6 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 3 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+def _val(res):
+    if not res.ok:
+        return None
+    return res.value
+
+def _dist_to_cam(obj):
+    c = obj.get("centroid_m")
+    if c is None:
+        return None
+    return (c[0] ** 2 + c[1] ** 2 + c[2] ** 2) ** 0.5
+
+sofa_res = single_object(scene_id="probe_scene", label="sofa")
+mirror_res = single_object(scene_id="probe_scene", label="mirror")
+
+sofa = _val(sofa_res)
+mirror = _val(mirror_res)
+
+if sofa is None or mirror is None:
+    submit("unknown", evidence=["sofa or mirror not found in scene"])
+
+ds = _dist_to_cam(sofa)
+dm = _dist_to_cam(mirror)
+
+if ds is None or dm is None:
+    submit("unknown", evidence=["missing centroid_m for sofa or mirror"])
+
+if ds > dm:
+    ans = "sofa"
+else:
+    ans = "mirror"
+
+submit(
+    ans,
+    target_ids=[sofa["object_id"], mirror["object_id"]],
+    evidence=[
+        "distance from camera = ||centroid_m||; sofa centroid=%s -> %.3f m" % (sofa["centroid_m"], ds),
+        "mirror centroid=%s -> %.3f m" % (mirror["centroid_m"], dm),
+        "larger norm means farther from camera",
+    ],
+)
+
+==============================================================================
+问题：场景里一共有多少个物体？
+状态：ok   答案：'9'   渲染：9（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 1 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 '9' 出现在 trace 里
+   OK  targets_in_scene — 9 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.2 s   成本：¥0.0069
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+res = list_objects(scene_id="probe_scene")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: " + str(res.error.code)])
+else:
+    objs = res.value
+    n = len(objs)
+    ids = [o["object_id"] for o in objs]
+    labels = [o["label"] for o in objs]
+    submit(str(n), target_ids=ids, evidence=["list_objects 返回 %d 个物体，类别为 %s" % (n, labels)])
+
+==============================================================================
+问题：场景里有几幅画？
+状态：ok   答案：'4'   渲染：4（指认：picture_1、picture_2、picture_3、picture_4）
+证据校验：supported（命中出处：-）
+   OK  has_evidence — evidence 有 1 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   OK  text_backed — 答案 '4' 出现在 trace 里
+   OK  targets_in_scene — 4 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.1 s   成本：¥0.0073
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "supported", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name": "tool
+-- 生成的程序 --
+from collections import Counter
+
+res = list_objects(scene_id="probe_scene")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: %s" % res.error.code])
+
+objs = res.value
+counts = Counter(o["label"] for o in objs)
+n_picture = counts.get("picture", 0)
+
+ids = [o["object_id"] for o in objs if o["label"] == "picture"]
+
+submit(
+    str(n_picture),
+    target_ids=ids,
+    evidence=["list_objects(probe_scene) 返回 %d 个物体，其中 label=='picture' 的有 %d 个" % (len(objs), n_picture)],
+)
+
+==============================================================================
+问题：场景里有哪些不同类别？
+状态：ok   答案：'chair, mirror, picture, sofa, sofa chair, table'   渲染：chair, mirror, picture, sofa, sofa chair, table（指认：sofa_1、picture_1、mirror_1、chair_1、picture_2、picture_3、sofa_chair_1、table_1、picture_4）
+证据校验：weak（命中出处：-）
+   OK  has_evidence — evidence 有 2 条
+   OK  tool_was_used — 成功调用 1 次工具（另有 0 次失败）
+   !!  text_backed — 答案 'chair, mirror, picture, sofa, sofa chair, table' 未在 trace 里逐字出现（可能是归一化差异，需人工看一眼）
+   OK  targets_in_scene — 9 个 target_id 全部落在场景内
+   OK  targets_exist — 全部存在于场景图
+生成次数：1   工具调用：1   耗时：1.3 s   成本：¥0.0071
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=True 
+  [execute] attempt=1 ok=True ok
+  [render] attempt=3 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=4 ok=True {"level": "weak", "ok": true, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 2 条", "hard": true}, {"name": "tool_was_
+-- 生成的程序 --
+from collections import Counter
+
+res = list_objects(scene_id="probe_scene")
+if not res.ok:
+    submit("unknown", evidence=["list_objects failed: %s" % res.error.code])
+
+labels = [o["label"] for o in res.value]
+counts = Counter(labels)
+answer = ", ".join(sorted(counts.keys()))
+
+submit(
+    answer,
+    target_ids=[o["object_id"] for o in res.value],
+    evidence=[
+        "list_objects(scene_id='probe_scene') returned %d objects" % len(res.value),
+        "distinct labels: %s" % dict(counts),
+    ],
+)
+
+==============================================================================
+问题：场景里有床吗？
+状态：ok   答案：'no'   渲染：no
+证据校验：unsupported（命中出处：-）
+   OK  has_evidence — evidence 有 1 条
+   !!  tool_was_used — 整条 trace 里没有一次成功的工具调用 —— 答案不可能来自几何量
+   OK  text_backed — 答案 'no' 出现在 trace 里
+   OK  targets_in_scene — 没有指认任何物体（不是错，但 Viewer 无法高亮，也无法核对指认是否正确）
+生成次数：2   工具调用：1   耗时：2.3 s   成本：¥0.0163
+  [synthesize] attempt=1 ok=True 
+  [static_check] attempt=1 ok=False 
+  [synthesize] attempt=2 ok=True 
+  [static_check] attempt=2 ok=True 
+  [execute] attempt=2 ok=True ok
+  [render] attempt=5 ok=True {"mode": "template", "used_fallback": false}
+  [verify] attempt=6 ok=False {"level": "unsupported", "ok": false, "matched_from": "", "checks": [{"name": "has_evidence", "ok": true, "detail": "evidence 有 1 条", "hard": true}, {"name": "t
+-- 生成的程序 --
+scene_id = "probe_scene"
+
+# 直接按类别查 "bed"
+res = find_object(scene_id=scene_id, label="bed")
+
+if not res.ok:
+    # NOT_FOUND 表示场景里没有床
+    submit("no", evidence=["find_object(label='bed') 返回错误码 %s，场景中不存在 bed 类别" % res.error.code])
+else:
+    beds = res.value
+    if isinstance(beds, list) and len(beds) > 0:
+        submit("yes", target_ids=[b["object_id"] for b in beds],
+               evidence=["find_object(label='bed') 返回 %d 个 bed 物体" % len(beds)])
+    else:
+        submit("no", evidence=["find_object(label='bed') 返回空列表，场景中无床"])
+
+==============================================================================
+汇总：题数 20 ｜ 状态 {"ok": 20} ｜ 证据校验 {"supported": 13, "unsupported": 1, "weak": 6}
+      重试过的题 4 ｜ 失败题 0 ｜ 工具调用合计 41 ｜ 成本 ¥0.2302
+
+==============================================================================
+总用量：{"calls": 25, "failed_calls": 0, "retried_calls": 0, "truncated": 0, "prompt_tokens": 52589, "completion_tokens": 8051, "cached_tokens": 45440, "cache_reported_calls": 25, "cost_cny": 0.230226, "unpriced_calls": 0, "latency_s": 41.229, "failed_latency_s": 0.0, "by_purpose": {"synthesize": {"calls": 25, "prompt_tokens": 52589, "completion_tokens": 8051, "cached_tokens": 45440, "cost_cny": 0.23022600000000001, "latency_s": 41.22922710000603}}}

@@ -1,0 +1,143 @@
+{
+  "mode": "dry_run",
+  "scene": "living_room_pred: 9 objects / 133 edges (up_axis=-y, scale=1.000)",
+  "scene_hint": {
+    "objects": {
+      "sofa": 1,
+      "picture": 4,
+      "mirror": 1,
+      "chair": 1,
+      "sofa chair": 1,
+      "table": 1
+    },
+    "n_objects": 9,
+    "image_id": "rgb.png",
+    "scene_id": "living_room_pred",
+    "image_size": [
+      640,
+      480
+    ],
+    "intrinsics_source": "predicted"
+  },
+  "tools_version": "1.3.0",
+  "toolset": [
+    "list_objects",
+    "get_object",
+    "find_object",
+    "single_object",
+    "find_nearest",
+    "find_farthest",
+    "query_relation",
+    "get_3d_position",
+    "get_3d_extent",
+    "calculate_distance",
+    "calculate_angle",
+    "get_attributes"
+  ],
+  "tool_docs_chars": 2487,
+  "system_prompt_chars": 4016,
+  "questions": [
+    "桌子离相机多少米？",
+    "椅子离相机多少米？",
+    "镜子离相机多少米？",
+    "沙发沿左右方向（相机坐标系的 x 轴）的跨度是多少米？",
+    "沙发和桌子之间的质心距离是多少米？",
+    "桌子和椅子之间的质心距离是多少米？",
+    "场景里离相机最远的那个物体，离相机多少米？",
+    "镜子和沙发之间的距离是多少米？",
+    "哪个物体离相机最近？",
+    "哪个物体离相机最远？",
+    "离相机第二近的是哪个物体？",
+    "椅子在桌子的左边还是右边？",
+    "沙发在桌子的前面还是后面？",
+    "镜子在沙发的左边还是右边？",
+    "桌子和椅子哪个离相机更近？",
+    "沙发和镜子哪个离相机更远？",
+    "场景里一共有多少个物体？",
+    "场景里有几幅画？",
+    "场景里有哪些不同类别？",
+    "场景里有床吗？"
+  ],
+  "planner": "off",
+  "vlm": {
+    "enabled": true,
+    "image": "D:\\3D_Spatial_Agent\\vendor\\UniDepth\\assets\\demo\\rgb.png",
+    "image_source": "build_log.txt（旧场景兼容路径，重建后会变成 build_meta.image_path）",
+    "label": "text",
+    "base_url": "https://api.deepseek.com",
+    "model": "deepseek-flash",
+    "api_key": "***7dc8",
+    "temperature": 0.2,
+    "max_tokens": 8192,
+    "max_retries": 2,
+    "timeout_s": 180.0,
+    "extra_body": {
+      "thinking": {
+        "type": "disabled"
+      }
+    },
+    "price_cny_per_mtok": [
+      3.0,
+      9.0
+    ],
+    "ready": true,
+    "confidence_threshold": 0.6,
+    "attrs": [
+      "color",
+      "material",
+      "texture",
+      "state",
+      "shape"
+    ]
+  },
+  "llm_env": {
+    "path": "D:\\3D_Spatial_Agent\\configs\\llm_backend.env",
+    "exists": true,
+    "keys": [
+      "SPATIAL_API_KEY",
+      "SPATIAL_BASE_URL",
+      "SPATIAL_EXTRA_BODY",
+      "SPATIAL_MAX_RETRIES",
+      "SPATIAL_MAX_TOKENS",
+      "SPATIAL_MODEL",
+      "SPATIAL_TEMPERATURE",
+      "SPATIAL_VISION_API_KEY",
+      "SPATIAL_VISION_BASE_URL",
+      "SPATIAL_VISION_MODEL"
+    ],
+    "applied": [
+      "SPATIAL_API_KEY",
+      "SPATIAL_BASE_URL",
+      "SPATIAL_EXTRA_BODY",
+      "SPATIAL_MAX_RETRIES",
+      "SPATIAL_MAX_TOKENS",
+      "SPATIAL_MODEL",
+      "SPATIAL_TEMPERATURE"
+    ],
+    "kept_from_env": [],
+    "conflicts": [],
+    "unknown_keys": [],
+    "empty_values": [
+      "SPATIAL_VISION_API_KEY",
+      "SPATIAL_VISION_BASE_URL",
+      "SPATIAL_VISION_MODEL"
+    ],
+    "error": null,
+    "config_sha256": "b51eeb596dd65f11f339795c7d192c65858fb3e3547add0d145cc85d494c34a1",
+    "secrets": {
+      "SPATIAL_API_KEY": {
+        "present": true,
+        "fingerprint": "ba46324a"
+      },
+      "SPATIAL_VISION_API_KEY": {
+        "present": false,
+        "fingerprint": null
+      }
+    }
+  },
+  "prompt_preview": {
+    "system": "你是「3D 空间推理 Agent」的程序合成器。你的唯一输出是**一个完整的 Python 程序**。\n\n手上有什么：一张照片已经建好的 3D 场景图。图里的物体有稳定 id、相机系**米制**质心与三维尺寸。\n你**不能**看图、不能读点云、不能猜坐标 —— **一切空间数值只能来自工具返回值**。\n\n## 可用工具（只能用这些；所有返回值都是 ToolResult 信封）\n（返回类型统一是 ToolResult：先判 res.ok 再读 res.value）\n  list_objects(scene_id: str | None=None, label: str | None=None, limit: int | None=None)\n      列出场景中的物体。`label` 为空则返回全部。`res.value` 是 **list**，每项 `{object_id, label, score, centroid_m:[x,y,z], extent_m:{w,h,l}}` —— **所有物体的质心与尺寸一次给全**，找极值/计数/求均值不必再逐个调工具。\n  get_object(scene_id: str | None=None, object_id: str='')\n      取单个物体的完整信息（含语义属性、掩码引用与二维框）。`res.value` 是**单个 dict**：`{object_id, label, score, centroid_m, extent_m, attributes, mask_ref, frame, bbox_2d}`。⚠ `bbox_2d` 是 `[x1, y1, x2, y2]`，**图像像素系**（原点左上），与相机系米制的 `centroid_m` 不是同一套坐标 —— 「图像左半边/画面上方」用它。\n  find_object(scene_id: str | None=None, label: str='')\n      按类别查物体，**可能返回多个**（`res.value` 与 `list_objects` 同形）。一个都没有 → `NOT_FOUND`。\n  single_object(scene_id: str | None=None, label: str='')\n      按类别取**恰好一个**物体（`res.value` 与 `get_object` 同形）；匹配到多个就 `AMBIGUOUS`。\n  find_nearest(scene_id: str | None=None, anchor: str='', label: str='', k: int=1)\n      在 `label` 类物体中找出离 `anchor` 最近的 k 个（按距离升序）。`res.value` = `list_objects` 同形 + `distance_m`（米）。\n  find_farthest(scene_id: str | None=None, anchor: str='', label: str='', k: int=1)\n      同 `find_nearest`，但 `res.value` 的 `distance_m` 降序（离得最远的在前）。\n  query_relation(scene_id: str | None=None, relation: str='left_of', a: str='', b: str='', tol: float | None=None)\n      查询两个物体之间的某一种关系。11 种关系的统一入口。`res.value` 是 **bool**（`distance` 给 float 米），**不是 dict**。⚠ `tol`（米）覆盖该关系自带的判定死区，**默认 0.05**（`near`/`far` 是 1.0）—— 差 40 mm 的一对在默认 `tol` 下判 **False**；计数类题目别拿默认值数，`tol=0` 才是严格比较。\n  get_3d_position(scene_id: str | None=None, object_id: str='', anchor: str='centroid')\n      物体的相机系三维坐标（米）。`res.value` 是 **`[x, y, z]`**（相机系米制；`anchor` 可切到 `'bbox_center'`）。\n  get_3d_extent(scene_id: str | None=None, object_id: str='')\n      物体的真实三维尺寸 (w, h, l)，米。`res.value` 是 **`{w, h, l}`**（米，轴对齐包围盒的三边长，**不是 OBB 也不是体积**）。\n  calculate_distance(scene_id: str | None=None, a: str='', b: str='')\n      两个物体之间的三维欧氏距离（米）。`res.value` 是 **float**（米）。\n  calculate_angle(scene_id: str | None=None, a: str='', b: str='', c: str='')\n      三点夹角（度），顶点是 **b**。即 ∠(a, b, c)。`res.value` 是 **float**（度）。\n  get_attributes(scene_id: str | None=None, object_id: str='', attrs: list[str] | None=None, candidates: dict | None=None)\n      读取某个物体在**视觉语义**上的属性（颜色 / 材质 / 纹理 / 状态 / 形状）。成功时 `res.value` 是 **list**，每项形如 `{\"name\": \"color\", \"value\": \"beige\", \"confidence\": 0.9}` —— 按 `name` 取，不要当成 `{\"color\": ...}` 这种按属性名索引的 dict。置信度低或落在闭集外时整条返回 `LOW_CONFIDENCE`，值仍在 `context[\"attributes\"]` 里。\n\n## 硬性规则（违反任一条会被零成本静态检查直接拒绝）\n1. 工具调用**一律关键字传参**。位置传参被禁止：工具的第一个参数是 scene_id，\n   写 `list_objects(\"chair\")` 会把 \"chair\" 静默绑到 scene_id 上，得到一个看起来很正常的错答案。\n2. `object_id` 只能来自 `list_objects` / `find_object` / `single_object` /\n   `find_nearest` / `find_farthest` 的返回值。凭印象编一个 id 会拿到 `NOT_IN_SCENE`。\n   **返回值的字段名是 `object_id`，不是 `id`**（写 `obj[\"id\"]` / `obj.get(\"id\")` 会得到\n   `None`，然后 `a=None` 一路传到几何工具，报一个看起来莫名其妙的 `NOT_IN_SCENE`）。\n   **每个工具的 `res.value` 形状写在上面对应那一行里** —— 照它读，不要猜。\n   ⚠ **先看清返回值里已经有什么，再决定要不要再调一次工具**：`list_objects` 一次就给全\n   每个物体的 `centroid_m` 与 `extent_m`，「最高的 / 最近的 / 有几个 / 平均多少」这类问题\n   通常**不需要**为每个物体再调一次工具。\n3. 每个工具都返回信封 `ToolResult`：先判 `if not res.ok:`，再读 `res.value`。\n   失败时 `res.error.code` 是可枚举的错误码，`res.error.recovery` 是建议的下一步动作 —— 照它做，\n   不要猜。（`CAPABILITY_DISABLED` 表示该能力在本实验臂被关闭，应当改用几何量回答。）\n4. 程序必须**以 `submit(...)` 结束**：\n       submit(answer, target_ids=[\"<物体 id>\"], evidence=[\"<这个数是怎么算出来的>\"])\n   `evidence` **至少 1 条**，写清来源（工具名 / 公式）。没有 `submit` 的程序等于没有答案。\n   `answer` 的类型必须符合题目要求。\n5. 只能 `import`：math, statistics, itertools, functools, collections, re。没有 `open`、没有文件系统、没有网络、没有 `eval`。\n6. 只输出**一个** ```python 代码块。不要解释，不要贴运行结果，不要写多个方案。\n\n## 算不出来时怎么办\n场景里查不到题目要求的东西（例如问「门」但清单里没有 `door`），\n或几何量不足以支撑答案时：**不要凑一个看起来合理的数字**。\n用 `submit(\"unknown\", evidence=[\"<说明为什么答不了>\"])` 如实弃答。\n编造一个带量纲的数（尤其是米制长度）是最糟的结果 —— 它会被当成一个错误答案，\n而弃答会被单独统计。\n",
+    "user": "## 问题\n桌子离相机多少米？\n\n## 场景内容（**只有类别清单与计数，没有坐标**）\n{\"image_id\": \"rgb.png\", \"image_size\": [640, 480], \"intrinsics_source\": \"predicted\", \"n_objects\": 9, \"objects\": {\"chair\": 1, \"mirror\": 1, \"picture\": 4, \"sofa\": 1, \"sofa chair\": 1, \"table\": 1}, \"scene_id\": \"living_room_pred\"}\n\n## 要求的答案类型\nstr（一个词或短语；颜色/类别这类题目通常是闭集里的一个词）\n\n现在输出程序。\n",
+    "user_with_plan": "## 问题\n桌子离相机多少米？\n\n## 场景内容（**只有类别清单与计数，没有坐标**）\n{\"image_id\": \"rgb.png\", \"image_size\": [640, 480], \"intrinsics_source\": \"predicted\", \"n_objects\": 9, \"objects\": {\"chair\": 1, \"mirror\": 1, \"picture\": 4, \"sofa\": 1, \"sofa chair\": 1, \"table\": 1}, \"scene_id\": \"living_room_pred\"}\n\n## 你上一轮列出的计划（**仅供参考**）\n这是你自己在写程序前给出的思路，不是约束。若它与工具文档或场景清单冲突，\n**以工具文档与场景清单为准** —— 计划里若出现了任何具体数值，一律不要采用：\n本项目里所有空间数值**只能**来自工具返回值。\n需要的工具类别：list_objects、calculate_distance\n步骤：\n  1. 读场景，找到门\n\n## 要求的答案类型\nstr（一个词或短语；颜色/类别这类题目通常是闭集里的一个词）\n\n现在输出程序。\n"
+  }
+}

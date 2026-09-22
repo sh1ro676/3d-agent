@@ -309,3 +309,87 @@ class TestPromptContract:
         scene = SceneGraph(scene_id="s", image_id="i",
                            camera_intrinsics=[[606.0, 0.0, 320.0], [0.0, 606.0, 240.0], [0.0, 0.0, 1.0]])
         assert "camera_intrinsics" not in scene_hint_for(scene)
+
+    def test_scene_hint_is_blind_to_build_meta(self):
+        """★ 回归守卫：`build_meta` 的**任何**字段都不许进提示词。
+
+        ⚠ 这条守卫的上一版是**失效**的 —— 它叫 `..._does_not_leak_intrinsics`、
+        注释也写对了，但只断言 `"camera_intrinsics" not in hint`，而夹具**没有构造
+        `build_meta`** ⟹ 真正有缺陷的那条分支（`build_meta.intrinsics_source` 透传）
+        **从未被执行过**。这是「守卫没生效」而不是「守卫失败」：
+        后者会变红，前者只是安静地什么都不查，于是一个错误能瞒过两轮。
+
+        所以断言写的是**白名单**（hint 的键只能来自 `SCENE_HINT_KEYS`），
+        不是「某个具体字段缺席」—— 下一个想透传 `fov` / `scale_calibrated` /
+        `up_axis_reliable` 的人也会被这条拦下。
+
+        ★ **已做 revert-check（把漏洞临时塞回）**：本测试与 `..._byte_identical_...`
+        双双变红，而旧的 `..._does_not_leak_intrinsics` **依然绿** ——
+        这就是"守卫失效"的直接证据，不是推断。
+        """
+        from agents.prompts.system import SCENE_HINT_KEYS, scene_hint_for
+        from scene_graph.schema import SceneGraph
+
+        # 键名取真实 builder 的输出（26 个），值用哨兵串 —— 便于连"值泄露"一起断言。
+        meta = {
+            "config": {"prompt": "sofa. chair.", "box_threshold": 0.3},
+            "timings_ms": {"depth_ms": 471.6, "detect_ms": 927.1},
+            "image_hw": [480, 640],                      # ← 真实落盘是 (高, 宽)
+            "grid_hw": [480, 640],
+            "grid_scale_vs_image": [1.0, 1.0],
+            "depth_range_m": [1.3763, 3.9738],
+            "n_detections_raw": 9, "n_detections_kept": 9,
+            "n_nodes": 9, "n_edges": 133, "n_dropped": 0, "n_fallbacks": 0,
+            "dropped": [], "fallbacks": [],
+            "mask_box_coverage_mean": 0.8041, "mask_box_coverage_min": 0.4624,
+            "label_counts": {"chair": 1},
+            "up_axis": "-y", "up_axis_tilt_deg": 63.04,
+            "up_axis_reliable": False, "up_axis_reason": "band_not_horizontal",
+            "scale_calibrated": False,
+            "intrinsics_source": "SENTINEL_source",       # ← 事故就是这一个字段
+            "intrinsics": [[163.737762, 0.0, 322.0],
+                           [0.0, 163.418274, 248.110352],
+                           [0.0, 0.0, 1.0]],
+            "fov": {"hfov_deg": 125.8, "vfov_deg": 111.5,
+                    "plausible": False, "reason": "hfov_out_of_range"},
+            "perception": {"device": "cuda", "device_total_mib": 8188.0},
+        }
+        hint = scene_hint_for(SceneGraph(scene_id="s", image_id="i", build_meta=meta))
+
+        # ① 契约：键只能来自白名单
+        extra = set(hint) - SCENE_HINT_KEYS
+        assert not extra, "scene_hint 出现白名单外的键：%s" % sorted(extra)
+        # ② 键名不许出现
+        import json as _json
+
+        blob = repr(hint) + _json.dumps(hint, ensure_ascii=False)
+        for k in meta:
+            assert k not in blob, "build_meta 的键泄露进 scene_hint：%s" % k
+        # ③ 值也不许出现（值泄露比键泄露更隐蔽：键名可以不出现，值照样能带着信息）
+        assert "SENTINEL" not in blob
+        # ④ 两个"看起来像尺寸"的量必须分开：image_size 来自归一化，不是 build_meta 透传
+        assert hint["image_size"] == [640, 480]           # (宽, 高) —— 不是 image_hw 的 (480, 640)
+
+    def test_scene_hint_is_byte_identical_across_intrinsics_sources(self):
+        """★ 可比性契约：只改 `build_meta`（内参来源那一档）必须给出**逐字节相同**的 hint。
+
+        这是探针实验的前提。它一旦不成立，「只改内参」的对照就同时改了提示词，
+        结论不可归因 —— 而那种污染**不会报错**，只会让两档的差异看起来更大或更小。
+        """
+        from agents.prompts.system import scene_hint_for
+        from scene_graph.schema import Node, SceneGraph
+
+        import json as _json
+
+        shared = {"image_hw": [480, 640],
+                  "intrinsics": [[163.737762, 0.0, 322.0],
+                                 [0.0, 163.418274, 248.110352],
+                                 [0.0, 0.0, 1.0]]}
+        nodes = (Node(id="chair_1", label="chair", centroid_3d=(1.5, 2.5, 3.5)),)
+
+        def hint_with(source: str) -> str:
+            sc = SceneGraph(scene_id="probe", image_id="i", nodes=nodes,
+                            build_meta=dict(shared, intrinsics_source=source))
+            return _json.dumps(scene_hint_for(sc), ensure_ascii=False, sort_keys=True)
+
+        assert hint_with("predicted") == hint_with("provided")
