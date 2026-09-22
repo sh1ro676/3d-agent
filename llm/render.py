@@ -128,12 +128,17 @@ def polish_prompt(rendered: str, *, question: str) -> str:
 
 
 def polish(client: Any, rendered: str, *, question: str,
-           purpose: str = "polish") -> tuple[str, dict[str, Any]]:
+           purpose: str = "polish", deadline: float | None = None
+           ) -> tuple[str, dict[str, Any]]:
     """可选润色。**失败或越界一律回退到模板文本**，并如实记录原因。
 
     返回 `(text, report)`。`report` 里 `used_fallback` 为 True 时，
     `text` 就是 `rendered` —— 于是「渲染层是否引入数字漂移」这个消融维度
     （§13.3(7) `render="llm"`）有了一份可直接统计的记录。
+
+    `deadline` 与 synthesize / plan 同一口径：它**也**吃整题的那份总预算。
+    润色是可选项，超预算时它失败并回退到模板文本 —— 这正是想要的行为
+    （答案已经算出来了，不该为了把句子写好看而把预算耗光）。
     """
     from llm.adapter import LLMError
 
@@ -146,6 +151,7 @@ def polish(client: Any, rendered: str, *, question: str,
                 {"role": "user", "content": polish_prompt(rendered, question=question)},
             ],
             purpose=purpose,
+            deadline=deadline,
         )
     except LLMError as exc:
         report.update({"used_fallback": True, "reason": "llm_error: %s" % exc})

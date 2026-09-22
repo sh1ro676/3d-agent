@@ -18,6 +18,8 @@
     GET  /                     → 四区界面（demo/index.html）
     GET  /api/health           → 后端与场景就绪状态（前端启动时探它）
     POST /api/ask              → 真跑一次问答，返回整条 run（答案 / trace / 校验 / 成本）
+                                 可选 `budget_s`：只能**收紧**总预算，不能放宽（见
+                                 `_ask_budget`）。超预算时 `run.status == "deadline"`
     POST /api/counterfactual   → 移走若干物体后重算关系（纯图操作，不花 API 钱）
     GET  /api/runs             → 历史批次（回放用）
     POST /api/build            → 上传一张图 → 起一个后台建图任务（立刻返回 job_id）
@@ -38,8 +40,14 @@
 安全与边界
 ==========
 - **只监听 127.0.0.1**：这是本机演示工具，不是服务，不该出现在局域网里。
+- **每个 HTTP 方法都过同一道来源守卫**（`_guard()`），GET / HEAD / POST 一致。
+  只守 POST 是不够的：`/api/health` 带后端 base_url 与 env 文件路径、`/api/runs`
+  是全部历史问答、还有整个静态目录 —— 而 `--host` 被改成 `0.0.0.0` 是很容易发生的事。
 - **问答串行**（一把非阻塞锁）：并发跑 Agent 会让成本台账互相覆盖；
   抢锁失败直接回 409，前端显示「上一题还在跑」——比排队静默等待诚实。
+- **问答有总预算**（`ANSWER_BUDGET_S`，默认 300 s，见它的说明）。没有它时最坏情况是
+  2184 s 占着这把锁不放，所有其他请求只能吃 409。超预算收尾时状态是 `deadline`，
+  与「模型调用失败」（`llm_error`）分开计数。
 - 反事实那条路**不装视觉**：它是纯图操作，为它构造一个 VLM 只会让「它是不是偷偷
   看了图」变成需要解释的问题。
 """
@@ -81,6 +89,29 @@ LOG_FILE = ROOT / "logs" / "demo_server.log"
 #: 问答锁 —— 见模块 docstring「安全与边界」。**非阻塞**获取，抢不到就如实回 409。
 _ASK_LOCK = threading.Lock()
 
+#: ★ 一次 `/api/ask` 的**总预算**（秒）。它同时是「这把锁最多被占住多久」的承诺。
+#:
+#: 为什么必须定这个数（量出来的，不是拍的）：
+#:   无预算时最坏 = 4 次 chat × 单次 chat 最坏 546 s = **2184 s（36.4 min）**。
+#:   单次 chat 最坏 = `max_retries + 1` 次 HTTP × `SPATIAL_TIMEOUT=180` + 退避 6 s
+#:   = 3 × 180 + (2 + 4) = 546 s（`SPATIAL_MAX_RETRIES=2` 写在 configs/llm_backend.env）。
+#:   这段时间里 `_ASK_LOCK` 一直被占着，**所有**其他 `/api/ask` 都只能得到 409。
+#:
+#: 300 s 这个取值满足两个不等式（两个都不是我猜的）：
+#:   · 必须 ≫ 实测 p100：`logs/agent_runs/` 里 54 条真实 run 的 `elapsed_s`
+#:     是中位数 1.8 s / p90 3.9 s / **最大 24.3 s**（最大那条还是 llm_error）。
+#:     300 s ≈ 12× 实测最大值 ⟹ 正常题不可能被它误杀。
+#:   · 必须 ≪ 2184 s：300 s 把最坏占用压到 1/7，且**真的会截断**病态重试链
+#:     （546 s 的单次调用跑不完）—— 这正是设它的目的。
+#:
+#: ⚠ 上界口径：预算只约束 **LLM 时间**（plan/synthesize/polish）。程序执行
+#:   （`exec_timeout_s`，默认 60 s）不在预算内，所以整题的实际上界是
+#:   `预算 + exec_timeout_s`。这个数要跟着一起说，不然「最多 300 s」是错的。
+ANSWER_BUDGET_S = 300.0
+#: 覆盖默认预算的环境变量名。显式命名而不是复用 `SPATIAL_*`：那是**模型端点**的
+#: 配置组，把它混进去会让「这个后端允许跑多久」看起来是上游模型服务商决定的。
+ASK_BUDGET_ENV = "SPATIAL_ASK_BUDGET_S"
+
 PLANNER_MODES = ("off", "on")
 DEFAULT_ANSWER_TYPES = ("float", "int", "str", "bool")
 
@@ -99,6 +130,9 @@ BUILD_TIMEOUT_S = 1500
 DEFAULT_BUILD_PROMPT = "sofa. chair. table. picture. mirror."
 #: 任务登记表只保留最近几个。这是演示工具，不是作业队列。
 _JOB_KEEP = 8
+#: ★ 「任务已经结束」的状态集合 —— **只有**这些能被淘汰。
+#: 见 `_evict_finished_jobs_locked`：淘汰不能看数量而不看状态。
+TERMINAL_JOB_STATES = ("done", "failed")
 
 #: 建图串行锁。显存只有 8188 MiB，两个建图同时跑必然 OOM；
 #: 而且「排队等」比「两个都崩」对演示更友好，所以这里用阻塞式获取。
@@ -223,6 +257,16 @@ class DemoHandler(SimpleHTTPRequestHandler):
     # -- 路由 ----------------------------------------------------------------
 
     def do_GET(self) -> None:                       # noqa: N802
+        # ★ 守卫在这里也必须过一道。原先只有 `do_POST` 过 —— 于是下面这几条
+        #   （`/api/health` 带后端 base_url、model、env 文件路径；
+        #    `/api/runs` 是**全部历史问答**；`/api/build/status` 是建图日志尾部）
+        #   以及**整个静态目录**对任何来源都是敞开的。
+        #   而 `--host` 一旦被改成 `0.0.0.0`（投屏演示时很容易发生），
+        #   这就等于把它们连同「谁能花 API 钱」一起交给了局域网。
+        #   `_guard()` 的 docstring 正是为此写的：一个参数不该有这种副作用 ——
+        #   而只守 POST 不守 GET，那句承诺就只兑现了一半。
+        if not self._guard():
+            return
         if self.path.startswith("/api/health"):
             return self._api_health()
         if self.path.startswith("/api/build/status"):
@@ -232,6 +276,14 @@ class DemoHandler(SimpleHTTPRequestHandler):
         if self.path in ("/", ""):
             self.path = "/index.html"
         return super().do_GET()
+
+    def do_HEAD(self) -> None:                      # noqa: N802
+        # 与 `do_GET` 同源。`SimpleHTTPRequestHandler` 的 `do_HEAD` 单独走
+        # `send_head()`、**不**经过 `do_GET`，所以漏了它就会留下一个
+        # 「HEAD 不受守卫」的缺口 —— 守卫要么一致，要么等于没设。
+        if not self._guard():
+            return
+        return super().do_HEAD()
 
     def do_POST(self) -> None:                      # noqa: N802
         if not self._guard():
@@ -262,6 +314,10 @@ class DemoHandler(SimpleHTTPRequestHandler):
             "scenes": [s.get("scene_id") for s in index.get("scenes") or []],
             "generated_at": index.get("generated_at"),
             "running": _ASK_LOCK.locked(),
+            # 预算单列出来：它是「这次请求最多等多久、锁最多被占多久」的承诺，
+            # 前端要能直接告诉用户，而不是让人去读源码。
+            "ask_budget_s": _default_budget_s(),
+            "ask_budget_env": ASK_BUDGET_ENV,
         })
 
     def _api_runs(self) -> None:
@@ -287,11 +343,19 @@ class DemoHandler(SimpleHTTPRequestHandler):
             return self._json(400, {"ok": False, "error": "answer_type 取值非法"})
         use_vlm = bool(payload.get("vlm", True))
 
+        # ★ 总预算：必须先于抢锁算出来。放在锁之后的话，一个非法 budget_s
+        #   会先占住锁再回 400 —— 那是自己给自己制造了一次串行等待。
+        try:
+            budget_s, budget_want = _ask_budget(payload)
+        except ValueError as exc:
+            return self._json(400, {"ok": False, "error": str(exc)})
+
         if not _ASK_LOCK.acquire(blocking=False):
             return self._json(409, {"ok": False, "error": "上一题还在跑，等它结束再问"})
 
         try:
-            _log("ask scene=%s planner=%s vlm=%s q=%s" % (scene_id, planner, use_vlm, question[:40]))
+            _log("ask scene=%s planner=%s vlm=%s budget=%.0fs q=%s"
+                 % (scene_id, planner, use_vlm, budget_s, question[:40]))
             session = build_session(
                 scene_ref=scene_id, env_file=str(ENV_FILE), no_vlm=not use_vlm,
             )
@@ -305,18 +369,27 @@ class DemoHandler(SimpleHTTPRequestHandler):
             except Exception as exc:        # noqa: BLE001  缺 key 秒级失败，不重试
                 return self._json(503, {"ok": False, "error": str(exc)})
 
-            loop = AgentLoop(client, ctx=session.ctx, planner=planner, toolset=session.toolset)
+            # 预算交给循环层，由它穿透到每一次 `client.chat`（见 agents/loop.py ④）。
+            # 它同时也限定了这把 `_ASK_LOCK` 最多被占住多久。
+            loop = AgentLoop(client, ctx=session.ctx, planner=planner,
+                             toolset=session.toolset, total_budget_s=budget_s)
             run = loop.run(question, answer_type=answer_type)
             try:
                 saved = _persist_live_run(scene_id, session, loop, run, client)
             except Exception as exc:        # noqa: BLE001  落盘失败不该把答案吞掉
                 saved = None
                 _log("persist live run failed: %r" % (exc,))
-            _log("ask done status=%s elapsed=%.2fs saved=%s" % (run.status, run.elapsed_s, saved))
+            _log("ask done status=%s elapsed=%.2fs budget=%.0fs saved=%s"
+                 % (run.status, run.elapsed_s, budget_s, saved))
             self._json(200, {
                 "ok": True,
                 "run": run.to_dict(),
                 "switches": loop.switches(),
+                # 预算随响应一起回去：前端才能说清「这次最多等多久」，
+                # 以及「客户端要求的数被收紧过没有」。
+                "budget_s": budget_s,
+                "budget_requested_s": budget_want,
+                "budget_capped": (budget_want is not None and budget_want > budget_s),
                 "vlm": session.vlm_report,
                 "scene_hint": session.scene_hint,
                 "usage": client.usage.snapshot(),
@@ -385,8 +458,12 @@ class DemoHandler(SimpleHTTPRequestHandler):
             }
             _BUILD_JOBS[job_id] = job
             _BUILD_ORDER.append(job_id)
-            while len(_BUILD_ORDER) > _JOB_KEEP:
-                _BUILD_JOBS.pop(_BUILD_ORDER.pop(0), None)
+            # 淘汰只碰**已终结**的任务；全是活动任务时允许超编（见该函数的说明）。
+            dropped = _evict_finished_jobs_locked()
+        if dropped:
+            # 淘汰要留痕：否则「我刚才那个任务怎么 404 了」变成需要考古的事。
+            _log("build jobs evicted (已终结, keep=%d): %s"
+                 % (_JOB_KEEP, ",".join(dropped)))
         _log("build job %s queued (prompt=%r intrinsics=%r)"
              % (job_id, prompt, intrinsics or "<未提供>"))
         # 排队发生在**工作线程**里（见 `_run_build_job` 里的 `_BUILD_LOCK`），
@@ -735,6 +812,90 @@ def _persist_live_run(scene_id: str, session: Any, loop: Any, run: Any,
     path = runs_dir / f"demo_live_{stamp}_{scene_id}.json"
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
     return path.name
+
+
+def _evict_finished_jobs_locked() -> list[str]:
+    """按数量淘汰**已终结**的任务，返回被淘汰的 id。**调用前必须已持有 `_JOBS_LOCK`。**
+
+    ⚠ 「只淘汰已终结」不是可有可无的收尾，它修的是一个静默缺陷。
+    原先的写法是：
+
+        while len(_BUILD_ORDER) > _JOB_KEEP:
+            _BUILD_JOBS.pop(_BUILD_ORDER.pop(0), None)     # ← 不看状态
+
+    只要提交超过 8 个任务，最旧的那个就会被踢掉 —— 而它很可能**还在排队**
+    （`_BUILD_LOCK` 是串行的，一次只跑一个，积压很正常）。两种后果都静默：
+
+      ① `/api/build/status?id=` 对它回 404「没有这个任务」，可它其实正在跑或在队列里
+         —— 用户看到的是「任务凭空消失了」；
+      ② `_run_build_job` 开头就 `_BUILD_JOBS[job_id]`。线程若还没执行到那一步就被淘汰，
+         直接 `KeyError` 死掉，job 永远停在 `"queued"`，前端只看到秒数一直涨。
+
+    所以判据必须包含「已结束」。**若全是活动任务，就允许超编** —— 这个登记表里
+    每条是一份 `_spec`（含 base64 图）+ 有上限的日志尾部，多留几条的代价远小于
+    丢掉一个正在跑的建图任务（它会白占一次 GPU，而且再也查不到）。
+    """
+    need = len(_BUILD_ORDER) - _JOB_KEEP
+    if need <= 0:
+        return []
+    finished = [jid for jid in _BUILD_ORDER
+                if (_BUILD_JOBS.get(jid) or {}).get("state") in TERMINAL_JOB_STATES]
+    dropped = finished[:need]
+    if not dropped:
+        return []
+    gone = set(dropped)
+    for jid in dropped:
+        _BUILD_JOBS.pop(jid, None)
+    # 原地切片赋值：`_BUILD_ORDER` 是模块级对象，别的地方按名字引用它，
+    # 重新绑定成新列表会让那些引用悄悄失效。
+    _BUILD_ORDER[:] = [jid for jid in _BUILD_ORDER if jid not in gone]
+    return dropped
+
+
+def _default_budget_s() -> float:
+    """默认预算 = `ANSWER_BUDGET_S`，可被 `SPATIAL_ASK_BUDGET_S` 覆盖。
+
+    ⚠ 非法覆盖值**回退到默认并落日志**，不抛异常：这个函数在请求路径上，
+    而"服务直接起不来"比"预算没按预期生效"严重得多。但回退**必须留痕** ——
+    静默回退会让「我明明设了 60 s，为什么不生效」变成一件查不到原因的事。
+    """
+    raw = os.environ.get(ASK_BUDGET_ENV)
+    if not raw:
+        return ANSWER_BUDGET_S
+    try:
+        value = float(raw)
+        if value <= 0:
+            raise ValueError("必须为正数")
+    except (TypeError, ValueError) as exc:
+        _log("%s=%r 无效（%s），回退到默认 %.0f s"
+             % (ASK_BUDGET_ENV, raw, exc, ANSWER_BUDGET_S))
+        return ANSWER_BUDGET_S
+    return value
+
+
+def _ask_budget(payload: dict[str, Any]) -> tuple[float, float | None]:
+    """本次问答生效的总预算 `(生效值, 客户端要求值或 None)`。**纯函数，可单测。**
+
+    ⚠ 客户端只能**收紧**、不能放宽。理由：预算是这个后端对 `_ASK_LOCK`
+    占用时长的承诺。把它交给调用方调大，等于让调用方决定「其他请求要被 409 拒多久」，
+    而承担后果的（被占住的锁、被拒的其他请求）都是服务端 —— 权责不对等。
+    所以这里做 `min(默认, 客户端值)`，并在响应里如实回传 `budget_capped`。
+
+    `budget_s` 非法（非数字 / ≤ 0）时抛 `ValueError` —— 由调用方翻成 400。
+    静默忽略非法值比报错更坏：前端会以为自己设的预算生效了。
+    """
+    default = _default_budget_s()
+    raw = payload.get("budget_s")
+    if raw is None or raw == "":
+        return default, None
+    try:
+        want = float(raw)
+    except (TypeError, ValueError):
+        raise ValueError("budget_s 必须是数字（收到 %r）" % (raw,)) from None
+    if want <= 0:
+        raise ValueError("budget_s 必须为正数（收到 %r）；想立即失败请不要用预算来表达"
+                         % (raw,))
+    return min(default, want), want
 
 
 def build_parser() -> argparse.ArgumentParser:

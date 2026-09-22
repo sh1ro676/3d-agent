@@ -60,6 +60,10 @@ _RUN_KEYS = (
     "question", "answer", "answer_type", "abstained", "evidence", "status", "target_ids",
     "verdict", "plan", "program", "program_fenced", "trace", "tool_calls", "attempts",
     "elapsed_s", "usage", "stages", "failure", "render", "switches", "scene_id", "tools_version",
+    # 2026-09-22 追加：让前端能看出「上面那段 program 到底跑过没有」。
+    # ⚠ 少了它会怎样：末轮 static_check 没过时，前端把一段**从未执行**的程序
+    #   和一段属于别的程序的 trace 并排显示，两者看起来是配套的。
+    "program_matches_trace", "executed_attempt",
 )
 
 

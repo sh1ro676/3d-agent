@@ -69,6 +69,11 @@ __all__ = [
     "cache_tokens",
     "usage_delta",
     "mask_secret",
+    # 预算相关的纯函数与常量（`agents/loop.py` 的 total_budget_s 靠它们落地）
+    "DEADLINE_MESSAGE",
+    "remaining_s",
+    "call_timeout_s",
+    "retry_sleep_s",
 ]
 
 #: 每个设置项对应的环境变量名。一律单名，**不做隐式回退** —— 见模块 docstring 第 1 条。
@@ -111,17 +116,33 @@ DEFAULT_PRICE_TABLE: Mapping[str, Sequence[float]] = {
 # ============================================================================
 
 
+#: 超出调用方给的预算时抛出的消息（`chat(..., deadline=...)`）。
+#:
+#: 定义成常量而不是就地写字符串，是为了让**测试能钉住它**，并且让日志里出现这句话时
+#: 一眼能认出这是「我们主动停手」，不是「模型/网络失败」—— 两者的处置完全不同：
+#: 前者要调预算或查为什么单次调用变慢，后者要查链路。
+DEADLINE_MESSAGE = "调用前已超出调用方给的总预算，主动放弃这次请求（不是网络或模型失败）"
+
+
 class LLMError(RuntimeError):
-    """一次调用彻底失败（重试耗尽 / 配置错误 / 不可重试的 4xx）。
+    """一次调用彻底失败（重试耗尽 / 配置错误 / 不可重试的 4xx / **超预算主动停手**）。
 
     调用方（`agents/loop.py`）应当把它转成一条**被记录在案的失败**，
     而不是让它冒到顶层把整轮实验打断 —— 但绝不能吞掉不记。
     """
 
-    def __init__(self, message: str, *, status: int | None = None, body: str = "") -> None:
+    def __init__(self, message: str, *, status: int | None = None, body: str = "",
+                 over_budget: bool = False) -> None:
         super().__init__(message)
         self.status = status
         self.body = body
+        #: ★ True ⟺ 这是**我们**主动停手（预算用完），不是模型/网络失败。
+        #:
+        #: 为什么要一个显式布尔而不是让调用方去比消息字符串：`agents/loop.py` 要把
+        #: 这两件事记成**两种不同的结局**（`llm_error` vs `deadline`）。靠字符串匹配
+        #: 来分类，会在有人改一句文案时静默失效 —— 而失效的方向是「主动停手被记成
+        #: 模型故障」，正好让报告里的失败归因失真。
+        self.over_budget = bool(over_budget)
 
 
 class _RetryableError(Exception):
@@ -138,6 +159,49 @@ def mask_secret(value: Any) -> str:
         return "(empty)"
     v = str(value)
     return "***" + v[-4:] if len(v) > 4 else "***"
+
+
+#: 单次 HTTP 尝试的最小超时。`urlopen(timeout=0)` 的语义是"非阻塞"（立刻抛），
+#: 不是"不超时"，所以预算只剩几毫秒时不能把 0 传下去 —— 那会把一次本来能成的
+#: 快速请求变成必然失败。0.1 s 是本机到国内端点一次正常往返的量级下界。
+_MIN_CALL_TIMEOUT_S = 0.1
+
+
+def remaining_s(deadline: float | None) -> float | None:
+    """距离 `deadline` 还剩多少秒（None = 不设上界）。**纯函数，可单测。**
+
+    ⚠ 这里用 `time.monotonic()` 而不是 `time.time()`：预算衡量的是**时长**，
+    而墙钟会被系统对时/NTP 调整往回拨。用墙钟算剩余量，一次对时就能让预算
+    凭空多出或消失几秒 —— 一个偶尔失效的限时器比没有限时器更难发现。
+    """
+    if deadline is None:
+        return None
+    return deadline - time.monotonic()
+
+
+def call_timeout_s(configured: float, left: float | None) -> float:
+    """这一次 HTTP 尝试该用多长超时 = `min(配置值, 剩余预算)`，并留一个可用下界。
+
+    ⚠ 为什么必须**取小**而不是直接用配置值：只用配置值的话，预算只剩 3 s 时
+    仍然会发一个最长 180 s 的请求，于是「总预算」的实际上界变成
+    「预算 + 180 s × 重试次数」。那不是预算，是装饰。
+    """
+    if left is None:
+        return configured
+    return max(_MIN_CALL_TIMEOUT_S, min(configured, left))
+
+
+def retry_sleep_s(attempt: int, deadline: float | None) -> float:
+    """重试退避时长，**封顶到 deadline**。与 `chat()` 里的 `min(2**attempt, 16)` 同口径。
+
+    封顶的理由：睡过预算再抛「超预算」确实还是超预算，但那样「预算 300 s、
+    实际用了 306 s」这种账会说不清 —— 而这些秒数在报告里是要被引用的。
+    """
+    base = float(min(2 ** attempt, 16))
+    left = remaining_s(deadline)
+    if left is None:
+        return base
+    return max(0.0, min(base, left))
 
 
 # ============================================================================
@@ -584,8 +648,14 @@ class LLMClient:
 
     # -- 主调用 --------------------------------------------------------------
 
-    def chat(self, messages: Sequence[Mapping[str, Any]], *, purpose: str = "chat") -> LLMReply:
-        """一次带重试的对话补全。失败抛 `LLMError`（已计入 `failed_calls`）。"""
+    def chat(self, messages: Sequence[Mapping[str, Any]], *, purpose: str = "chat",
+             deadline: float | None = None) -> LLMReply:
+        """一次带重试的对话补全。失败抛 `LLMError`（已计入 `failed_calls`）。
+
+        `deadline` 是 `time.monotonic()` 坐标系下的**绝对时刻**（None = 不设上界）。
+        它的检查点是**每一次 HTTP 尝试之前**，不是调用方那一层 —— 理由见循环体内
+        那段注释，一句话：否则预算的实际上界会变成「预算 + 546 s」，等于没定。
+        """
         t_pre = time.perf_counter()
         try:
             self.check_ready()
@@ -615,9 +685,28 @@ class LLMClient:
         last_error = ""
         last_status: int | None = None
         for attempt in range(1, s.max_retries + 2):
+            # ★ 预算的**唯一有效检查点**就在这里。
+            #   为什么不能只放在调用方（`AgentLoop.run` 的轮次边界）：调用方只看得到
+            #   「两次 synthesize 之间」，而一次 `chat()` 内部合法地含
+            #   `max_retries + 1` 次 HTTP 尝试，每次都允许用满 `s.timeout`。
+            #   按代码里的常数算（SPATIAL_TIMEOUT=180、SPATIAL_MAX_RETRIES=2）：
+            #       单次 chat 最坏 = 3 × 180 + (2 + 4) = 546 s
+            #       一次问答最多 3 次 synthesize（+ 臂 G 1 次 plan）= 4 次 chat
+            #       ⟹ deadline 若只查轮次边界，上界 = 预算 + 546 s，而不是预算。
+            #   只有这里同时知道「还剩多少」和「怎么把它变成 urlopen(timeout=)」。
+            left = remaining_s(deadline)
+            if left is not None and left <= 0:
+                # 「一个请求都没发出去」也要**计一次失败**：与前面预检失败同一条口径，
+                # 不计数会让报告里的失败率凭空偏低。落日志便于事后归因。
+                self.usage.add_failure(time.perf_counter() - t_pre)
+                self._log_failure(purpose, attempt, DEADLINE_MESSAGE, t_pre, retryable=False)
+                raise LLMError(DEADLINE_MESSAGE, status=None, body=DEADLINE_MESSAGE,
+                               over_budget=True)
+
+            attempt_timeout = call_timeout_s(s.timeout, left)
             t0 = time.perf_counter()
             try:
-                body = self._transport(s.endpoint, payload, headers, s.timeout)
+                body = self._transport(s.endpoint, payload, headers, attempt_timeout)
             except _FatalError as exc:
                 last_error, last_status = str(exc), _status_of(exc)
                 self.usage.add_failure(time.perf_counter() - t0)
@@ -628,13 +717,13 @@ class LLMClient:
                 last_error, last_status = str(exc), None
                 self._log_failure(purpose, attempt, last_error, t0, retryable=True)
                 if attempt <= s.max_retries:
-                    time.sleep(min(2 ** attempt, 16))
+                    time.sleep(retry_sleep_s(attempt, deadline))
                 continue
             except Exception as exc:          # noqa: BLE001  自定义 transport 的锅也要能看见
                 last_error, last_status = "%s: %s" % (type(exc).__name__, exc), None
                 self._log_failure(purpose, attempt, last_error, t0, retryable=True)
                 if attempt <= s.max_retries:
-                    time.sleep(min(2 ** attempt, 16))
+                    time.sleep(retry_sleep_s(attempt, deadline))
                 continue
 
             elapsed = time.perf_counter() - t0

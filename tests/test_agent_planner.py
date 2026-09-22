@@ -47,13 +47,17 @@ GOOD_PROG = "```python\nres = list_objects()\nsubmit(len(res.value), evidence=['
 
 
 class FakeClient:
+    """见 `test_agent_loop.FakeClient` 的说明：`deadline` 必须接受并记录，
+    不能吞掉 —— 否则「预算有没有传到 LLM 层」在测试里无法断言。"""
+
     def __init__(self, *script):
         self.script = list(script)
         self.calls: list[dict] = []
         self.usage = UsageLedger()
 
-    def chat(self, messages, *, purpose="chat"):
-        self.calls.append({"messages": [dict(m) for m in messages], "purpose": purpose})
+    def chat(self, messages, *, purpose="chat", deadline=None):
+        self.calls.append({"messages": [dict(m) for m in messages], "purpose": purpose,
+                           "deadline": deadline})
         if not self.script:
             raise AssertionError("client 被多调了一次")
         item = self.script.pop(0)

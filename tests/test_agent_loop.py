@@ -62,15 +62,21 @@ def scene() -> SceneGraph:
 
 
 class FakeClient:
-    """按顺序吐出预设回复（或抛预设异常）。记账与真实 client 同结构。"""
+    """按顺序吐出预设回复（或抛预设异常）。记账与真实 client 同结构。
+
+    ⚠ `chat` 必须接受 `deadline` 并**记下来**，不能只写 `**kwargs` 吞掉：
+    预算有没有真的传到 LLM 调用这一层，是本项目要能**断言**的一件事
+    （只写 `**_ignored` 的话，「预算传丢了」和「预算传对了」在测试里长得一样）。
+    """
 
     def __init__(self, *script):
         self.script = list(script)
         self.calls: list[dict] = []
         self.usage = UsageLedger()
 
-    def chat(self, messages, *, purpose="chat"):
-        self.calls.append({"messages": [dict(m) for m in messages], "purpose": purpose})
+    def chat(self, messages, *, purpose="chat", deadline=None):
+        self.calls.append({"messages": [dict(m) for m in messages], "purpose": purpose,
+                           "deadline": deadline})
         if not self.script:
             raise AssertionError("client 被多调了一次")
         item = self.script.pop(0)
@@ -160,7 +166,18 @@ class TestHappyPath:
         assert run.answer == "unknown"
 
     def test_all_statuses_are_declared(self):
-        assert set(STATUSES) == {"ok", "abstained", "static_failed", "exec_failed", "llm_error"}
+        assert set(STATUSES) == {"ok", "abstained", "static_failed", "exec_failed",
+                                 "llm_error", "deadline"}
+
+    def test_deadline_is_not_folded_into_llm_error(self):
+        """`deadline` 必须与 `llm_error` **并存**，不能合并。
+
+        两者处置方向相反：`llm_error` 要查链路（网络/端点/模型），`deadline` 要查
+        预算够不够、以及「为什么单次调用变慢了」。合并成一条之后，报告里的失败归因
+        会指向错误的方向，而两个状态各自的计数也就失去了意义。
+        """
+        assert "deadline" in STATUSES and "llm_error" in STATUSES
+        assert len(set(STATUSES)) == len(STATUSES), "状态枚举里不能有重复值"
 
 
 # ---------------------------------------------------------------------------

@@ -83,6 +83,10 @@ def build_parser() -> argparse.ArgumentParser:
                     help="只渲染提示词与场景清单，不发请求（零成本）")
     ap.add_argument("--timeout", type=float, default=60.0, help="单次程序执行的硬超时（秒）")
     ap.add_argument("--max-retries", type=int, default=2, help="定向重新生成的上限（默认 2）")
+    ap.add_argument("--budget", type=float, default=None,
+                    help="★ 整题的总预算（秒，含 plan/synthesize/polish 的 LLM 时间）。"
+                         "默认不设上界。超预算时状态记为 deadline（与 llm_error 分开）。"
+                         "口径见 agents/loop.py 模块 docstring ④")
     ap.add_argument("--render", default="template", choices=["template", "llm"],
                     help="答案渲染：模板（默认，零成本）或 LLM 润色（多一次调用）")
     ap.add_argument("--planner", default="off", choices=["off", "on"],
@@ -297,7 +301,8 @@ def main(argv: list[str] | None = None) -> int:
 
     loop = AgentLoop(client, ctx=ctx, max_synthesis_retries=args.max_retries,
                      exec_timeout_s=args.timeout, render=args.render,
-                     planner=args.planner, toolset=toolset)
+                     planner=args.planner, toolset=toolset,
+                     total_budget_s=args.budget)
     runs = []
     for question, atype in zip(questions, types):
         run = loop.run(question, answer_type=atype)
@@ -632,6 +637,14 @@ def _human(payload: dict[str, Any]) -> str:
         if run["program"]:
             out.append("-- 生成的程序 --")
             out.append(run["program"])
+        # ★ 不同源要**响**，不能只是躺在 JSON 里等人自己发现。
+        #   末轮 static_check 没过时就是这样：上面那段程序从未被执行过，
+        #   而下面要打印的 trace 来自更早的一轮。拿它去解释 trace 会得到错的归因。
+        if not run.get("program_matches_trace", True):
+            out.append("   ⚠ 上面这段程序**没有被执行过**（末轮 static_check 没过）。"
+                       "上面打印的 trace 来自第 %s 轮的另一段程序 ——"
+                       "要按 program 解释 trace，请改用 executed_program。"
+                       % (run.get("executed_attempt"),))
     if "summary" in payload:
         s = payload["summary"]
         out.append("\n" + "=" * 78)

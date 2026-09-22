@@ -859,6 +859,13 @@ function renderRunDetail(run, extra) {
       '<div class="tr-val" style="max-height:220px">' + esc(run.plan.text || jstr(run.plan, 800)) + '</div></div>');
   }
   if (run.program) {
+    // ⚠ 只在**明确是 false** 时告警：老产物里没有这个字段，而「没记录」不等于
+    //   「不同源」。用 `=== false` 而不是 `!`，就是为了不做这个静默转换。
+    if (run.program_matches_trace === false) {
+      p.push('<div class="err-box">⚠ 下面这段程序<b>没有被执行过</b>（末轮静态检查没过）。' +
+        '下方「工具调用轨迹」来自第 ' + esc(String(run.executed_attempt)) +
+        ' 轮的另一段程序 —— 两者不是配套的，不要按它去解释那些调用。</div>');
+    }
     p.push('<details class="pf"><summary>生成的程序（' + (run.program_fenced ? '带 ``` 围栏' : '未带围栏') +
       '）—— 这是 LLM 唯一的"控制流"产物</summary><pre>' + esc(run.program) + '</pre></details>');
   }

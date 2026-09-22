@@ -375,11 +375,16 @@ def synthesize(
     purpose: str = "synthesize",
     tools: Sequence[str] | None = None,
     plan_text: str | None = None,
+    deadline: float | None = None,
 ) -> SynthesisResult:
     """调一次 LLM 生成程序，然后静态检查。**不做重试** —— 重试策略在 `loop.py`。
 
     为什么把重试留在循环层：重试需要知道「执行结果」这种循环层才有的信息，
     塞进这里会让 synthesizer 变成半个循环，而它本该只负责"生成 + 检查"。
+
+    `deadline`（`time.monotonic()` 绝对时刻 / None）原样传给 `client.chat` ——
+    预算必须在**每次 HTTP 尝试前**生效，见 `llm/adapter.py::chat` 里的说明。
+    这一层不解释它，只负责传下去：预算口径只该有一个出题的地方。
     """
     messages = build_messages(
         question, scene_hint,
@@ -390,7 +395,7 @@ def synthesize(
         tools=tools,
         plan_text=plan_text,
     )
-    reply = client.chat(messages, purpose=purpose)
+    reply = client.chat(messages, purpose=purpose, deadline=deadline)
     source, fenced = extract_code(reply.text)
     check = static_check(source, tools=tools)
     return SynthesisResult(

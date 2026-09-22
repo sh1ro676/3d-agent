@@ -140,11 +140,17 @@ def plan(
     tools: Sequence[str] | None = None,
     answer_type: str | None = None,
     purpose: str = "plan",
+    deadline: float | None = None,
 ) -> Plan:
     """调一次 LLM 产出一份**前置计划**。**不做重试**（与 synthesizer 同一分工：
     重试策略属于循环层）。
 
     任何失败都翻成 `ok=False`，不抛 `LLMError` —— 见模块 docstring 第 3 条。
+
+    ⚠ `deadline`（`time.monotonic()` 绝对时刻 / None）：臂 G 这一次调用**计入同一份
+    总预算**，不另给额度。所以总预算不够时，臂 G 可能把预算耗尽、让随后的 synthesis
+    直接以「超预算」收尾 —— 这是有意的：预算的口径是「整题的 LLM 时间」，
+    按调用方切额度会让「预算 300 s」这句话变成「每个环节各 300 s」。
     """
     from agents.prompts import system as prompt_system
 
@@ -157,7 +163,7 @@ def plan(
     ]
 
     try:
-        reply = client.chat(messages, purpose=purpose)
+        reply = client.chat(messages, purpose=purpose, deadline=deadline)
     except LLMError as exc:
         return Plan(ok=False, error=str(exc)[:400])
 
