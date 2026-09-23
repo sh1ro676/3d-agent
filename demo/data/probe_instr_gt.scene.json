@@ -1,5 +1,5 @@
 {
- "scene_id": "living_room_gt",
+ "scene_id": "probe_scene",
  "image_id": "rgb.png",
  "up_axis": "-y",
  "scale_factor": 1.0,
@@ -24,7 +24,7 @@
   640,
   480
  ],
- "image_url": "assets/living_room_gt/rgb.png",
+ "image_url": "assets/probe_instr_gt/rgb.png",
  "nodes": [
   {
    "id": "sofa_1",
@@ -58,7 +58,7 @@
      4.1217
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/sofa_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/sofa_1.png",
    "n_points": 23841,
    "centroid_source": "mask",
    "attributes": {},
@@ -96,7 +96,7 @@
      4.1459
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/picture_1.png",
    "n_points": 16137,
    "centroid_source": "mask",
    "attributes": {},
@@ -134,7 +134,7 @@
      4.0964
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/mirror_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/mirror_1.png",
    "n_points": 18015,
    "centroid_source": "mask",
    "attributes": {},
@@ -172,7 +172,7 @@
      2.4423
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/chair_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/chair_1.png",
    "n_points": 18785,
    "centroid_source": "mask",
    "attributes": {},
@@ -210,7 +210,7 @@
      4.0432
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_2.png",
+   "mask_url": "assets/probe_instr_gt/masks/picture_2.png",
    "n_points": 965,
    "centroid_source": "mask",
    "attributes": {},
@@ -248,7 +248,7 @@
      4.0841
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_3.png",
+   "mask_url": "assets/probe_instr_gt/masks/picture_3.png",
    "n_points": 893,
    "centroid_source": "mask",
    "attributes": {},
@@ -286,7 +286,7 @@
      3.5829
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/sofa_chair_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/sofa_chair_1.png",
    "n_points": 29108,
    "centroid_source": "mask",
    "attributes": {},
@@ -324,7 +324,7 @@
      2.6966
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/table_1.png",
+   "mask_url": "assets/probe_instr_gt/masks/table_1.png",
    "n_points": 30660,
    "centroid_source": "mask",
    "attributes": {},
@@ -362,7 +362,7 @@
      4.1545
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_4.png",
+   "mask_url": "assets/probe_instr_gt/masks/picture_4.png",
    "n_points": 809,
    "centroid_source": "mask",
    "attributes": {},

@@ -1,0 +1,65 @@
+{
+ "scene_id": "iphone_real",
+ "summary": "场景 iphone_real 共 0 个物体：（空）。\n**尺度未校正**：相对关系可信，绝对米数不可引用。",
+ "quality": {
+  "scale_calibrated": false,
+  "scale_factor": 1.0,
+  "intrinsics_source": "provided",
+  "up_axis": "-y",
+  "up_axis_tilt_deg": 20.07,
+  "up_axis_reliable": true,
+  "n_objects": 0,
+  "n_low_point_objects": 0,
+  "n_edges_precomputed": 0
+ },
+ "relation_summary": {
+  "n_pairs_total": 0,
+  "n_pairs_reported": 0
+ },
+ "caveats": [
+  "尺度未校正（scale_factor=1.0）：全部米制数字共享同一个未知比例因子，**相对关系可信、绝对数值不可采信**。要引用绝对值需先 calibrate_scale。"
+ ],
+ "truncated": false,
+ "objects": [],
+ "provenance": {
+  "scene_json": "D:\\3D_Spatial_Agent\\dataset\\scenes\\iphone_real",
+  "tools_version": "1.3.0",
+  "method": "geometry_v1",
+  "detail": "full",
+  "n_objects": 0,
+  "n_pairs_total": 0,
+  "gpu_used_mb": null,
+  "latency_ms": {
+   "describe_scene": 0.05,
+   "summarize_scene": 0.1,
+   "diagnose_failure": 0.01,
+   "counterfactual": null
+  }
+ },
+ "diagnosis": {
+  "scene_id": "iphone_real",
+  "question_id": null,
+  "question": null,
+  "stage": "检测",
+  "findings": [
+   {
+    "stage": "检测",
+    "severity": 9.0,
+    "reason": "场景里没有任何物体",
+    "detail": "检测或提示词阶段就已经失败。",
+    "fix": "换查询词 / 放宽检测阈值后重建场景图；若图里确实无目标物，应走 abstain。"
+   },
+   {
+    "stage": "尺度",
+    "severity": 6.0,
+    "reason": "尺度未校正（scale_factor=1.0）",
+    "detail": "绝对米数含未知比例因子；相对关系不受影响。",
+    "fix": "用场景内已知尺寸物体或数据集 GT 做一次 calibrate_scale。"
+   }
+  ]
+ },
+ "counterfactual": {
+  "diff": null,
+  "relation_summary": null
+ }
+}

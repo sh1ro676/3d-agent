@@ -1,18 +1,18 @@
 {
- "scene_id": "living_room_gt",
+ "scene_id": "points_probe",
  "image_id": "rgb.png",
  "up_axis": "-y",
  "scale_factor": 1.0,
  "camera_intrinsics": [
   [
-   518.85791015625,
+   518.86,
    0.0,
-   325.58245849609375
+   325.58
   ],
   [
    0.0,
-   519.4696044921875,
-   253.7361602783203
+   519.47,
+   253.74
   ],
   [
    0.0,
@@ -24,7 +24,7 @@
   640,
   480
  ],
- "image_url": "assets/living_room_gt/rgb.png",
+ "image_url": "assets/points_probe/rgb.png",
  "nodes": [
   {
    "id": "sofa_1",
@@ -38,13 +38,13 @@
    ],
    "centroid_3d": [
     0.7967,
-    0.3192,
+    0.3191,
     3.1746
    ],
    "extent_3d": [
     2.3415,
     0.817,
-    1.2649
+    1.2634
    ],
    "bbox_3d": {
     "min": [
@@ -55,10 +55,10 @@
     "max": [
      2.0963,
      0.5604,
-     4.1217
+     4.1203
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/sofa_1.png",
+   "mask_url": "assets/points_probe/masks/sofa_1.png",
    "n_points": 23841,
    "centroid_source": "mask",
    "attributes": {},
@@ -75,7 +75,7 @@
     172.96
    ],
    "centroid_3d": [
-    1.337,
+    1.3369,
     -1.1095,
     4.0582
    ],
@@ -92,11 +92,11 @@
     ],
     "max": [
      1.9265,
-     -0.6156,
+     -0.6157,
      4.1459
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_1.png",
+   "mask_url": "assets/points_probe/masks/picture_1.png",
    "n_points": 16137,
    "centroid_source": "mask",
    "attributes": {},
@@ -113,28 +113,28 @@
     197.2
    ],
    "centroid_3d": [
-    -0.2999,
-    -1.0369,
-    3.9486
+    -0.2998,
+    -1.037,
+    3.9484
    ],
    "extent_3d": [
     0.877,
-    1.2759,
-    0.2727
+    1.2765,
+    0.2723
    ],
    "bbox_3d": {
     "min": [
      -0.7433,
-     -1.6761,
-     3.8237
+     -1.6766,
+     3.824
     ],
     "max": [
-     0.1337,
+     0.1338,
      -0.4001,
      4.0964
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/mirror_1.png",
+   "mask_url": "assets/points_probe/masks/mirror_1.png",
    "n_points": 18015,
    "centroid_source": "mask",
    "attributes": {},
@@ -151,28 +151,28 @@
     474.95
    ],
    "centroid_3d": [
-    -0.7396,
+    -0.7395,
     0.6535,
     1.8336
    ],
    "extent_3d": [
-    0.9769,
+    0.9768,
     0.3028,
-    0.8274
+    0.8292
    ],
    "bbox_3d": {
     "min": [
      -1.2903,
-     0.5293,
+     0.5292,
      1.6149
     ],
     "max": [
      -0.3134,
-     0.8321,
-     2.4423
+     0.832,
+     2.4441
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/chair_1.png",
+   "mask_url": "assets/points_probe/masks/chair_1.png",
    "n_points": 18785,
    "centroid_source": "mask",
    "attributes": {},
@@ -191,7 +191,7 @@
    "centroid_3d": [
     -1.1661,
     -1.0598,
-    4.0147
+    4.0146
    ],
    "extent_3d": [
     0.2607,
@@ -206,11 +206,11 @@
     ],
     "max": [
      -1.0372,
-     -0.944,
+     -0.9441,
      4.0432
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_2.png",
+   "mask_url": "assets/points_probe/masks/picture_2.png",
    "n_points": 965,
    "centroid_source": "mask",
    "attributes": {},
@@ -233,12 +233,12 @@
    ],
    "extent_3d": [
     0.2522,
-    0.2142,
+    0.2141,
     0.0573
    ],
    "bbox_3d": {
     "min": [
-     -1.2851,
+     -1.285,
      -0.9435,
      4.0269
     ],
@@ -248,7 +248,7 @@
      4.0841
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_3.png",
+   "mask_url": "assets/points_probe/masks/picture_3.png",
    "n_points": 893,
    "centroid_source": "mask",
    "attributes": {},
@@ -267,26 +267,26 @@
    "centroid_3d": [
     -1.0662,
     0.3275,
-    2.7394
+    2.7393
    ],
    "extent_3d": [
     1.3318,
     0.8102,
-    1.4802
+    1.4819
    ],
    "bbox_3d": {
     "min": [
      -1.8224,
      -0.0955,
-     2.1027
+     2.1028
     ],
     "max": [
      -0.4906,
      0.7147,
-     3.5829
+     3.5847
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/sofa_chair_1.png",
+   "mask_url": "assets/points_probe/masks/sofa_chair_1.png",
    "n_points": 29108,
    "centroid_source": "mask",
    "attributes": {},
@@ -303,14 +303,14 @@
     478.75
    ],
    "centroid_3d": [
-    0.5888,
+    0.5889,
     0.6055,
     1.8714
    ],
    "extent_3d": [
     1.0593,
     0.5367,
-    1.0292
+    1.0394
    ],
    "bbox_3d": {
     "min": [
@@ -321,10 +321,10 @@
     "max": [
      1.2593,
      0.9571,
-     2.6966
+     2.7068
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/table_1.png",
+   "mask_url": "assets/points_probe/masks/table_1.png",
    "n_points": 30660,
    "centroid_source": "mask",
    "attributes": {},
@@ -342,11 +342,11 @@
    ],
    "centroid_3d": [
     -1.9192,
-    -0.8223,
-    4.0817
+    -0.8224,
+    4.0816
    ],
    "extent_3d": [
-    0.1464,
+    0.147,
     0.2873,
     0.1487
    ],
@@ -357,12 +357,12 @@
      4.0058
     ],
     "max": [
-     -1.849,
+     -1.8484,
      -0.6719,
      4.1545
     ]
    },
-   "mask_url": "assets/living_room_gt/masks/picture_4.png",
+   "mask_url": "assets/points_probe/masks/picture_4.png",
    "n_points": 809,
    "centroid_source": "mask",
    "attributes": {},
@@ -374,16 +374,16 @@
    "source": "sofa_1",
    "target": "picture_1",
    "relation": "distance",
-   "value": 1.7645907708778947,
+   "value": 1.7645311366680982,
    "metric": {
-    "distance_m": 1.7646,
+    "distance_m": 1.7645,
     "delta_x": -0.5403,
     "delta_y": 1.4286,
-    "delta_z": -0.8837,
+    "delta_z": -0.8836,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
-    "b_x": 1.337,
+    "b_x": 1.3369,
     "b_y": -1.1095,
     "b_z": 4.0582
    }
@@ -397,7 +397,7 @@
     "delta_x": -0.5403,
     "tol": 0.05,
     "a_x": 0.7967,
-    "b_x": 1.337
+    "b_x": 1.3369
    }
   },
   {
@@ -406,7 +406,7 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.8837,
+    "delta_z": -0.8836,
     "tol": 0.05,
     "a_z": 3.1746,
     "b_z": 4.0582
@@ -428,18 +428,18 @@
    "source": "sofa_1",
    "target": "mirror_1",
    "relation": "distance",
-   "value": 1.908066697693814,
+   "value": 1.9079214215509432,
    "metric": {
-    "distance_m": 1.9081,
-    "delta_x": 1.0966,
+    "distance_m": 1.9079,
+    "delta_x": 1.0965,
     "delta_y": 1.3561,
-    "delta_z": -0.774,
+    "delta_z": -0.7739,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
-    "b_x": -0.2999,
-    "b_y": -1.0369,
-    "b_z": 3.9486
+    "b_x": -0.2998,
+    "b_y": -1.037,
+    "b_z": 3.9484
    }
   },
   {
@@ -448,9 +448,9 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.0966,
+    "delta_x": -1.0965,
     "tol": 0.05,
-    "a_x": -0.2999,
+    "a_x": -0.2998,
     "b_x": 0.7967
    }
   },
@@ -460,10 +460,10 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.774,
+    "delta_z": -0.7739,
     "tol": 0.05,
     "a_z": 3.1746,
-    "b_z": 3.9486
+    "b_z": 3.9484
    }
   },
   {
@@ -482,16 +482,16 @@
    "source": "sofa_1",
    "target": "chair_1",
    "relation": "distance",
-   "value": 2.0664581910551485,
+   "value": 2.0664161031161075,
    "metric": {
-    "distance_m": 2.0665,
-    "delta_x": 1.5363,
+    "distance_m": 2.0664,
+    "delta_x": 1.5362,
     "delta_y": -0.3344,
     "delta_z": 1.341,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
-    "b_x": -0.7396,
+    "b_x": -0.7395,
     "b_y": 0.6535,
     "b_z": 1.8336
    }
@@ -502,9 +502,9 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.5363,
+    "delta_x": -1.5362,
     "tol": 0.05,
-    "a_x": -0.7396,
+    "a_x": -0.7395,
     "b_x": 0.7967
    }
   },
@@ -536,18 +536,18 @@
    "source": "sofa_1",
    "target": "picture_2",
    "relation": "distance",
-   "value": 2.5416652138591944,
+   "value": 2.5415539219191308,
    "metric": {
-    "distance_m": 2.5417,
-    "delta_x": 1.9628,
-    "delta_y": 1.379,
+    "distance_m": 2.5416,
+    "delta_x": 1.9627,
+    "delta_y": 1.3789,
     "delta_z": -0.8401,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
     "b_x": -1.1661,
     "b_y": -1.0598,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -556,7 +556,7 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.9628,
+    "delta_x": -1.9627,
     "tol": 0.05,
     "a_x": -1.1661,
     "b_x": 0.7967
@@ -571,7 +571,7 @@
     "delta_z": -0.8401,
     "tol": 0.05,
     "a_z": 3.1746,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -580,7 +580,7 @@
    "relation": "below",
    "value": true,
    "metric": {
-    "delta_up": 1.379,
+    "delta_up": 1.3789,
     "tol": 0.05,
     "up_axis": 1.0,
     "up_sign": -1.0
@@ -590,14 +590,14 @@
    "source": "sofa_1",
    "target": "picture_3",
    "relation": "distance",
-   "value": 2.432755838220965,
+   "value": 2.4326910152479004,
    "metric": {
-    "distance_m": 2.4328,
-    "delta_x": 1.9517,
+    "distance_m": 2.4327,
+    "delta_x": 1.9516,
     "delta_y": 1.1557,
-    "delta_z": -0.8795,
+    "delta_z": -0.8794,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
     "b_x": -1.155,
     "b_y": -0.8366,
@@ -610,7 +610,7 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.9517,
+    "delta_x": -1.9516,
     "tol": 0.05,
     "a_x": -1.155,
     "b_x": 0.7967
@@ -622,7 +622,7 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.8795,
+    "delta_z": -0.8794,
     "tol": 0.05,
     "a_z": 3.1746,
     "b_z": 4.054
@@ -644,18 +644,18 @@
    "source": "sofa_1",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 1.913110804087543,
+   "value": 1.9130327632625626,
    "metric": {
-    "distance_m": 1.9131,
-    "delta_x": 1.8629,
+    "distance_m": 1.913,
+    "delta_x": 1.8628,
     "delta_y": -0.0084,
-    "delta_z": 0.4352,
+    "delta_z": 0.4353,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -664,7 +664,7 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.8629,
+    "delta_x": -1.8628,
     "tol": 0.05,
     "a_x": -1.0662,
     "b_x": 0.7967
@@ -676,9 +676,9 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -0.4352,
+    "delta_z": -0.4353,
     "tol": 0.05,
-    "a_z": 2.7394,
+    "a_z": 2.7393,
     "b_z": 3.1746
    }
   },
@@ -686,16 +686,16 @@
    "source": "sofa_1",
    "target": "table_1",
    "relation": "distance",
-   "value": 1.3503606497079217,
+   "value": 1.3503527386656395,
    "metric": {
     "distance_m": 1.3504,
-    "delta_x": 0.2079,
-    "delta_y": -0.2863,
+    "delta_x": 0.2078,
+    "delta_y": -0.2864,
     "delta_z": 1.3032,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
-    "b_x": 0.5888,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -706,9 +706,9 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -0.2079,
+    "delta_x": -0.2078,
     "tol": 0.05,
-    "a_x": 0.5888,
+    "a_x": 0.5889,
     "b_x": 0.7967
    }
   },
@@ -730,7 +730,7 @@
    "relation": "above",
    "value": true,
    "metric": {
-    "delta_up": 0.2863,
+    "delta_up": 0.2864,
     "tol": 0.05,
     "up_axis": 1.0,
     "up_sign": -1.0
@@ -740,18 +740,18 @@
    "source": "sofa_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 3.0825635495190773,
+   "value": 3.082475863833792,
    "metric": {
-    "distance_m": 3.0826,
+    "distance_m": 3.0825,
     "delta_x": 2.7159,
     "delta_y": 1.1415,
-    "delta_z": -0.9071,
+    "delta_z": -0.907,
     "a_x": 0.7967,
-    "a_y": 0.3192,
+    "a_y": 0.3191,
     "a_z": 3.1746,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -772,10 +772,10 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.9071,
+    "delta_z": -0.907,
     "tol": 0.05,
     "a_z": 3.1746,
-    "b_z": 4.0817
+    "b_z": 4.0816
    }
   },
   {
@@ -794,18 +794,18 @@
    "source": "picture_1",
    "target": "mirror_1",
    "relation": "distance",
-   "value": 1.6421829535675108,
+   "value": 1.6420621498575514,
    "metric": {
-    "distance_m": 1.6422,
-    "delta_x": 1.6369,
+    "distance_m": 1.6421,
+    "delta_x": 1.6368,
     "delta_y": -0.0725,
-    "delta_z": 0.1096,
-    "a_x": 1.337,
+    "delta_z": 0.1097,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
-    "b_x": -0.2999,
-    "b_y": -1.0369,
-    "b_z": 3.9486
+    "b_x": -0.2998,
+    "b_y": -1.037,
+    "b_z": 3.9484
    }
   },
   {
@@ -814,10 +814,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.6369,
+    "delta_x": -1.6368,
     "tol": 0.05,
-    "a_x": -0.2999,
-    "b_x": 1.337
+    "a_x": -0.2998,
+    "b_x": 1.3369
    }
   },
   {
@@ -826,9 +826,9 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -0.1096,
+    "delta_z": -0.1097,
     "tol": 0.05,
-    "a_z": 3.9486,
+    "a_z": 3.9484,
     "b_z": 4.0582
    }
   },
@@ -848,16 +848,16 @@
    "source": "picture_1",
    "target": "chair_1",
    "relation": "distance",
-   "value": 3.517021262081372,
+   "value": 3.5169513826468495,
    "metric": {
     "distance_m": 3.517,
-    "delta_x": 2.0766,
+    "delta_x": 2.0765,
     "delta_y": -1.763,
     "delta_z": 2.2246,
-    "a_x": 1.337,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
-    "b_x": -0.7396,
+    "b_x": -0.7395,
     "b_y": 0.6535,
     "b_z": 1.8336
    }
@@ -868,10 +868,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -2.0766,
+    "delta_x": -2.0765,
     "tol": 0.05,
-    "a_x": -0.7396,
-    "b_x": 1.337
+    "a_x": -0.7395,
+    "b_x": 1.3369
    }
   },
   {
@@ -902,18 +902,18 @@
    "source": "picture_1",
    "target": "picture_2",
    "relation": "distance",
-   "value": 2.504018524070895,
+   "value": 2.503886704611198,
    "metric": {
-    "distance_m": 2.504,
-    "delta_x": 2.5031,
+    "distance_m": 2.5039,
+    "delta_x": 2.503,
     "delta_y": -0.0497,
-    "delta_z": 0.0436,
-    "a_x": 1.337,
+    "delta_z": 0.0435,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
     "b_x": -1.1661,
     "b_y": -1.0598,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -922,23 +922,23 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -2.5031,
+    "delta_x": -2.503,
     "tol": 0.05,
     "a_x": -1.1661,
-    "b_x": 1.337
+    "b_x": 1.3369
    }
   },
   {
    "source": "picture_1",
    "target": "picture_3",
    "relation": "distance",
-   "value": 2.506895756290651,
+   "value": 2.5068127001656313,
    "metric": {
-    "distance_m": 2.5069,
-    "delta_x": 2.492,
+    "distance_m": 2.5068,
+    "delta_x": 2.4919,
     "delta_y": -0.2729,
     "delta_z": 0.0042,
-    "a_x": 1.337,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
     "b_x": -1.155,
@@ -952,10 +952,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -2.492,
+    "delta_x": -2.4919,
     "tol": 0.05,
     "a_x": -1.155,
-    "b_x": 1.337
+    "b_x": 1.3369
    }
   },
   {
@@ -974,18 +974,18 @@
    "source": "picture_1",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 3.095144323642286,
+   "value": 3.095073853107703,
    "metric": {
     "distance_m": 3.0951,
-    "delta_x": 2.4032,
+    "delta_x": 2.4031,
     "delta_y": -1.437,
     "delta_z": 1.3189,
-    "a_x": 1.337,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -994,10 +994,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -2.4032,
+    "delta_x": -2.4031,
     "tol": 0.05,
     "a_x": -1.0662,
-    "b_x": 1.337
+    "b_x": 1.3369
    }
   },
   {
@@ -1008,7 +1008,7 @@
    "metric": {
     "delta_z": -1.3189,
     "tol": 0.05,
-    "a_z": 2.7394,
+    "a_z": 2.7393,
     "b_z": 4.0582
    }
   },
@@ -1028,16 +1028,16 @@
    "source": "picture_1",
    "target": "table_1",
    "relation": "distance",
-   "value": 2.8780518177534047,
+   "value": 2.878002164701059,
    "metric": {
-    "distance_m": 2.8781,
-    "delta_x": 0.7482,
+    "distance_m": 2.878,
+    "delta_x": 0.7481,
     "delta_y": -1.715,
     "delta_z": 2.1868,
-    "a_x": 1.337,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
-    "b_x": 0.5888,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -1048,10 +1048,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -0.7482,
+    "delta_x": -0.7481,
     "tol": 0.05,
-    "a_x": 0.5888,
-    "b_x": 1.337
+    "a_x": 0.5889,
+    "b_x": 1.3369
    }
   },
   {
@@ -1082,18 +1082,18 @@
    "source": "picture_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 3.2689627993461574,
+   "value": 3.2688785904940567,
    "metric": {
-    "distance_m": 3.269,
+    "distance_m": 3.2689,
     "delta_x": 3.2562,
     "delta_y": -0.2871,
     "delta_z": -0.0234,
-    "a_x": 1.337,
+    "a_x": 1.3369,
     "a_y": -1.1095,
     "a_z": 4.0582,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -1105,7 +1105,7 @@
     "delta_x": -3.2562,
     "tol": 0.05,
     "a_x": -1.9192,
-    "b_x": 1.337
+    "b_x": 1.3369
    }
   },
   {
@@ -1124,16 +1124,16 @@
    "source": "mirror_1",
    "target": "chair_1",
    "relation": "distance",
-   "value": 2.743035748815896,
+   "value": 2.7429594413924168,
    "metric": {
     "distance_m": 2.743,
     "delta_x": 0.4397,
     "delta_y": -1.6905,
-    "delta_z": 2.115,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
-    "b_x": -0.7396,
+    "delta_z": 2.1149,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
+    "b_x": -0.7395,
     "b_y": 0.6535,
     "b_z": 1.8336
    }
@@ -1146,8 +1146,8 @@
    "metric": {
     "delta_x": -0.4397,
     "tol": 0.05,
-    "a_x": -0.7396,
-    "b_x": -0.2999
+    "a_x": -0.7395,
+    "b_x": -0.2998
    }
   },
   {
@@ -1156,10 +1156,10 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -2.115,
+    "delta_z": -2.1149,
     "tol": 0.05,
     "a_z": 1.8336,
-    "b_z": 3.9486
+    "b_z": 3.9484
    }
   },
   {
@@ -1178,18 +1178,18 @@
    "source": "mirror_1",
    "target": "picture_2",
    "relation": "distance",
-   "value": 0.8690494802153061,
+   "value": 0.8690550035931396,
    "metric": {
-    "distance_m": 0.869,
+    "distance_m": 0.8691,
     "delta_x": 0.8662,
-    "delta_y": 0.0228,
-    "delta_z": -0.0661,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "delta_y": 0.0229,
+    "delta_z": -0.0662,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.1661,
     "b_y": -1.0598,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -1198,16 +1198,16 @@
    "relation": "near",
    "value": true,
    "metric": {
-    "distance_m": 0.869,
+    "distance_m": 0.8691,
     "delta_x": 0.8662,
-    "delta_y": 0.0228,
-    "delta_z": -0.0661,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "delta_y": 0.0229,
+    "delta_z": -0.0662,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.1661,
     "b_y": -1.0598,
-    "b_z": 4.0147,
+    "b_z": 4.0146,
     "thresh_m": 1.0
    }
   },
@@ -1220,7 +1220,7 @@
     "delta_x": -0.8662,
     "tol": 0.05,
     "a_x": -1.1661,
-    "b_x": -0.2999
+    "b_x": -0.2998
    }
   },
   {
@@ -1229,25 +1229,25 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.0661,
+    "delta_z": -0.0662,
     "tol": 0.05,
-    "a_z": 3.9486,
-    "b_z": 4.0147
+    "a_z": 3.9484,
+    "b_z": 4.0146
    }
   },
   {
    "source": "mirror_1",
    "target": "picture_3",
    "relation": "distance",
-   "value": 0.8845484142689184,
+   "value": 0.8846083651409189,
    "metric": {
-    "distance_m": 0.8845,
+    "distance_m": 0.8846,
     "delta_x": 0.8551,
     "delta_y": -0.2004,
-    "delta_z": -0.1054,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "delta_z": -0.1056,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.155,
     "b_y": -0.8366,
     "b_z": 4.054
@@ -1259,13 +1259,13 @@
    "relation": "near",
    "value": true,
    "metric": {
-    "distance_m": 0.8845,
+    "distance_m": 0.8846,
     "delta_x": 0.8551,
     "delta_y": -0.2004,
-    "delta_z": -0.1054,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "delta_z": -0.1056,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.155,
     "b_y": -0.8366,
     "b_z": 4.054,
@@ -1281,7 +1281,7 @@
     "delta_x": -0.8551,
     "tol": 0.05,
     "a_x": -1.155,
-    "b_x": -0.2999
+    "b_x": -0.2998
    }
   },
   {
@@ -1290,9 +1290,9 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.1054,
+    "delta_z": -0.1056,
     "tol": 0.05,
-    "a_z": 3.9486,
+    "a_z": 3.9484,
     "b_z": 4.054
    }
   },
@@ -1312,18 +1312,18 @@
    "source": "mirror_1",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 1.977702341821417,
+   "value": 1.9776736424471382,
    "metric": {
     "distance_m": 1.9777,
     "delta_x": 0.7663,
     "delta_y": -1.3645,
-    "delta_z": 1.2092,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "delta_z": 1.2091,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -1335,7 +1335,7 @@
     "delta_x": -0.7663,
     "tol": 0.05,
     "a_x": -1.0662,
-    "b_x": -0.2999
+    "b_x": -0.2998
    }
   },
   {
@@ -1344,10 +1344,10 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -1.2092,
+    "delta_z": -1.2091,
     "tol": 0.05,
-    "a_z": 2.7394,
-    "b_z": 3.9486
+    "a_z": 2.7393,
+    "b_z": 3.9484
    }
   },
   {
@@ -1366,16 +1366,16 @@
    "source": "mirror_1",
    "target": "table_1",
    "relation": "distance",
-   "value": 2.7932509752234607,
+   "value": 2.7931385409148928,
    "metric": {
-    "distance_m": 2.7933,
+    "distance_m": 2.7931,
     "delta_x": -0.8887,
     "delta_y": -1.6425,
-    "delta_z": 2.0772,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
-    "b_x": 0.5888,
+    "delta_z": 2.077,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -1388,8 +1388,8 @@
    "metric": {
     "delta_x": -0.8887,
     "tol": 0.05,
-    "a_x": -0.2999,
-    "b_x": 0.5888
+    "a_x": -0.2998,
+    "b_x": 0.5889
    }
   },
   {
@@ -1398,10 +1398,10 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -2.0772,
+    "delta_z": -2.077,
     "tol": 0.05,
     "a_z": 1.8714,
-    "b_z": 3.9486
+    "b_z": 3.9484
    }
   },
   {
@@ -1420,18 +1420,18 @@
    "source": "mirror_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 1.6389005815003992,
+   "value": 1.6389492859390684,
    "metric": {
     "distance_m": 1.6389,
-    "delta_x": 1.6193,
+    "delta_x": 1.6194,
     "delta_y": -0.2146,
     "delta_z": -0.1331,
-    "a_x": -0.2999,
-    "a_y": -1.0369,
-    "a_z": 3.9486,
+    "a_x": -0.2998,
+    "a_y": -1.037,
+    "a_z": 3.9484,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -1440,10 +1440,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.6193,
+    "delta_x": -1.6194,
     "tol": 0.05,
     "a_x": -1.9192,
-    "b_x": -0.2999
+    "b_x": -0.2998
    }
   },
   {
@@ -1454,8 +1454,8 @@
    "metric": {
     "delta_z": -0.1331,
     "tol": 0.05,
-    "a_z": 3.9486,
-    "b_z": 4.0817
+    "a_z": 3.9484,
+    "b_z": 4.0816
    }
   },
   {
@@ -1474,18 +1474,18 @@
    "source": "chair_1",
    "target": "picture_2",
    "relation": "distance",
-   "value": 2.80614644076824,
+   "value": 2.8061589944603513,
    "metric": {
-    "distance_m": 2.8061,
+    "distance_m": 2.8062,
     "delta_x": 0.4265,
     "delta_y": 1.7133,
     "delta_z": -2.1811,
-    "a_x": -0.7396,
+    "a_x": -0.7395,
     "a_y": 0.6535,
     "a_z": 1.8336,
     "b_x": -1.1661,
     "b_y": -1.0598,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -1497,7 +1497,7 @@
     "delta_x": -0.4265,
     "tol": 0.05,
     "a_x": -1.1661,
-    "b_x": -0.7396
+    "b_x": -0.7395
    }
   },
   {
@@ -1509,7 +1509,7 @@
     "delta_z": -2.1811,
     "tol": 0.05,
     "a_z": 1.8336,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -1528,13 +1528,13 @@
    "source": "chair_1",
    "target": "picture_3",
    "relation": "distance",
-   "value": 2.706151230147955,
+   "value": 2.7061912047939543,
    "metric": {
     "distance_m": 2.7062,
     "delta_x": 0.4154,
     "delta_y": 1.4901,
-    "delta_z": -2.2204,
-    "a_x": -0.7396,
+    "delta_z": -2.2205,
+    "a_x": -0.7395,
     "a_y": 0.6535,
     "a_z": 1.8336,
     "b_x": -1.155,
@@ -1551,7 +1551,7 @@
     "delta_x": -0.4154,
     "tol": 0.05,
     "a_x": -1.155,
-    "b_x": -0.7396
+    "b_x": -0.7395
    }
   },
   {
@@ -1560,7 +1560,7 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -2.2204,
+    "delta_z": -2.2205,
     "tol": 0.05,
     "a_z": 1.8336,
     "b_z": 4.054
@@ -1582,18 +1582,18 @@
    "source": "chair_1",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 1.0165361449044774,
+   "value": 1.0165154584487837,
    "metric": {
     "distance_m": 1.0165,
     "delta_x": 0.3266,
     "delta_y": 0.326,
-    "delta_z": -0.9058,
-    "a_x": -0.7396,
+    "delta_z": -0.9057,
+    "a_x": -0.7395,
     "a_y": 0.6535,
     "a_z": 1.8336,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -1605,7 +1605,7 @@
     "delta_x": -0.3266,
     "tol": 0.05,
     "a_x": -1.0662,
-    "b_x": -0.7396
+    "b_x": -0.7395
    }
   },
   {
@@ -1614,10 +1614,10 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -0.9058,
+    "delta_z": -0.9057,
     "tol": 0.05,
     "a_z": 1.8336,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -1636,16 +1636,16 @@
    "source": "chair_1",
    "target": "table_1",
    "relation": "distance",
-   "value": 1.3298223871186623,
+   "value": 1.3297955858413542,
    "metric": {
     "distance_m": 1.3298,
     "delta_x": -1.3284,
     "delta_y": 0.048,
     "delta_z": -0.0378,
-    "a_x": -0.7396,
+    "a_x": -0.7395,
     "a_y": 0.6535,
     "a_z": 1.8336,
-    "b_x": 0.5888,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -1658,26 +1658,26 @@
    "metric": {
     "delta_x": -1.3284,
     "tol": 0.05,
-    "a_x": -0.7396,
-    "b_x": 0.5888
+    "a_x": -0.7395,
+    "b_x": 0.5889
    }
   },
   {
    "source": "chair_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 2.936583379797732,
+   "value": 2.9365733290187754,
    "metric": {
     "distance_m": 2.9366,
-    "delta_x": 1.1796,
+    "delta_x": 1.1797,
     "delta_y": 1.4759,
-    "delta_z": -2.2481,
-    "a_x": -0.7396,
+    "delta_z": -2.248,
+    "a_x": -0.7395,
     "a_y": 0.6535,
     "a_z": 1.8336,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -1686,10 +1686,10 @@
    "relation": "right_of",
    "value": true,
    "metric": {
-    "delta_x": -1.1796,
+    "delta_x": -1.1797,
     "tol": 0.05,
     "a_x": -1.9192,
-    "b_x": -0.7396
+    "b_x": -0.7395
    }
   },
   {
@@ -1698,10 +1698,10 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -2.2481,
+    "delta_z": -2.248,
     "tol": 0.05,
     "a_z": 1.8336,
-    "b_z": 4.0817
+    "b_z": 4.0816
    }
   },
   {
@@ -1720,15 +1720,15 @@
    "source": "picture_2",
    "target": "picture_3",
    "relation": "distance",
-   "value": 0.22693386869088203,
+   "value": 0.22693555241297916,
    "metric": {
     "distance_m": 0.2269,
-    "delta_x": -0.0112,
+    "delta_x": -0.0111,
     "delta_y": -0.2232,
     "delta_z": -0.0394,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
+    "a_z": 4.0146,
     "b_x": -1.155,
     "b_y": -0.8366,
     "b_z": 4.054
@@ -1741,12 +1741,12 @@
    "value": true,
    "metric": {
     "distance_m": 0.2269,
-    "delta_x": -0.0112,
+    "delta_x": -0.0111,
     "delta_y": -0.2232,
     "delta_z": -0.0394,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
+    "a_z": 4.0146,
     "b_x": -1.155,
     "b_y": -0.8366,
     "b_z": 4.054,
@@ -1769,18 +1769,18 @@
    "source": "picture_2",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 1.8870817912562448,
+   "value": 1.887124085556488,
    "metric": {
     "distance_m": 1.8871,
     "delta_x": -0.0999,
-    "delta_y": -1.3873,
+    "delta_y": -1.3874,
     "delta_z": 1.2753,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
+    "a_z": 4.0146,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -1803,8 +1803,8 @@
    "metric": {
     "delta_z": -1.2753,
     "tol": 0.05,
-    "a_z": 2.7394,
-    "b_z": 4.0147
+    "a_z": 2.7393,
+    "b_z": 4.0146
    }
   },
   {
@@ -1813,7 +1813,7 @@
    "relation": "above",
    "value": true,
    "metric": {
-    "delta_up": 1.3873,
+    "delta_up": 1.3874,
     "tol": 0.05,
     "up_axis": 1.0,
     "up_sign": -1.0
@@ -1823,16 +1823,16 @@
    "source": "picture_2",
    "target": "table_1",
    "relation": "distance",
-   "value": 3.232137620372454,
+   "value": 3.2321050393343445,
    "metric": {
     "distance_m": 3.2321,
-    "delta_x": -1.755,
+    "delta_x": -1.7549,
     "delta_y": -1.6653,
-    "delta_z": 2.1433,
+    "delta_z": 2.1432,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
-    "b_x": 0.5888,
+    "a_z": 4.0146,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -1843,10 +1843,10 @@
    "relation": "left_of",
    "value": true,
    "metric": {
-    "delta_x": -1.755,
+    "delta_x": -1.7549,
     "tol": 0.05,
     "a_x": -1.1661,
-    "b_x": 0.5888
+    "b_x": 0.5889
    }
   },
   {
@@ -1855,10 +1855,10 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -2.1433,
+    "delta_z": -2.1432,
     "tol": 0.05,
     "a_z": 1.8714,
-    "b_z": 4.0147
+    "b_z": 4.0146
    }
   },
   {
@@ -1877,7 +1877,7 @@
    "source": "picture_2",
    "target": "picture_4",
    "relation": "distance",
-   "value": 0.792484599673998,
+   "value": 0.7925251866691658,
    "metric": {
     "distance_m": 0.7925,
     "delta_x": 0.7531,
@@ -1885,10 +1885,10 @@
     "delta_z": -0.067,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
+    "a_z": 4.0146,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -1903,10 +1903,10 @@
     "delta_z": -0.067,
     "a_x": -1.1661,
     "a_y": -1.0598,
-    "a_z": 4.0147,
+    "a_z": 4.0146,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817,
+    "b_y": -0.8224,
+    "b_z": 4.0816,
     "thresh_m": 1.0
    }
   },
@@ -1930,8 +1930,8 @@
    "metric": {
     "delta_z": -0.067,
     "tol": 0.05,
-    "a_z": 4.0147,
-    "b_z": 4.0817
+    "a_z": 4.0146,
+    "b_z": 4.0816
    }
   },
   {
@@ -1950,18 +1950,18 @@
    "source": "picture_3",
    "target": "sofa_chair_1",
    "relation": "distance",
-   "value": 1.7582359108504315,
+   "value": 1.758298471789343,
    "metric": {
-    "distance_m": 1.7582,
+    "distance_m": 1.7583,
     "delta_x": -0.0888,
-    "delta_y": -1.1641,
+    "delta_y": -1.1642,
     "delta_z": 1.3147,
     "a_x": -1.155,
     "a_y": -0.8366,
     "a_z": 4.054,
     "b_x": -1.0662,
     "b_y": 0.3275,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -1984,7 +1984,7 @@
    "metric": {
     "delta_z": -1.3147,
     "tol": 0.05,
-    "a_z": 2.7394,
+    "a_z": 2.7393,
     "b_z": 4.054
    }
   },
@@ -1994,7 +1994,7 @@
    "relation": "above",
    "value": true,
    "metric": {
-    "delta_up": 1.1641,
+    "delta_up": 1.1642,
     "tol": 0.05,
     "up_axis": 1.0,
     "up_sign": -1.0
@@ -2004,7 +2004,7 @@
    "source": "picture_3",
    "target": "table_1",
    "relation": "distance",
-   "value": 3.143937180779072,
+   "value": 3.1439459104480294,
    "metric": {
     "distance_m": 3.1439,
     "delta_x": -1.7438,
@@ -2013,7 +2013,7 @@
     "a_x": -1.155,
     "a_y": -0.8366,
     "a_z": 4.054,
-    "b_x": 0.5888,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -2027,7 +2027,7 @@
     "delta_x": -1.7438,
     "tol": 0.05,
     "a_x": -1.155,
-    "b_x": 0.5888
+    "b_x": 0.5889
    }
   },
   {
@@ -2058,7 +2058,7 @@
    "source": "picture_3",
    "target": "picture_4",
    "relation": "distance",
-   "value": 0.7648808603557091,
+   "value": 0.7648774009300636,
    "metric": {
     "distance_m": 0.7649,
     "delta_x": 0.7642,
@@ -2068,8 +2068,8 @@
     "a_y": -0.8366,
     "a_z": 4.054,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -2086,8 +2086,8 @@
     "a_y": -0.8366,
     "a_z": 4.054,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817,
+    "b_y": -0.8224,
+    "b_z": 4.0816,
     "thresh_m": 1.0
    }
   },
@@ -2107,16 +2107,16 @@
    "source": "sofa_chair_1",
    "target": "table_1",
    "relation": "distance",
-   "value": 1.8893843259022998,
+   "value": 1.88933437914369,
    "metric": {
-    "distance_m": 1.8894,
+    "distance_m": 1.8893,
     "delta_x": -1.655,
     "delta_y": -0.278,
-    "delta_z": 0.868,
+    "delta_z": 0.8679,
     "a_x": -1.0662,
     "a_y": 0.3275,
-    "a_z": 2.7394,
-    "b_x": 0.5888,
+    "a_z": 2.7393,
+    "b_x": 0.5889,
     "b_y": 0.6055,
     "b_z": 1.8714
    }
@@ -2130,7 +2130,7 @@
     "delta_x": -1.655,
     "tol": 0.05,
     "a_x": -1.0662,
-    "b_x": 0.5888
+    "b_x": 0.5889
    }
   },
   {
@@ -2139,10 +2139,10 @@
    "relation": "behind",
    "value": true,
    "metric": {
-    "delta_z": -0.868,
+    "delta_z": -0.8679,
     "tol": 0.05,
     "a_z": 1.8714,
-    "b_z": 2.7394
+    "b_z": 2.7393
    }
   },
   {
@@ -2161,7 +2161,7 @@
    "source": "sofa_chair_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 1.962557587443096,
+   "value": 1.962576327476307,
    "metric": {
     "distance_m": 1.9626,
     "delta_x": 0.853,
@@ -2169,10 +2169,10 @@
     "delta_z": -1.3423,
     "a_x": -1.0662,
     "a_y": 0.3275,
-    "a_z": 2.7394,
+    "a_z": 2.7393,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -2195,8 +2195,8 @@
    "metric": {
     "delta_z": -1.3423,
     "tol": 0.05,
-    "a_z": 2.7394,
-    "b_z": 4.0817
+    "a_z": 2.7393,
+    "b_z": 4.0816
    }
   },
   {
@@ -2215,18 +2215,18 @@
    "source": "table_1",
    "target": "picture_4",
    "relation": "distance",
-   "value": 3.6351573118219305,
+   "value": 3.635121284123193,
    "metric": {
-    "distance_m": 3.6352,
+    "distance_m": 3.6351,
     "delta_x": 2.5081,
-    "delta_y": 1.4278,
-    "delta_z": -2.2103,
-    "a_x": 0.5888,
+    "delta_y": 1.4279,
+    "delta_z": -2.2102,
+    "a_x": 0.5889,
     "a_y": 0.6055,
     "a_z": 1.8714,
     "b_x": -1.9192,
-    "b_y": -0.8223,
-    "b_z": 4.0817
+    "b_y": -0.8224,
+    "b_z": 4.0816
    }
   },
   {
@@ -2238,7 +2238,7 @@
     "delta_x": -2.5081,
     "tol": 0.05,
     "a_x": -1.9192,
-    "b_x": 0.5888
+    "b_x": 0.5889
    }
   },
   {
@@ -2247,10 +2247,10 @@
    "relation": "front_of",
    "value": true,
    "metric": {
-    "delta_z": -2.2103,
+    "delta_z": -2.2102,
     "tol": 0.05,
     "a_z": 1.8714,
-    "b_z": 4.0817
+    "b_z": 4.0816
    }
   },
   {
@@ -2259,7 +2259,7 @@
    "relation": "below",
    "value": true,
    "metric": {
-    "delta_up": 1.4278,
+    "delta_up": 1.4279,
     "tol": 0.05,
     "up_axis": 1.0,
     "up_sign": -1.0
@@ -2297,12 +2297,12 @@
    640
   ],
   "timings_ms": {
-   "depth_ms": 1178.3,
-   "detect_ms": 743.6,
-   "segment_ms": 260.8,
-   "nodes_ms": 28.2,
-   "up_axis_ms": 8.3,
-   "relations_ms": 2.4
+   "depth_ms": 2031.6,
+   "detect_ms": 1220.1,
+   "segment_ms": 272.8,
+   "nodes_ms": 33.3,
+   "up_axis_ms": 13.7,
+   "relations_ms": 4.5
   },
   "perception": {
    "device": "cuda",
@@ -2316,7 +2316,7 @@
      "hub_id": "IDEA-Research/grounding-dino-tiny",
      "loaded": true,
      "source": "local",
-     "load_s": 7.42,
+     "load_s": 11.69,
      "resident_mb": 660.0,
      "n_params_m": 172.3,
      "note": "开放词汇检测；prompt 须小写句点结尾"
@@ -2326,7 +2326,7 @@
      "hub_id": "facebook/sam2.1-hiera-base-plus",
      "loaded": true,
      "source": "local",
-     "load_s": 0.5,
+     "load_s": 0.64,
      "resident_mb": 282.2,
      "n_params_m": 73.3,
      "note": "提示式分割；必须批量一次调用（快 7.57×）"
@@ -2336,7 +2336,7 @@
      "hub_id": "lpiccinelli/unidepth-v2-vits14",
      "loaded": true,
      "source": "hub",
-     "load_s": 7.66,
+     "load_s": 11.1,
      "resident_mb": 132.3,
      "n_params_m": 34.2,
      "note": "点云来源；许可 CC BY-NC 4.0，不可商用"

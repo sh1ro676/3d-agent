@@ -16,6 +16,7 @@
 | `aggregation_probe.json` | **四档**：**经真实 `build_scene_graph`** 的聚合段探针（合成夹具 + `SyntheticPerception` 桥，零 API）。含基线 / `bbox_fallback` 净代价 / 覆盖率扫描 / 尺寸失效机制 / `no_valid_points` / 双路对照 / prompt 召回 / 内参守卫。由 `scripts/run_aggregation_probe.py` 生成。⚠ 与上面那份**不重复**：那份绕开 builder 直接量几何量，这份量的是 ①②③④⑤⑥ 全段（**含两条降级路径**） | ✅ **当前** |
 | `intrinsics_probe.json` | 内参敏感度探针的比对结果（`_pred` / `_gt` 两档 20 题）。由 `scripts/compare_intrinsics_probe.py` 生成 | ✅ **当前** |
 | `real_photo_exif_probe.md` | **真机照片的 EXIF 实测**：两张 iPhone 照片（实拍 + 截图）经微信送达后 EXIF **全失**。三层证据（PIL / 段级扫描 / 前端源码）＋ 阳性对照 3/3。含本轮补的 `--intrinsics f35:<mm>` 入口。原始输出：同目录 `real_photo_exif_probe.txt`（PIL）、`real_photo_seg_probe.txt`（段级）、`real_photo_ui_probe.txt`（前端） | ✅ **当前** |
+| `ui_e2e_probe.md` | **演示台端到端实测**：在真机浏览器里跑完「上传微信实拍图 → 内参选等效焦距 24 mm → 建图 → 落盘 → 回显」，核到 `exif.source=user:35mm`（不是只看单测）。含冷/热两态实测耗时、**词表对检出率的决定性影响**（同一张图 0 → 21 个物体），以及本轮修掉的三个界面缺陷。截图见同目录 `ui_e2e/` | ✅ **当前** |
 | `combination_run_20260919_214625.json` / `.md` | **真跑**原始产物（工具文档升到 1.3.0 之后的那一跑，10 题 ¥0.088） | ✅ **当前测量** |
 | `combination_run_20260919_214625_reanalyzed.json` / `.md` | 上面那份用**当前**口径复算 ⇒ **当前结论**（2026-09-20 又复算过一次：修正 `has_comprehension` 的过度声称） | ✅ **当前结论** |
 | `combination_run_20260919_212608_reanalyzed.json` / `.md` | 「**改前**」基线：口径与提示词都没改时的同一批题 | ✅ 对照用（`combination_probe.md` 引用它） |

@@ -34,7 +34,11 @@ const fmt = (v, d = 3) => {
   if (typeof v === 'number') {
     if (!Number.isFinite(v)) return String(v);
     if (Number.isInteger(v) && Math.abs(v) < 1e6) return String(v);
-    return v.toFixed(d).replace(/0+$/, '').replace(/\.$/, '');
+    // 只剥 `toFixed` 补出来的**小数**尾零（1.500 → 1.5）。
+    // ⚠ 不能写成 `/0+$/`：那会连整数末尾的零一起吃掉 —— fmt(70.43, 0) 会得到
+    //   "7" 而不是 "70"（实测：横幅里的"掩码平均覆盖检测框的 70%"显示成了 7%）。
+    //   正则里必须带 `\.`，否则 `"70"` 与 `"1.500"` 无从区分。
+    return v.toFixed(d).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
   }
   return String(v);
 };
@@ -658,12 +662,52 @@ function setBanners() {
 
   const calibrated = q.scale_calibrated ?? meta.scale_calibrated ?? false;
   if (!calibrated) {
+    // 例子必须来自**当前场景**。写死 "sofa_1 / 6.7 m" 会在一个没有沙发的场景上
+    // 说一句当前场景里根本不存在的事实（实测：一张图书馆照片，21 个节点全是
+    // person / bookshelf / table，横幅却仍写着"本场景 sofa_1"）—— 而这个界面
+    // 全部的说服力，就建立在"它说的都是现场真事"上。
+    const nodes = (S.scene && S.scene.nodes) || [];
+    const sized = nodes.filter(
+      (n) => Array.isArray(n.extent_3d) && n.extent_3d.some((v) => v > 0));
+    const sample = sized.slice().sort(
+      (a, b) => Math.max(...b.extent_3d) - Math.max(...a.extent_3d))[0];
+    // 横向换算这一环可不可信，取决于**内参从哪来**；`scale_calibrated` 是
+    // builder 无条件写的 False，分辨不出这件事，所以要看 intrinsics_source。
+    const src = meta.intrinsics_source;
+    const intrLine = src === 'provided'
+      ? '横向的像素↔米制换算用的是<b>你提供的内参</b>（这一步是对的），'
+      : src === 'predicted'
+        ? '横向换算用的是<b>模型自己猜的</b>内参 —— 这一环单独就有实测 118 倍的横向误差，'
+        : '';
+    const cov = meta.mask_box_coverage_mean;
     out.push(banner({
       title: '尺度未标定',
       summary: '相对位置可信，<b>绝对尺寸不可采信</b> —— 盒子比例不能当尺寸读',
-      detail: '全部米制数字共享一个未知比例因子（scale_factor = 1.0）。' +
-        '本场景 <code>sofa_1</code> 的输出尺寸是 6.7 m —— 这不是"沙发真有六米七"，' +
-        '而是尺度没定。节点之间的<b>相对</b>位置是对的，三维距离就是这么算出来的。',
+      detail: (sample
+        ? '本场景最大的一个物体是 <code>' + esc(sample.label) + '</code>，' +
+          '算出来最长边 <b>' + fmt(Math.max(...sample.extent_3d), 1) + ' m</b>。'
+        : '本场景没有检出任何物体，所以这里没有例子可举。') +
+        '尺寸取的是「掩码内点云在每个轴上的跨度」，掩码一旦沾到背景点，' +
+        '跨度就会被撑到米级' +
+        (cov == null ? '' : '（本场景掩码平均只覆盖检测框的 ' + fmt(cov * 100, 0) + '%）') +
+        '；而质心用的是逐轴中位数，对离群点不敏感 —— 所以节点之间的<b>相对</b>位置是对的，' +
+        '三维距离就是这么算出来的。' + intrLine + '别拿单个盒子的边长当尺子。',
+    }));
+  }
+
+  // 一个物体都没检出来时，用户的第一反应是"工具坏了"。实测最常见的原因很朴素：
+  // 默认词表是**客厅**的（sofa / chair / table / picture / mirror），拿它去看一张
+  // 图书馆、办公室或街景的照片，它真的一个都找不出来。不说这一句，用户只会
+  // 反复重试同一件注定失败的事（换个词表就能出 21 个物体）。
+  if ((meta.n_detections_raw ?? 0) === 0) {
+    const pr = (meta.config && meta.config.prompt) || '';
+    out.push(banner({
+      title: '没有检出任何物体',
+      summary: '这张图上<b>没有</b>词表里列的那些东西 —— 换个词表再来一次',
+      detail: '检测词表是 <code>' + esc(pr) + '</code>，它是按<b>客厅</b>配的。' +
+        '换一个场景（书架、街道、办公室），它可能真的一件都找不出来。' +
+        '把词表改成图里实际有的东西再建一次 —— 实测同一张图书馆照片：' +
+        '用客厅词表检出 <b>0</b> 个，把词表换成 <code>bookshelf. table. person. book.</code> 后检出 <b>21</b> 个。',
     }));
   }
 

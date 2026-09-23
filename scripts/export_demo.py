@@ -43,6 +43,13 @@ _META_KEYS = (
     "mask_box_coverage_mean", "mask_box_coverage_min", "label_counts",
     "up_axis", "up_axis_tilt_deg", "up_axis_reliable", "up_axis_reason",
     "scale_calibrated", "depth_range_m", "image_hw", "timings_ms", "perception",
+    # 2026-09-23 追加：前端要能区分「尺度未标定」到底是哪一种。
+    #   `scale_calibrated` 是 builder **无条件**写的 False，单看它无法分辨
+    #   「横向换算本来就是模型猜的」与「横向换算有据、只是没做漂移校正」——
+    #   而这两件事的严重程度差了 118 倍，补救方式也完全不同（换图 vs 填镜头）。
+    # ⚠ 少了它会怎样：前端只能一律按最坏情况说「绝对尺寸不可采信」，
+    #   于是「用户填了镜头」这个唯一能救回米制的动作，在界面上看不出任何回报。
+    "intrinsics_source",
     # 2026-09-22 追加：加载/构建/落盘三项聚合 + 口径（`scope`）。
     # ⚠ 少了它会怎样：单场景文件里有 `timings_ms`（只有六段热态细分），
     #   而 index 的场景条目连那六段都拿不到 —— 前端无法回答「建图要多久」。
@@ -353,6 +360,7 @@ def main(argv: list[str] | None = None) -> int:
             "up_axis_reliable": meta.get("up_axis_reliable"),
             "up_axis_tilt_deg": meta.get("up_axis_tilt_deg"),
             "scale_calibrated": meta.get("scale_calibrated"),
+            "intrinsics_source": meta.get("intrinsics_source"),
             "timing": _timing_payload(meta),
             "assets": counts,
         })

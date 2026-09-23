@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-22 19:29:27",
+ "generated_at": "2026-09-23 21:25:01",
  "scenes": [
   {
    "scene_id": "exif_fixture_exif",
@@ -24,6 +24,7 @@
    "up_axis_reliable": true,
    "up_axis_tilt_deg": 14.26,
    "scale_calibrated": false,
+   "intrinsics_source": "provided",
    "timing": {
     "stages_ms": {
      "depth_ms": 930.9,
@@ -67,6 +68,7 @@
    "up_axis_reliable": false,
    "up_axis_tilt_deg": 63.71,
    "scale_calibrated": false,
+   "intrinsics_source": "predicted",
    "timing": {
     "stages_ms": {
      "depth_ms": 919.2,
@@ -85,6 +87,85 @@
    "assets": {
     "images": 1,
     "masks": 9
+   }
+  },
+  {
+   "scene_id": "iphone_real",
+   "image_id": "rgb.jpg",
+   "n_nodes": 0,
+   "n_edges": 0,
+   "image_url": "assets/iphone_real/rgb.jpg",
+   "image_hw": [
+    1280,
+    1707
+   ],
+   "has_report": true,
+   "label_counts": {},
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 20.07,
+   "scale_calibrated": false,
+   "intrinsics_source": "provided",
+   "timing": {
+    "stages_ms": {
+     "depth_ms": 1552.5,
+     "detect_ms": 718.2,
+     "segment_ms": 0.0,
+     "nodes_ms": 0.0,
+     "up_axis_ms": 33.3,
+     "relations_ms": 0.0
+    },
+    "model_load_ms": 21393.3,
+    "build_wall_ms": 2316.4,
+    "save_ms": 26.3,
+    "total_wall_ms": 23736.0,
+    "scope": "stages_ms = build_scene_graph 内部六段细分（热态：模型已在显存；不含落盘）。 model_load_ms = 本进程首次加载三个模型的墙钟。 build_wall_ms = build_scene_graph 这一次调用的整段墙钟（**含**上面那六段）。 save_ms = masks 与 points 落盘的墙钟（**不含 scene.json 自身的写入** —— 那段耗时记在 build_log.txt，因为它要塞进 scene.json、逻辑上不可能闭包）。 total_wall_ms = model_load_ms + build_wall_ms + save_ms。 ⚠ 同一进程内建第 N 张图时 model_load_ms 从第 2 张起为 0 ⟹ total_wall_ms 对不同张数不能直接平均，必须先说明「第几张、进程冷热」。"
+   },
+   "assets": {
+    "images": 1,
+    "masks": 0
+   }
+  },
+  {
+   "scene_id": "lib_probe",
+   "image_id": "rgb.jpg",
+   "n_nodes": 21,
+   "n_edges": 833,
+   "image_url": "assets/lib_probe/rgb.jpg",
+   "image_hw": [
+    1280,
+    1707
+   ],
+   "has_report": true,
+   "label_counts": {
+    "person": 12,
+    "bookshelf": 6,
+    "bookshelf table": 1,
+    "table": 2
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 20.07,
+   "scale_calibrated": false,
+   "intrinsics_source": "provided",
+   "timing": {
+    "stages_ms": {
+     "depth_ms": 501.3,
+     "detect_ms": 536.0,
+     "segment_ms": 610.7,
+     "nodes_ms": 241.0,
+     "up_axis_ms": 24.0,
+     "relations_ms": 196.9
+    },
+    "model_load_ms": 12022.4,
+    "build_wall_ms": 2121.1,
+    "save_ms": 131.3,
+    "total_wall_ms": 14274.8,
+    "scope": "stages_ms = build_scene_graph 内部六段细分（热态：模型已在显存；不含落盘）。 model_load_ms = 本进程首次加载三个模型的墙钟。 build_wall_ms = build_scene_graph 这一次调用的整段墙钟（**含**上面那六段）。 save_ms = masks 与 points 落盘的墙钟（**不含 scene.json 自身的写入** —— 那段耗时记在 build_log.txt，因为它要塞进 scene.json、逻辑上不可能闭包）。 total_wall_ms = model_load_ms + build_wall_ms + save_ms。 ⚠ 同一进程内建第 N 张图时 model_load_ms 从第 2 张起为 0 ⟹ total_wall_ms 对不同张数不能直接平均，必须先说明「第几张、进程冷热」。"
+   },
+   "assets": {
+    "images": 1,
+    "masks": 21
    }
   },
   {
@@ -110,6 +191,7 @@
    "up_axis_reliable": false,
    "up_axis_tilt_deg": 63.04,
    "scale_calibrated": false,
+   "intrinsics_source": null,
    "timing": {
     "stages_ms": {
      "depth_ms": 2085.0,
@@ -153,6 +235,7 @@
    "up_axis_reliable": true,
    "up_axis_tilt_deg": 11.95,
    "scale_calibrated": false,
+   "intrinsics_source": "provided",
    "timing": {
     "stages_ms": {
      "depth_ms": 1178.3,
@@ -196,6 +279,139 @@
    "up_axis_reliable": false,
    "up_axis_tilt_deg": 63.04,
    "scale_calibrated": false,
+   "intrinsics_source": "predicted",
+   "timing": {
+    "stages_ms": {
+     "depth_ms": 471.6,
+     "detect_ms": 927.1,
+     "segment_ms": 280.8,
+     "nodes_ms": 30.0,
+     "up_axis_ms": 8.8,
+     "relations_ms": 2.5
+    },
+    "model_load_ms": null,
+    "build_wall_ms": null,
+    "save_ms": null,
+    "total_wall_ms": null,
+    "scope": "旧场景：本次改动之前建的。只有 builder 六段（热态细分）；model_load_ms / save_ms / total_wall_ms 当时未测，故为 null —— 是「没测到」，不是「测到 0」。"
+   },
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "points_probe",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 137,
+   "image_url": "assets/points_probe/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": false,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 11.95,
+   "scale_calibrated": false,
+   "intrinsics_source": "provided",
+   "timing": {
+    "stages_ms": {
+     "depth_ms": 2031.6,
+     "detect_ms": 1220.1,
+     "segment_ms": 272.8,
+     "nodes_ms": 33.3,
+     "up_axis_ms": 13.7,
+     "relations_ms": 4.5
+    },
+    "model_load_ms": null,
+    "build_wall_ms": null,
+    "save_ms": null,
+    "total_wall_ms": null,
+    "scope": "旧场景：本次改动之前建的。只有 builder 六段（热态细分）；model_load_ms / save_ms / total_wall_ms 当时未测，故为 null —— 是「没测到」，不是「测到 0」。"
+   },
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "probe_instr_gt",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 137,
+   "image_url": "assets/probe_instr_gt/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": true,
+   "up_axis_tilt_deg": 11.95,
+   "scale_calibrated": false,
+   "intrinsics_source": "provided",
+   "timing": {
+    "stages_ms": {
+     "depth_ms": 1178.3,
+     "detect_ms": 743.6,
+     "segment_ms": 260.8,
+     "nodes_ms": 28.2,
+     "up_axis_ms": 8.3,
+     "relations_ms": 2.4
+    },
+    "model_load_ms": null,
+    "build_wall_ms": null,
+    "save_ms": null,
+    "total_wall_ms": null,
+    "scope": "旧场景：本次改动之前建的。只有 builder 六段（热态细分）；model_load_ms / save_ms / total_wall_ms 当时未测，故为 null —— 是「没测到」，不是「测到 0」。"
+   },
+   "assets": {
+    "images": 1,
+    "masks": 9
+   }
+  },
+  {
+   "scene_id": "probe_instr_pred",
+   "image_id": "rgb.png",
+   "n_nodes": 9,
+   "n_edges": 133,
+   "image_url": "assets/probe_instr_pred/rgb.png",
+   "image_hw": [
+    640,
+    480
+   ],
+   "has_report": true,
+   "label_counts": {
+    "sofa": 1,
+    "picture": 4,
+    "mirror": 1,
+    "chair": 1,
+    "sofa chair": 1,
+    "table": 1
+   },
+   "up_axis": "-y",
+   "up_axis_reliable": false,
+   "up_axis_tilt_deg": 63.04,
+   "scale_calibrated": false,
+   "intrinsics_source": "predicted",
    "timing": {
     "stages_ms": {
      "depth_ms": 471.6,
@@ -239,6 +455,7 @@
    "up_axis_reliable": false,
    "up_axis_tilt_deg": 63.04,
    "scale_calibrated": false,
+   "intrinsics_source": "predicted",
    "timing": {
     "stages_ms": {
      "depth_ms": 1712.3,

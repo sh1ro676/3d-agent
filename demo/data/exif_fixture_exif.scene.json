@@ -2350,6 +2350,7 @@
     }
    }
   },
+  "intrinsics_source": "provided",
   "config": {
    "prompt": "sofa. chair. table. picture. mirror.",
    "box_threshold": 0.3,

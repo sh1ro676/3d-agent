@@ -1,0 +1,229 @@
+{
+ "scene_id": "probe_instr_gt",
+ "summary": "场景 probe_scene 共 9 个物体：chair × 1、mirror × 1、picture × 4、sofa × 1、sofa chair × 1、table × 1。\n最紧凑的三组相邻关系：picture_2→picture_3 0.23 m；picture_3→picture_2 0.23 m；picture_4→picture_3 0.76 m。\n方位（左侧）：sofa_1 在 picture_1 的左侧；mirror_1 在 table_1 的左侧；chair_1 在 table_1 的左侧；picture_2 在 sofa_chair_1 的左侧。\n方位（右侧）：sofa_1 在 mirror_1 的右侧；sofa_1 在 chair_1 的右侧；sofa_1 在 picture_2 的右侧；sofa_1 在 picture_3 的右侧。\n方位（前方）：sofa_1 在 picture_1 的前方；sofa_1 在 mirror_1 的前方；sofa_1 在 picture_2 的前方；sofa_1 在 picture_3 的前方。\n方位（后方）：sofa_1 在 chair_1 的后方；sofa_1 在 sofa_chair_1 的后方；sofa_1 在 table_1 的后方；picture_1 在 mirror_1 的后方。\n方位（上方）：sofa_1 在 chair_1 的上方；sofa_1 在 table_1 的上方；picture_1 在 mirror_1 的上方；picture_1 在 chair_1 的上方。\n方位（下方）：sofa_1 在 picture_1 的下方；sofa_1 在 mirror_1 的下方；sofa_1 在 picture_2 的下方；sofa_1 在 picture_3 的下方。\n**尺度未校正**：相对关系可信，绝对米数不可引用。\n注意：3 个物体的掩码点数少于 1000（[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]）—— 很可能是伪物体而非真实存在：点云质心不可信，物体计数与关系边数都会因此偏高。实测分界为伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。",
+ "quality": {
+  "scale_calibrated": false,
+  "scale_factor": 1.0,
+  "intrinsics_source": "provided",
+  "up_axis": "-y",
+  "up_axis_tilt_deg": 11.95,
+  "up_axis_reliable": true,
+  "n_objects": 9,
+  "n_low_point_objects": 3,
+  "n_edges_precomputed": 137
+ },
+ "relation_summary": {
+  "n_pairs_total": 36,
+  "n_pairs_reported": 36
+ },
+ "caveats": [
+  "尺度未校正（scale_factor=1.0）：全部米制数字共享同一个未知比例因子，**相对关系可信、绝对数值不可采信**。要引用绝对值需先 calibrate_scale。",
+  "3 个物体的掩码点数少于 1000（[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]）—— 很可能是伪物体而非真实存在：点云质心不可信，物体计数与关系边数都会因此偏高。实测分界为伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。"
+ ],
+ "truncated": false,
+ "objects": [
+  {
+   "id": "sofa_1",
+   "label": "sofa",
+   "centroid_m": [
+    0.7967,
+    0.3192,
+    3.1746
+   ],
+   "extent_m": {
+    "w": 2.342,
+    "h": 0.817,
+    "l": 1.265
+   },
+   "confidence": 0.836,
+   "centroid_source": "mask",
+   "n_points": 23841,
+   "attributes": {}
+  },
+  {
+   "id": "picture_1",
+   "label": "picture",
+   "centroid_m": [
+    1.337,
+    -1.1095,
+    4.0582
+   ],
+   "extent_m": {
+    "w": 1.118,
+    "h": 0.985,
+    "l": 0.243
+   },
+   "confidence": 0.795,
+   "centroid_source": "mask",
+   "n_points": 16137,
+   "attributes": {}
+  },
+  {
+   "id": "mirror_1",
+   "label": "mirror",
+   "centroid_m": [
+    -0.2999,
+    -1.0369,
+    3.9486
+   ],
+   "extent_m": {
+    "w": 0.877,
+    "h": 1.276,
+    "l": 0.273
+   },
+   "confidence": 0.676,
+   "centroid_source": "mask",
+   "n_points": 18015,
+   "attributes": {}
+  },
+  {
+   "id": "chair_1",
+   "label": "chair",
+   "centroid_m": [
+    -0.7396,
+    0.6535,
+    1.8336
+   ],
+   "extent_m": {
+    "w": 0.977,
+    "h": 0.303,
+    "l": 0.827
+   },
+   "confidence": 0.528,
+   "centroid_source": "mask",
+   "n_points": 18785,
+   "attributes": {}
+  },
+  {
+   "id": "picture_2",
+   "label": "picture",
+   "centroid_m": [
+    -1.1661,
+    -1.0598,
+    4.0147
+   ],
+   "extent_m": {
+    "w": 0.261,
+    "h": 0.23,
+    "l": 0.043
+   },
+   "confidence": 0.501,
+   "centroid_source": "mask",
+   "n_points": 965,
+   "attributes": {}
+  },
+  {
+   "id": "picture_3",
+   "label": "picture",
+   "centroid_m": [
+    -1.155,
+    -0.8366,
+    4.054
+   ],
+   "extent_m": {
+    "w": 0.252,
+    "h": 0.214,
+    "l": 0.057
+   },
+   "confidence": 0.489,
+   "centroid_source": "mask",
+   "n_points": 893,
+   "attributes": {}
+  },
+  {
+   "id": "sofa_chair_1",
+   "label": "sofa chair",
+   "centroid_m": [
+    -1.0662,
+    0.3275,
+    2.7394
+   ],
+   "extent_m": {
+    "w": 1.332,
+    "h": 0.81,
+    "l": 1.48
+   },
+   "confidence": 0.44,
+   "centroid_source": "mask",
+   "n_points": 29108,
+   "attributes": {}
+  },
+  {
+   "id": "table_1",
+   "label": "table",
+   "centroid_m": [
+    0.5888,
+    0.6055,
+    1.8714
+   ],
+   "extent_m": {
+    "w": 1.059,
+    "h": 0.537,
+    "l": 1.029
+   },
+   "confidence": 0.399,
+   "centroid_source": "mask",
+   "n_points": 30660,
+   "attributes": {}
+  },
+  {
+   "id": "picture_4",
+   "label": "picture",
+   "centroid_m": [
+    -1.9192,
+    -0.8223,
+    4.0817
+   ],
+   "extent_m": {
+    "w": 0.146,
+    "h": 0.287,
+    "l": 0.149
+   },
+   "confidence": 0.332,
+   "centroid_source": "mask",
+   "n_points": 809,
+   "attributes": {}
+  }
+ ],
+ "provenance": {
+  "scene_json": "dataset\\scenes\\probe_instr_gt",
+  "tools_version": "1.3.0",
+  "method": "geometry_v1",
+  "detail": "full",
+  "n_objects": 9,
+  "n_pairs_total": 36,
+  "gpu_used_mb": null,
+  "latency_ms": {
+   "describe_scene": 1.86,
+   "summarize_scene": 3.9,
+   "diagnose_failure": 0.02,
+   "counterfactual": null
+  }
+ },
+ "diagnosis": {
+  "scene_id": "probe_scene",
+  "question_id": null,
+  "question": null,
+  "stage": "尺度",
+  "findings": [
+   {
+    "stage": "尺度",
+    "severity": 6.0,
+    "reason": "尺度未校正（scale_factor=1.0）",
+    "detail": "绝对米数含未知比例因子；相对关系不受影响。",
+    "fix": "用场景内已知尺寸物体或数据集 GT 做一次 calibrate_scale。"
+   },
+   {
+    "stage": "检测",
+    "severity": 4.5,
+    "reason": "3 个物体的掩码点数不足 1000",
+    "detail": "[('picture_4', 809), ('picture_3', 893), ('picture_2', 965)]。实测分界：伪物体 809–965 点 vs 真实物体 16137–30660 点（17 倍空隙）。",
+    "fix": "这些多半是伪物体（低分检测框）：考虑按 score 或点数过滤后重建，并把它们标成 LOW_CONFIDENCE 而不是当作确定物体。"
+   }
+  ]
+ },
+ "counterfactual": {
+  "diff": null,
+  "relation_summary": null
+ }
+}

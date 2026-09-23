@@ -1,0 +1,117 @@
+{
+ "scene_id": "iphone_real",
+ "image_id": "rgb.jpg",
+ "up_axis": "-y",
+ "scale_factor": 1.0,
+ "camera_intrinsics": [
+  [
+   1138.0,
+   0.0,
+   640.0
+  ],
+  [
+   0.0,
+   1138.0,
+   853.5
+  ],
+  [
+   0.0,
+   0.0,
+   1.0
+  ]
+ ],
+ "image_hw": [
+  1280,
+  1707
+ ],
+ "image_url": "assets/iphone_real/rgb.jpg",
+ "nodes": [],
+ "edges": [],
+ "build_meta": {
+  "n_detections_raw": 0,
+  "n_detections_kept": 0,
+  "n_nodes": 0,
+  "n_edges": 0,
+  "n_dropped": 0,
+  "n_fallbacks": 0,
+  "mask_box_coverage_mean": null,
+  "mask_box_coverage_min": null,
+  "label_counts": {},
+  "up_axis": "-y",
+  "up_axis_tilt_deg": 20.07,
+  "up_axis_reliable": true,
+  "up_axis_reason": "ok",
+  "scale_calibrated": false,
+  "depth_range_m": [
+   3.7195,
+   35.5667
+  ],
+  "image_hw": [
+   1707,
+   1280
+  ],
+  "timings_ms": {
+   "depth_ms": 1552.5,
+   "detect_ms": 718.2,
+   "segment_ms": 0.0,
+   "nodes_ms": 0.0,
+   "up_axis_ms": 33.3,
+   "relations_ms": 0.0
+  },
+  "perception": {
+   "device": "cuda",
+   "device_total_mib": 8188.0,
+   "resident_mb": 1082.7,
+   "resident_pct": 13.2,
+   "peak_mb": 2175.6,
+   "models": {
+    "grounding": {
+     "role": "grounding",
+     "hub_id": "IDEA-Research/grounding-dino-tiny",
+     "loaded": true,
+     "source": "local",
+     "load_s": 12.57,
+     "resident_mb": 660.0,
+     "n_params_m": 172.3,
+     "note": "开放词汇检测；prompt 须小写句点结尾"
+    },
+    "segmentation": {
+     "role": "segmentation",
+     "hub_id": "facebook/sam2.1-hiera-base-plus",
+     "loaded": true,
+     "source": "local",
+     "load_s": 0.5,
+     "resident_mb": 282.2,
+     "n_params_m": 73.3,
+     "note": "提示式分割；必须批量一次调用（快 7.57×）"
+    },
+    "depth": {
+     "role": "depth",
+     "hub_id": "lpiccinelli/unidepth-v2-vits14",
+     "loaded": true,
+     "source": "hub",
+     "load_s": 8.32,
+     "resident_mb": 132.3,
+     "n_params_m": 34.2,
+     "note": "点云来源；许可 CC BY-NC 4.0，不可商用"
+    }
+   }
+  },
+  "intrinsics_source": "provided",
+  "timing": {
+   "scope": "stages_ms = build_scene_graph 内部六段细分（热态：模型已在显存；不含落盘）。 model_load_ms = 本进程首次加载三个模型的墙钟。 build_wall_ms = build_scene_graph 这一次调用的整段墙钟（**含**上面那六段）。 save_ms = masks 与 points 落盘的墙钟（**不含 scene.json 自身的写入** —— 那段耗时记在 build_log.txt，因为它要塞进 scene.json、逻辑上不可能闭包）。 total_wall_ms = model_load_ms + build_wall_ms + save_ms。 ⚠ 同一进程内建第 N 张图时 model_load_ms 从第 2 张起为 0 ⟹ total_wall_ms 对不同张数不能直接平均，必须先说明「第几张、进程冷热」。",
+   "model_load_ms": 21393.3,
+   "build_wall_ms": 2316.4,
+   "save_ms": 26.3,
+   "total_wall_ms": 23736.0
+  },
+  "config": {
+   "prompt": "sofa. chair. table. picture. mirror.",
+   "box_threshold": 0.3,
+   "text_threshold": 0.25,
+   "tol_m": 0.05,
+   "near_m": 1.0,
+   "relation_policy": "distance_plus_true"
+  }
+ }
+}
