@@ -74,6 +74,32 @@ Phase 0 Step 6/7 把「内参来源」测成了一条硬结论（`phase0/probe_d
 **在预算之内**，但已用掉约三分之一，不是可以被忽略的量。所以它作为
 `quantisation_rel` 一起返回，随 K 进 `build_meta`。
 
+### ④ 允许调用方**直接给出**等效焦距（`focal_35mm_mm=`）
+
+不是便利功能，是补上一个**当时是空的**兜底入口。
+
+2026-09-23 实测（`reports/real_photo_exif_probe.txt` / `reports/real_photo_ui_probe.txt`）：
+两张 iPhone 照片经微信送达后，**文件里一个 `APP1` 段都没有** —— 段级扫描显示两张图的
+段序列逐项同构（`JFIF(16) / APP2=ICC_PROFILE(564) / DQT(67,67) / SOF0(17) / DHT(31,181,31,181)`），
+即都被同一套编码器重编码过；阳性对照 3/3 命中（`rgb_exif.jpg`、`sony.jpg`、`panasonic.jpg`
+都有 `APP1 ← Exif`），所以「没扫到」是有信息的。前端 `readExifTags` 对这两张图读到的
+tag 数都是 **0**。
+
+⟹ 对普通人最常用的那条传图路径，EXIF **不是「有时没有」而是「必丢」**。而产品当时
+唯一的补救入口是 `--intrinsics "fx,fy,cx,cy"`，要求用户给出四个像素焦距；手机里能查到的
+只有「等效焦距 24 mm」这种毫米数。**那条兜底对目标用户是空的。**
+
+所以把 f_35 做成入参，让用户给出他真正查得到的那一个数，走**完全相同的**换算。
+**公式只有一份**是这段设计的硬约束：另写一份会立刻产生口径分叉，而两个公式对同一张图
+给出不同 K 时，谁对谁错在产物里看不出来。
+
+`source` 记成 `user:35mm` 而不是 `exif:35mm`，因为**事后必须分得清**这个数是从照片里
+读到的还是人填的 —— 两者误差来源不同（前者只有整数毫米量化，后者还叠加「记错镜头倍率」）。
+
+⚠ 手填不可用时**抛 `ValueError`**，不静默退化：`focal_35mm_mm=0` / `"abc"` 属于调用方
+输入错误，与「文件里没有 EXIF」根本不是一类事，混在一起会让一个填错的数字伪装成
+「这张图没有元数据」。
+
 ## 做不到的事（写清楚，免得下游误以为它是真值）
 
 - **没有主点。** EXIF 不记录 cx/cy，只能用图像中心。真实主点常偏 1–3%，本模块无法修正。
@@ -174,7 +200,10 @@ class ExifIntrinsics:
 
     def describe(self) -> str:
         """一行人类可读的说明，供 CLI 与 build_log 使用。"""
-        parts = [f"EXIF → fx={self.fx:.1f} fy={self.fy:.1f} "
+        # 来源必须在这一行里可见：`user:35mm` 与 `exif:35mm` 的误差来源不同
+        # （前者多一层「用户报错倍率」），事后只看数字分不出来。
+        label = "EXIF → " if self.source.startswith("exif") else "用户提供 → "
+        parts = [f"{label}fx={self.fx:.1f} fy={self.fy:.1f} "
                  f"cx={self.cx:.1f} cy={self.cy:.1f}"]
         if self.focal_35mm_mm is not None:
             parts.append(f"等效焦距 {self.focal_35mm_mm:g} mm")
@@ -268,12 +297,19 @@ def read_exif_intrinsics(
     *,
     image_size: tuple[int, int] | None = None,
     sensor_width_mm: float = SENSOR_WIDTH_MM_35MM,
+    focal_35mm_mm: float | None = None,
 ) -> ExifIntrinsics | None:
     """`source` 为图片路径或已打开的 `PIL.Image`；读不到可用焦距时返回 `None`。
 
     `image_size` 显式给出 `(H, W)` 时以它为准 —— 用于「图片被下游改过尺寸、但
     EXIF 仍是原始尺寸」的情形：`f_px` 必须按**实际参与推理的那张图**的像素数算，
     否则 f_px 与像素网格不匹配，产生的错误与内参错一样隐蔽。
+
+    `focal_35mm_mm` 显式给出时，**跳过**从文件读 `FocalLengthIn35mmFilm`，改用这个
+    值（`source` 变成 `user:35mm`；见模块 docstring ④）。这一档用于「照片没有 EXIF、
+    但用户知道自己用的是哪颗镜头」。它与 `sensor_width_mm` 那条**假设**路径的语义
+    完全不同：那是「不知道、只能猜一个」，这是「外部给定的事实」—— 所以它
+    **不进** `assumed_sensor`。值不可用（0 / 负 / nan / 非数）时抛 `ValueError`。
 
     **返回 `None` 而不是抛异常**是刻意的：EXIF 缺失太常见（截图、聊天软件转存、
     部分 PNG），它属于正常分支而非错误。调用方拿到 `None` 应当退到
@@ -287,7 +323,17 @@ def read_exif_intrinsics(
             W, H = W_img, H_img
 
         exif = im.getexif()
-        f_35 = _as_float(_lookup(exif, TAG_FOCAL_35MM))
+        if focal_35mm_mm is not None:
+            # ★ 显式给出的值必须**响**，不能像「缺 EXIF」那样静默退化：一个填错的
+            #   数字伪装成「这张图没有元数据」，是两件完全不同的事。
+            f_35 = _as_float(focal_35mm_mm)
+            if f_35 is None:
+                raise ValueError(
+                    f"focal_35mm_mm={focal_35mm_mm!r} 不可用（需要正的有限数）。"
+                    "这是调用方显式给出的值，与「文件里没有 EXIF」语义不同，不静默降级。"
+                )
+        else:
+            f_35 = _as_float(_lookup(exif, TAG_FOCAL_35MM))
         f_mm = _as_float(_lookup(exif, TAG_FOCAL_LENGTH))
         if f_35 is None and f_mm is None:
             return None
@@ -295,15 +341,26 @@ def read_exif_intrinsics(
         notes: list[str] = []
         long_side = float(max(W, H))
 
+        given = focal_35mm_mm is not None
         if f_35 is not None:
             f_px = f_35 / SENSOR_WIDTH_MM_35MM * long_side
-            src = "exif:35mm"
+            src = "user:35mm" if given else "exif:35mm"
             assumed = False
             quant: float | None = 0.5 / f_35
-            notes.append(
-                f"由 FocalLengthIn35mmFilm={f_35:g} mm 换算："
-                f"f_px = {f_35:g}/36 × max(W,H)={long_side:.0f} = {f_px:.1f}"
-            )
+            if given:
+                notes.append(
+                    f"由**调用方提供**的等效焦距 {f_35:g} mm 换算（不来自文件 EXIF）："
+                    f"f_px = {f_35:g}/36 × max(W,H)={long_side:.0f} = {f_px:.1f}"
+                    "。⚠ 该值依赖用户报对镜头倍率；倍率选错时 fx 按倍率成比例偏，"
+                    "而 `check_fov` 通常拦不住它 —— 窗口 30–110° 等价于 "
+                    "f_35 ∈ [12.6, 67.2] mm，手机各档（超广 13 / 主摄 24 / 长焦 48–77）"
+                    "绝大多数落在里面。"
+                )
+            else:
+                notes.append(
+                    f"由 FocalLengthIn35mmFilm={f_35:g} mm 换算："
+                    f"f_px = {f_35:g}/36 × max(W,H)={long_side:.0f} = {f_px:.1f}"
+                )
         else:
             f_px = float(f_mm) / float(sensor_width_mm) * long_side
             src = "exif:focal+sensor_assumed"
@@ -343,18 +400,26 @@ def read_exif_intrinsics(
         notes.append("主点无 EXIF 来源，取图像中心；真实主点常偏 1–3%。")
         notes.append("EXIF 不含畸变系数；广角镜头的桶形畸变会让边缘横向几何系统性偏。")
         if quant is not None:
-            notes.append(
-                f"FocalLengthIn35mmFilm 为整数毫米 ⟹ 四舍五入半步 ±{quant*100:.1f}%"
-                f"（整步 ±{quant*200:.1f}%）。Step 7 容差预算：方位误差 ≤10 px 要求"
-                "焦距偏差 ≤±6.6% —— EXIF 在预算内，但用掉了约三分之一。"
-            )
+            if given:
+                notes.append(
+                    f"调用方提供的等效焦距按整毫米记 ⟹ ±{quant*100:.1f}%（±0.5 mm）。"
+                    "Step 7 容差预算（方位误差 ≤10 px 要求焦距偏差 ≤±6.6%）仍然满足，"
+                    "但这一档的主要误差来源不是量化，而是**镜头倍率报错**。"
+                )
+            else:
+                notes.append(
+                    f"FocalLengthIn35mmFilm 为整数毫米 ⟹ 四舍五入半步 ±{quant*100:.1f}%"
+                    f"（整步 ±{quant*200:.1f}%）。Step 7 容差预算：方位误差 ≤10 px 要求"
+                    "焦距偏差 ≤±6.6% —— EXIF 在预算内，但用掉了约三分之一。"
+                )
 
         K = intrinsics_matrix(f_px, f_px, W / 2.0, H / 2.0)
         fov = check_fov(K, (H, W))
         if not fov.plausible:
             notes.append(
                 f"check_fov 判定不可信（HFoV {fov.hfov_deg:.1f}°，reason={fov.reason}）"
-                " —— 很可能是传感器宽度假设错了。"
+                + (" —— 很可能是等效焦距填错了。"
+                   if given else " —— 很可能是传感器宽度假设错了。")
             )
 
         return ExifIntrinsics(

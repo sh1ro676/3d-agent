@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 import time
@@ -95,7 +96,9 @@ def timing_block(
 
 
 def _intrinsics_from_exif(
-    image_path: Path, image_size: tuple[int, int] | None
+    image_path: Path,
+    image_size: tuple[int, int] | None,
+    focal_35mm_mm: float | None = None,
 ) -> tuple[tuple[float, float, float, float] | None, str, dict]:
     """EXIF → 内参。读不到就返回 `(None, 降级说明, {})` —— 这是**正常分支不是错误**。
 
@@ -103,10 +106,16 @@ def _intrinsics_from_exif(
     走「降级 + 写清原因」而不是抛异常：一个与几何无关的原因（缺元数据）不该
     让整条流水线停下来，但它也绝不能被静默吞掉 —— 因为降级之后横向尺度会
     差 118 倍（Step 7 实测），那是必须在记录里看得见的事。
+
+    2026-09-23 实测把「常态」升级成了「必丢」：两张 iPhone 照片经微信送达后文件里
+    **一个 APP1 段都没有**（`reports/real_photo_exif_probe.txt`，阳性对照 3/3 命中）。
+    于是多了一条 `focal_35mm_mm` 入口：让用户给出他真正查得到的那个数（等效焦距 mm），
+    走**同一份换算**（见 `vision/exif.py` 模块 docstring ④）。**公式只有一份**是硬约束。
     """
     from vision.exif import read_exif_intrinsics
 
-    got = read_exif_intrinsics(image_path, image_size=image_size)
+    got = read_exif_intrinsics(image_path, image_size=image_size,
+                               focal_35mm_mm=focal_35mm_mm)
     if got is None:
         return None, ("EXIF 里没有可用的等效焦距（截图 / 转存 / 无元数据都会这样）"
                       " —— 退化为模型预测值"), {"exif": None}
@@ -145,12 +154,33 @@ def load_known_intrinsics(
     `FocalLengthIn35mmFilm` 是唯一可得的内参来源。它带 ±2–4% 的量化误差，
     落在 Step 7 算出的容差预算（±6.6%，对应方位误差 10 px）之内，但用掉了约
     三分之一 —— 所以来源、量化误差、视场判定必须随 K 一起落到记录里。
+
+    `f35:<mm>` 是给「**照片没有 EXIF、但用户知道自己用的哪颗镜头**」那一档
+    （如 `f35:24`）：实测微信传图必丢 EXIF，而 `exif` 那一路会静默退化成模型
+    预测，所以需要一个普通人真的填得出来的兜底。
     """
     if not spec:
         return None, "未提供 —— 将用模型预测值，并做视场合理性检查", {}
 
     if spec == "exif":
         return _intrinsics_from_exif(image_path, image_size)
+
+    if spec.startswith("f35:"):
+        # 「用户知道自己用的哪颗镜头」这一档。为什么需要它：实测两张 iPhone 照片
+        # 经微信送达后 EXIF **必丢**，而原来的兜底是让用户填 4 个像素焦距 ——
+        # 手机里根本查不到，等于兜底是空的。
+        # 这里只做解析与校验；换算一律走 `_intrinsics_from_exif`（同一份公式）。
+        raw = spec[4:].strip()
+        try:
+            mm = float(raw)
+        except ValueError:
+            raise SystemExit(
+                f"--intrinsics f35: 后面要跟一个毫米数（等效焦距），例如 f35:24 "
+                f"—— 收到 {raw!r}"
+            ) from None
+        if not (math.isfinite(mm) and mm > 0.0):
+            raise SystemExit(f"--intrinsics f35: 需要正的有限数，收到 {raw!r}")
+        return _intrinsics_from_exif(image_path, image_size, focal_35mm_mm=mm)
 
     if spec != "auto":
         p = Path(spec)
@@ -232,7 +262,9 @@ def main() -> int:
     ap.add_argument("--intrinsics", default=None,
                     help="已知内参：(a) .npy 路径（3×3）(b) \"fx,fy,cx,cy\" "
                          "(c) exif = 从图片 EXIF 的等效焦距换算（真实照片用这个）"
-                         "(d) auto = 依次试 同目录 intrinsics.npy → EXIF → 模型预测。"
+                         "(d) f35:24 = 用户直接给出等效焦距 mm —— 照片经微信/社交软件"
+                         "转存后 EXIF 必丢，这时用这个（demo 上传框里有对应输入）"
+                         "(e) auto = 依次试 同目录 intrinsics.npy → EXIF → 模型预测。"
                          "强烈建议提供：实测横向误差 306.3 px → 2.6 px（118 倍）")
     ap.add_argument("--prompt", default=None,
                     help='小写标签、每个以句点结尾，如 "sofa. chair. table."')

@@ -61,8 +61,16 @@ def _fmt_table(exif) -> list[str]:
     return out
 
 
-def report(path: Path, raw: bool = False) -> bool:
-    """打印一张图的判定。返回「是否拿到了可用内参」。"""
+def report(path: Path, raw: bool = False,
+           assume_f35: float | None = None) -> bool:
+    """打印一张图的判定。返回「是否拿到了可用内参」。
+
+    `assume_f35` 给出时**忽略文件里有没有 EXIF**，按「等效焦距 = 该值」算一份内参
+    供预览（走 `vision/exif.py` 的 `focal_35mm_mm=` 入参）。用途：
+    「照片被微信转存、EXIF 丢光了，但我知道用的是 1× 主摄 ⟹ 先看看填 24 mm
+    会得到什么 K」。它**就是** `build_scene.py --intrinsics f35:24` 会用的那条路，
+    所以这里预览到的数就是上传后会用的数。
+    """
     from PIL import Image
 
     from vision.exif import read_exif_intrinsics
@@ -82,8 +90,15 @@ def report(path: Path, raw: bool = False) -> bool:
         return False
 
     print(f"  尺寸 {size[0]}×{size[1]}   EXIF 顶层标签数 {n_tags}")
+    if assume_f35 is not None:
+        print(f"  [模拟] 忽略文件里的 EXIF，按等效焦距 {assume_f35:g} mm 换算 —— "
+              f"这正是 --intrinsics f35:{assume_f35:g} 会得到的结果")
 
-    got = read_exif_intrinsics(path)
+    try:
+        got = read_exif_intrinsics(path, focal_35mm_mm=assume_f35)
+    except ValueError as e:
+        print(f"  [FAIL] --assume-f35 的值不可用：{e}")
+        return False
     if got is None:
         print()
         print("  ✗ **读不到可用的等效焦距** ⟹ `--intrinsics exif` 会退化为模型预测。")
@@ -130,7 +145,13 @@ def report(path: Path, raw: bool = False) -> bool:
 
     print()
     print(f"  建议命令：")
-    print(f"    --intrinsics exif     （来源可信时）")
+    if assume_f35 is not None:
+        # 模拟模式下来源就是用户自己给的那个数，推荐它才有用；此时推荐 `exif`
+        # 是错的（这张图根本没有 EXIF）。
+        print(f"    --intrinsics f35:{assume_f35:g}    （上传时用这条 —— 由后半段换算，"
+              f"与上面预览逐位相同）")
+    else:
+        print(f"    --intrinsics exif     （来源可信时）")
     print(f"    --intrinsics \"{got.fx:.1f},{got.fy:.1f},{got.cx:.1f},{got.cy:.1f}\""
           f"   （想把这个值固定下来、让场景图可复现时）")
     return True
@@ -145,6 +166,11 @@ def main() -> int:
                     help="同时打印原始 EXIF 标签表")
     ap.add_argument("--sensor-width", type=float, default=None,
                     help="给「只有 FocalLength」的图指定真实传感器宽度（mm）后重算")
+    ap.add_argument("--assume-f35", type=float, default=None, metavar="MM",
+                    help="忽略文件里的 EXIF，按「等效焦距 = MM」预览一份内参。"
+                         "照片被微信/社交软件转存后 EXIF 必丢，这时用它先看看"
+                         "填 24 mm（1× 主摄）会得到什么 K —— 与上传时的 "
+                         "--intrinsics f35:MM 完全同路")
     args = ap.parse_args()
 
     targets: list[Path] = [Path(p) for p in args.image]
@@ -180,7 +206,7 @@ def main() -> int:
         if not p.is_file():
             print(f"\n  [FAIL] 文件不存在：{p}")
             continue
-        ok += int(report(p, raw=args.raw))
+        ok += int(report(p, raw=args.raw, assume_f35=args.assume_f35))
 
     print()
     print("=" * 74)

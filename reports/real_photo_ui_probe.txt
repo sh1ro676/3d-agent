@@ -1,0 +1,31 @@
+抽取自 demo/app.js:1140（1406 字符）
+
+=== uploads/real_photo_probe/iphone_real.jpg
+    整个 JPEG 里读到的 EXIF tag 数 : 0
+    tag 号                          : []
+    UP.exif35 (= tags.has(0xA405))  : false
+    预览行显示                      : 没有 EXIF 等效焦距
+    状态行显示                      : 无 EXIF 焦距 → 内参将退化为模型预测值，本场景会被标成「尺度未标定」
+
+=== uploads/real_photo_probe/iphone_screenshot.jpg
+    整个 JPEG 里读到的 EXIF tag 数 : 0
+    tag 号                          : []
+    UP.exif35 (= tags.has(0xA405))  : false
+    预览行显示                      : 没有 EXIF 等效焦距
+    状态行显示                      : 无 EXIF 焦距 → 内参将退化为模型预测值，本场景会被标成「尺度未标定」
+
+=== .cache/exif_fixture/rgb_exif.jpg
+    整个 JPEG 里读到的 EXIF tag 数 : 6
+    tag 号                          : [271,272,37386,40962,40963,41989]
+    UP.exif35 (= tags.has(0xA405))  : true
+    预览行显示                      : 检测到 EXIF 等效焦距
+    状态行显示                      : 有 EXIF 焦距 → 内参可从 EXIF 换算（选出 auto 即可）
+
+=== .cache/cross_source/sony.jpg
+    整个 JPEG 里读到的 EXIF tag 数 : 49
+    tag 号                          : [270,271,272,274,282,283,296,305,306,531,34665,33434,33437,34850,34855,34864,34866,36864,36867,36868,37121,37122,37379,37380,37381,37383,37384,37385,37386,37500,37510,40960,40961,40962,40963,40965,41728,41729,41985,41986,41987,41988,41989,41990,41992,41993,41994,42034,50341]
+    UP.exif35 (= tags.has(0xA405))  : true
+    预览行显示                      : 检测到 EXIF 等效焦距
+    状态行显示                      : 有 EXIF 焦距 → 内参可从 EXIF 换算（选出 auto 即可）
+
+小结：2/4 张会被前端判为「有 EXIF 等效焦距」

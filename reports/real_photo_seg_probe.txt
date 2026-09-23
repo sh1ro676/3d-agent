@@ -1,0 +1,58 @@
+=== uploads/real_photo_probe/iphone_real.jpg  217924 B  (10 段, Exif 段 0)
+     APP0/JFIF    len=16     ← JFIF
+     APP2         len=564    
+     MARKER_DB    len=67     
+     MARKER_DB    len=67     
+     MARKER_C0    len=17     
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     SOS          扫瞄数据起于 @1177（共 216747 B）
+
+=== uploads/real_photo_probe/iphone_screenshot.jpg  301351 B  (10 段, Exif 段 0)
+     APP0/JFIF    len=16     ← JFIF
+     APP2         len=564    
+     MARKER_DB    len=67     
+     MARKER_DB    len=67     
+     MARKER_C0    len=17     
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     SOS          扫瞄数据起于 @1177（共 300174 B）
+
+=== .cache/exif_fixture/rgb_exif.jpg  112762 B  (10 段, Exif 段 1)
+     APP0/JFIF    len=16     ← JFIF
+     APP1         len=136    ← Exif
+     MARKER_DB    len=67     
+     MARKER_DB    len=67     
+     MARKER_C0    len=17     
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     SOS          扫瞄数据起于 @749（共 112013 B）
+
+=== .cache/cross_source/sony.jpg  40678 B  (9 段, Exif 段 1)
+     APP1         len=39965  ← Exif
+     MARKER_DB    len=67     
+     MARKER_DB    len=67     
+     MARKER_C0    len=17     
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     SOS          扫瞄数据起于 @40560（共 118 B）
+
+=== .cache/cross_source/panasonic.jpg  29895 B  (9 段, Exif 段 1)
+     APP1         len=29182  ← Exif
+     MARKER_DB    len=67     
+     MARKER_DB    len=67     
+     MARKER_C0    len=17     
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     MARKER_C4    len=31     
+     MARKER_C4    len=181    
+     SOS          扫瞄数据起于 @29777（共 118 B）
+

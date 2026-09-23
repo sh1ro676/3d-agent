@@ -77,6 +77,19 @@ $PY = "venvs\vision\Scripts\python.exe"
 `--intrinsics auto` 依次尝试三条路：同名 sidecar `.npy` → 照片自带 EXIF → 模型自己预测。
 **强烈建议让前两条生效** —— 原因见下面的「使用须知」。
 
+若照片**没有** EXIF（⚠ 经微信 / 社交软件转发的图会丢光，实测见「使用须知」），
+而你记得用的是哪颗镜头，就直接给等效焦距 —— 不用手算像素焦距：
+
+```powershell
+& $PY scripts\build_scene.py --image 你的照片.jpg --intrinsics f35:24    # 1× 主摄 ≈ 24 mm
+```
+
+上传框里也有对应入口（内参下拉选「等效焦距」）。想在上传**之前**先看看会得到什么 K：
+
+```powershell
+& $PY scripts\inspect_exif.py --image 你的照片.jpg --assume-f35 24
+```
+
 ### ③ 真的问它一句
 
 ```powershell
@@ -120,7 +133,11 @@ copy configs\llm_backend.env.template configs\llm_backend.env   # 填上你的 k
 - **想让绝对米数可信，必须给它内参**（相机矩阵或照片 EXIF）。不给也能跑，
   但界面会挂横幅说明「相对位置可信、绝对尺寸不可采信」—— 这是刻意的，不是缺陷。
 - **图片短边建议 ≥768 px**。模型自带的相机估计对输入分辨率很敏感。
-- 手机照片的 EXIF 读取链路已打通，但**还没有真机手机样本**做过端到端验证。
+- ⚠ **经微信 / 社交软件转发的照片会丢光 EXIF**。实测两张 iPhone 照片（实拍 + 截图）送达后，
+  文件里**连一个 EXIF 段都没有**（段级扫描，阳性对照 3/3 命中）——
+  详见 [`reports/real_photo_exif_probe.md`](reports/real_photo_exif_probe.md)。
+  落进这一档时，选内参「等效焦距」手填一次（1× 主摄通常 24 mm）比让它退化成
+  「尺度未标定」强得多；**最优解仍是改用相册原图**（保住 EXIF）。
 
 > 这三条都是从实测里来的 —— 完整论证、全部数字与口径见
 > [`docs/3D_Spatial_Agent_技术调研与实施方案.md`](docs/3D_Spatial_Agent_技术调研与实施方案.md)。

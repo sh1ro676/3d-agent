@@ -454,9 +454,14 @@ details.pf pre{margin:0;padding:11px 13px;overflow:auto;max-height:320px;font:11
           <select id="up-intr">
             <option value="auto">auto —— 同目录 npy → EXIF → 模型预测（推荐）</option>
             <option value="exif">exif —— 强制从 EXIF 的等效焦距换算</option>
+            <option value="f35">等效焦距 —— 我知道这张图用的镜头（毫米）</option>
             <option value="manual">手动 —— 我填 fx,fy,cx,cy</option>
             <option value="">不提供 —— 直接用模型预测值</option>
           </select>
+        </label>
+        <label id="up-f35-wrap" class="hidden">等效焦距 f₃₅ (mm)
+          <input type="number" id="up-f35" placeholder="24（iPhone 1×主摄；0.5×≈13，3×≈77）"
+                 step="1" min="5" max="300">
         </label>
         <label id="up-manual-wrap" class="hidden">fx, fy, cx, cy
           <input type="text" id="up-manual" placeholder="例如 525.1,525.1,320,240">
@@ -469,8 +474,10 @@ details.pf pre{margin:0;padding:11px 13px;overflow:auto;max-height:320px;font:11
           <b>上传的照片没有标定内参，横向米制尺度就不可信。</b>
           模型预测的内参在同一张图上有实测 118 倍的横向误差（306.3 px → 2.6 px）。
           手机直出原图通常带 EXIF 等效焦距，选 <code>auto</code> 会自动用它；
-          截图 / 聊天软件转存的图一般没有 —— 那种情况下本场景会被标成
-          <b>「尺度未标定」</b>，界面上所有米制数字都要按相对值读。
+          ⚠ 但<b>经微信 / 社交软件转发的图会把 EXIF 丢干净</b>（实测：两张 iPhone 照片
+          送达后文件里连一个 EXIF 段都不剩），截图同理。这种情况下选
+          <code>等效焦距</code> 手填一次（1× 主摄通常 24 mm），比让它退化成
+          <b>「尺度未标定」</b>强得多。
         </span>
       </div>
 

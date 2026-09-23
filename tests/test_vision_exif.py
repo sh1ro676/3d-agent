@@ -489,6 +489,95 @@ def test_result_is_frozen(tmp_path: Path):
         got.fx = 1.0                                     # type: ignore[misc]
 
 
+# ---------------------------------------------------------------------------
+# ⑤ 调用方直接给出等效焦距（`focal_35mm_mm=`）
+#
+# 这一档的存在理由见模块 docstring ④：实测两张 iPhone 照片经微信送达后文件里
+# **一个 APP1 段都没有**，所以对最常用的传图路径 EXIF 是「必丢」而不是「有时没有」。
+# 原来的兜底要求用户手填 4 个像素焦距，而手机里查不到 —— 那条兜底是空的。
+# ---------------------------------------------------------------------------
+
+def test_provided_focal_35mm_matches_the_exif_path_bit_for_bit(tmp_path: Path):
+    """同一个 f_35：从文件读 vs 调用方给 —— 必须**逐位相等**。
+
+    这是本组最重要的一条。新入参的全部风险不在于算错，而在于「顺手又写了一份
+    公式」：两份公式迟早分叉，而分叉之后同一张图经两条路得到不同 K，
+    谁对谁错在产物里完全看不出来。
+    """
+    p = _write_jpeg(tmp_path / "p1.jpg", (4000, 3000), focal_35=29)
+
+    a = read_exif_intrinsics(p)
+    b = read_exif_intrinsics(p, focal_35mm_mm=29)
+
+    assert a is not None and b is not None
+    assert np.array_equal(a.K, b.K), "两条路的 K 不逐位相等 ⟹ 公式分叉了"
+
+
+def test_provided_focal_35mm_works_without_any_exif(tmp_path: Path):
+    """没有 EXIF 的图（微信转存件 / 截图）本来返回 `None` —— 现在可以出 K。"""
+    p = _write_jpeg(tmp_path / "p2.jpg", (1280, 1707))      # 刻意不写任何 EXIF
+
+    assert read_exif_intrinsics(p) is None, "没有元数据时仍应返回 None —— 这条没变"
+
+    got = read_exif_intrinsics(p, focal_35mm_mm=24)
+    assert got is not None
+    assert got.fx == pytest.approx(24.0 / SENSOR_WIDTH_MM_35MM * 1707)
+    assert got.image_hw == (1707, 1280)
+
+
+def test_provided_focal_35mm_is_labelled_user_not_exif(tmp_path: Path):
+    """来源必须可区分：`user:35mm` 比 `exif:35mm` 多一层「用户报错倍率」的误差。"""
+    p = _write_jpeg(tmp_path / "p3.jpg", (4000, 3000), focal_35=29)
+
+    a = read_exif_intrinsics(p)
+    assert a is not None and a.source == "exif:35mm"
+
+    b = read_exif_intrinsics(p, focal_35mm_mm=13)
+    assert b is not None
+    assert b.source == "user:35mm"
+    assert b.focal_35mm_mm == 13
+    assert "用户" in b.describe() or "调用方" in b.describe()
+
+
+def test_provided_value_wins_over_the_file_value(tmp_path: Path):
+    """文件里已有 EXIF 时，显式给的值必须是**生效的那一个**（双向验证）。
+
+    只断言「与手算一致」不够：若显式值被忽略、结果其实来自文件里的 29 mm，
+    在某些输入下也可能碰巧相符。所以同时要求它**不等于**文件那条路。
+    """
+    p = _write_jpeg(tmp_path / "p4.jpg", (4000, 3000), focal_35=29)
+
+    a = read_exif_intrinsics(p)
+    b = read_exif_intrinsics(p, focal_35mm_mm=13)
+
+    assert a is not None and b is not None
+    assert a.fx == pytest.approx(29.0 / SENSOR_WIDTH_MM_35MM * 4000)
+    assert b.fx == pytest.approx(13.0 / SENSOR_WIDTH_MM_35MM * 4000)
+    assert b.fx != a.fx
+
+
+def test_provided_none_is_simply_not_provided(tmp_path: Path):
+    """`None` 的语义是「不提供」，不是「给了一个空值」—— 不该抛。"""
+    p = _write_jpeg(tmp_path / "p5.jpg", (4000, 3000), focal_35=29)
+
+    got = read_exif_intrinsics(p, focal_35mm_mm=None)
+    assert got is not None and got.source == "exif:35mm"
+
+
+@pytest.mark.parametrize("bad", [0, -1, float("nan"), float("inf"), "abc", ""])
+def test_unusable_provided_focal_35mm_raises(tmp_path: Path, bad: object):
+    """显式给出的坏值必须**抛**，不能退化到「文件里没有 EXIF」那条正常分支。
+
+    两者处置完全不同：一个是用户填错了，一个是这张图本来就没有元数据。
+    混起来会让一个填错的数字伪装成「没有内参」，然后一路静默回到模型预测 ——
+    而模型预测的横向误差是 118 倍。
+    """
+    p = _write_jpeg(tmp_path / "p6.jpg", (4000, 3000), focal_35=29)
+
+    with pytest.raises(ValueError):
+        read_exif_intrinsics(p, focal_35mm_mm=bad)
+
+
 def test_exif_module_does_not_import_torch():
     """EXIF 是纯元数据解析，不该把 torch 拉进无 GPU 的测试路径。
 

@@ -1205,19 +1205,31 @@ function setupUpload() {
   const intrSel = $('#up-intr');
   const manualWrap = $('#up-manual-wrap');
   const manual = $('#up-manual');
+  const f35Wrap = $('#up-f35-wrap');
+  const f35 = $('#up-f35');
 
   const setStatus = (text, cls = 'muted') => { status.className = cls; status.textContent = text; };
-  const intrinsicsValue = () => (intrSel.value === 'manual' ? manual.value.trim() : intrSel.value);
+  const intrinsicsValue = () => {
+    if (intrSel.value === 'manual') return manual.value.trim();
+    // 用户在框里给的是**等效焦距**，不是四个像素值：换算交给后端
+    // （f_px = f35/36 × 长边），前端不自己算 —— 两处各写一份公式迟早分叉，
+    // 而分叉之后同一张图经两条路得到不同 K，谁对谁错在产物里看不出来。
+    if (intrSel.value === 'f35') return 'f35:' + f35.value.trim();
+    return intrSel.value;
+  };
   const updateGo = () => {
     const needManual = intrSel.value === 'manual' && !manual.value.trim();
-    go.disabled = UP.busy || !UP.data || needManual;
+    const needF35 = intrSel.value === 'f35' && !f35.value.trim();
+    go.disabled = UP.busy || !UP.data || needManual || needF35;
   };
 
   intrSel.addEventListener('change', () => {
     manualWrap.classList.toggle('hidden', intrSel.value !== 'manual');
+    f35Wrap.classList.toggle('hidden', intrSel.value !== 'f35');
     updateGo();
   });
   manual.addEventListener('input', updateGo);
+  f35.addEventListener('input', updateGo);
 
   const takeFile = async (f) => {
     if (!f) return;
@@ -1251,7 +1263,8 @@ function setupUpload() {
     }
     setStatus(UP.exif35
       ? '有 EXIF 焦距 → 内参可从 EXIF 换算（选出 auto 即可）'
-      : '无 EXIF 焦距 → 内参将退化为模型预测值，本场景会被标成「尺度未标定」');
+      : '无 EXIF 焦距（微信/社交软件转发的图必丢）→ 会被标成「尺度未标定」。'
+        + '两条出路：改用相册原图，或在下方内参选「等效焦距」手填一次（1× 主摄通常 24 mm）');
     updateGo();
   };
 
